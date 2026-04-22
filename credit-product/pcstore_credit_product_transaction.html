@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>店务通门店系统 - 结算单</title>
+    <title>店务通门店系统 - 赊销货品明细</title>
     <style>
         * {
             margin: 0;
@@ -167,66 +167,6 @@
             background: #e0e0e0;
         }
 
-        /* 结算单表格 */
-        .settlement-table {
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            overflow: hidden;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table thead th {
-            padding: 15px 20px;
-            text-align: left;
-            font-weight: 600;
-            color: #333;
-            background: #f8f9fa;
-            font-size: 14px;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        .data-table tbody td {
-            padding: 15px 20px;
-            font-size: 14px;
-            color: #666;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .data-table tbody tr:hover {
-            background: #f8f9fa;
-        }
-
-        .data-table tbody tr:last-child td {
-            border-bottom: none;
-        }
-
-        .status-tag {
-            padding: 4px 12px;
-            border-radius: 12px;
-            font-size: 12px;
-            font-weight: bold;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-
-        .status-paid {
-            background: #d4edda;
-            color: #155724;
-        }
-
-        .status-overdue {
-            background: #f8d7da;
-            color: #721c24;
-        }
-
         .btn-link {
             padding: 0;
             background: none;
@@ -242,21 +182,45 @@
             color: #ff526d;
         }
 
-
-
-        .btn-primary {
-            padding: 8px 20px;
-            background: #ff6b81;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: all 0.3s ease;
+        /* 表格 */
+        .settlement-table {
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
 
-        .btn-primary:hover {
-            background: #ff526d;
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            white-space: nowrap;
+        }
+
+        .data-table thead th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            background: #f8f9fa;
+            font-size: 14px;
+            border-bottom: 2px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .data-table tbody td {
+            padding: 15px 20px;
+            font-size: 14px;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+            white-space: nowrap;
+        }
+
+        .data-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+
+        .data-table tbody tr:last-child td {
+            border-bottom: none;
         }
 
         /* 分页器 */
@@ -301,63 +265,31 @@
             border-color: #ff6b81;
         }
 
-        /* 业务规则 */
-        .business-rules {
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            margin-top: 20px;
-        }
-
-        .rules-title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333;
-            margin-bottom: 15px;
-        }
-
-        .rules-list {
-            list-style: none;
-        }
-
-        .rule-item {
-            margin-bottom: 10px;
-            padding: 10px;
-            background: #f8f9fa;
-            border-radius: 4px;
-            font-size: 14px;
-        }
-
-        .rule-item strong {
-            color: #ff6b81;
-        }
-
-        /* 支付弹窗 */
-        .payment-modal {
+        /* 右侧弹窗 */
+        .right-modal {
             position: fixed;
             top: 0;
-            right: -400px;
-            width: 400px;
+            right: -60%;
+            width: 60%;
             height: 100vh;
             background: #fff;
             box-shadow: -2px 0 8px rgba(0,0,0,0.1);
             z-index: 1000;
             transition: right 0.3s ease;
-            padding: 30px;
+            display: flex;
+            flex-direction: column;
         }
 
-        .payment-modal.active {
+        .right-modal.active {
             right: 0;
         }
 
         .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid #e0e0e0;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
         }
 
         .modal-title {
@@ -384,35 +316,59 @@
             color: #333;
         }
 
-        .qr-code-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            margin: 40px 0;
+        .modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
         }
 
-        .qr-code {
-            width: 200px;
-            height: 200px;
+        .product-info {
             background: #f8f9fa;
+            padding: 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+        }
+
+        .product-info h3 {
+            font-size: 16px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .info-item {
             display: flex;
             align-items: center;
-            justify-content: center;
-            margin-bottom: 20px;
-            border: 1px solid #e0e0e0;
+            gap: 8px;
         }
 
-        .qr-code img {
-            width: 180px;
-            height: 180px;
+        .info-label {
+            font-size: 14px;
+            color: #666;
+            width: 100px;
+            flex-shrink: 0;
         }
 
-        .payment-tip {
-            font-size: 16px;
+        .info-value {
+            font-size: 14px;
+            font-weight: 500;
             color: #333;
-            text-align: center;
-            margin-top: 20px;
+        }
+
+        .text-brand-color {
+            color: #ff6b81;
+            font-weight: bold;
+        }
+
+        .text-green {
+            color: #52c41a;
+            font-weight: bold;
         }
 
         .backdrop {
@@ -450,7 +406,12 @@
                 align-items: stretch;
             }
 
-            .settlement-details {
+            .right-modal {
+                width: 100%;
+                right: -100%;
+            }
+
+            .info-grid {
                 grid-template-columns: 1fr;
             }
         }
@@ -545,113 +506,91 @@
         <main class="main-content">
             <!-- 顶部导航 -->
             <div class="top-nav">
-                <h1 class="page-title">报表 > 结算单</h1>
+                <h1 class="page-title">报表 > 赊销货品</h1>
                 <div class="user-info">
-                    <!-- <button class="btn btn-primary" onclick="goToStorePayment()">去店长商城支付</button> -->
                     <span>测试门店</span>
                     <div class="user-avatar">R</div>
                 </div>
             </div>
 
-            <!-- 统计信息 -->
-            <div class="stats-area" style="display: flex; gap: 30px; margin-bottom: 20px; justify-content: space-between; align-items: center;">
-                <div style="display: flex; gap: 30px;">
-                    <div class="stat-item">
-                        <span>待支付：</span>
-                        <span style="color: #ff6b81; font-weight: bold; font-size: 18px;">1</span>
-                        <span>张结算单</span>
+            <!-- 搜索区域 -->
+            <div class="search-area">
+                <div class="search-form">
+                    <div class="form-group">
+                        <label>商品名称：</label>
+                        <input type="text" id="search-product-name" placeholder="请输入商品名称">
                     </div>
-                    <div class="stat-item">
-                        <span>逾期未支付：</span>
-                        <span style="color: #ff6b81; font-weight: bold; font-size: 18px;">1</span>
-                        <span>张结算单</span>
-                    </div>
+                    <button class="btn btn-primary" onclick="filterProduct()">查询</button>
+                    <button class="btn btn-secondary" onclick="resetProductSearch()">重置</button>
+                    <button class="btn btn-primary" onclick="exportProductDetails()">导出赊销货品明细</button>
                 </div>
-                <!-- <div class="stat-item">
-                    <button class="btn btn-primary" onclick="window.location.href='pcstore_credt_product_transaction.html'" style="font-size: 14px;">赊销货品明细</button>
-                </div> -->
             </div>
 
-            <!-- 结算单表格 -->
+            <!-- 商品明细表格 -->
             <div class="settlement-table">
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>结算单号</th>
-                            <th>结算周期</th>
-                            <th>实付金额</th>
-                            <th>支付状态</th>
-                            <th>结算日期</th>
-                            <th>支付时间</th>
+                            <th>商品名称</th>
+                            <th>规格</th>
+                            <th>赊销库存总数</th>
+                            <th>已结算总数</th>
+                            <th>未结算总数</th>
+                            <th>归还支付总数</th>
                             <th>操作</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="detail-table-body">
                         <tr>
-                            <td>SETTLE20260426001</td>
-                            <td>2026-02-26 至 2026-03-25</td>
-                            <td>¥0.00</td>
-                            <td><span class="status-tag status-pending">待支付</span></td>
-                            <td>2026-04-26</td>
-                            <td>-</td>
-                            <td>
-                                <a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a>
-                                <a href="#" class="btn-link" onclick="paySettlement('SETTLE20260426001')" style="margin-left: 10px;">支付</a>
-                            </td>
+                            <td>图拉植蓓青春泉液</td>
+                            <td>30ml</td>
+                            <td>6瓶</td>
+                            <td>1瓶</td>
+                            <td>3瓶</td>
+                            <td>2瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%98%A5%E6%B3%89%E6%B6%B2&spec=30ml">结算明细</a></td>
                         </tr>
                         <tr>
-                            <td>SETTLE20260326001</td>
-                            <td>2026-01-26 至 2026-02-25</td>
-                            <td>¥10,500.00</td>
-                            <td><span class="status-tag status-paid">已支付</span></td>
-                            <td>2026-03-26</td>
-                            <td>2026-03-28 10:30:21</td>
-                            <td><a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a></td>
+                            <td>图拉植蓓精华液</td>
+                            <td>50ml</td>
+                            <td>20瓶</td>
+                            <td>10瓶</td>
+                            <td>10瓶</td>
+                            <td>0瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%B6%B2&spec=50ml">结算明细</a></td>
                         </tr>
                         <tr>
-                            <td>SETTLE20260226001</td>
-                            <td>2025-12-26 至 2026-01-25</td>
-                            <td>¥0.00</td>
-                            <td><span class="status-tag status-overdue">逾期未付款</span></td>
-                            <td>2026-02-26</td>
-                            <td>-</td>
-                            <td>
-                                <a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a>
-                                <a href="#" class="btn-link" onclick="paySettlement('SETTLE20260226001')" style="margin-left: 10px;">支付</a>
-                            </td>
+                            <td>图拉植蓓面霜</td>
+                            <td>50g</td>
+                            <td>17瓶</td>
+                            <td>8瓶</td>
+                            <td>9瓶</td>
+                            <td>0瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E9%9D%A2%E9%9C%9C&spec=50g">结算明细</a></td>
                         </tr>
                         <tr>
-                            <td>SETTLE20260126001</td>
-                            <td>2025-11-26 至 2025-12-25</td>
-                            <td>¥8,750.00</td>
-                            <td><span class="status-tag status-paid">已支付</span></td>
-                            <td>2026-01-26</td>
-                            <td>2026-01-26 11:30:21</td>
-                            <td><a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a></td>
+                            <td>图拉植蓓乳液</td>
+                            <td>100ml</td>
+                            <td>14瓶</td>
+                            <td>6瓶</td>
+                            <td>8瓶</td>
+                            <td>0瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E4%B9%B3%E6%B6%B2&spec=100ml">结算明细</a></td>
                         </tr>
                         <tr>
-                            <td>SETTLE20251226001</td>
-                            <td>2025-10-26 至 2025-11-25</td>
-                            <td>¥11,200.00</td>
-                            <td><span class="status-tag status-paid">已支付</span></td>
-                            <td>2025-12-26</td>
-                            <td>2025-12-26 11:30:21</td>
-                            <td><a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a></td>
-                        </tr>
-                        <tr>
-                            <td>SETTLE20251126001</td>
-                            <td>2025-09-26 至 2025-10-25</td>
-                            <td>¥9,800.00</td>
-                            <td><span class="status-tag status-paid">已支付</span></td>
-                            <td>2025-11-26</td>
-                            <td>2025-11-26 11:30:21</td>
-                            <td><a href="pcstore_settlement_product_detail.html" class="btn-link">查看结算单</a></td>
+                            <td>图拉植蓓身体乳</td>
+                            <td>200ml</td>
+                            <td>11瓶</td>
+                            <td>4瓶</td>
+                            <td>7瓶</td>
+                            <td>0瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E8%BA%AB%E4%BD%93%E4%B9%B3&spec=200ml">结算明细</a></td>
                         </tr>
                     </tbody>
                 </table>
                 <!-- 分页器 -->
                 <div class="pagination">
-                    <span class="page-info">共 14 条数据</span>
+                    <span class="page-info">共 15 条数据</span>
                     <div class="page-controls">
                         <button class="page-btn">上一页</button>
                         <button class="page-btn active">1</button>
@@ -661,57 +600,161 @@
                     </div>
                 </div>
             </div>
-
-
-
-
-
-            <script>
-                // 跳转到店长商城支付
-                function goToStorePayment() {
-                    // 这里可以添加跳转逻辑，例如跳转到店长商城的支付页面
-                    alert('跳转到店长商城支付页面');
-                    // 实际项目中可以使用 window.location.href 进行跳转
-                    // window.location.href = 'store_payment.html';
-                }
-
-                // 支付结算单
-                function paySettlement(settlementId) {
-                    // 显示支付弹窗
-                    document.getElementById('paymentBackdrop').classList.add('active');
-                    document.getElementById('paymentModal').classList.add('active');
-                    // 这里可以添加支付逻辑，例如根据settlementId获取支付二维码
-                    console.log('支付结算单: ' + settlementId);
-                }
-
-                // 关闭支付弹窗
-                function closePaymentModal() {
-                    document.getElementById('paymentBackdrop').classList.remove('active');
-                    document.getElementById('paymentModal').classList.remove('active');
-                }
-
-                // 点击遮罩层关闭弹窗
-                document.getElementById('paymentBackdrop').addEventListener('click', function() {
-                    closePaymentModal();
-                });
-            </script>
         </main>
     </div>
 
-    <!-- 支付弹窗 -->
-    <div class="backdrop" id="paymentBackdrop"></div>
-    <div class="payment-modal" id="paymentModal">
-        <div class="modal-header">
-            <h2 class="modal-title">结算单支付</h2>
-            <button class="close-btn" onclick="closePaymentModal()">×</button>
-        </div>
-        <div class="qr-code-container">
-            <div class="qr-code">
-                <!-- 这里可以放二维码图片 -->
-                <div style="font-size: 14px; color: #999;">二维码</div>
-            </div>
-            <div class="payment-tip">请扫码完成支付</div>
-        </div>
-    </div>
+    <script>
+        // 商品库存数据
+        const productStockData = {
+            '图拉植蓓青春泉液': {
+                '30ml': { total: '35瓶', settled: '15瓶', unsettled: '20瓶' }
+            },
+            '图拉植蓓精华液': {
+                '50ml': { total: '20瓶', settled: '10瓶', unsettled: '10瓶' }
+            },
+            '图拉植蓓面霜': {
+                '50g': { total: '17瓶', settled: '8瓶', unsettled: '9瓶' }
+            },
+            '图拉植蓓乳液': {
+                '100ml': { total: '14瓶', settled: '6瓶', unsettled: '8瓶' }
+            },
+            '图拉植蓓身体乳': {
+                '200ml': { total: '11瓶', settled: '4瓶', unsettled: '7瓶' }
+            }
+        };
+
+        // 商品明细数据
+        const productDetailData = [
+            { name: '图拉植蓓青春泉液', spec: '30ml', total: '35瓶', settled: '15瓶', unsettled: '20瓶' },
+            { name: '图拉植蓓精华液', spec: '50ml', total: '20瓶', settled: '10瓶', unsettled: '10瓶' },
+            { name: '图拉植蓓面霜', spec: '50g', total: '17瓶', settled: '8瓶', unsettled: '9瓶' },
+            { name: '图拉植蓓乳液', spec: '100ml', total: '14瓶', settled: '6瓶', unsettled: '8瓶' },
+            { name: '图拉植蓓身体乳', spec: '200ml', total: '11瓶', settled: '4瓶', unsettled: '7瓶' }
+        ];
+
+        // 库存日志数据
+        const stockLogData = [
+            {
+                id: '08290B0010002384',
+                batch: 'B56033',
+                stockStatus: '在库',
+                settlementStatus: '',
+                docNo: 'IN00000001',
+                relatedDocNo: '',
+                docType: '采购入库',
+                relatedSettleNo: '',
+                settlePeriod: '',
+                operator: '张三',
+                operateTime: '2026-03-01 09:00:00'
+            },
+            {
+                id: '08290B0010002385',
+                batch: 'B56034',
+                stockStatus: '已出库',
+                settlementStatus: '未结算',
+                docNo: 'OUT00000001',
+                relatedDocNo: 'C260301001',
+                docType: '盘亏出库',
+                relatedSettleNo: '',
+                settlePeriod: '',
+                operator: '张三',
+                operateTime: '2026-03-15 10:30:00'
+            },
+            {
+                id: '08290B0010002386',
+                batch: 'B56035',
+                stockStatus: '已出库',
+                settlementStatus: '已结算',
+                docNo: 'OUT00000002',
+                relatedDocNo: 'C260320003',
+                docType: '盘亏出库',
+                relatedSettleNo: 'SETTLE20260426001',
+                settlePeriod: '2026-02-26 至 2026-03-25',
+                operator: '李四',
+                operateTime: '2026-03-20 14:20:00'
+            },
+            {
+                id: '08290B0010002387',
+                batch: 'B56036',
+                stockStatus: '在库',
+                settlementStatus: '',
+                docNo: 'IN00000002',
+                relatedDocNo: 'C260320003',
+                docType: '盘盈入库',
+                relatedSettleNo: '',
+                settlePeriod: '',
+                operator: '王五',
+                operateTime: '2026-03-22 11:00:00'
+            }
+        ];
+
+        // 打开库存日志弹窗
+        function openStockLogModal(productName, spec) {
+            // 设置商品信息
+            document.getElementById('modal-product-name').textContent = productName;
+            document.getElementById('modal-spec').textContent = spec;
+            
+            // 设置库存数量
+            const stockData = productStockData[productName][spec];
+            document.getElementById('modal-total-stock').textContent = stockData.total;
+            document.getElementById('modal-settled-stock').textContent = stockData.settled;
+            document.getElementById('modal-unsettled-stock').textContent = stockData.unsettled;
+        }
+
+        // 筛选商品
+        function filterProduct() {
+            const searchName = document.getElementById('search-product-name').value.trim();
+            const tbody = document.getElementById('detail-table-body');
+            
+            tbody.innerHTML = '';
+            
+            const filteredData = searchName === '' ? productDetailData : productDetailData.filter(item => item.name.includes(searchName));
+            
+            filteredData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.name}</td>
+                    <td>${item.spec}</td>
+                    <td>${item.total}</td>
+                    <td>${item.settled}</td>
+                    <td>${item.unsettled}</td>
+                    <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=${encodeURIComponent(item.name)}&spec=${encodeURIComponent(item.spec)}">商品结算明细</a></td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // 重置商品搜索
+        function resetProductSearch() {
+            document.getElementById('search-product-name').value = '';
+            filterProduct();
+        }
+
+        // 导出赊销货品明细
+        function exportProductDetails() {
+            const searchName = document.getElementById('search-product-name').value.trim();
+            const filteredData = searchName === '' ? productDetailData : productDetailData.filter(item => item.name.includes(searchName));
+            
+            // 构建CSV内容
+            let csvContent = "商品名称,规格,赊销库存总数,已结算总数,未结算总数,归还支付总数\n";
+            
+            filteredData.forEach(item => {
+                csvContent += `${item.name},${item.spec},${item.total},${item.settled},${item.unsettled},${item.returned || '0瓶'}\n`;
+            });
+            
+            // 创建Blob对象
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', '赊销货品明细.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>

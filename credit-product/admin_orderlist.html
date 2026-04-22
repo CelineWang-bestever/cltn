@@ -1,356 +1,378 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>结算单管理</title>
-<link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
-<script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
-<script>
-tailwind.config = {
-theme: {
-extend: {
-colors: {
-primary: '#409EFF',
-secondary: '#6B7280'
-},
-borderRadius: {
-'none': '0px',
-'sm': '2px',
-DEFAULT: '4px',
-'md': '8px',
-'lg': '12px',
-'xl': '16px',
-'2xl': '20px',
-'3xl': '24px',
-'full': '9999px',
-'button': '4px'
-}
-}
-}
-}
-</script>
-<link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
-<style>
-body {
-min-height: 1024px;
-background-color: #f8fafc;
-}
-.sidebar-item:hover {
-background-color: rgba(255, 255, 255, 0.1);
-}
-.status-tag {
-padding: 4px 12px;
-border-radius: 16px;
-font-size: 12px;
-font-weight: 500;
-}
-.table-header {
-background-color: #f1f5f9;
-font-weight: 600;
-}
-.table-row:nth-child(even) {
-background-color: #f8fafc;
-}
-.table-row:nth-child(odd) {
-background-color: white;
-}
-.pagination-btn {
-width: 32px;
-height: 32px;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.pagination-btn.active {
-background-color: #ef4444;
-color: white;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结算单管理</title>
+    <link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
+    <script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#409EFF',
+                        secondary: '#6B7280'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                        '2xl': '20px',
+                        '3xl': '24px',
+                        'full': '9999px',
+                        'button': '4px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
+    <style>
+        body {
+            min-height: 1024px;
+            background-color: #f8fafc;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .status-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .table-header {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .table-row:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .table-row:nth-child(odd) {
+            background-color: white;
+        }
+
+        .pagination-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-btn.active {
+            background-color: #ef4444;
+            color: white;
+        }
+    </style>
 </head>
+
 <body class="flex bg-gray-100">
-<!-- 左侧导航栏 -->
-<div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
-<!-- Logo 区域 -->
-<div class="h-16 flex items-center px-6 border-b border-gray-700">
-<i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
-<span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
-</div>
-<!-- 导航菜单 -->
-<nav class="flex-1 py-4">
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-home text-gray-300 mr-3"></i>
-<span class="text-gray-200">首页</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-cog text-gray-300 mr-3"></i>
-<span class="text-gray-200">系统管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-calendar-alt text-gray-300 mr-3"></i>
-<span class="text-gray-200">活动管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-user-plus text-gray-300 mr-3"></i>
-<span class="text-gray-200">报名活动</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-store text-gray-300 mr-3"></i>
-<span class="text-gray-200">门店信息</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-users text-gray-300 mr-3"></i>
-<span class="text-gray-200">会员信息</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-box text-gray-300 mr-3"></i>
-<span class="text-gray-200">商品管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-file-invoice text-gray-300 mr-3"></i>
-<span class="text-gray-200">订单管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-robot text-gray-300 mr-3"></i>
-<span class="text-gray-200">AI 机器人</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-truck-loading text-gray-100 mr-3"></i>
-<span class="text-white font-medium">赊销铺货</span>
-</div>
-<i class="fas fa-chevron-down text-gray-300 text-xs"></i>
-</div>
-<!-- 展开的子菜单 -->
-<div class="ml-6">
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center">
-<i class="fas fa-store text-gray-400 mr-3 text-sm"></i>
-<span class="text-gray-300">铺货门店</span>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
-<i class="fas fa-file-invoice text-gray-100 mr-3 text-sm"></i>
-<span class="text-white font-medium">结算单</span>
-</div>
-</div>
-</nav>
-</div>
-<!-- 主内容区 -->
-<div class="flex-1 p-6">
-<!-- 面包屑导航 -->
-<nav class="flex items-center mb-6">
-<span class="text-gray-500">首页</span>
-<i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-<span class="text-gray-500">赊销铺货</span>
-<i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-<span class="text-gray-800 font-medium">结算单</span>
-</nav>
-<!-- 主要内容卡片 -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-<!-- 筛选区域 -->
-<div class="p-6 border-b border-gray-200 bg-gray-50">
-<div class="flex items-center space-x-4">
-<label class="text-gray-700 font-medium">支付状态：</label>
-<div class="relative">
-<select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
-<option value="">全部</option>
-<option value="待支付">待支付</option>
-<option value="已支付">已支付</option>
-<option value="逾期未付款">逾期未付款</option>
-</select>
-<i class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-</div>
-<button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">
-筛选
-</button>
-<button class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap ml-2">
-重置
-</button>
-</div>
-</div>
-<!-- 卡片头部 -->
-<div class="p-6 border-b border-gray-200">
-<div class="flex items-center justify-between">
-<h2 class="text-xl font-semibold text-gray-800">结算单</h2>
-<div class="flex space-x-6">
-<div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
-<span class="text-yellow-700 font-medium">待支付：1 张结算单</span>
-</div>
-<div class="bg-pink-50 border border-pink-200 rounded-lg p-3">
-<span class="text-pink-700 font-medium">逾期未支付：1 张结算单</span>
-</div>
-</div>
-</div>
-</div>
-<!-- 数据表格 -->
-<div class="overflow-x-auto">
-<table class="w-full">
-<thead>
-<tr class="table-header">
-<th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">结算周期</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">应付金额</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">实付金额</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">支付状态</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">结算日期</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">支付时间</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
-</tr>
-</thead>
-<tbody>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE001</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
-<td class="py-4 px-6 text-gray-600">2026-03-27 至 2026-04-26</td>
-<td class="py-4 px-6 text-gray-800">¥12,850.00</td>
-<td class="py-4 px-6 text-gray-800">¥0.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-yellow-100 text-yellow-800">待支付</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-04-26</td>
-<td class="py-4 px-6 text-gray-600">-</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE002</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
-<td class="py-4 px-6 text-gray-600">2026-03-20 至 2026-04-19</td>
-<td class="py-4 px-6 text-gray-800">¥8,950.00</td>
-<td class="py-4 px-6 text-gray-800">¥8,950.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-green-100 text-green-800">已支付</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-04-19</td>
-<td class="py-4 px-6 text-gray-600">2026-03-28 10:30:21</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE003</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
-<td class="py-4 px-6 text-gray-600">2026-03-15 至 2026-04-14</td>
-<td class="py-4 px-6 text-gray-800">¥15,200.00</td>
-<td class="py-4 px-6 text-gray-800">¥0.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-pink-100 text-pink-800">逾期未付款</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-04-14</td>
-<td class="py-4 px-6 text-gray-600">-</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE004</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜深圳南山店</td>
-<td class="py-4 px-6 text-gray-600">2026-03-10 至 2026-04-09</td>
-<td class="py-4 px-6 text-gray-800">¥22,500.00</td>
-<td class="py-4 px-6 text-gray-800">¥22,500.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-green-100 text-green-800">已支付</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-04-09</td>
-<td class="py-4 px-6 text-gray-600">2026-03-25 14:15:45</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE005</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜杭州西湖店</td>
-<td class="py-4 px-6 text-gray-600">2026-03-05 至 2026-04-04</td>
-<td class="py-4 px-6 text-gray-800">¥18,750.00</td>
-<td class="py-4 px-6 text-gray-800">¥0.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-yellow-100 text-yellow-800">待支付</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-04-04</td>
-<td class="py-4 px-6 text-gray-600">-</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE006</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜成都春熙路店</td>
-<td class="py-4 px-6 text-gray-600">2026-02-28 至 2026-03-29</td>
-<td class="py-4 px-6 text-gray-800">¥31,200.00</td>
-<td class="py-4 px-6 text-gray-800">¥31,200.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-green-100 text-green-800">已支付</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-03-29</td>
-<td class="py-4 px-6 text-gray-600">2026-03-01 09:20:30</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE007</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜西安钟楼店</td>
-<td class="py-4 px-6 text-gray-600">2026-02-22 至 2026-03-23</td>
-<td class="py-4 px-6 text-gray-800">¥14,650.00</td>
-<td class="py-4 px-6 text-gray-800">¥0.00</td>
-<td class="py-4 px-6">
-<span class="status-tag bg-pink-100 text-pink-800">逾期未付款</span>
-</td>
-<td class="py-4 px-6 text-gray-600">2026-03-23</td>
-<td class="py-4 px-6 text-gray-600">-</td>
-<td class="py-4 px-6">
-<a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- 分页控件 -->
-<div class="p-6 border-t border-gray-200 flex items-center justify-between">
-<div class="text-gray-600">
-共 14 条记录，每页显示 7 条
-</div>
-<div class="flex items-center space-x-2">
-<button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md">
-<i class="fas fa-chevron-left text-sm"></i>
-</button>
-<button class="pagination-btn active">1</button>
-<button class="pagination-btn text-gray-600 hover:bg-gray-100">2</button>
-<button class="pagination-btn text-gray-600 hover:bg-gray-100">3</button>
-<button class="pagination-btn text-gray-600 hover:bg-gray-100">
-<i class="fas fa-chevron-right text-sm"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
+    <!-- 左侧导航栏 -->
+    <div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
+        <!-- Logo 区域 -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-700">
+            <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+            <span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
+        </div>
+        <!-- 导航菜单 -->
+        <nav class="flex-1 py-4">
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-home text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">首页</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-cog text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">系统管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-calendar-alt text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">活动管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-user-plus text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">报名活动</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-store text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">门店信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-users text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">会员信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-box text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">商品管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-file-invoice text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">订单管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">AI 机器人</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-truck-loading text-gray-100 mr-3"></i>
+                    <span class="text-white font-medium">赊销铺货</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+            </div>
+            <!-- 展开的子菜单 -->
+            <div class="ml-6">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center">
+                    <i class="fas fa-store text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">铺货门店</span>
+                </div>
+                <div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
+                    <i class="fas fa-file-invoice text-gray-100 mr-3 text-sm"></i>
+                    <span class="text-white font-medium">结算单</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- 主内容区 -->
+    <div class="flex-1 p-6">
+        <!-- 面包屑导航 -->
+        <nav class="flex items-center mb-6">
+            <span class="text-gray-500">首页</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-500">赊销铺货</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-800 font-medium">结算单</span>
+        </nav>
+        <!-- 主要内容卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- 筛选区域 -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <label class="text-gray-700 font-medium">门店名称：</label>
+                    <div class="relative">
+                        <select
+                            class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
+                            <option value="">全部</option>
+                            <option value="克丽缇娜上海旗舰店">克丽缇娜上海旗舰店</option>
+                            <option value="克丽缇娜北京朝阳店">克丽缇娜北京朝阳店</option>
+                            <option value="克丽缇娜广州天河店">克丽缇娜广州天河店</option>
+                            <option value="克丽缇娜深圳南山店">克丽缇娜深圳南山店</option>
+                            <option value="克丽缇娜杭州西湖店">克丽缇娜杭州西湖店</option>
+                        </select>
+                        <i
+                            class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <label class="text-gray-700 font-medium">支付状态：</label>
+                    <div class="relative">
+                        <select
+                            class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
+                            <option value="">全部</option>
+                            <option value="待支付">待支付</option>
+                            <option value="已支付">已支付</option>
+                            <option value="逾期未付款">逾期未付款</option>
+                        </select>
+                        <i
+                            class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <button
+                        class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">
+                        筛选
+                    </button>
+                    <button
+                        class="border border-gray-300 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-50 transition-colors !rounded-button whitespace-nowrap ml-2">
+                        重置
+                    </button>
+                </div>
+            </div>
+            <!-- 卡片头部 -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-gray-800">结算单</h2>
+                    <div class="flex space-x-6">
+                        <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3"
+                            style="border: 0px; background-color: #fff;">
+                            <span class="text-yellow-700 font-medium">待支付：2 张结算单</span>
+                        </div>
+                        <div class="bg-pink-50 border border-pink-200 rounded-lg p-3"
+                            style="border: 0px; background-color: #fff;">
+                            <span class="text-pink-700 font-medium">逾期未支付：2 张结算单</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 数据表格 -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">结算周期</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">实付金额</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">支付状态</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">结算日期</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">支付时间</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE001</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-27 至 2026-04-26</td>
+                            <td class="py-4 px-6 text-gray-800">¥0.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-yellow-100 text-yellow-800">待支付</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-26</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE002</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-20 至 2026-04-19</td>
+                            <td class="py-4 px-6 text-gray-800">¥8,950.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-green-100 text-green-800">已支付</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-19</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-28 10:30:21</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE003</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-15 至 2026-04-14</td>
+                            <td class="py-4 px-6 text-gray-800">¥0.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-pink-100 text-pink-800">逾期未付款</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-14</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE004</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜深圳南山店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-10 至 2026-04-09</td>
+                            <td class="py-4 px-6 text-gray-800">¥22,500.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-green-100 text-green-800">已支付</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-09</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-25 14:15:45</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE005</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜杭州西湖店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-05 至 2026-04-04</td>
+                            <td class="py-4 px-6 text-gray-800">¥0.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-yellow-100 text-yellow-800">待支付</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-04</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE006</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜成都春熙路店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-02-28 至 2026-03-29</td>
+                            <td class="py-4 px-6 text-gray-800">¥31,200.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-green-100 text-green-800">已支付</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-29</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-01 09:20:30</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE007</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜西安钟楼店</td>
+                            <td class="py-4 px-6 text-gray-600">2026-02-22 至 2026-03-23</td>
+                            <td class="py-4 px-6 text-gray-800">¥0.00</td>
+                            <td class="py-4 px-6">
+                                <span class="status-tag bg-pink-100 text-pink-800">逾期未付款</span>
+                            </td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-23</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6">
+                                <a href="#" class="text-primary hover:text-blue-700 font-medium">查看结算单</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 分页控件 -->
+            <div class="p-6 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-gray-600">
+                    共 14 条记录，每页显示 7 条
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md">
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100">2</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100">3</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100">
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

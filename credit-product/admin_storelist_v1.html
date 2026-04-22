@@ -1,409 +1,418 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>结算单管理</title>
-<link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
-<script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
-<script>
-tailwind.config = {
-theme: {
-extend: {
-colors: {
-primary: '#409EFF',
-secondary: '#6B7280'
-},
-borderRadius: {
-'none': '0px',
-'sm': '2px',
-DEFAULT: '4px',
-'md': '8px',
-'lg': '12px',
-'xl': '16px',
-'2xl': '20px',
-'3xl': '24px',
-'full': '9999px',
-'button': '4px'
-}
-}
-}
-}
-</script>
-<link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
-<style>
-body {
-min-height: 1024px;
-background-color: #f8fafc;
-}
-.sidebar-item:hover {
-background-color: rgba(255, 255, 255, 0.1);
-}
-.status-tag {
-padding: 4px 12px;
-border-radius: 16px;
-font-size: 12px;
-font-weight: 500;
-}
-.table-header {
-background-color: #f1f5f9;
-font-weight: 600;
-}
-.table-row:nth-child(even) {
-background-color: #f8fafc;
-}
-.table-row:nth-child(odd) {
-background-color: white;
-}
-.pagination-btn {
-width: 32px;
-height: 32px;
-display: flex;
-align-items: center;
-justify-content: center;
-}
-.pagination-btn.active {
-    background-color: #ef4444;
-    color: white;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>结算单管理</title>
+    <link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
+    <script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#409EFF',
+                        secondary: '#6B7280'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                        '2xl': '20px',
+                        '3xl': '24px',
+                        'full': '9999px',
+                        'button': '4px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
+    <style>
+        body {
+            min-height: 1024px;
+            background-color: #f8fafc;
+        }
 
-/* 新增报名门店弹窗 */
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-}
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
 
-.modal {
-    background-color: white;
-    border-radius: 8px;
-    padding: 24px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
+        .status-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
 
-.modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 12px;
-    border-bottom: 1px solid #e0e0e0;
-}
+        .table-header {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
 
-.modal-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-}
+        .table-row:nth-child(even) {
+            background-color: #f8fafc;
+        }
 
-.close-btn {
-    background: none;
-    border: none;
-    font-size: 24px;
-    cursor: pointer;
-    color: #999;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .table-row:nth-child(odd) {
+            background-color: white;
+        }
 
-.close-btn:hover {
-    color: #333;
-}
+        .pagination-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.form-group {
-    margin-bottom: 16px;
-}
+        .pagination-btn.active {
+            background-color: #ef4444;
+            color: white;
+        }
 
-.form-label {
-    display: block;
-    margin-bottom: 6px;
-    font-weight: 500;
-    color: #333;
-}
+        /* 新增报名门店弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
 
-.form-select {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-}
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-.form-select:focus {
-    outline: none;
-    border-color: #409EFF;
-    box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1);
-}
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
 
-.time-info {
-    margin: 12px 0;
-    padding: 12px;
-    background-color: #f8fafc;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #666;
-}
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
 
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    margin-top: 24px;
-    padding-top: 16px;
-    border-top: 1px solid #e0e0e0;
-}
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-.btn-cancel {
-    padding: 8px 16px;
-    border: 1px solid #d1d5db;
-    border-radius: 4px;
-    background-color: white;
-    color: #333;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .close-btn:hover {
+            color: #333;
+        }
 
-.btn-cancel:hover {
-    background-color: #f8fafc;
-}
+        .form-group {
+            margin-bottom: 16px;
+        }
 
-.btn-save {
-    padding: 8px 16px;
-    border: 1px solid #409EFF;
-    border-radius: 4px;
-    background-color: #409EFF;
-    color: white;
-    font-size: 14px;
-    cursor: pointer;
-    transition: all 0.3s;
-}
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
 
-.btn-save:hover {
-    background-color: #66b1ff;
-}
+        .form-select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+        }
 
-/* 查看报名门店侧拉弹窗 */
-.side-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: none;
-    z-index: 999;
-}
+        .form-select:focus {
+            outline: none;
+            border-color: #409EFF;
+            box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1);
+        }
 
-.side-modal {
-    position: fixed;
-    top: 0;
-    right: -1200px;
-    width: 1200px;
-    height: 100vh;
-    background-color: white;
-    box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    transition: right 0.3s ease;
-    display: flex;
-    flex-direction: column;
-}
+        .time-info {
+            margin: 12px 0;
+            padding: 12px;
+            background-color: #f8fafc;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #666;
+        }
 
-.side-modal.active {
-    right: 0;
-}
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
 
-.side-modal-header {
-    padding: 20px 24px;
-    border-bottom: 1px solid #e0e0e0;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
+        .btn-cancel {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background-color: white;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-.side-modal-title {
-    font-size: 18px;
-    font-weight: 600;
-    color: #333;
-}
+        .btn-cancel:hover {
+            background-color: #f8fafc;
+        }
 
-.side-modal-body {
-    flex: 1;
-    padding: 24px;
-    overflow-y: auto;
-}
+        .btn-save {
+            padding: 8px 16px;
+            border: 1px solid #409EFF;
+            border-radius: 4px;
+            background-color: #409EFF;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
 
-.side-modal-table {
-    width: 100%;
-    border-collapse: collapse;
-}
+        .btn-save:hover {
+            background-color: #66b1ff;
+        }
 
-.side-modal-table th {
-    background-color: #f1f5f9;
-    padding: 12px;
-    text-align: left;
-    font-weight: 600;
-    color: #666;
-    border-bottom: 1px solid #e0e0e0;
-}
+        /* 查看报名门店侧拉弹窗 */
+        .side-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: none;
+            z-index: 999;
+        }
 
-.side-modal-table td {
-    padding: 12px;
-    border-bottom: 1px solid #f0f0f0;
-    color: #333;
-}
+        .side-modal {
+            position: fixed;
+            top: 0;
+            right: -1200px;
+            width: 1200px;
+            height: 100vh;
+            background-color: white;
+            box-shadow: -2px 0 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            transition: right 0.3s ease;
+            display: flex;
+            flex-direction: column;
+        }
 
-.side-modal-table tr:nth-child(even) {
-    background-color: #f8fafc;
-}
+        .side-modal.active {
+            right: 0;
+        }
 
-.contract-signed {
-    color: #10b981;
-    font-weight: 500;
-}
+        .side-modal-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-.contract-unsigned {
-    color: #f59e0b;
-    font-weight: 500;
-}
+        .side-modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
 
-.contract-expired {
-    color: #ef4444;
-    font-weight: 500;
-}
+        .side-modal-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
 
-.view-contract-btn {
-    color: #409EFF;
-    text-decoration: none;
-    font-weight: 500;
-}
+        .side-modal-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
 
-.view-contract-btn:hover {
-    text-decoration: underline;
-}
-</style>
+        .side-modal-table th {
+            background-color: #f1f5f9;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .side-modal-table td {
+            padding: 12px;
+            border-bottom: 1px solid #f0f0f0;
+            color: #333;
+        }
+
+        .side-modal-table tr:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .contract-signed {
+            color: #10b981;
+            font-weight: 500;
+        }
+
+        .contract-unsigned {
+            color: #f59e0b;
+            font-weight: 500;
+        }
+
+        .contract-expired {
+            color: #ef4444;
+            font-weight: 500;
+        }
+
+        .view-contract-btn {
+            color: #409EFF;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .view-contract-btn:hover {
+            text-decoration: underline;
+        }
+    </style>
 </head>
+
 <body class="flex bg-gray-100">
-<!-- 左侧导航栏 -->
-<div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
-<!-- Logo 区域 -->
-<div class="h-16 flex items-center px-6 border-b border-gray-700">
-<i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
-<span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
-</div>
-<!-- 导航菜单 -->
-<nav class="flex-1 py-4">
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-home text-gray-300 mr-3"></i>
-<span class="text-gray-200">首页</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-cog text-gray-300 mr-3"></i>
-<span class="text-gray-200">系统管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-calendar-alt text-gray-300 mr-3"></i>
-<span class="text-gray-200">活动管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-user-plus text-gray-300 mr-3"></i>
-<span class="text-gray-200">报名活动</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-store text-gray-300 mr-3"></i>
-<span class="text-gray-200">门店信息</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-users text-gray-300 mr-3"></i>
-<span class="text-gray-200">会员信息</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-box text-gray-300 mr-3"></i>
-<span class="text-gray-200">商品管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-file-invoice text-gray-300 mr-3"></i>
-<span class="text-gray-200">订单管理</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-robot text-gray-300 mr-3"></i>
-<span class="text-gray-200">AI 机器人</span>
-</div>
-<i class="fas fa-chevron-down text-gray-400 text-xs"></i>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
-<div class="flex items-center">
-<i class="fas fa-truck-loading text-gray-100 mr-3"></i>
-<span class="text-white font-medium">赊销铺货</span>
-</div>
-<i class="fas fa-chevron-down text-gray-300 text-xs"></i>
-</div>
-<!-- 展开的子菜单 -->
-<div class="ml-6">
-<div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
-<i class="fas fa-store text-gray-100 mr-3 text-sm"></i>
-<span class="text-white font-medium">铺货门店</span>
-</div>
-<div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center hidden">
-<i class="fas fa-file-invoice text-gray-400 mr-3 text-sm"></i>
-<span class="text-gray-300">结算单</span>
-</div>
-</div>
-</nav>
-</div>
-<!-- 主内容区 -->
-<div class="flex-1 p-6">
-<!-- 面包屑导航 -->
-<nav class="flex items-center mb-6">
-<span class="text-gray-500">首页</span>
-<i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-<span class="text-gray-500">赊销铺货</span>
-<i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-<span class="text-gray-800 font-medium">铺货门店</span>
-</nav>
-<!-- 主要内容卡片 -->
-<div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-<!-- 操作按钮区域 -->
-<!-- <div class="p-6 border-b border-gray-200 bg-gray-50">
+    <!-- 左侧导航栏 -->
+    <div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
+        <!-- Logo 区域 -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-700">
+            <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+            <span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
+        </div>
+        <!-- 导航菜单 -->
+        <nav class="flex-1 py-4">
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-home text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">首页</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-cog text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">系统管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-calendar-alt text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">活动管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-user-plus text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">报名活动</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-store text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">门店信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-users text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">会员信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-box text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">商品管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-file-invoice text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">订单管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">AI 机器人</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-truck-loading text-gray-100 mr-3"></i>
+                    <span class="text-white font-medium">赊销铺货</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+            </div>
+            <!-- 展开的子菜单 -->
+            <div class="ml-6">
+                <div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
+                    <i class="fas fa-store text-gray-100 mr-3 text-sm"></i>
+                    <span class="text-white font-medium">铺货门店</span>
+                </div>
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center hidden">
+                    <i class="fas fa-file-invoice text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">结算单</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- 主内容区 -->
+    <div class="flex-1 p-6">
+        <!-- 面包屑导航 -->
+        <nav class="flex items-center mb-6">
+            <span class="text-gray-500">首页</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-500">赊销铺货</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-800 font-medium">铺货门店</span>
+        </nav>
+        <!-- 主要内容卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- 操作按钮区域 -->
+            <!-- <div class="p-6 border-b border-gray-200 bg-gray-50">
 <div class="flex items-center space-x-4">
 <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap ml-2">
 新增报名门店
@@ -416,247 +425,247 @@ justify-content: center;
 </button>
 </div>
 </div> -->
-<!-- 卡片头部 -->
-<div class="p-6 border-b border-gray-200">
-<div class="flex items-center justify-between">
-<h2 class="text-xl font-semibold text-gray-800">门店列表</h2>
-</div>
-</div>
-<!-- 数据表格 -->
-<div class="overflow-x-auto">
-<table class="w-full">
-<thead>
-<tr class="table-header">
-<th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">合同状态</th>
-<th class="py-4 px-6 text-left text-gray-600 font-medium">签署时间</th>
-</tr>
-</thead>
-<tbody>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE001</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
-<td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
-<td class="py-4 px-6 text-gray-600">2026-03-01 14:30:00</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE002</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
-<td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
-<td class="py-4 px-6 text-gray-600">2026-03-02 09:15:30</td>
-</tr>
-<tr class="table-row">
-<td class="py-4 px-6 text-gray-800">STORE003</td>
-<td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
-<td class="py-4 px-6"><span class="text-orange-500 font-medium">未签署</span></td>
-<td class="py-4 px-6 text-gray-400">-</td>
-</tr>
-</tbody>
-</table>
-</div>
-<!-- 分页控件 -->
-<div class="p-6 border-t border-gray-200 flex items-center justify-between">
-<div class="text-gray-600">
-共 3 条记录，每页显示 10 条
-</div>
-<div class="flex items-center space-x-2">
-<button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md" disabled>
-<i class="fas fa-chevron-left text-sm"></i>
-</button>
-<button class="pagination-btn active">1</button>
-<button class="pagination-btn text-gray-600 hover:bg-gray-100" disabled>
-<i class="fas fa-chevron-right text-sm"></i>
-</button>
-</div>
-</div>
-</div>
-</div>
-
-<!-- 查看报名门店侧拉弹窗 -->
-<div id="viewStoreModalOverlay" class="side-modal-overlay"></div>
-<div id="viewStoreModal" class="side-modal">
-    <div class="side-modal-header">
-        <h2 class="side-modal-title">查看报名门店</h2>
-        <button class="close-btn" onclick="closeViewStoreModal()">×</button>
-    </div>
-    <div class="side-modal-body">
-        <table class="side-modal-table">
-            <thead>
-                <tr>
-                    <th>门店编码</th>
-                    <th>门店名称</th>
-                    <th>签约状态</th>
-                    <th>合同开始日期</th>
-                    <th>合同结束日期</th>
-                    <th>最新签约时间</th>
-                    <th>报名时间</th>
-                    <th>操作</th>
-                </tr>
-            </thead>
-            <tbody id="storeListBody">
-                <!-- 动态生成的门店数据 -->
-            </tbody>
-        </table>
-    </div>
-</div>
-
-<!-- 新增报名门店弹窗 -->
-<div id="addStoreModal" class="modal-overlay" style="display: none;">
-    <div class="modal">
-        <div class="modal-header">
-            <h2 class="modal-title">新增报名门店</h2>
-            <button class="close-btn" onclick="closeAddStoreModal()">×</button>
-        </div>
-        <div class="modal-body">
-            <div class="form-group">
-                <label class="form-label">选择报名批次</label>
-                <select class="form-select" id="batchSelect">
-                    <option value="">请选择报名批次</option>
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                </select>
+            <!-- 卡片头部 -->
+            <div class="p-6 border-b border-gray-200">
+                <div class="flex items-center justify-between">
+                    <h2 class="text-xl font-semibold text-gray-800">门店列表</h2>
+                </div>
             </div>
-            <div class="form-group">
-                <label class="form-label">选择门店</label>
-                <select class="form-select" id="storeSelect">
-                    <option value="">请选择门店</option>
-                    <option value="STORE001">STORE001 - 克丽缇娜上海旗舰店</option>
-                    <option value="STORE002">STORE002 - 克丽缇娜北京朝阳店</option>
-                    <option value="STORE003">STORE003 - 克丽缇娜广州天河店</option>
-                    <option value="STORE004">STORE004 - 克丽缇娜深圳南山店</option>
-                    <option value="STORE005">STORE005 - 克丽缇娜杭州西湖店</option>
-                </select>
+            <!-- 数据表格 -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">合同状态</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">签署时间</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE001</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
+                            <td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-01 14:30:00</td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE002</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
+                            <td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-02 09:15:30</td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">STORE003</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
+                            <td class="py-4 px-6"><span class="text-orange-500 font-medium">未签署</span></td>
+                            <td class="py-4 px-6 text-gray-400">-</td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
-            <div class="form-group">
-                <label class="form-label">合同开始日期</label>
-                <input type="date" id="contractStartDate" class="form-select" placeholder="请选择开始日期">
-            </div>
-            <div class="form-group">
-                <label class="form-label">合同结束日期</label>
-                <input type="date" id="contractEndDate" class="form-select" placeholder="请选择结束日期">
+            <!-- 分页控件 -->
+            <div class="p-6 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-gray-600">
+                    共 3 条记录，每页显示 10 条
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md" disabled>
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100" disabled>
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </button>
+                </div>
             </div>
         </div>
-        <div class="modal-footer">
-            <button class="btn-cancel" onclick="closeAddStoreModal()">取消</button>
-            <button class="btn-save" onclick="saveStoreRegistration()">保存</button>
+    </div>
+
+    <!-- 查看报名门店侧拉弹窗 -->
+    <div id="viewStoreModalOverlay" class="side-modal-overlay"></div>
+    <div id="viewStoreModal" class="side-modal">
+        <div class="side-modal-header">
+            <h2 class="side-modal-title">查看报名门店</h2>
+            <button class="close-btn" onclick="closeViewStoreModal()">×</button>
+        </div>
+        <div class="side-modal-body">
+            <table class="side-modal-table">
+                <thead>
+                    <tr>
+                        <th>门店编码</th>
+                        <th>门店名称</th>
+                        <th>签约状态</th>
+                        <th>合同开始日期</th>
+                        <th>合同结束日期</th>
+                        <th>最新签约时间</th>
+                        <th>报名时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="storeListBody">
+                    <!-- 动态生成的门店数据 -->
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<script>
-    // 批次时间数据
-    const batchTimeData = {
-        '1': { start: '2026-03-01', end: '2027-03-01' },
-        '2': { start: '2026-03-16', end: '2027-03-31' },
-        '3': { start: '2026-04-01', end: '2027-04-15' }
-    };
+    <!-- 新增报名门店弹窗 -->
+    <div id="addStoreModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">新增报名门店</h2>
+                <button class="close-btn" onclick="closeAddStoreModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">选择报名批次</label>
+                    <select class="form-select" id="batchSelect">
+                        <option value="">请选择报名批次</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">选择门店</label>
+                    <select class="form-select" id="storeSelect">
+                        <option value="">请选择门店</option>
+                        <option value="STORE001">STORE001 - 克丽缇娜上海旗舰店</option>
+                        <option value="STORE002">STORE002 - 克丽缇娜北京朝阳店</option>
+                        <option value="STORE003">STORE003 - 克丽缇娜广州天河店</option>
+                        <option value="STORE004">STORE004 - 克丽缇娜深圳南山店</option>
+                        <option value="STORE005">STORE005 - 克丽缇娜杭州西湖店</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">合同开始日期</label>
+                    <input type="date" id="contractStartDate" class="form-select" placeholder="请选择开始日期">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">合同结束日期</label>
+                    <input type="date" id="contractEndDate" class="form-select" placeholder="请选择结束日期">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeAddStoreModal()">取消</button>
+                <button class="btn-save" onclick="saveStoreRegistration()">保存</button>
+            </div>
+        </div>
+    </div>
 
-    // 门店数据（模拟数据）
-    const storeData = {
-        '1': [
-            { code: 'STORE001', name: '克丽缇娜上海旗舰店', contract: '已签署', signUpTime: '2026-03-01 10:00', signTime: '2026-03-02 14:30' },
-            { code: 'STORE002', name: '克丽缇娜北京朝阳店', contract: '已签署', signUpTime: '2026-03-01 10:30', signTime: '2026-03-02 15:00' },
-            { code: 'STORE003', name: '克丽缇娜广州天河店', contract: '合约已结束', signUpTime: '2026-03-01 11:00', signTime: '2025-03-02 15:30' },
-            { code: 'STORE004', name: '克丽缇娜深圳南山店', contract: '合约已结束', signUpTime: '2026-03-01 11:30', signTime: '2025-03-02 16:00' },
-            { code: 'STORE005', name: '克丽缇娜杭州西湖店', contract: '已签署', signUpTime: '2026-03-01 12:00', signTime: '2026-03-02 16:30' },
-            { code: 'STORE006', name: '克丽缇娜成都春熙路店', contract: '已签署', signUpTime: '2026-03-01 14:00', signTime: '2026-03-02 17:00' },
-            { code: 'STORE007', name: '克丽缇娜西安钟楼店', contract: '已签署', signUpTime: '2026-03-01 14:30', signTime: '2026-03-02 17:30' },
-            { code: 'STORE008', name: '克丽缇娜南京新街口店', contract: '已签署', signUpTime: '2026-03-01 15:00', signTime: '2026-03-02 18:00' },
-            { code: 'STORE009', name: '克丽缇娜武汉江汉路店', contract: '已签署', signUpTime: '2026-03-01 15:30', signTime: '2026-03-02 18:30' },
-            { code: 'STORE010', name: '克丽缇娜重庆解放碑店', contract: '已签署', signUpTime: '2026-03-01 16:00', signTime: '2026-03-02 19:00' },
-            { code: 'STORE011', name: '克丽缇娜天津滨江道店', contract: '已签署', signUpTime: '2026-03-01 16:30', signTime: '2026-03-02 19:30' },
-            { code: 'STORE012', name: '克丽缇娜苏州观前街店', contract: '已签署', signUpTime: '2026-03-01 17:00', signTime: '2026-03-02 20:00' },
-            { code: 'STORE013', name: '克丽缇娜长沙五一广场店', contract: '未签署', signUpTime: '2026-03-02 10:00', signTime: '-' },
-            { code: 'STORE014', name: '克丽缇娜郑州二七广场店', contract: '未签署', signUpTime: '2026-03-02 10:30', signTime: '-' },
-            { code: 'STORE015', name: '克丽缇娜济南泉城路店', contract: '未签署', signUpTime: '2026-03-02 11:00', signTime: '-' }
-        ],
-        '2': [
-            { code: 'STORE016', name: '克丽缇娜沈阳中街店', contract: '已签署', signUpTime: '2026-03-16 10:00', signTime: '2026-03-17 14:30' },
-            { code: 'STORE017', name: '克丽缇娜大连西安路店', contract: '已签署', signUpTime: '2026-03-16 10:30', signTime: '2026-03-17 15:00' },
-            { code: 'STORE018', name: '克丽缇娜长春红旗街店', contract: '已签署', signUpTime: '2026-03-16 11:00', signTime: '2026-03-17 15:30' },
-            { code: 'STORE019', name: '克丽缇娜哈尔滨中央大街店', contract: '已签署', signUpTime: '2026-03-16 11:30', signTime: '2026-03-17 16:00' },
-            { code: 'STORE020', name: '克丽缇娜石家庄中山路店', contract: '已签署', signUpTime: '2026-03-16 12:00', signTime: '2026-03-17 16:30' },
-            { code: 'STORE021', name: '克丽缇娜太原迎泽大街店', contract: '已签署', signUpTime: '2026-03-16 14:00', signTime: '2026-03-17 17:00' },
-            { code: 'STORE022', name: '克丽缇娜呼和浩特中山路店', contract: '已签署', signUpTime: '2026-03-16 14:30', signTime: '2026-03-17 17:30' },
-            { code: 'STORE023', name: '克丽缇娜包头钢铁大街店', contract: '已签署', signUpTime: '2026-03-16 15:00', signTime: '2026-03-17 18:00' },
-            { code: 'STORE024', name: '克丽缇娜兰州东方红广场店', contract: '已签署', signUpTime: '2026-03-16 15:30', signTime: '2026-03-17 18:30' },
-            { code: 'STORE025', name: '克丽缇娜银川解放西街店', contract: '已签署', signUpTime: '2026-03-16 16:00', signTime: '2026-03-17 19:00' },
-            { code: 'STORE026', name: '克丽缇娜西宁东大街店', contract: '已签署', signUpTime: '2026-03-16 16:30', signTime: '2026-03-17 19:30' },
-            { code: 'STORE027', name: '克丽缇娜乌鲁木齐中山路店', contract: '已签署', signUpTime: '2026-03-16 17:00', signTime: '2026-03-17 20:00' },
-            { code: 'STORE028', name: '克丽缇娜拉萨北京东路店', contract: '已签署', signUpTime: '2026-03-17 10:00', signTime: '2026-03-18 14:30' },
-            { code: 'STORE029', name: '克丽缇娜南宁民族大道店', contract: '已签署', signUpTime: '2026-03-17 10:30', signTime: '2026-03-18 15:00' },
-            { code: 'STORE030', name: '克丽缇娜海口国贸大道店', contract: '已签署', signUpTime: '2026-03-17 11:00', signTime: '2026-03-18 15:30' },
-            { code: 'STORE031', name: '克丽缇娜三亚解放路店', contract: '已签署', signUpTime: '2026-03-17 11:30', signTime: '2026-03-18 16:00' },
-            { code: 'STORE032', name: '克丽缇娜福州八一七路店', contract: '已签署', signUpTime: '2026-03-17 12:00', signTime: '2026-03-18 16:30' },
-            { code: 'STORE033', name: '克丽缇娜厦门中山路店', contract: '已签署', signUpTime: '2026-03-17 14:00', signTime: '2026-03-18 17:00' },
-            { code: 'STORE034', name: '克丽缇娜南昌八一大道店', contract: '未签署', signUpTime: '2026-03-17 14:30', signTime: '-' },
-            { code: 'STORE035', name: '克丽缇娜合肥淮河路店', contract: '未签署', signUpTime: '2026-03-17 15:00', signTime: '-' },
-            { code: 'STORE036', name: '克丽缇娜杭州西湖店', contract: '未签署', signUpTime: '2026-03-17 15:30', signTime: '-' },
-            { code: 'STORE037', name: '克丽缇娜宁波中山路店', contract: '未签署', signUpTime: '2026-03-17 16:00', signTime: '-' },
-            { code: 'STORE038', name: '克丽缇娜温州五马街店', contract: '未签署', signUpTime: '2026-03-17 16:30', signTime: '-' }
-        ],
-        '3': [
-            { code: 'STORE039', name: '克丽缇娜深圳罗湖店', contract: '已签署', signUpTime: '2026-04-01 10:00', signTime: '2026-04-02 14:30' },
-            { code: 'STORE040', name: '克丽缇娜广州天河城店', contract: '已签署', signUpTime: '2026-04-01 10:30', signTime: '2026-04-02 15:00' },
-            { code: 'STORE041', name: '克丽缇娜上海南京西路店', contract: '已签署', signUpTime: '2026-04-01 11:00', signTime: '2026-04-02 15:30' },
-            { code: 'STORE042', name: '克丽缇娜北京王府井店', contract: '已签署', signUpTime: '2026-04-01 11:30', signTime: '2026-04-02 16:00' },
-            { code: 'STORE043', name: '克丽缇娜成都春熙路店', contract: '已签署', signUpTime: '2026-04-01 12:00', signTime: '2026-04-02 16:30' },
-            { code: 'STORE044', name: '克丽缇娜重庆观音桥店', contract: '已签署', signUpTime: '2026-04-01 14:00', signTime: '2026-04-02 17:00' },
-            { code: 'STORE045', name: '克丽缇娜武汉光谷店', contract: '未签署', signUpTime: '2026-04-01 14:30', signTime: '-' },
-            { code: 'STORE046', name: '克丽缇娜西安小寨店', contract: '未签署', signUpTime: '2026-04-01 15:00', signTime: '-' },
-            { code: 'STORE047', name: '克丽缇娜南京夫子庙店', contract: '未签署', signUpTime: '2026-04-01 15:30', signTime: '-' },
-            { code: 'STORE048', name: '克丽缇娜杭州武林店', contract: '未签署', signUpTime: '2026-04-01 16:00', signTime: '-' },
-            { code: 'STORE049', name: '克丽缇娜苏州金鸡湖店', contract: '未签署', signUpTime: '2026-04-01 16:30', signTime: '-' },
-            { code: 'STORE050', name: '克丽缇娜天津和平路店', contract: '未签署', signUpTime: '2026-04-01 17:00', signTime: '-' },
-            { code: 'STORE051', name: '克丽缇娜青岛香港中路店', contract: '未签署', signUpTime: '2026-04-02 10:00', signTime: '-' },
-            { code: 'STORE052', name: '克丽缇娜大连星海广场店', contract: '未签署', signUpTime: '2026-04-02 10:30', signTime: '-' },
-            { code: 'STORE053', name: '克丽缇娜沈阳中街店', contract: '未签署', signUpTime: '2026-04-02 11:00', signTime: '-' },
-            { code: 'STORE054', name: '克丽缇娜长沙黄兴路店', contract: '未签署', signUpTime: '2026-04-02 11:30', signTime: '-' },
-            { code: 'STORE055', name: '克丽缇娜郑州二七塔店', contract: '未签署', signUpTime: '2026-04-02 12:00', signTime: '-' },
-            { code: 'STORE056', name: '克丽缇娜济南泉城广场店', contract: '未签署', signUpTime: '2026-04-02 14:00', signTime: '-' }
-        ]
-    };
+    <script>
+        // 批次时间数据
+        const batchTimeData = {
+            '1': { start: '2026-03-01', end: '2027-03-01' },
+            '2': { start: '2026-03-16', end: '2027-03-31' },
+            '3': { start: '2026-04-01', end: '2027-04-15' }
+        };
 
-    // 打开查看报名门店弹窗
-    function openViewStoreModal(batch) {
-        const modal = document.getElementById('viewStoreModal');
-        const overlay = document.getElementById('viewStoreModalOverlay');
-        const tbody = document.getElementById('storeListBody');
-        
-        // 清空表格内容
-        tbody.innerHTML = '';
-        
-        // 获取对应批次的门店数据
-        const stores = storeData[batch] || [];
-        
-        // 生成表格内容
-        stores.forEach(store => {
-            const row = document.createElement('tr');
-            
-            let contractClass;
-            if (store.contract === '已签署') {
-                contractClass = 'contract-signed';
-            } else if (store.contract === '合约已结束') {
-                contractClass = 'contract-expired';
-            } else {
-                contractClass = 'contract-unsigned';
-            }
-            const actionHtml = (store.contract === '已签署' || store.contract === '合约已结束') 
-                ? '<a href="#" class="view-contract-btn">查看签约记录</a>' 
-                : '-';
-            
-            // 模拟合同日期数据
-            let contractStartDate = '-';
-            let contractEndDate = '-';
-            if (store.contract === '已签署' || store.contract === '合约已结束') {
-                // 为已签署和合约已结束的门店添加合同日期
-                contractStartDate = '2026-01-01';
-                contractEndDate = '2026-12-31';
-            }
-            
-            row.innerHTML = `
+        // 门店数据（模拟数据）
+        const storeData = {
+            '1': [
+                { code: 'STORE001', name: '克丽缇娜上海旗舰店', contract: '已签署', signUpTime: '2026-03-01 10:00', signTime: '2026-03-02 14:30' },
+                { code: 'STORE002', name: '克丽缇娜北京朝阳店', contract: '已签署', signUpTime: '2026-03-01 10:30', signTime: '2026-03-02 15:00' },
+                { code: 'STORE003', name: '克丽缇娜广州天河店', contract: '合约已结束', signUpTime: '2026-03-01 11:00', signTime: '2025-03-02 15:30' },
+                { code: 'STORE004', name: '克丽缇娜深圳南山店', contract: '合约已结束', signUpTime: '2026-03-01 11:30', signTime: '2025-03-02 16:00' },
+                { code: 'STORE005', name: '克丽缇娜杭州西湖店', contract: '已签署', signUpTime: '2026-03-01 12:00', signTime: '2026-03-02 16:30' },
+                { code: 'STORE006', name: '克丽缇娜成都春熙路店', contract: '已签署', signUpTime: '2026-03-01 14:00', signTime: '2026-03-02 17:00' },
+                { code: 'STORE007', name: '克丽缇娜西安钟楼店', contract: '已签署', signUpTime: '2026-03-01 14:30', signTime: '2026-03-02 17:30' },
+                { code: 'STORE008', name: '克丽缇娜南京新街口店', contract: '已签署', signUpTime: '2026-03-01 15:00', signTime: '2026-03-02 18:00' },
+                { code: 'STORE009', name: '克丽缇娜武汉江汉路店', contract: '已签署', signUpTime: '2026-03-01 15:30', signTime: '2026-03-02 18:30' },
+                { code: 'STORE010', name: '克丽缇娜重庆解放碑店', contract: '已签署', signUpTime: '2026-03-01 16:00', signTime: '2026-03-02 19:00' },
+                { code: 'STORE011', name: '克丽缇娜天津滨江道店', contract: '已签署', signUpTime: '2026-03-01 16:30', signTime: '2026-03-02 19:30' },
+                { code: 'STORE012', name: '克丽缇娜苏州观前街店', contract: '已签署', signUpTime: '2026-03-01 17:00', signTime: '2026-03-02 20:00' },
+                { code: 'STORE013', name: '克丽缇娜长沙五一广场店', contract: '未签署', signUpTime: '2026-03-02 10:00', signTime: '-' },
+                { code: 'STORE014', name: '克丽缇娜郑州二七广场店', contract: '未签署', signUpTime: '2026-03-02 10:30', signTime: '-' },
+                { code: 'STORE015', name: '克丽缇娜济南泉城路店', contract: '未签署', signUpTime: '2026-03-02 11:00', signTime: '-' }
+            ],
+            '2': [
+                { code: 'STORE016', name: '克丽缇娜沈阳中街店', contract: '已签署', signUpTime: '2026-03-16 10:00', signTime: '2026-03-17 14:30' },
+                { code: 'STORE017', name: '克丽缇娜大连西安路店', contract: '已签署', signUpTime: '2026-03-16 10:30', signTime: '2026-03-17 15:00' },
+                { code: 'STORE018', name: '克丽缇娜长春红旗街店', contract: '已签署', signUpTime: '2026-03-16 11:00', signTime: '2026-03-17 15:30' },
+                { code: 'STORE019', name: '克丽缇娜哈尔滨中央大街店', contract: '已签署', signUpTime: '2026-03-16 11:30', signTime: '2026-03-17 16:00' },
+                { code: 'STORE020', name: '克丽缇娜石家庄中山路店', contract: '已签署', signUpTime: '2026-03-16 12:00', signTime: '2026-03-17 16:30' },
+                { code: 'STORE021', name: '克丽缇娜太原迎泽大街店', contract: '已签署', signUpTime: '2026-03-16 14:00', signTime: '2026-03-17 17:00' },
+                { code: 'STORE022', name: '克丽缇娜呼和浩特中山路店', contract: '已签署', signUpTime: '2026-03-16 14:30', signTime: '2026-03-17 17:30' },
+                { code: 'STORE023', name: '克丽缇娜包头钢铁大街店', contract: '已签署', signUpTime: '2026-03-16 15:00', signTime: '2026-03-17 18:00' },
+                { code: 'STORE024', name: '克丽缇娜兰州东方红广场店', contract: '已签署', signUpTime: '2026-03-16 15:30', signTime: '2026-03-17 18:30' },
+                { code: 'STORE025', name: '克丽缇娜银川解放西街店', contract: '已签署', signUpTime: '2026-03-16 16:00', signTime: '2026-03-17 19:00' },
+                { code: 'STORE026', name: '克丽缇娜西宁东大街店', contract: '已签署', signUpTime: '2026-03-16 16:30', signTime: '2026-03-17 19:30' },
+                { code: 'STORE027', name: '克丽缇娜乌鲁木齐中山路店', contract: '已签署', signUpTime: '2026-03-16 17:00', signTime: '2026-03-17 20:00' },
+                { code: 'STORE028', name: '克丽缇娜拉萨北京东路店', contract: '已签署', signUpTime: '2026-03-17 10:00', signTime: '2026-03-18 14:30' },
+                { code: 'STORE029', name: '克丽缇娜南宁民族大道店', contract: '已签署', signUpTime: '2026-03-17 10:30', signTime: '2026-03-18 15:00' },
+                { code: 'STORE030', name: '克丽缇娜海口国贸大道店', contract: '已签署', signUpTime: '2026-03-17 11:00', signTime: '2026-03-18 15:30' },
+                { code: 'STORE031', name: '克丽缇娜三亚解放路店', contract: '已签署', signUpTime: '2026-03-17 11:30', signTime: '2026-03-18 16:00' },
+                { code: 'STORE032', name: '克丽缇娜福州八一七路店', contract: '已签署', signUpTime: '2026-03-17 12:00', signTime: '2026-03-18 16:30' },
+                { code: 'STORE033', name: '克丽缇娜厦门中山路店', contract: '已签署', signUpTime: '2026-03-17 14:00', signTime: '2026-03-18 17:00' },
+                { code: 'STORE034', name: '克丽缇娜南昌八一大道店', contract: '未签署', signUpTime: '2026-03-17 14:30', signTime: '-' },
+                { code: 'STORE035', name: '克丽缇娜合肥淮河路店', contract: '未签署', signUpTime: '2026-03-17 15:00', signTime: '-' },
+                { code: 'STORE036', name: '克丽缇娜杭州西湖店', contract: '未签署', signUpTime: '2026-03-17 15:30', signTime: '-' },
+                { code: 'STORE037', name: '克丽缇娜宁波中山路店', contract: '未签署', signUpTime: '2026-03-17 16:00', signTime: '-' },
+                { code: 'STORE038', name: '克丽缇娜温州五马街店', contract: '未签署', signUpTime: '2026-03-17 16:30', signTime: '-' }
+            ],
+            '3': [
+                { code: 'STORE039', name: '克丽缇娜深圳罗湖店', contract: '已签署', signUpTime: '2026-04-01 10:00', signTime: '2026-04-02 14:30' },
+                { code: 'STORE040', name: '克丽缇娜广州天河城店', contract: '已签署', signUpTime: '2026-04-01 10:30', signTime: '2026-04-02 15:00' },
+                { code: 'STORE041', name: '克丽缇娜上海南京西路店', contract: '已签署', signUpTime: '2026-04-01 11:00', signTime: '2026-04-02 15:30' },
+                { code: 'STORE042', name: '克丽缇娜北京王府井店', contract: '已签署', signUpTime: '2026-04-01 11:30', signTime: '2026-04-02 16:00' },
+                { code: 'STORE043', name: '克丽缇娜成都春熙路店', contract: '已签署', signUpTime: '2026-04-01 12:00', signTime: '2026-04-02 16:30' },
+                { code: 'STORE044', name: '克丽缇娜重庆观音桥店', contract: '已签署', signUpTime: '2026-04-01 14:00', signTime: '2026-04-02 17:00' },
+                { code: 'STORE045', name: '克丽缇娜武汉光谷店', contract: '未签署', signUpTime: '2026-04-01 14:30', signTime: '-' },
+                { code: 'STORE046', name: '克丽缇娜西安小寨店', contract: '未签署', signUpTime: '2026-04-01 15:00', signTime: '-' },
+                { code: 'STORE047', name: '克丽缇娜南京夫子庙店', contract: '未签署', signUpTime: '2026-04-01 15:30', signTime: '-' },
+                { code: 'STORE048', name: '克丽缇娜杭州武林店', contract: '未签署', signUpTime: '2026-04-01 16:00', signTime: '-' },
+                { code: 'STORE049', name: '克丽缇娜苏州金鸡湖店', contract: '未签署', signUpTime: '2026-04-01 16:30', signTime: '-' },
+                { code: 'STORE050', name: '克丽缇娜天津和平路店', contract: '未签署', signUpTime: '2026-04-01 17:00', signTime: '-' },
+                { code: 'STORE051', name: '克丽缇娜青岛香港中路店', contract: '未签署', signUpTime: '2026-04-02 10:00', signTime: '-' },
+                { code: 'STORE052', name: '克丽缇娜大连星海广场店', contract: '未签署', signUpTime: '2026-04-02 10:30', signTime: '-' },
+                { code: 'STORE053', name: '克丽缇娜沈阳中街店', contract: '未签署', signUpTime: '2026-04-02 11:00', signTime: '-' },
+                { code: 'STORE054', name: '克丽缇娜长沙黄兴路店', contract: '未签署', signUpTime: '2026-04-02 11:30', signTime: '-' },
+                { code: 'STORE055', name: '克丽缇娜郑州二七塔店', contract: '未签署', signUpTime: '2026-04-02 12:00', signTime: '-' },
+                { code: 'STORE056', name: '克丽缇娜济南泉城广场店', contract: '未签署', signUpTime: '2026-04-02 14:00', signTime: '-' }
+            ]
+        };
+
+        // 打开查看报名门店弹窗
+        function openViewStoreModal(batch) {
+            const modal = document.getElementById('viewStoreModal');
+            const overlay = document.getElementById('viewStoreModalOverlay');
+            const tbody = document.getElementById('storeListBody');
+
+            // 清空表格内容
+            tbody.innerHTML = '';
+
+            // 获取对应批次的门店数据
+            const stores = storeData[batch] || [];
+
+            // 生成表格内容
+            stores.forEach(store => {
+                const row = document.createElement('tr');
+
+                let contractClass;
+                if (store.contract === '已签署') {
+                    contractClass = 'contract-signed';
+                } else if (store.contract === '合约已结束') {
+                    contractClass = 'contract-expired';
+                } else {
+                    contractClass = 'contract-unsigned';
+                }
+                const actionHtml = (store.contract === '已签署' || store.contract === '合约已结束')
+                    ? '<a href="#" class="view-contract-btn">查看签约记录</a>'
+                    : '-';
+
+                // 模拟合同日期数据
+                let contractStartDate = '-';
+                let contractEndDate = '-';
+                if (store.contract === '已签署' || store.contract === '合约已结束') {
+                    // 为已签署和合约已结束的门店添加合同日期
+                    contractStartDate = '2026-01-01';
+                    contractEndDate = '2026-12-31';
+                }
+
+                row.innerHTML = `
                 <td>${store.code}</td>
                 <td>${store.name}</td>
                 <td><span class="${contractClass}">${store.contract}</span></td>
@@ -666,120 +675,121 @@ justify-content: center;
                 <td>${store.signUpTime}</td>
                 <td>${actionHtml}</td>
             `;
-            
-            tbody.appendChild(row);
+
+                tbody.appendChild(row);
+            });
+
+            // 显示弹窗
+            overlay.style.display = 'block';
+            modal.classList.add('active');
+        }
+
+        // 关闭查看报名门店弹窗
+        function closeViewStoreModal() {
+            const modal = document.getElementById('viewStoreModal');
+            const overlay = document.getElementById('viewStoreModalOverlay');
+
+            modal.classList.remove('active');
+            overlay.style.display = 'none';
+        }
+
+        // 点击遮罩层关闭弹窗
+        document.getElementById('viewStoreModalOverlay').addEventListener('click', function () {
+            closeViewStoreModal();
         });
-        
-        // 显示弹窗
-        overlay.style.display = 'block';
-        modal.classList.add('active');
-    }
 
-    // 关闭查看报名门店弹窗
-    function closeViewStoreModal() {
-        const modal = document.getElementById('viewStoreModal');
-        const overlay = document.getElementById('viewStoreModalOverlay');
-        
-        modal.classList.remove('active');
-        overlay.style.display = 'none';
-    }
-
-    // 点击遮罩层关闭弹窗
-    document.getElementById('viewStoreModalOverlay').addEventListener('click', function() {
-        closeViewStoreModal();
-    });
-
-    // 打开新增报名门店弹窗
-    function openAddStoreModal() {
-        document.getElementById('addStoreModal').style.display = 'flex';
-    }
-
-    // 关闭新增报名门店弹窗
-    function closeAddStoreModal() {
-        document.getElementById('addStoreModal').style.display = 'none';
-        // 重置表单
-        document.getElementById('batchSelect').value = '';
-        document.getElementById('storeSelect').value = '';
-        document.getElementById('contractStartDate').value = '';
-        document.getElementById('contractEndDate').value = '';
-    }
-
-
-
-    // 保存门店报名
-    function saveStoreRegistration() {
-        const batch = document.getElementById('batchSelect').value;
-        const store = document.getElementById('storeSelect').value;
-        const contractStartDate = document.getElementById('contractStartDate').value;
-        const contractEndDate = document.getElementById('contractEndDate').value;
-
-        if (!batch) {
-            alert('请选择报名批次');
-            return;
+        // 打开新增报名门店弹窗
+        function openAddStoreModal() {
+            document.getElementById('addStoreModal').style.display = 'flex';
         }
 
-        if (!store) {
-            alert('请选择门店');
-            return;
+        // 关闭新增报名门店弹窗
+        function closeAddStoreModal() {
+            document.getElementById('addStoreModal').style.display = 'none';
+            // 重置表单
+            document.getElementById('batchSelect').value = '';
+            document.getElementById('storeSelect').value = '';
+            document.getElementById('contractStartDate').value = '';
+            document.getElementById('contractEndDate').value = '';
         }
 
-        if (!contractStartDate) {
-            alert('请选择合同开始日期');
-            return;
-        }
 
-        if (!contractEndDate) {
-            alert('请选择合同结束日期');
-            return;
-        }
 
-        if (new Date(contractEndDate) < new Date(contractStartDate)) {
-            alert('合同结束日期不能早于开始日期');
-            return;
-        }
+        // 保存门店报名
+        function saveStoreRegistration() {
+            const batch = document.getElementById('batchSelect').value;
+            const store = document.getElementById('storeSelect').value;
+            const contractStartDate = document.getElementById('contractStartDate').value;
+            const contractEndDate = document.getElementById('contractEndDate').value;
 
-        // 模拟保存操作
-        alert('保存成功！');
-        
-        // 更新对应批次的报名门店数量
-        updateStoreCount(batch);
-        
-        // 关闭弹窗
-        closeAddStoreModal();
-    }
-
-    // 更新门店数量
-    function updateStoreCount(batch) {
-        const tableRows = document.querySelectorAll('tbody tr');
-        tableRows.forEach(row => {
-            const batchCell = row.querySelector('td:first-child');
-            if (batchCell && batchCell.textContent.trim() === batch) {
-                const countCell = row.querySelector('td:nth-child(4)');
-                if (countCell) {
-                    const currentCount = parseInt(countCell.textContent.trim());
-                    countCell.textContent = currentCount + 1;
-                }
+            if (!batch) {
+                alert('请选择报名批次');
+                return;
             }
-        });
-    }
 
-    // 为新增报名门店按钮添加点击事件
-    document.addEventListener('DOMContentLoaded', function() {
-        const addBtn = document.querySelector('button.bg-green-500');
-        if (addBtn) {
-            addBtn.addEventListener('click', openAddStoreModal);
+            if (!store) {
+                alert('请选择门店');
+                return;
+            }
+
+            if (!contractStartDate) {
+                alert('请选择合同开始日期');
+                return;
+            }
+
+            if (!contractEndDate) {
+                alert('请选择合同结束日期');
+                return;
+            }
+
+            if (new Date(contractEndDate) < new Date(contractStartDate)) {
+                alert('合同结束日期不能早于开始日期');
+                return;
+            }
+
+            // 模拟保存操作
+            alert('保存成功！');
+
+            // 更新对应批次的报名门店数量
+            updateStoreCount(batch);
+
+            // 关闭弹窗
+            closeAddStoreModal();
         }
-        
-        // 为查看报名门店链接添加点击事件
-        const viewLinks = document.querySelectorAll('tbody tr td:last-child a');
-        viewLinks.forEach((link, index) => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                const batch = index + 1;
-                openViewStoreModal(batch.toString());
+
+        // 更新门店数量
+        function updateStoreCount(batch) {
+            const tableRows = document.querySelectorAll('tbody tr');
+            tableRows.forEach(row => {
+                const batchCell = row.querySelector('td:first-child');
+                if (batchCell && batchCell.textContent.trim() === batch) {
+                    const countCell = row.querySelector('td:nth-child(4)');
+                    if (countCell) {
+                        const currentCount = parseInt(countCell.textContent.trim());
+                        countCell.textContent = currentCount + 1;
+                    }
+                }
+            });
+        }
+
+        // 为新增报名门店按钮添加点击事件
+        document.addEventListener('DOMContentLoaded', function () {
+            const addBtn = document.querySelector('button.bg-green-500');
+            if (addBtn) {
+                addBtn.addEventListener('click', openAddStoreModal);
+            }
+
+            // 为查看报名门店链接添加点击事件
+            const viewLinks = document.querySelectorAll('tbody tr td:last-child a');
+            viewLinks.forEach((link, index) => {
+                link.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    const batch = index + 1;
+                    openViewStoreModal(batch.toString());
+                });
             });
         });
-    });
-</script>
+    </script>
 </body>
+
 </html>
