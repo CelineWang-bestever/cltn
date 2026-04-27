@@ -541,16 +541,15 @@
                         <span class="info-label">已结算数量：</span>
                         <span class="info-value text-brand-color" id="modal-settled-stock"></span>
                     </div>
-
+                    <div class="info-item">
+                        <span class="info-label">已归还数量：</span>
+                        <span class="info-value text-blue" id="modal-returned-stock"></span>
+                    </div>
                     <div class="info-item">
                         <span class="info-label">未结算数量：</span>
                         <span class="info-value text-green" id="modal-unsettled-stock"></span>
                     </div>
                 </div>
-            </div>
-
-            <div style="margin-bottom: 15px; font-size: 14px; color: #666;">
-                当前表格显示的是寄售入库货品的明细数据，可通过筛选条件查看特定状态的记录。
             </div>
 
             <div class="search-area">
@@ -561,7 +560,7 @@
                             <option value="all">全部</option>
                             <option value="未结算">未结算</option>
                             <option value="已结算">已结算</option>
-
+                            <option value="已归还">已归还</option>
                         </select>
                     </div>
                     <button class="btn btn-primary" onclick="filterStockLog()">筛选</button>
@@ -575,8 +574,7 @@
                         <tr>
                             <th>商品唯一编号</th>
                             <th>批次</th>
-                            <th>寄售入库日期</th>
-                            <th>库存状态</th>
+                            <th>寄售库存状态</th>
                             <th>结算状态</th>
                             <th>关联结算单号</th>
                             <th>结算周期</th>
@@ -653,21 +651,20 @@
         // 重新定义商品库存数据
         const productStockData = {};
         productStockData['图拉植蓓青春泉液'] = {};
-        productStockData['图拉植蓓青春泉液']['30ml'] = { total: '5瓶', settled: '2瓶', unsettled: '3瓶'};
+        productStockData['图拉植蓓青春泉液']['30ml'] = { total: '6瓶', settled: '1瓶', unsettled: '3瓶', returnedStock: '2瓶'};
         productStockData['图拉植蓓精华液'] = {};
-        productStockData['图拉植蓓精华液']['50ml'] = { total: '20瓶', settled: '10瓶', unsettled: '10瓶'};
+        productStockData['图拉植蓓精华液']['50ml'] = { total: '20瓶', settled: '10瓶', unsettled: '10瓶', returnedStock: '0瓶'};
         productStockData['图拉植蓓面霜'] = {};
-        productStockData['图拉植蓓面霜']['50g'] = { total: '17瓶', settled: '8瓶', unsettled: '9瓶'};
+        productStockData['图拉植蓓面霜']['50g'] = { total: '17瓶', settled: '8瓶', unsettled: '9瓶', returnedStock: '0瓶'};
         productStockData['图拉植蓓乳液'] = {};
-        productStockData['图拉植蓓乳液']['100ml'] = { total: '14瓶', settled: '6瓶', unsettled: '8瓶'};
+        productStockData['图拉植蓓乳液']['100ml'] = { total: '14瓶', settled: '6瓶', unsettled: '8瓶', returnedStock: '0瓶'};
         productStockData['图拉植蓓身体乳'] = {};
-        productStockData['图拉植蓓身体乳']['200ml'] = { total: '11瓶', settled: '4瓶', unsettled: '7瓶'};
+        productStockData['图拉植蓓身体乳']['200ml'] = { total: '11瓶', settled: '4瓶', unsettled: '7瓶', returnedStock: '0瓶'};
 
         const stockLogData = [
             {
                 id: '08290B0010002384',
                 batch: 'B56033',
-                inDate: '2026-03-10',
                 stockStatus: '在库',
                 settlementStatus: '未结算',
                 relatedSettleNo: '-',
@@ -676,7 +673,6 @@
             {
                 id: '08290B0010002385',
                 batch: 'B56034',
-                inDate: '2026-02-01',
                 stockStatus: '已出库',
                 settlementStatus: '未结算',
                 relatedSettleNo: '-',
@@ -685,7 +681,6 @@
             {
                 id: '08290B0010002386',
                 batch: 'B56035',
-                inDate: '2026-02-01',
                 stockStatus: '已出库',
                 settlementStatus: '已结算',
                 relatedSettleNo: 'SETTLE20260426001',
@@ -694,17 +689,23 @@
             {
                 id: '08290B0010002387',
                 batch: 'B56036',
-                inDate: '2026-02-01',
                 stockStatus: '在库',
                 settlementStatus: '未结算',
                 relatedSettleNo: '-',
                 settlePeriod: ''
             },
             {
+                id: '08290B0010002388',
+                batch: 'B56036',
+                stockStatus: '已出库',
+                settlementStatus: '已归还',
+                relatedSettleNo: '-',
+                settlePeriod: ''
+            },
+            {
                 id: '08290B0010002389',
                 batch: 'B56036',
-                inDate: '2026-02-01',
-                stockStatus: '在库',
+                stockStatus: '已出库',
                 settlementStatus: '已结算',
                 relatedSettleNo: 'SETTLE20260426001',
                 settlePeriod: '2026-02-26 至 2026-03-25'
@@ -716,9 +717,9 @@
             {
                 docNo: 'IN00000001',
                 relatedDocNo: '-',
-                docType: '寄售入库',
+                docType: '采购入库',
                 operator: '张三',
-                operateTime: '2026-03-10 09:00:00'
+                operateTime: '2026-02-01 09:00:00'
             }
         ];
         stockChangeLogData['08290B0010002385_B56034'] = [
@@ -732,20 +733,28 @@
             {
                 docNo: 'IN00000001',
                 relatedDocNo: '-',
-                docType: '寄售入库',
+                docType: '采购入库',
                 operator: '张三',
                 operateTime: '2026-02-01 09:00:00'
             }
         ];
-
-        stockChangeLogData['08290B0010002389_B56036'] = [
+        stockChangeLogData['08290B0010002388_B56036'] = [
             {
-                docNo: 'IN00000002',
-                relatedDocNo: 'C260301011',
-                docType: '盘盈入库',
+                docNo: 'OUT00000002',
+                relatedDocNo: '-',
+                docType: '寄售归还出库',
                 operator: '张三',
-                operateTime: '2026-05-08 09:00:00'
+                operateTime: '2026-05-27 09:00:00'
             },
+            {
+                docNo: 'IN00000001',
+                relatedDocNo: '-',
+                docType: '采购入库',
+                operator: '张三',
+                operateTime: '2026-02-01 09:00:00'
+            }
+        ];
+        stockChangeLogData['08290B0010002389_B56036'] = [
             {
                 docNo: 'OUT00000002',
                 relatedDocNo: 'C260301010',
@@ -756,7 +765,7 @@
             {
                 docNo: 'IN00000001',
                 relatedDocNo: '-',
-                docType: '寄售入库',
+                docType: '采购入库',
                 operator: '张三',
                 operateTime: '2026-02-01 09:00:00'
             }
@@ -772,7 +781,7 @@
             {
                 docNo: 'IN00000001',
                 relatedDocNo: '-',
-                docType: '寄售入库',
+                docType: '采购入库',
                 operator: '张三',
                 operateTime: '2026-02-01 09:00:00'
             }
@@ -795,7 +804,7 @@
             {
                 docNo: 'IN00000001',
                 relatedDocNo: '-',
-                docType: '寄售入库',
+                docType: '采购入库',
                 operator: '张三',
                 operateTime: '2026-02-01 09:00:00'
             }
@@ -805,32 +814,13 @@
             const params = new URLSearchParams(window.location.search);
             const productName = decodeURIComponent(params.get('productName')) || '图拉植蓓青春泉液';
             const spec = decodeURIComponent(params.get('spec')) || '30ml';
-            const startDate = params.get('startDate');
-            const endDate = params.get('endDate');
 
             console.log('productName:', productName);
             console.log('spec:', spec);
-            console.log('startDate:', startDate);
-            console.log('endDate:', endDate);
             console.log('productStockData:', productStockData);
 
             document.getElementById('modal-product-name').textContent = productName;
             document.getElementById('modal-spec').textContent = spec;
-            
-            // 更新文案显示，包含日期范围信息
-            const infoDiv = document.querySelector('div[style="margin-bottom: 15px; font-size: 14px; color: #666;"]');
-            if (startDate && endDate) {
-                infoDiv.style.padding = '10px 15px';
-                infoDiv.style.backgroundColor = '#f8f9fa';
-                infoDiv.style.borderLeft = '4px solid #ff6b81';
-                infoDiv.style.borderRadius = '4px';
-                infoDiv.style.fontSize = '14px';
-                infoDiv.style.color = '#333';
-                infoDiv.style.display = 'block';
-                infoDiv.innerHTML = `当前表格显示的是 <span style="font-weight: bold; color: #ff6b81;">${startDate} 至 ${endDate}</span> 期间寄售入库货品的明细数据`;
-            } else {
-                infoDiv.style.display = 'none';
-            }
             
             // 检查商品是否存在，不存在则使用默认值
             let stockData;
@@ -845,10 +835,12 @@
                 document.getElementById('modal-total-stock').textContent = stockData.total;
                 document.getElementById('modal-settled-stock').textContent = stockData.settled;
                 document.getElementById('modal-unsettled-stock').textContent = stockData.unsettled;
+                document.getElementById('modal-returned-stock').textContent = stockData.returnedStock;
             } else {
                 document.getElementById('modal-total-stock').textContent = '-';
                 document.getElementById('modal-settled-stock').textContent = '-';
                 document.getElementById('modal-unsettled-stock').textContent = '-';
+                document.getElementById('modal-returned-stock').textContent = '-';
             }
 
             filterStockLog();
@@ -867,7 +859,6 @@
                 row.innerHTML = `
                     <td>${item.id}</td>
                     <td>${item.batch}</td>
-                    <td>${item.inDate || '-'}</td>
                     <td>${item.stockStatus}</td>
                     <td>${item.settlementStatus}</td>
                     <td>${item.relatedSettleNo || '-'}</td>

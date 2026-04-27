@@ -642,7 +642,7 @@
                                 <div class="barcode-row">
                                     <span>${barcode.batchNo}</span>
                                     <span>${barcode.barcode}</span>
-                                    <span class="stock-type ${barcode.stockType === '赊销' ? 'credit' : 'distribution'}">${barcode.stockType}</span>
+                                    <span class="stock-type ${barcode.stockType === '寄售' ? 'credit' : 'distribution'}">${barcode.stockType}</span>
                                     <button class="delete-btn" onclick="deleteBarcode(${index}, ${barcodeIndex})" "><svg class="linear-icon" style="width: 16px; height: 16px; color: #ff6b81;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                                 </div>
                             `).join('')}
@@ -728,7 +728,7 @@
                 for (let i = 0; i < diff; i++) {
                     const batchNo = 'B' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + String(currentBarcodeCount + i).padStart(3, '0');
                     const barcode = '690' + String(product.id).padStart(9, '0') + Math.floor(Math.random() * 10);
-                    const stockType = Math.random() > 0.5 ? '赊销' : '门店自有';
+                    const stockType = Math.random() > 0.5 ? '寄售' : '门店自有';
                     product.barcodes.push({
                         batchNo: batchNo,
                         barcode: barcode,
@@ -784,13 +784,13 @@
                 return sum + subtotal;
             }, 0);
             
-            // 计算赊销和门店自有的数量
+            // 计算寄售和门店自有的数量
             let creditCount = 0;
             let distributionCount = 0;
             
             receiptProducts.forEach(product => {
                 product.barcodes.forEach(barcode => {
-                    if (barcode.stockType === '赊销') {
+                    if (barcode.stockType === '寄售') {
                         creditCount++;
                     } else if (barcode.stockType === '门店自有') {
                         distributionCount++;

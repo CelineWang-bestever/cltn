@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报名批次管理</title>
+    <link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
+    <script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#409EFF',
+                        secondary: '#6B7280'
+                    },
+                    borderRadius: {
+                        'none': '0px',
+                        'sm': '2px',
+                        DEFAULT: '4px',
+                        'md': '8px',
+                        'lg': '12px',
+                        'xl': '16px',
+                        '2xl': '20px',
+                        '3xl': '24px',
+                        'full': '9999px',
+                        'button': '4px'
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
+    <style>
+        body {
+            min-height: 1024px;
+            background-color: #f8fafc;
+        }
+
+        .sidebar-item:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .status-tag {
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .table-header {
+            background-color: #f1f5f9;
+            font-weight: 600;
+        }
+
+        .table-row:nth-child(even) {
+            background-color: #f8fafc;
+        }
+
+        .table-row:nth-child(odd) {
+            background-color: white;
+        }
+
+        .pagination-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .pagination-btn.active {
+            background-color: #ef4444;
+            color: white;
+        }
+
+        /* 新增批次弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .modal {
+            background-color: white;
+            border-radius: 8px;
+            padding: 24px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #999;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: #333;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #409EFF;
+            box-shadow: 0 0 0 3px rgba(64, 158, 255, 0.1);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 24px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .btn-cancel {
+            padding: 8px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            background-color: white;
+            color: #333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-cancel:hover {
+            background-color: #f8fafc;
+        }
+
+        .btn-save {
+            padding: 8px 16px;
+            border: 1px solid #409EFF;
+            border-radius: 4px;
+            background-color: #409EFF;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-save:hover {
+            background-color: #66b1ff;
+        }
+    </style>
+</head>
+
+<body class="flex bg-gray-100">
+    <!-- 左侧导航栏 -->
+    <div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
+        <!-- Logo 区域 -->
+        <div class="h-16 flex items-center px-6 border-b border-gray-700">
+            <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+            <span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
+        </div>
+        <!-- 导航菜单 -->
+        <nav class="flex-1 py-4">
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-home text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">首页</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-cog text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">系统管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-calendar-alt text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">活动管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-user-plus text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">报名活动</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-store text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">门店信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-users text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">会员信息</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-box text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">商品管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-file-invoice text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">订单管理</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-robot text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">AI 机器人</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+            <div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-truck-loading text-gray-100 mr-3"></i>
+                    <span class="text-white font-medium">寄售铺货</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
+            </div>
+            <!-- 展开的子菜单 -->
+            <div class="ml-6">
+                <div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
+                    <i class="fas fa-layer-group text-gray-100 mr-3 text-sm"></i>
+                    <span class="text-white font-medium">报名管理</span>
+                </div>
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_storelist_v1.html'">
+                    <i class="fas fa-store text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">寄售门店</span>
+                </div>
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_orderlist.html'">
+                    <i class="fas fa-file-invoice text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">结算单</span>
+                </div>
+            </div>
+        </nav>
+    </div>
+    <!-- 主内容区 -->
+    <div class="flex-1 p-6">
+        <!-- 面包屑导航 -->
+        <nav class="flex items-center mb-6">
+            <span class="text-gray-500">首页</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-500">寄售铺货</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-800 font-medium">报名管理</span>
+        </nav>
+        <!-- 主要内容卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- 操作按钮区域 -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap" onclick="openAddBatchModal()">
+                        新增报名批次
+                    </button>
+                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap" onclick="openAddStoreModal()" style="display: none;">
+                        新增门店
+                    </button>
+                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="openBatchImportModal()" style="display: none;">
+                        批量导入门店
+                    </button>
+                </div>
+            </div>
+            <!-- 筛选区域 -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-gray-700 font-medium">批次名称</label>
+                        <input type="text" id="batchNameSearch" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入批次名称">
+                    </div>
+                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="filterBatchByName()">
+                        筛选
+                    </button>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors !rounded-button whitespace-nowrap" onclick="resetBatchSearch()">
+                        重置
+                    </button>
+                </div>
+            </div>
+            <!-- 数据表格 -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">批次名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">合同开始时间</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">合同结束时间</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">签约门店数量</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">未签约门店数量</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">1</td>
+                            <td class="py-4 px-6 text-gray-600">2026-03-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-05-31</td>
+                            <td class="py-4 px-6 text-gray-800">10</td>
+                            <td class="py-4 px-6 text-gray-800">5</td>
+                            <td class="py-4 px-6">
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="editBatch('1')">编辑</button>
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="viewBatch('1')">查看</button>
+                                <button class="text-primary hover:text-blue-700 font-medium" onclick="viewBatchData('1')">门店数据</button>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">2</td>
+                            <td class="py-4 px-6 text-gray-600">2026-06-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-08-31</td>
+                            <td class="py-4 px-6 text-gray-800">12</td>
+                            <td class="py-4 px-6 text-gray-800">8</td>
+                            <td class="py-4 px-6">
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="editBatch('1')">编辑</button>
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="viewBatch('1')">查看</button>
+                                <button class="text-primary hover:text-blue-700 font-medium" onclick="viewBatchData('1')">门店数据</button>
+                            </td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">3</td>
+                            <td class="py-4 px-6 text-gray-600">2026-09-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-11-30</td>
+                            <td class="py-4 px-6 text-gray-800">9</td>
+                            <td class="py-4 px-6 text-gray-800">9</td>
+                            <td class="py-4 px-6">
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="editBatch('1')">编辑</button>
+                                <button class="text-primary hover:text-blue-700 font-medium mr-4" onclick="viewBatch('1')">查看</button>
+                                <button class="text-primary hover:text-blue-700 font-medium" onclick="viewBatchData('1')">门店数据</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <!-- 分页控件 -->
+            <div class="p-6 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-gray-600">
+                    共 3 条记录，每页显示 10 条
+                </div>
+                <div class="flex items-center space-x-2">
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md" disabled>
+                        <i class="fas fa-chevron-left text-sm"></i>
+                    </button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100" disabled>
+                        <i class="fas fa-chevron-right text-sm"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增批次弹窗 -->
+    <div id="addBatchModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">新增报名批次</h2>
+                <button class="close-btn" onclick="closeAddBatchModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">批次名称</label>
+                    <input type="text" class="form-input" placeholder="请输入批次名称">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">开始时间</label>
+                    <input type="date" class="form-input">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">结束时间</label>
+                    <input type="date" class="form-input">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeAddBatchModal()">取消</button>
+                <button class="btn-save">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增门店弹窗 -->
+    <div id="addStoreModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">新增门店</h2>
+                <button class="close-btn" onclick="closeAddStoreModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">选择报名批次</label>
+                    <select class="form-input" id="batchSelect" onchange="showBatchTime()">
+                        <option value="">请选择报名批次</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group" id="batchTimeInfo" style="display: none;">
+                    <label class="form-label">批次时间</label>
+                    <div class="text-gray-600" id="batchTimeText"></div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">选择门店</label>
+                    <select class="form-input" id="storeSelect">
+                        <option value="">请选择门店</option>
+                        <option value="STORE001">STORE001 - 克丽缇娜上海旗舰店</option>
+                        <option value="STORE002">STORE002 - 克丽缇娜北京朝阳店</option>
+                        <option value="STORE003">STORE003 - 克丽缇娜广州天河店</option>
+                        <option value="STORE004">STORE004 - 克丽缇娜深圳南山店</option>
+                        <option value="STORE005">STORE005 - 克丽缇娜杭州西湖店</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">合同生效开始日期</label>
+                    <input type="date" class="form-input" id="contractStartDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">合同生效结束日期</label>
+                    <input type="date" class="form-input" id="contractEndDate">
+                </div>
+                <div class="form-group">
+                    <div class="text-orange-500 text-sm">系统将于合同生效开始日期前15天推送签署合同通知，不足15天将于次日上午8:30推送通知。</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeAddStoreModal()">取消</button>
+                <button class="btn-save" onclick="saveStore()">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 编辑批次弹窗 -->
+    <div id="editBatchModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">编辑批次</h2>
+                <button class="close-btn" onclick="closeEditBatchModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">批次名称</label>
+                    <input type="text" class="form-input" id="editBatchName" placeholder="请输入批次名称">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">开始时间</label>
+                    <input type="date" class="form-input" id="editBatchStartDate">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">结束时间</label>
+                    <input type="date" class="form-input" id="editBatchEndDate">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeEditBatchModal()">取消</button>
+                <button class="btn-save" onclick="saveEditBatch()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 批量导入门店弹窗 -->
+    <div id="batchImportModal" class="modal-overlay" style="display: none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">批量导入门店</h2>
+                <button class="close-btn" onclick="closeBatchImportModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">选择报名批次</label>
+                    <select class="form-input" id="importBatchSelect">
+                        <option value="">请选择报名批次</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">上传文件</label>
+                    <div class="border-2 border-dashed border-gray-300 rounded-md p-6 text-center">
+                        <i class="fas fa-cloud-upload-alt text-gray-400 text-3xl mb-2"></i>
+                        <p class="text-gray-600 mb-2">点击或拖拽文件到此处上传</p>
+                        <p class="text-gray-400 text-sm">支持 Excel 文件格式 (.xlsx, .xls)</p>
+                        <input type="file" class="hidden" id="fileUpload" accept=".xlsx,.xls">
+                    </div>
+                </div>
+                <div class="form-group mt-4">
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors !rounded-button whitespace-nowrap" onclick="document.getElementById('fileUpload').click()">
+                        选择文件
+                    </button>
+                    <span class="text-gray-600 ml-2" id="fileName">未选择文件</span>
+                </div>
+                <div class="form-group mt-4">
+                    <div class="text-orange-500 text-sm">
+                        导入模板说明：<br>
+                        1. 请按照模板格式填写门店信息<br>
+                        2. 模板包含字段：门店编码、合同开始日期、合同结束日期<br>
+                        3. 日期格式：YYYY-MM-DD
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeBatchImportModal()">取消</button>
+                <button class="btn-save" onclick="batchImportStores()">导入</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 批次时间数据
+        const batchTimeData = {
+            '1': { start: '2026-03-01', end: '2026-05-31' },
+            '2': { start: '2026-06-01', end: '2026-08-31' },
+            '3': { start: '2026-09-01', end: '2026-11-30' }
+        };
+
+        // 打开新增批次页面
+        function openAddBatchModal() {
+            window.location.href = 'C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html';
+        }
+
+        // 关闭新增批次弹窗
+        function closeAddBatchModal() {
+            document.getElementById('addBatchModal').style.display = 'none';
+        }
+
+        // 打开新增门店弹窗
+        function openAddStoreModal() {
+            document.getElementById('addStoreModal').style.display = 'flex';
+        }
+
+        // 关闭新增门店弹窗
+        function closeAddStoreModal() {
+            document.getElementById('addStoreModal').style.display = 'none';
+            // 重置表单
+            document.getElementById('batchSelect').value = '';
+            document.getElementById('batchTimeInfo').style.display = 'none';
+            document.getElementById('storeSelect').value = '';
+            document.getElementById('contractStartDate').value = '';
+            document.getElementById('contractEndDate').value = '';
+        }
+
+        // 显示报名批次的开始、结束时间
+        function showBatchTime() {
+            const batchSelect = document.getElementById('batchSelect');
+            const batchTimeInfo = document.getElementById('batchTimeInfo');
+            const batchTimeText = document.getElementById('batchTimeText');
+            const batch = batchSelect.value;
+
+            if (batch) {
+                const timeData = batchTimeData[batch];
+                if (timeData) {
+                    batchTimeText.textContent = `开始时间: ${timeData.start} 至 结束时间: ${timeData.end}`;
+                    batchTimeInfo.style.display = 'block';
+                }
+            } else {
+                batchTimeInfo.style.display = 'none';
+            }
+        }
+
+        // 保存新增门店
+        function saveStore() {
+            const batch = document.getElementById('batchSelect').value;
+            const store = document.getElementById('storeSelect').value;
+            const contractStartDate = document.getElementById('contractStartDate').value;
+            const contractEndDate = document.getElementById('contractEndDate').value;
+
+            if (!batch) {
+                alert('请选择报名批次');
+                return;
+            }
+
+            if (!store) {
+                alert('请选择门店');
+                return;
+            }
+
+            if (!contractStartDate) {
+                alert('请选择合同生效开始日期');
+                return;
+            }
+
+            if (!contractEndDate) {
+                alert('请选择合同生效结束日期');
+                return;
+            }
+
+            if (new Date(contractEndDate) < new Date(contractStartDate)) {
+                alert('合同生效结束日期不能早于开始日期');
+                return;
+            }
+
+            // 模拟保存操作
+            alert('保存成功！');
+
+            // 关闭弹窗
+            closeAddStoreModal();
+        }
+
+        // 编辑批次
+        function editBatch(batch) {
+            window.location.href = `C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html?batchId=${batch}`;
+        }
+
+        // 关闭编辑批次弹窗
+        function closeEditBatchModal() {
+            document.getElementById('editBatchModal').style.display = 'none';
+        }
+
+        // 保存编辑批次
+        function saveEditBatch() {
+            const batchName = document.getElementById('editBatchName').value;
+            const startDate = document.getElementById('editBatchStartDate').value;
+            const endDate = document.getElementById('editBatchEndDate').value;
+
+            if (!batchName) {
+                alert('请输入批次名称');
+                return;
+            }
+
+            if (!startDate) {
+                alert('请选择开始时间');
+                return;
+            }
+
+            if (!endDate) {
+                alert('请选择结束时间');
+                return;
+            }
+
+            if (new Date(endDate) < new Date(startDate)) {
+                alert('结束时间不能早于开始时间');
+                return;
+            }
+
+            // 模拟保存操作
+            alert('保存成功！');
+
+            // 关闭弹窗
+            closeEditBatchModal();
+        }
+
+        // 查看批次
+        function viewBatch(batch) {
+            window.location.href = `C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html?batchId=${batch}`;
+        }
+
+        // 查看批次数据
+        function viewBatchData(batch) {
+            alert('查看批次 ' + batch + ' 的数据');
+        }
+
+        // 打开批量导入门店弹窗
+        function openBatchImportModal() {
+            document.getElementById('batchImportModal').style.display = 'flex';
+            // 重置表单
+            document.getElementById('importBatchSelect').value = '';
+            document.getElementById('fileUpload').value = '';
+            document.getElementById('fileName').textContent = '未选择文件';
+        }
+
+        // 关闭批量导入门店弹窗
+        function closeBatchImportModal() {
+            document.getElementById('batchImportModal').style.display = 'none';
+        }
+
+        // 处理文件上传
+        document.getElementById('fileUpload').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                document.getElementById('fileName').textContent = file.name;
+            } else {
+                document.getElementById('fileName').textContent = '未选择文件';
+            }
+        });
+
+        // 批量导入门店
+        function batchImportStores() {
+            const batch = document.getElementById('importBatchSelect').value;
+            const file = document.getElementById('fileUpload').files[0];
+
+            if (!batch) {
+                alert('请选择报名批次');
+                return;
+            }
+
+            if (!file) {
+                alert('请选择要上传的文件');
+                return;
+            }
+
+            // 检查文件类型
+            const allowedTypes = ['.xlsx', '.xls'];
+            const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+            if (!allowedTypes.includes(fileExtension)) {
+                alert('只支持 Excel 文件格式 (.xlsx, .xls)');
+                return;
+            }
+
+            // 模拟导入操作
+            alert('导入成功！');
+
+            // 关闭弹窗
+            closeBatchImportModal();
+        }
+
+        // 删除批次
+        function deleteBatch(batch, signedCount) {
+            if (signedCount > 0) {
+                alert('该批次门店数量大于0，不允许删除该批次');
+                return;
+            }
+            if (confirm('确定要删除' + batch + '吗？')) {
+                alert('删除' + batch + '成功');
+            }
+        }
+
+        // 按批次名称筛选
+        function filterBatchByName() {
+            const searchValue = document.getElementById('batchNameSearch').value.trim();
+            const rows = document.querySelectorAll('tbody tr');
+            
+            rows.forEach(row => {
+                const batchName = row.querySelector('td:first-child').textContent.trim();
+                if (batchName.includes(searchValue)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // 重置筛选
+        function resetBatchSearch() {
+            document.getElementById('batchNameSearch').value = '';
+            const rows = document.querySelectorAll('tbody tr');
+            rows.forEach(row => {
+                row.style.display = '';
+            });
+        }
+    </script>
+</body>
+
+</html>

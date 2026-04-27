@@ -382,17 +382,21 @@
             <div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-truck-loading text-gray-100 mr-3"></i>
-                    <span class="text-white font-medium">赊销铺货</span>
+                    <span class="text-white font-medium">寄售铺货</span>
                 </div>
                 <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
             </div>
             <!-- 展开的子菜单 -->
             <div class="ml-6">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_management.html'">
+                    <i class="fas fa-clipboard-list text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">报名管理</span>
+                </div>
                 <div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
                     <i class="fas fa-store text-gray-100 mr-3 text-sm"></i>
-                    <span class="text-white font-medium">铺货门店</span>
+                    <span class="text-white font-medium">寄售门店</span>
                 </div>
-                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center hidden">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_orderlist.html'">
                     <i class="fas fa-file-invoice text-gray-400 mr-3 text-sm"></i>
                     <span class="text-gray-300">结算单</span>
                 </div>
@@ -405,26 +409,59 @@
         <nav class="flex items-center mb-6">
             <span class="text-gray-500">首页</span>
             <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-            <span class="text-gray-500">赊销铺货</span>
+            <span class="text-gray-500">寄售铺货</span>
             <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-            <span class="text-gray-800 font-medium">铺货门店</span>
+            <span class="text-gray-800 font-medium">寄售门店</span>
         </nav>
         <!-- 主要内容卡片 -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <!-- 操作按钮区域 -->
-            <!-- <div class="p-6 border-b border-gray-200 bg-gray-50">
-<div class="flex items-center space-x-4">
-<button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap ml-2">
-新增报名门店
-</button>
-<button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">
-导入报名门店
-</button>
-<button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">
-导出报名门店
-</button>
-</div>
-</div> -->
+            <!-- 筛选区域 -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center space-x-4 flex-wrap justify-between">
+                    <div class="flex items-center space-x-4 flex-wrap">
+                        <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">报名批次</label>
+                            <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入批次名称">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">门店编码</label>
+                            <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入门店编码">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">门店名称</label>
+                            <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入门店名称">
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">分公司</label>
+                            <select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
+                                <option value="">全部</option>
+                                <option value="店销-北京">店销-北京</option>
+                                <option value="店销-天津">店销-天津</option>
+                                <option value="店销-河北">店销-河北</option>
+                                <option value="店销-上海">店销-上海</option>
+                                <option value="店销-广州">店销-广州</option>
+                                <option value="店销-深圳">店销-深圳</option>
+                                <option value="店销-杭州">店销-杭州</option>
+                            </select>
+                        </div>
+                        <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">合同状态</label>
+                            <select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-32">
+                                <option value="">全部</option>
+                                <option value="已签署">已签署</option>
+                                <option value="未签署">未签署</option>
+                                <option value="已失效">已失效</option>
+                            </select>
+                        </div>
+                        <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">
+                            筛选
+                        </button>
+                        <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors !rounded-button whitespace-nowrap">
+                            重置
+                        </button>
+                    </div>
+                </div>
+            </div>
             <!-- 卡片头部 -->
             <div class="p-6 border-b border-gray-200">
                 <div class="flex items-center justify-between">
@@ -436,30 +473,54 @@
                 <table class="w-full">
                     <thead>
                         <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">报名批次</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">分公司</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">签署用户姓名</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">合同开始日期</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">合同结束日期</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同状态</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">签署时间</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">2</td>
                             <td class="py-4 px-6 text-gray-800">STORE001</td>
                             <td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-上海</td>
+                            <td class="py-4 px-6 text-gray-600">张三</td>
+                            <td class="py-4 px-6 text-gray-600">2026-06-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-08-31</td>
                             <td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
                             <td class="py-4 px-6 text-gray-600">2026-03-01 14:30:00</td>
+                            <td class="py-4 px-6"><a href="#" class="text-primary hover:underline">下载合同</a></td>
                         </tr>
                         <tr class="table-row">
-                            <td class="py-4 px-6 text-gray-800">STORE002</td>
-                            <td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
-                            <td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
-                            <td class="py-4 px-6 text-gray-600">2026-03-02 09:15:30</td>
-                        </tr>
-                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">2</td>
                             <td class="py-4 px-6 text-gray-800">STORE003</td>
                             <td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-广州</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6 text-gray-600">2026-06-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-08-31</td>
                             <td class="py-4 px-6"><span class="text-orange-500 font-medium">未签署</span></td>
                             <td class="py-4 px-6 text-gray-400">-</td>
+                            <td class="py-4 px-6">-</td>
+                        </tr>
+                        <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">1</td>
+                            <td class="py-4 px-6 text-gray-800">STORE002</td>
+                            <td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-北京</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6 text-gray-600">2026-04-01</td>
+                            <td class="py-4 px-6 text-gray-600">2026-06-31</td>
+                            <td class="py-4 px-6"><span class="text-orange-500 font-medium">已失效</span></td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
+                            <td class="py-4 px-6">-</td>
                         </tr>
                     </tbody>
                 </table>
@@ -789,6 +850,11 @@
                 });
             });
         });
+
+        // 查看签约记录
+        function viewSignRecord(storeCode) {
+            alert('查看门店 ' + storeCode + ' 的签约记录');
+        }
     </script>
 </body>
 

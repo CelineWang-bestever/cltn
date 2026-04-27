@@ -835,7 +835,7 @@
             const batchNo = 'B' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
             const barcode = '690' + String(randomProduct.id).padStart(9, '0') + Math.floor(Math.random() * 10);
             // 随机库存类型
-            const stockType = Math.random() > 0.5 ? '赊销' : '门店自有';
+            const stockType = Math.random() > 0.5 ? '寄售' : '门店自有';
             
             addProductToList(randomProduct, batchNo, barcode, stockType);
         }
@@ -861,7 +861,7 @@
             if (barcode) {
                 const randomProduct = mockProducts[Math.floor(Math.random() * mockProducts.length)];
                 const batchNo = 'B' + new Date().toISOString().slice(0, 10).replace(/-/g, '');
-                const stockType = Math.random() > 0.5 ? '赊销' : '门店自有';
+                const stockType = Math.random() > 0.5 ? '寄售' : '门店自有';
                 addProductToList(randomProduct, batchNo, barcode, stockType);
                 // 关闭弹窗
                 closeManualInputModal();
@@ -948,7 +948,7 @@
             `;
             
             checkedProducts.forEach((product, index) => {
-                const creditBarcodes = product.barcodes.filter(b => b.stockType === '赊销');
+                const creditBarcodes = product.barcodes.filter(b => b.stockType === '寄售');
                 const storeBarcodes = product.barcodes.filter(b => b.stockType === '门店自有');
                 const creditCount = creditBarcodes.length;
                 const storeCount = storeBarcodes.length;
@@ -971,7 +971,7 @@
                             <span class="barcode-summary-label">门店自有商品数量</span>
                             ${isEditMode ? `<div class="quantity-editor"><button class="qty-btn" onclick="changeStoreQuantity(${index}, -1)">-</button><input type="number" class="qty-input" value="${storeCount}" min="0" id="store-qty-${index}" onchange="updateStoreQuantity(${index}, this.value)"><button class="qty-btn" onclick="changeStoreQuantity(${index}, 1)">+</button></div>` : `<span class="barcode-count">${storeCount}件</span>`}
                         </div>
-                        ${creditCount > 0 ? `<div class="barcode-summary-row"><span class="barcode-summary-label">赊销库存商品数量</span><span class="barcode-count">${creditCount}件</span></div><div class="barcode-details">${creditBarcodes.map((barcode, barcodeIndex) => {
+                        ${creditCount > 0 ? `<div class="barcode-summary-row"><span class="barcode-summary-label">寄售库存商品数量</span><span class="barcode-count">${creditCount}件</span></div><div class="barcode-details">${creditBarcodes.map((barcode, barcodeIndex) => {
                                 const originalIndex = product.barcodes.indexOf(barcode);
                                 return `<div class="barcode-row"><span>${barcode.batchNo}</span><span>${barcode.barcode}</span><span class="stock-type credit">${barcode.stockType}</span>${isEditMode ? `<button class="delete-btn" onclick="deleteBarcode(${index}, ${originalIndex})"><svg class="linear-icon" style="width: 16px; height: 16px; color: #ff6b81;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>` : ''}</div>`;
                             }).join('')}</div>` : ''}
@@ -1018,7 +1018,7 @@
                 for (let i = 0; i < diff; i++) {
                     const batchNo = 'B' + new Date().toISOString().slice(0, 10).replace(/-/g, '') + String(currentBarcodeCount + i).padStart(3, '0');
                     const barcode = '690' + String(product.id).padStart(9, '0') + Math.floor(Math.random() * 10);
-                    const stockType = Math.random() > 0.5 ? '赊销' : '门店自有';
+                    const stockType = Math.random() > 0.5 ? '寄售' : '门店自有';
                     product.barcodes.push({
                         batchNo: batchNo,
                         barcode: barcode,

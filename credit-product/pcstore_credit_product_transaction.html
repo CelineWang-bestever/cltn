@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>店务通门店系统 - 赊销货品明细</title>
+    <title>店务通门店系统 - 寄售货品明细</title>
     <style>
         * {
             margin: 0;
@@ -125,6 +125,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
+            margin: 0;
         }
 
         .form-group label {
@@ -506,7 +507,7 @@
         <main class="main-content">
             <!-- 顶部导航 -->
             <div class="top-nav">
-                <h1 class="page-title">报表 > 赊销货品</h1>
+                <h1 class="page-title">报表 > 寄售货品</h1>
                 <div class="user-info">
                     <span>测试门店</span>
                     <div class="user-avatar">R</div>
@@ -515,14 +516,27 @@
 
             <!-- 搜索区域 -->
             <div class="search-area">
-                <div class="search-form">
-                    <div class="form-group">
-                        <label>商品名称：</label>
-                        <input type="text" id="search-product-name" placeholder="请输入商品名称">
+                <div class="search-form" style="justify-content: space-between; align-items: center;">
+                    <div class="flex items-center gap-15" style="align-items: center;">
+                        <div class="form-group" style="margin: 0; display: flex; align-items: center; gap: 15px;">
+                            <div>
+                                <label>商品名称：</label>
+                                <input type="text" id="search-product-name" placeholder="请输入商品名称">
+                            </div>
+                            <div>
+                                <label>寄售入库日期：</label>
+                                <input type="date" id="start-date" style="margin-right: 10px;">
+                                <span>至</span>
+                                <input type="date" id="end-date" style="margin-left: 10px;">
+                            </div>
+                            <button class="btn btn-primary" onclick="filterProduct()">查询</button>
+                            <button class="btn btn-secondary" onclick="resetProductSearch()">重置</button>
+                        </div>
                     </div>
-                    <button class="btn btn-primary" onclick="filterProduct()">查询</button>
-                    <button class="btn btn-secondary" onclick="resetProductSearch()">重置</button>
-                    <button class="btn btn-primary" onclick="exportProductDetails()">导出赊销货品明细</button>
+                    <div class="flex items-center gap-20" style="align-items: center;">
+                        <button class="btn btn-primary" style="margin-right: 24px;" onclick="exportProductDetails()">导出寄售货品明细</button>
+                        <button class="btn" style="background: white; color: #ff6b81; border: 1px solid #ff6b81; transition: all 0.3s ease;" onclick="exportSettledInventoryDetails()">导出已结算退回货品</button>
+                    </div>
                 </div>
             </div>
 
@@ -533,10 +547,9 @@
                         <tr>
                             <th>商品名称</th>
                             <th>规格</th>
-                            <th>赊销库存总数</th>
-                            <th>已结算总数</th>
-                            <th>未结算总数</th>
-                            <th>归还支付总数</th>
+                            <th>寄售入库总数</th>
+                            <th>未结算数量</th>
+                            <th>已结算数量</th>
                             <th>操作</th>
                         </tr>
                     </thead>
@@ -545,10 +558,9 @@
                             <td>图拉植蓓青春泉液</td>
                             <td>30ml</td>
                             <td>6瓶</td>
-                            <td>1瓶</td>
                             <td>3瓶</td>
-                            <td>2瓶</td>
-                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%98%A5%E6%B3%89%E6%B6%B2&spec=30ml">结算明细</a></td>
+                            <td>1瓶</td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%98%A5%E6%B3%89%E6%B6%B2&spec=30ml">货品明细</a></td>
                         </tr>
                         <tr>
                             <td>图拉植蓓精华液</td>
@@ -556,8 +568,7 @@
                             <td>20瓶</td>
                             <td>10瓶</td>
                             <td>10瓶</td>
-                            <td>0瓶</td>
-                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%B6%B2&spec=50ml">结算明细</a></td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E6%B6%B2&spec=50ml">货品明细</a></td>
                         </tr>
                         <tr>
                             <td>图拉植蓓面霜</td>
@@ -565,8 +576,7 @@
                             <td>17瓶</td>
                             <td>8瓶</td>
                             <td>9瓶</td>
-                            <td>0瓶</td>
-                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E9%9D%A2%E9%9C%9C&spec=50g">结算明细</a></td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E9%9D%A2%E9%9C%9C&spec=50g">货品明细</a></td>
                         </tr>
                         <tr>
                             <td>图拉植蓓乳液</td>
@@ -574,8 +584,7 @@
                             <td>14瓶</td>
                             <td>6瓶</td>
                             <td>8瓶</td>
-                            <td>0瓶</td>
-                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E4%B9%B3%E6%B6%B2&spec=100ml">结算明细</a></td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E4%B9%B3%E6%B6%B2&spec=100ml">货品明细</a></td>
                         </tr>
                         <tr>
                             <td>图拉植蓓身体乳</td>
@@ -583,8 +592,7 @@
                             <td>11瓶</td>
                             <td>4瓶</td>
                             <td>7瓶</td>
-                            <td>0瓶</td>
-                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E8%BA%AB%E4%BD%93%E4%B9%B3&spec=200ml">结算明细</a></td>
+                            <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=%E5%9B%BE%E6%8B%89%E6%A4%8D%E8%90%9D%E9%9D%92%E8%BA%AB%E4%BD%93%E4%B9%B3&spec=200ml">货品明细</a></td>
                         </tr>
                     </tbody>
                 </table>
@@ -625,11 +633,11 @@
 
         // 商品明细数据
         const productDetailData = [
-            { name: '图拉植蓓青春泉液', spec: '30ml', total: '35瓶', settled: '15瓶', unsettled: '20瓶' },
-            { name: '图拉植蓓精华液', spec: '50ml', total: '20瓶', settled: '10瓶', unsettled: '10瓶' },
-            { name: '图拉植蓓面霜', spec: '50g', total: '17瓶', settled: '8瓶', unsettled: '9瓶' },
-            { name: '图拉植蓓乳液', spec: '100ml', total: '14瓶', settled: '6瓶', unsettled: '8瓶' },
-            { name: '图拉植蓓身体乳', spec: '200ml', total: '11瓶', settled: '4瓶', unsettled: '7瓶' }
+            { name: '图拉植蓓青春泉液', spec: '30ml', total: '35瓶', settled: '15瓶', unsettled: '20瓶',入库日期: '2026-03-01' },
+            { name: '图拉植蓓精华液', spec: '50ml', total: '20瓶', settled: '10瓶', unsettled: '10瓶',入库日期: '2026-03-05' },
+            { name: '图拉植蓓面霜', spec: '50g', total: '17瓶', settled: '8瓶', unsettled: '9瓶',入库日期: '2026-03-10' },
+            { name: '图拉植蓓乳液', spec: '100ml', total: '14瓶', settled: '6瓶', unsettled: '8瓶',入库日期: '2026-03-15' },
+            { name: '图拉植蓓身体乳', spec: '200ml', total: '11瓶', settled: '4瓶', unsettled: '7瓶',入库日期: '2026-03-20' }
         ];
 
         // 库存日志数据
@@ -704,21 +712,36 @@
         // 筛选商品
         function filterProduct() {
             const searchName = document.getElementById('search-product-name').value.trim();
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
             const tbody = document.getElementById('detail-table-body');
             
             tbody.innerHTML = '';
             
-            const filteredData = searchName === '' ? productDetailData : productDetailData.filter(item => item.name.includes(searchName));
+            const filteredData = productDetailData.filter(item => {
+                // 商品名称筛选
+                const nameMatch = searchName === '' || item.name.includes(searchName);
+                
+                // 日期范围筛选
+                const dateMatch = (!startDate || !endDate) || 
+                    (item.入库日期 >= startDate && item.入库日期 <= endDate);
+                
+                return nameMatch && dateMatch;
+            });
             
             filteredData.forEach(item => {
                 const row = document.createElement('tr');
+                let href = `pcstore_credit_product_log.html?productName=${encodeURIComponent(item.name)}&spec=${encodeURIComponent(item.spec)}`;
+                if (startDate && endDate) {
+                    href += `&startDate=${startDate}&endDate=${endDate}`;
+                }
                 row.innerHTML = `
                     <td>${item.name}</td>
                     <td>${item.spec}</td>
                     <td>${item.total}</td>
                     <td>${item.settled}</td>
                     <td>${item.unsettled}</td>
-                    <td><a class="btn-link" href="pcstore_credit_product_log.html?productName=${encodeURIComponent(item.name)}&spec=${encodeURIComponent(item.spec)}">商品结算明细</a></td>
+                    <td><a class="btn-link" href="${href}">货品明细</a></td>
                 `;
                 tbody.appendChild(row);
             });
@@ -727,19 +750,33 @@
         // 重置商品搜索
         function resetProductSearch() {
             document.getElementById('search-product-name').value = '';
+            document.getElementById('start-date').value = '';
+            document.getElementById('end-date').value = '';
             filterProduct();
         }
 
-        // 导出赊销货品明细
+        // 导出寄售货品明细
         function exportProductDetails() {
             const searchName = document.getElementById('search-product-name').value.trim();
-            const filteredData = searchName === '' ? productDetailData : productDetailData.filter(item => item.name.includes(searchName));
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            const filteredData = productDetailData.filter(item => {
+                // 商品名称筛选
+                const nameMatch = searchName === '' || item.name.includes(searchName);
+                
+                // 日期范围筛选
+                const dateMatch = (!startDate || !endDate) || 
+                    (item.入库日期 >= startDate && item.入库日期 <= endDate);
+                
+                return nameMatch && dateMatch;
+            });
             
             // 构建CSV内容
-            let csvContent = "商品名称,规格,赊销库存总数,已结算总数,未结算总数,归还支付总数\n";
+            let csvContent = "商品名称,规格,寄售库存总数,已结算总数,未结算总数,寄售入库日期\n";
             
             filteredData.forEach(item => {
-                csvContent += `${item.name},${item.spec},${item.total},${item.settled},${item.unsettled},${item.returned || '0瓶'}\n`;
+                csvContent += `${item.name},${item.spec},${item.total},${item.settled},${item.unsettled},${item.入库日期}\n`;
             });
             
             // 创建Blob对象
@@ -749,7 +786,47 @@
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', '赊销货品明细.csv');
+            link.setAttribute('download', '寄售货品明细.csv');
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // 导出已结算在库货品明细
+        function exportSettledInventoryDetails() {
+            const searchName = document.getElementById('search-product-name').value.trim();
+            const startDate = document.getElementById('start-date').value;
+            const endDate = document.getElementById('end-date').value;
+            
+            const filteredData = productDetailData.filter(item => {
+                // 商品名称筛选
+                const nameMatch = searchName === '' || item.name.includes(searchName);
+                
+                // 日期范围筛选
+                const dateMatch = (!startDate || !endDate) || 
+                    (item.入库日期 >= startDate && item.入库日期 <= endDate);
+                
+                return nameMatch && dateMatch;
+            });
+            
+            // 构建CSV内容
+            let csvContent = "商品名称,规格,已结算在库总数,寄售入库日期\n";
+            
+            filteredData.forEach(item => {
+                // 这里假设已结算在库总数就是已结算总数
+                // 实际应用中可能需要根据具体业务逻辑计算
+                csvContent += `${item.name},${item.spec},${item.settled},${item.入库日期}\n`;
+            });
+            
+            // 创建Blob对象
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', '已结算在库货品明细.csv');
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();

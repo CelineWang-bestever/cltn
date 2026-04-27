@@ -153,15 +153,21 @@
             <div class="mb-1 px-4 py-2 rounded-md bg-gray-700 cursor-pointer flex items-center justify-between">
                 <div class="flex items-center">
                     <i class="fas fa-truck-loading text-gray-100 mr-3"></i>
-                    <span class="text-white font-medium">赊销铺货</span>
+                    <span class="text-white font-medium">寄售铺货</span>
                 </div>
                 <i class="fas fa-chevron-down text-gray-300 text-xs"></i>
             </div>
             <!-- 展开的子菜单 -->
             <div class="ml-6">
-                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center"
+                    onclick="window.location.href='/C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_management.html'">
+                    <i class="fas fa-clipboard-list text-gray-400 mr-3 text-sm"></i>
+                    <span class="text-gray-300">报名管理</span>
+                </div>
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center"
+                    onclick="window.location.href='/C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_storelist_v1.html'">
                     <i class="fas fa-store text-gray-400 mr-3 text-sm"></i>
-                    <span class="text-gray-300">铺货门店</span>
+                    <span class="text-gray-300">寄售门店</span>
                 </div>
                 <div class="mb-1 px-4 py-2 rounded-md bg-blue-800 cursor-pointer flex items-center">
                     <i class="fas fa-file-invoice text-gray-100 mr-3 text-sm"></i>
@@ -176,7 +182,7 @@
         <nav class="flex items-center mb-6">
             <span class="text-gray-500">首页</span>
             <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
-            <span class="text-gray-500">赊销铺货</span>
+            <span class="text-gray-500">寄售铺货</span>
             <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
             <span class="text-gray-800 font-medium">结算单</span>
         </nav>
@@ -185,21 +191,19 @@
             <!-- 筛选区域 -->
             <div class="p-6 border-b border-gray-200 bg-gray-50">
                 <div class="flex items-center space-x-4">
-                    <label class="text-gray-700 font-medium">门店名称：</label>
-                    <div class="relative">
-                        <select
-                            class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
-                            <option value="">全部</option>
-                            <option value="克丽缇娜上海旗舰店">克丽缇娜上海旗舰店</option>
-                            <option value="克丽缇娜北京朝阳店">克丽缇娜北京朝阳店</option>
-                            <option value="克丽缇娜广州天河店">克丽缇娜广州天河店</option>
-                            <option value="克丽缇娜深圳南山店">克丽缇娜深圳南山店</option>
-                            <option value="克丽缇娜杭州西湖店">克丽缇娜杭州西湖店</option>
-                        </select>
-                        <i
-                            class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-gray-700 font-medium">门店编码</label>
+                        <input type="text"
+                            class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40"
+                            placeholder="请输入门店编码">
                     </div>
-                    <label class="text-gray-700 font-medium">支付状态：</label>
+                    <div class="flex items-center space-x-2">
+                        <label class="text-gray-700 font-medium">门店名称</label>
+                        <input type="text"
+                            class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40"
+                            placeholder="请输入门店名称">
+                    </div>
+                    <label class="text-gray-700 font-medium">支付状态</label>
                     <div class="relative">
                         <select
                             class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
@@ -210,6 +214,16 @@
                         </select>
                         <i
                             class="fas fa-chevron-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none"></i>
+                    </div>
+                    <label class="text-gray-700 font-medium">结算日期</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="date"
+                            class="bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40"
+                            placeholder="开始日期">
+                        <span class="text-gray-500">至</span>
+                        <input type="date"
+                            class="bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40"
+                            placeholder="结束日期">
                     </div>
                     <button
                         class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap">

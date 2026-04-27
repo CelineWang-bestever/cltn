@@ -568,8 +568,31 @@
                     </div>
                 </div>
                 <!-- <div class="stat-item">
-                    <button class="btn btn-primary" onclick="window.location.href='pcstore_credt_product_transaction.html'" style="font-size: 14px;">赊销货品明细</button>
+                    <button class="btn btn-primary" onclick="window.location.href='pcstore_credt_product_transaction.html'" style="font-size: 14px;">寄售货品明细</button>
                 </div> -->
+            </div>
+
+            <!-- 筛选区域 -->
+            <div class="search-area">
+                <form class="search-form" id="settlement-search-form">
+                    <div class="form-group">
+                        <label>支付状态</label>
+                        <select id="payment-status">
+                            <option value="">全部</option>
+                            <option value="pending">待支付</option>
+                            <option value="paid">已支付</option>
+                            <option value="overdue">逾期未付款</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>结算日期</label>
+                        <input type="date" id="start-date" placeholder="开始日期">
+                        <span style="margin: 0 10px;">至</span>
+                        <input type="date" id="end-date" placeholder="结束日期">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="searchSettlement()">查询</button>
+                    <button type="button" class="btn btn-secondary" onclick="resetSettlementSearch()">重置</button>
+                </form>
             </div>
 
             <!-- 结算单表格 -->
@@ -694,6 +717,28 @@
                 document.getElementById('paymentBackdrop').addEventListener('click', function() {
                     closePaymentModal();
                 });
+
+                // 搜索结算单
+                function searchSettlement() {
+                    const paymentStatus = document.getElementById('payment-status').value;
+                    const startDate = document.getElementById('start-date').value;
+                    const endDate = document.getElementById('end-date').value;
+                    
+                    // 这里可以添加搜索逻辑
+                    console.log('搜索条件：', {
+                        paymentStatus,
+                        startDate,
+                        endDate
+                    });
+                    alert('搜索功能已触发');
+                }
+                
+                // 重置搜索
+                function resetSettlementSearch() {
+                    document.getElementById('payment-status').value = '';
+                    document.getElementById('start-date').value = '';
+                    document.getElementById('end-date').value = '';
+                }
             </script>
         </main>
     </div>
