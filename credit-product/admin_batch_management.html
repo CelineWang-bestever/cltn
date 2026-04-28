@@ -284,11 +284,11 @@
                     <i class="fas fa-layer-group text-gray-100 mr-3 text-sm"></i>
                     <span class="text-white font-medium">报名管理</span>
                 </div>
-                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_storelist_v1.html'">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='admin_storelist_v1.html'">
                     <i class="fas fa-store text-gray-400 mr-3 text-sm"></i>
                     <span class="text-gray-300">寄售门店</span>
                 </div>
-                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_orderlist.html'">
+                <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center" onclick="window.location.href='admin_orderlist.html'">
                     <i class="fas fa-file-invoice text-gray-400 mr-3 text-sm"></i>
                     <span class="text-gray-300">结算单</span>
                 </div>
@@ -307,20 +307,6 @@
         </nav>
         <!-- 主要内容卡片 -->
         <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-            <!-- 操作按钮区域 -->
-            <div class="p-6 border-b border-gray-200 bg-gray-50">
-                <div class="flex items-center space-x-4">
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap" onclick="openAddBatchModal()">
-                        新增报名批次
-                    </button>
-                    <button class="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600 transition-colors !rounded-button whitespace-nowrap" onclick="openAddStoreModal()" style="display: none;">
-                        新增门店
-                    </button>
-                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="openBatchImportModal()" style="display: none;">
-                        批量导入门店
-                    </button>
-                </div>
-            </div>
             <!-- 筛选区域 -->
             <div class="p-6 border-b border-gray-200 bg-gray-50">
                 <div class="flex items-center space-x-4">
@@ -335,12 +321,18 @@
                         重置
                     </button>
                 </div>
+                <div class="mt-4">
+                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="openAddBatchModal()">
+                        新增报名批次
+                    </button>
+                </div>
             </div>
             <!-- 数据表格 -->
             <div class="overflow-x-auto">
                 <table class="w-full">
                     <thead>
                         <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">批次编号</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">批次名称</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同开始时间</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同结束时间</th>
@@ -352,6 +344,7 @@
                     <tbody>
                         <tr class="table-row">
                             <td class="py-4 px-6 text-gray-800">1</td>
+                            <td class="py-4 px-6 text-gray-800">第1批</td>
                             <td class="py-4 px-6 text-gray-600">2026-03-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-05-31</td>
                             <td class="py-4 px-6 text-gray-800">10</td>
@@ -364,6 +357,7 @@
                         </tr>
                         <tr class="table-row">
                             <td class="py-4 px-6 text-gray-800">2</td>
+                            <td class="py-4 px-6 text-gray-800">第2批</td>
                             <td class="py-4 px-6 text-gray-600">2026-06-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-08-31</td>
                             <td class="py-4 px-6 text-gray-800">12</td>
@@ -376,6 +370,7 @@
                         </tr>
                         <tr class="table-row">
                             <td class="py-4 px-6 text-gray-800">3</td>
+                            <td class="py-4 px-6 text-gray-800">第3批</td>
                             <td class="py-4 px-6 text-gray-600">2026-09-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-11-30</td>
                             <td class="py-4 px-6 text-gray-800">9</td>
@@ -572,7 +567,7 @@
 
         // 打开新增批次页面
         function openAddBatchModal() {
-            window.location.href = 'C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html';
+            window.location.href = 'admin_batch_detail.html';
         }
 
         // 关闭新增批次弹窗
@@ -655,7 +650,7 @@
 
         // 编辑批次
         function editBatch(batch) {
-            window.location.href = `C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html?batchId=${batch}`;
+            window.location.href = `admin_batch_detail.html?batchId=${batch}`;
         }
 
         // 关闭编辑批次弹窗
@@ -698,7 +693,7 @@
 
         // 查看批次
         function viewBatch(batch) {
-            window.location.href = `C:/Users/celine.wang/Documents/trae_projects/cltn_2/credit-product/admin_batch_detail.html?batchId=${batch}`;
+            window.location.href = `admin_batch_detail.html?batchId=${batch}`;
         }
 
         // 查看批次数据
