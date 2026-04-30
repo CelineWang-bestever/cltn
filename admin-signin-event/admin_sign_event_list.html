@@ -1,669 +1,465 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>活动列表</title>
-    <link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
-    <script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        primary: '#409EFF',
-                        secondary: '#66B2FF'
-                    },
-                    borderRadius: {
-                        'none': '0px',
-                        'sm': '2px',
-                        DEFAULT: '4px',
-                        'md': '8px',
-                        'lg': '12px',
-                        'xl': '16px',
-                        '2xl': '20px',
-                        '3xl': '24px',
-                        'full': '9999px',
-                        'button': '4px'
-                    }
-                }
-            }
-        }
-    </script>
+    <title>活动列表 - TDesign</title>
+    
+    <!-- Vue 3 CDN -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    
+    <!-- TDesign Vue Next CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/tdesign-vue-next/dist/tdesign.css">
+    
+    <!-- TDesign Vue Next JS -->
+    <script src="https://unpkg.com/tdesign-vue-next/dist/tdesign.js"></script>
+    
     <style>
         body {
-            min-height: 1024px;
-            background-color: #f9fafb;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
         }
-
-        .no-scrollbar::-webkit-scrollbar {
-            display: none;
+        
+        .page-header {
+            background: white;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
         }
-
-        .no-scrollbar {
-            -ms-overflow-style: none;
-            scrollbar-width: none;
-        }
-
-        /* 签到二维码弹窗 */
-        .qr-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            display: none;
+        
+        .header-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 16px;
+            height: 64px;
+            display: flex;
             align-items: center;
-            justify-content: center;
-            z-index: 1000;
+            justify-content: space-between;
         }
-
-        .qr-modal {
-            background-color: white;
-            border-radius: 12px;
-            padding: 32px;
-            width: 90%;
-            max-width: 480px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-            display: none;
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #0052D9;
         }
-
-        .qr-modal-header {
+        
+        .main-content {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 32px 16px;
+        }
+        
+        .filter-card {
+            background: white;
+            border-radius: 6px;
+            padding: 24px;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+        
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .filter-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+        
+        .table-card {
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.06);
+        }
+        
+        .action-bar {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 24px;
+            padding: 16px 24px;
         }
-
-        .qr-modal-title {
-            font-size: 18px;
-            font-weight: 600;
-            color: #333;
-        }
-
-        .qr-close-btn {
-            background: none;
-            border: none;
-            font-size: 24px;
-            cursor: pointer;
-            color: #999;
-            padding: 0;
-            width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .qr-close-btn:hover {
-            color: #333;
-        }
-
-        .qr-code-container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            margin-bottom: 24px;
-        }
-
-        .qr-code {
-            width: 200px;
-            height: 200px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 1px solid #e0e0e0;
-            border-radius: 8px;
-            margin-bottom: 12px;
-        }
-
-        .qr-refresh-tip {
+        
+        .status-normal {
+            background-color: #e8f8ef;
+            color: #00a870;
+            padding: 2px 8px;
+            border-radius: 3px;
             font-size: 12px;
-            color: #999;
         }
-
-        .url-container {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 10px 12px;
-            border: 1px solid #e0e0e0;
-            border-radius: 4px;
-            background-color: #f5f5f5;
-            color: #666;
-            font-size: 14px;
-            margin-right: 8px;
-        }
-
-        .copy-btn {
-            padding: 10px 16px;
-            background-color: #409EFF;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            font-size: 14px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        .copy-btn:hover {
-            background-color: #66b1ff;
-        }
-
-        .tip-text {
-            font-size: 14px;
-            color: #666;
-            text-align: center;
-            line-height: 1.5;
+        
+        .status-inactive {
+            background-color: #fde8e8;
+            color: #e34d59;
+            padding: 2px 8px;
+            border-radius: 3px;
+            font-size: 12px;
         }
     </style>
 </head>
-
-<body class="bg-gray-50">
-    <div class="min-h-screen bg-gray-50">
+<body>
+    <div id="app">
         <!-- Header -->
-        <header class="bg-white shadow-sm">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex justify-between items-center h-16">
-                    <div class="flex items-center">
-                        <h1 class="text-2xl font-bold text-primary">活动列表</h1>
-                    </div>
-                    <div class="flex items-center space-x-4">
-                        <button class="px-4 py-2 text-sm text-gray-600 hover:text-primary transition-colors">设置</button>
-                    </div>
-                </div>
+        <div class="page-header">
+            <div class="header-content">
+                <div class="page-title">活动列表</div>
+                <t-button theme="default" variant="text">设置</t-button>
             </div>
-        </header>
-        <!-- Main Content -->
-        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-            <!-- Search Filters -->
-            <div class="bg-white rounded-lg shadow-sm p-6 mb-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">活动名称</label>
-                        <input type="text" placeholder="请输入活动名称"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">活动状态</label>
-                        <select
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
-                            <option>全部</option>
-                            <option>正常</option>
-                            <option>失效</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">活动开始日期</label>
-                        <input type="date"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
-                    </div>
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">活动结束日期</label>
-                        <input type="date"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent text-sm">
-                    </div>
-                </div>
-                <div class="flex justify-end space-x-3 mt-6">
-                    <button
-                        class="px-4 py-2 border border-gray-300 text-gray-700 rounded-md hover:bg-gray-50 transition-colors text-sm !rounded-button whitespace-nowrap">
-                        重置
-                    </button>
-                    <button
-                        class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors text-sm !rounded-button whitespace-nowrap">
-                        搜索
-                    </button>
-                </div>
-            </div>
-            <!-- Action Bar -->
-            <div class="flex justify-between items-center mb-6">
-                <div></div>
-                <button
-                    class="px-4 py-2 bg-primary text-white rounded-md hover:bg-blue-600 transition-colors text-sm !rounded-button whitespace-nowrap">
-                    + 创建新活动
-                </button>
-            </div>
-            <!-- Activity Table -->
-            <div class="bg-white rounded-lg shadow-sm overflow-hidden">
-                <div class="overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200">
-                        <thead class="bg-gray-50">
-                            <tr>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    ID</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    活动名称</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    活动开始时间</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    活动结束时间</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    活动状态</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    创建人</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    创建时间</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    修改人</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    修改时间</th>
-                                <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    操作</th>
-                            </tr>
-                        </thead>
-                        <tbody class="bg-white divide-y divide-gray-200">
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310150001</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023 秋季新品发布会</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-15 09:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-15 18:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">正常</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">王建国</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-10 09:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">李晓明</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-12 15:20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310140002</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">加盟商年度大会</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-20 14:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-22 17:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">正常</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">陈雅婷</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-05 10:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">赵志强</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-18 11:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310130003</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">春季促销活动</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-09-15 08:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-09-15 20:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">失效</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">刘德华</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-09-10 14:20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">周杰伦</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-09-12 16:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310120004</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">新产品发布会</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-05 10:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-05 16:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">正常</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">马化腾</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-25 13:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">马云</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-10-28 09:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310110005</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">年度总结会议</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-12-20 09:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-12-22 17:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">正常</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">任正非</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-12-10 11:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">雷军</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-12-15 14:20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310100006</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">客户答谢晚宴</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-08-15 19:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-08-15 22:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">失效</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">董明珠</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-08-05 16:45</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">丁磊</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-08-10 10:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310090007</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">技术交流研讨会</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-10 09:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-10 17:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">正常</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">张一鸣</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-01 15:20</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">程维</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-11-05 12:10</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ACT202310080008</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">品牌推广活动</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-07-20 10:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-07-22 18:00</td>
-                                <td class="px-6 py-4 whitespace-nowrap">
-                                    <span
-                                        class="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-red-100 text-red-800">失效</span>
-                                </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">宿华</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-07-10 14:30</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">黄峥</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">2023-07-15 11:15</td>
-                                <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                    <div class="flex space-x-2">
-                                        <button class="text-primary hover:text-blue-600 transition-colors">查看</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">修改</button>
-                                        <button class="text-primary hover:text-blue-600 transition-colors">报名名单</button>
-                                        <button
-                                            class="text-primary hover:text-blue-600 transition-colors">签到二维码</button>
-                                        <button
-                                            class="text-green-600 hover:text-green-700 transition-colors">礼品二维码</button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!-- Pagination -->
-                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200 sm:px-6">
-                    <div class="flex-1 flex justify-between sm:hidden">
-                        <button
-                            class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            上一页
-                        </button>
-                        <button
-                            class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">
-                            下一页
-                        </button>
-                    </div>
-                    <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
-                        <div>
-                            <p class="text-sm text-gray-700">
-                                共 <span class="font-medium">50</span> 条记录，
-                                <span class="font-medium">1</span> / <span class="font-medium">5</span> 页
-                            </p>
-                        </div>
-                        <div>
-                            <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px"
-                                aria-label="Pagination">
-                                <button
-                                    class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">上一页</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                            d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-primary bg-blue-50">
-                                    1
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    2
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    3
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    4
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    5
-                                </button>
-                                <button
-                                    class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
-                                    <span class="sr-only">下一页</span>
-                                    <svg class="h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"
-                                        fill="currentColor" aria-hidden="true">
-                                        <path fill-rule="evenodd"
-                                            d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                                            clip-rule="evenodd" />
-                                    </svg>
-                                </button>
-                            </nav>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </main>
-    </div>
-
-    <!-- 签到二维码弹窗 -->
-    <div id="qrModalOverlay" class="qr-modal-overlay">
-        <div id="qrModal" class="qr-modal">
-            <div class="qr-modal-header">
-                <h2 class="qr-modal-title">签到二维码</h2>
-                <button class="qr-close-btn" onclick="closeQrModal()">×</button>
-            </div>
-            <div class="qr-code-container">
-                <div class="qr-code" id="qrCode">
-                    <div style="font-size: 14px; color: #999;">二维码</div>
-                </div>
-                <div class="qr-refresh-tip">二维码每30秒自动刷新</div>
-            </div>
-            <div class="url-container">
-                <input type="text" class="url-input" id="urlInput" value="https://example.com/signin/ACT202310150001"
-                    readonly>
-                <button class="copy-btn" onclick="copyUrl()">复制</button>
-            </div>
-            <div class="tip-text">复制链接并分享给执行人员，访问该链接查看动态二维码</div>
         </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Search Filters -->
+            <div class="filter-card">
+                <div class="filter-grid">
+                    <div>
+                        <t-input v-model="filters.activityName" placeholder="请输入活动名称" label="活动名称"></t-input>
+                    </div>
+                    <div>
+                        <t-select v-model="filters.status" placeholder="请选择">
+                            <template #prefixIcon>活动状态</template>
+                            <t-option value="" label="全部"></t-option>
+                            <t-option value="normal" label="正常"></t-option>
+                            <t-option value="inactive" label="失效"></t-option>
+                        </t-select>
+                    </div>
+                    <div>
+                        <t-date-picker v-model="filters.startDate" placeholder="请选择开始日期" label="活动开始日期"></t-date-picker>
+                    </div>
+                    <div>
+                        <t-date-picker v-model="filters.endDate" placeholder="请选择结束日期" label="活动结束日期"></t-date-picker>
+                    </div>
+                </div>
+                <div class="filter-actions">
+                    <t-button theme="default" variant="outline" @click="resetFilters">重置</t-button>
+                    <t-button theme="primary" @click="search">搜索</t-button>
+                </div>
+            </div>
+
+            <!-- Action Bar -->
+            <div class="action-bar">
+                <div></div>
+                <t-button theme="primary" @click="createActivity">
+                    <template #icon><t-icon name="add"></t-icon></template>
+                    创建新活动
+                </t-button>
+            </div>
+
+            <!-- Activity Table -->
+            <div class="table-card">
+                <t-table
+                    :data="tableData"
+                    :columns="columns"
+                    :hover="true"
+                    :stripe="true"
+                    row-key="id"
+                    :pagination="null"
+                >
+                    <template #status="{ row }">
+                        <span :class="row.status === 'normal' ? 'status-normal' : 'status-inactive'">
+                            {{ row.status === 'normal' ? '正常' : '失效' }}
+                        </span>
+                    </template>
+                    
+                    <template #operation="{ row }">
+                        <div style="display: flex; gap: 8px;">
+                            <t-link theme="primary" @click="viewActivity(row)">查看</t-link>
+                            <t-link theme="primary" @click="editActivity(row)">修改</t-link>
+                            <t-link theme="primary" @click="viewSignup(row)">报名名单</t-link>
+                            <t-link theme="primary" @click="showQrCode(row, 'signin')">签到二维码</t-link>
+                            <t-link theme="success" @click="showQrCode(row, 'gift')">礼品二维码</t-link>
+                        </div>
+                    </template>
+                </t-table>
+
+                <!-- Pagination -->
+                <div style="padding: 16px 24px; display: flex; justify-content: space-between; align-items: center;">
+                    <t-pagination
+                        v-model="pagination.current"
+                        :total="pagination.total"
+                        :page-size="pagination.pageSize"
+                        :page-size-options="[10, 20, 50]"
+                        show-jumper
+                        show-page-size
+                        @current-change="handleCurrentChange"
+                        @page-size-change="handlePageSizeChange"
+                    ></t-pagination>
+                </div>
+            </div>
+        </div>
+
+        <!-- QR Code Dialog -->
+        <t-dialog
+            v-model:visible="qrDialog.visible"
+            :header="qrDialog.title"
+            :width="480"
+            @close="closeQrDialog"
+        >
+            <div style="text-align: center; padding: 20px 0;">
+                <div style="width: 200px; height: 200px; margin: 0 auto 12px; background: #f8f9fa; border: 1px solid #e0e0e0; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+                    <span style="color: #999; font-size: 14px;">二维码</span>
+                </div>
+                <div style="color: #999; font-size: 12px; margin-bottom: 24px;">二维码每30秒自动刷新</div>
+                
+                <div style="display: flex; gap: 8px; margin-bottom: 20px;">
+                    <t-input :value="qrDialog.url" readonly style="flex: 1;"></t-input>
+                    <t-button theme="primary" @click="copyUrl">复制</t-button>
+                </div>
+                
+                <div style="color: #666; font-size: 14px; line-height: 1.5;">
+                    复制链接并分享给执行人员，访问该链接查看动态二维码
+                </div>
+            </div>
+        </t-dialog>
     </div>
 
     <script>
-        let qrRefreshTimer = null;
+        const { createApp, ref, reactive } = Vue;
+        const { 
+            Button: TButton,
+            Input: TInput,
+            Select: TSelect,
+            Option: TOption,
+            DatePicker: TDatePicker,
+            Table: TTable,
+            Link: TLink,
+            Dialog: TDialog,
+            Pagination: TPagination,
+            Icon: TIcon,
+            MessagePlugin 
+        } = TDesign;
 
-        // 打开签到二维码弹窗
-        function openQrModal(activityId) {
-            const modal = document.getElementById('qrModal');
-            const overlay = document.getElementById('qrModalOverlay');
-            const urlInput = document.getElementById('urlInput');
-
-            // 设置URL
-            urlInput.value = `https://example.com/signin/${activityId}`;
-
-            // 显示弹窗
-            overlay.style.display = 'flex';
-            modal.style.display = 'block';
-
-            // 开始30秒刷新二维码
-            startQrRefresh();
-        }
-
-        // 关闭签到二维码弹窗
-        function closeQrModal() {
-            const modal = document.getElementById('qrModal');
-            const overlay = document.getElementById('qrModalOverlay');
-
-            // 隐藏弹窗
-            modal.style.display = 'none';
-            overlay.style.display = 'none';
-
-            // 停止刷新二维码
-            stopQrRefresh();
-        }
-
-        // 开始刷新二维码
-        function startQrRefresh() {
-            // 清除之前的定时器
-            stopQrRefresh();
-
-            // 设置30秒刷新一次
-            qrRefreshTimer = setInterval(() => {
-                refreshQrCode();
-            }, 30000);
-        }
-
-        // 停止刷新二维码
-        function stopQrRefresh() {
-            if (qrRefreshTimer) {
-                clearInterval(qrRefreshTimer);
-                qrRefreshTimer = null;
-            }
-        }
-
-        // 刷新二维码
-        function refreshQrCode() {
-            const qrCode = document.getElementById('qrCode');
-            // 这里可以添加实际的二维码刷新逻辑
-            console.log('二维码已刷新');
-            // 模拟刷新效果
-            qrCode.style.opacity = '0.5';
-            setTimeout(() => {
-                qrCode.style.opacity = '1';
-            }, 300);
-        }
-
-        // 复制URL
-        function copyUrl() {
-            const urlInput = document.getElementById('urlInput');
-            urlInput.select();
-            urlInput.setSelectionRange(0, 99999);
-
-            try {
-                navigator.clipboard.writeText(urlInput.value).then(() => {
-                    alert('链接已复制到剪贴板');
+        const app = createApp({
+            setup() {
+                // 筛选条件
+                const filters = reactive({
+                    activityName: '',
+                    status: '',
+                    startDate: '',
+                    endDate: ''
                 });
-            } catch (err) {
-                // 降级方案
-                document.execCommand('copy');
-                alert('链接已复制到剪贴板');
-            }
-        }
 
-        // 点击遮罩层关闭弹窗
-        document.getElementById('qrModalOverlay').addEventListener('click', function () {
-            closeQrModal();
-        });
+                // 表格列配置
+                const columns = [
+                    { colKey: 'id', title: 'ID', width: 180 },
+                    { colKey: 'name', title: '活动名称', width: 150 },
+                    { colKey: 'startTime', title: '活动开始时间', width: 150 },
+                    { colKey: 'endTime', title: '活动结束时间', width: 150 },
+                    { colKey: 'status', title: '活动状态', width: 100, cell: 'status' },
+                    { colKey: 'creator', title: '创建人', width: 100 },
+                    { colKey: 'createTime', title: '创建时间', width: 150 },
+                    { colKey: 'modifier', title: '修改人', width: 100 },
+                    { colKey: 'modifyTime', title: '修改时间', width: 150 },
+                    { colKey: 'operation', title: '操作', width: 250, cell: 'operation', fixed: 'right' }
+                ];
 
-        // 为签到二维码按钮添加点击事件
-        document.addEventListener('DOMContentLoaded', function () {
-            const qrButtons = document.querySelectorAll('button');
-            qrButtons.forEach(button => {
-                if (button.textContent === '签到二维码') {
-                    button.addEventListener('click', function () {
-                        const row = this.closest('tr');
-                        const activityId = row.querySelector('td:first-child').textContent;
-                        openQrModal(activityId);
+                // 表格数据
+                const tableData = ref([
+                    {
+                        id: 'ACT202310150001',
+                        name: '2023 秋季新品发布会',
+                        startTime: '2023-10-15 09:00',
+                        endTime: '2023-10-15 18:00',
+                        status: 'normal',
+                        creator: '王建国',
+                        createTime: '2023-10-10 09:30',
+                        modifier: '李晓明',
+                        modifyTime: '2023-10-12 15:20'
+                    },
+                    {
+                        id: 'ACT202310140002',
+                        name: '加盟商年度大会',
+                        startTime: '2023-10-20 14:00',
+                        endTime: '2023-10-22 17:00',
+                        status: 'normal',
+                        creator: '陈雅婷',
+                        createTime: '2023-10-05 10:15',
+                        modifier: '赵志强',
+                        modifyTime: '2023-10-18 11:45'
+                    },
+                    {
+                        id: 'ACT202310130003',
+                        name: '春季促销活动',
+                        startTime: '2023-09-15 08:00',
+                        endTime: '2023-09-15 20:00',
+                        status: 'inactive',
+                        creator: '刘德华',
+                        createTime: '2023-09-10 14:20',
+                        modifier: '周杰伦',
+                        modifyTime: '2023-09-12 16:30'
+                    },
+                    {
+                        id: 'ACT202310120004',
+                        name: '新产品发布会',
+                        startTime: '2023-11-05 10:00',
+                        endTime: '2023-11-05 16:00',
+                        status: 'normal',
+                        creator: '马化腾',
+                        createTime: '2023-10-25 13:45',
+                        modifier: '马云',
+                        modifyTime: '2023-10-28 09:15'
+                    },
+                    {
+                        id: 'ACT202310110005',
+                        name: '年度总结会议',
+                        startTime: '2023-12-20 09:00',
+                        endTime: '2023-12-22 17:00',
+                        status: 'normal',
+                        creator: '任正非',
+                        createTime: '2023-12-10 11:30',
+                        modifier: '雷军',
+                        modifyTime: '2023-12-15 14:20'
+                    }
+                ]);
+
+                // 分页配置
+                const pagination = reactive({
+                    current: 1,
+                    pageSize: 10,
+                    total: 50
+                });
+
+                // 二维码弹窗
+                const qrDialog = reactive({
+                    visible: false,
+                    title: '签到二维码',
+                    url: '',
+                    type: 'signin',
+                    activityId: ''
+                });
+
+                let qrRefreshTimer = null;
+
+                // 重置筛选
+                const resetFilters = () => {
+                    filters.activityName = '';
+                    filters.status = '';
+                    filters.startDate = '';
+                    filters.endDate = '';
+                };
+
+                // 搜索
+                const search = () => {
+                    console.log('搜索条件:', filters);
+                    MessagePlugin.success('搜索成功');
+                };
+
+                // 创建新活动
+                const createActivity = () => {
+                    MessagePlugin.info('创建新活动');
+                };
+
+                // 查看活动
+                const viewActivity = (row) => {
+                    MessagePlugin.info(`查看活动: ${row.name}`);
+                };
+
+                // 修改活动
+                const editActivity = (row) => {
+                    MessagePlugin.info(`修改活动: ${row.name}`);
+                };
+
+                // 查看报名名单
+                const viewSignup = (row) => {
+                    MessagePlugin.info(`查看报名名单: ${row.name}`);
+                };
+
+                // 显示二维码
+                const showQrCode = (row, type) => {
+                    qrDialog.visible = true;
+                    qrDialog.type = type;
+                    qrDialog.activityId = row.id;
+                    qrDialog.title = type === 'signin' ? '签到二维码' : '礼品二维码';
+                    qrDialog.url = `https://example.com/${type}/${row.id}`;
+                    
+                    // 开始刷新二维码
+                    startQrRefresh();
+                };
+
+                // 关闭二维码弹窗
+                const closeQrDialog = () => {
+                    qrDialog.visible = false;
+                    stopQrRefresh();
+                };
+
+                // 开始刷新二维码
+                const startQrRefresh = () => {
+                    stopQrRefresh();
+                    qrRefreshTimer = setInterval(() => {
+                        refreshQrCode();
+                    }, 30000);
+                };
+
+                // 停止刷新二维码
+                const stopQrRefresh = () => {
+                    if (qrRefreshTimer) {
+                        clearInterval(qrRefreshTimer);
+                        qrRefreshTimer = null;
+                    }
+                };
+
+                // 刷新二维码
+                const refreshQrCode = () => {
+                    console.log('二维码已刷新');
+                    MessagePlugin.success('二维码已刷新');
+                };
+
+                // 复制URL
+                const copyUrl = () => {
+                    navigator.clipboard.writeText(qrDialog.url).then(() => {
+                        MessagePlugin.success('链接已复制到剪贴板');
+                    }).catch(() => {
+                        MessagePlugin.error('复制失败');
                     });
-                }
-            });
+                };
+
+                // 分页变化
+                const handleCurrentChange = (current) => {
+                    pagination.current = current;
+                    console.log('当前页:', current);
+                };
+
+                const handlePageSizeChange = (pageSize) => {
+                    pagination.pageSize = pageSize;
+                    console.log('每页条数:', pageSize);
+                };
+
+                return {
+                    filters,
+                    columns,
+                    tableData,
+                    pagination,
+                    qrDialog,
+                    resetFilters,
+                    search,
+                    createActivity,
+                    viewActivity,
+                    editActivity,
+                    viewSignup,
+                    showQrCode,
+                    closeQrDialog,
+                    copyUrl,
+                    handleCurrentChange,
+                    handlePageSizeChange
+                };
+            }
         });
+
+        // 注册组件
+        app.component('t-button', TButton);
+        app.component('t-input', TInput);
+        app.component('t-select', TSelect);
+        app.component('t-option', TOption);
+        app.component('t-date-picker', TDatePicker);
+        app.component('t-table', TTable);
+        app.component('t-link', TLink);
+        app.component('t-dialog', TDialog);
+        app.component('t-pagination', TPagination);
+        app.component('t-icon', TIcon);
+
+        app.mount('#app');
     </script>
 </body>
-
 </html>
