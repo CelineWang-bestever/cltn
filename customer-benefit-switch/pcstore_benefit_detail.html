@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>客户权益 - 权益卡详情</title>
+    <script src="https://modao.cc/agent-py/static/source/js/tailwindcss.3.4.3.js"></script>
+    <script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.1.0.7.js"></script>
+    <style>
+        @font-face {
+            font-family: 'PingFang SC';
+            src: local('PingFang SC');
+        }
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .brand-pink {
+            color: #F1A3B8;
+        }
+        .bg-brand-pink {
+            background-color: #F1A3B8;
+        }
+        .border-brand-pink {
+            border-color: #F1A3B8;
+        }
+        .modal-overlay {
+            background-color: rgba(0, 0, 0, 0.4);
+            display: none;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .benefit-card {
+            background: linear-gradient(135deg, #FDF2F5 0%, #FCE7F0 100%);
+        }
+        /* 隐藏滚动条但保留滚动功能 */
+        ::-webkit-scrollbar {
+            width: 0;
+            height: 0;
+            background: transparent;
+        }
+        .checkbox-custom {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #D1D5DB;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+        }
+        .checkbox-custom.checked {
+            background-color: #F1A3B8;
+            border-color: #F1A3B8;
+        }
+        .payment-option.active {
+            border-color: #F1A3B8;
+            background-color: #FDF2F5;
+            color: #F1A3B8;
+        }
+        .target-benefit.active {
+            border-color: #F1A3B8;
+            background-color: #FDF2F5;
+        }
+    </style>
+</head>
+<body class="min-h-screen">
+    <div class="max-w-4xl mx-auto p-6">
+        <!-- 顶部导航 -->
+        <div class="flex items-center justify-between mb-6">
+            <button class="flex items-center gap-2 text-gray-500 hover:text-gray-700">
+                <iconify-icon icon="mdi:arrow-left" width="20"></iconify-icon>
+                <span>返回</span>
+            </button>
+            <h1 class="text-xl font-bold brand-pink">客户权益</h1>
+            <button class="text-gray-400 hover:text-gray-600" onclick="closePage()">
+                <iconify-icon icon="mdi:close" width="24"></iconify-icon>
+            </button>
+        </div>
+
+        <!-- 权益卡片展示区 -->
+        <div class="benefit-card rounded-2xl p-8 mb-6 relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/20 rounded-full -translate-y-1/2 translate-x-1/2"></div>
+            <div class="relative z-10">
+                <div class="flex items-center gap-3 mb-4">
+                    <span class="bg-white/80 px-3 py-1 rounded-full text-xs font-medium text-gray-600 flex items-center gap-1">
+                        <iconify-icon icon="mdi:ticket" width="14"></iconify-icon>
+                        权益
+                    </span>
+                    <h2 class="text-2xl font-bold text-gray-800">产品消耗</h2>
+                </div>
+                <div class="grid grid-cols-4 gap-6 mt-8">
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">使用期限</p>
+                        <p class="text-sm font-medium">永久有效</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">剩余次数</p>
+                        <p class="text-sm font-medium">1 / 2 次</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">开卡日期</p>
+                        <p class="text-sm font-medium">2026-05-04</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 mb-1">客户姓名</p>
+                        <p class="text-sm font-medium">尊贵会员</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab 切换 -->
+        <div class="flex border-b border-gray-100 mb-4">
+            <button class="px-6 py-3 text-gray-500 hover:text-gray-700 font-medium">卡耗明细</button>
+            <button class="px-6 py-3 brand-pink border-b-2 border-brand-pink font-medium relative">购买权益</button>
+            <button class="px-6 py-3 text-gray-500 hover:text-gray-700 font-medium">赠送权益</button>
+        </div>
+
+        <!-- 权益列表 -->
+        <div class="bg-white rounded-xl shadow-sm overflow-hidden mb-6">
+            <table class="w-full">
+                <thead>
+                    <tr class="bg-gray-50">
+                        <th class="py-4 px-6 text-left text-sm font-medium text-gray-500">服务名称</th>
+                        <th class="py-4 px-6 text-left text-sm font-medium text-gray-500">服务时长</th>
+                        <th class="py-4 px-6 text-left text-sm font-medium text-gray-500">服务价格</th>
+                        <th class="py-4 px-6 text-left text-sm font-medium text-gray-500">可用次数</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b border-gray-50 hover:bg-gray-50">
+                        <td class="py-4 px-6">
+                            <div class="flex items-center gap-2">
+                                <span class="w-2 h-2 rounded-full bg-brand-pink"></span>
+                                <span class="text-sm font-medium">产品消耗</span>
+                            </div>
+                        </td>
+                        <td class="py-4 px-6 text-sm text-gray-500">30分钟</td>
+                        <td class="py-4 px-6 text-sm text-gray-600">¥100</td>
+                        <td class="py-4 px-6 text-sm font-medium">1</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- 卡订单信息 -->
+        <div class="bg-white rounded-xl shadow-sm p-6 mb-6">
+            <h3 class="text-sm font-bold text-gray-700 mb-4">卡订单信息</h3>
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">订单编号</p>
+                    <p class="text-sm font-mono text-gray-700">2026050511254723573</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">下单时间</p>
+                    <p class="text-sm text-gray-700">2026-05-04 12:12:59</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">订单人</p>
+                    <p class="text-sm text-gray-700">roger</p>
+                </div>
+                <div>
+                    <p class="text-xs text-gray-400 mb-1">制单人</p>
+                    <p class="text-sm text-gray-700">roger</p>
+                </div>
+                <div class="col-span-2">
+                    <p class="text-xs text-gray-400 mb-1">订单备注</p>
+                    <p class="text-sm text-gray-700">-</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 底部操作按钮 -->
+        <div class="flex items-center justify-center gap-3">
+            <button class="px-6 py-2.5 border border-gray-200 rounded-lg text-gray-600 hover:bg-gray-50 font-medium">关闭</button>
+            <button class="px-6 py-2.5 border border-brand-pink rounded-lg text-brand-pink hover:bg-pink-50 font-medium">卡延期</button>
+            <button class="px-6 py-2.5 border border-brand-pink rounded-lg text-brand-pink hover:bg-pink-50 font-medium">卡升级</button>
+            <button class="px-6 py-2.5 border border-brand-pink rounded-lg text-brand-pink hover:bg-pink-50 font-medium">耗卡</button>
+            <button class="px-6 py-2.5 border border-brand-pink rounded-lg text-brand-pink hover:bg-pink-50 font-medium">退卡</button>
+            <button class="px-6 py-2.5 bg-brand-pink rounded-lg text-white font-medium shadow-lg shadow-pink-200" onclick="openSwitchModal()">置换权益</button>
+        </div>
+    </div>
+
+    <!-- 权益置换弹窗（100%高度） -->
+    <div class="modal-overlay fixed inset-0 z-50" id="switchModal">
+        <div class="bg-white w-full h-screen flex flex-col overflow-hidden">
+            <!-- 弹窗内容区域（80%宽度） -->
+            <div class="flex-1 flex flex-col max-w-[80%] mx-auto w-full overflow-hidden">
+                <!-- 弹窗顶部导航栏 -->
+                <div class="bg-white border-b border-gray-100 px-6 py-3 flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                    <button class="text-gray-500 hover:text-gray-700" onclick="closeSwitchModal()">
+                        <iconify-icon icon="mdi:arrow-left" width="20"></iconify-icon>
+                    </button>
+                    <span class="text-lg font-bold text-gray-800">CHLITINA 克丽缇娜</span>
+                    <div class="flex items-center gap-2 text-sm text-gray-500">
+                        <span>客户列表</span>
+                        <iconify-icon icon="mdi:chevron-right" width="14"></iconify-icon>
+                        <span>权益置换</span>
+                    </div>
+                </div>
+                <div class="flex items-center gap-4">
+                    <button class="p-2 text-gray-500 hover:text-gray-700">
+                        <iconify-icon icon="mdi:bell" width="20"></iconify-icon>
+                    </button>
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-pink-400 flex items-center justify-center">
+                            <iconify-icon icon="mdi:user" width="16" class="text-white"></iconify-icon>
+                        </div>
+                        <span class="text-sm text-gray-700">roger</span>
+                    </div>
+                    <div class="flex items-center gap-1 text-sm text-gray-500">
+                        <span>测试店1</span>
+                        <iconify-icon icon="mdi:chevron-down" width="14"></iconify-icon>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 客户信息区域 -->
+            <div class="bg-gradient-to-r from-pink-50 to-orange-50 px-6 py-4">
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-pink-300 to-orange-300 flex items-center justify-center">
+                        <iconify-icon icon="mdi:user" width="24" class="text-white"></iconify-icon>
+                    </div>
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2">
+                            <span class="font-bold text-gray-800">于 金</span>
+                            <span class="px-2 py-0.5 bg-pink-100 text-pink-600 text-xs rounded-full">会员</span>
+                        </div>
+                        <p class="text-sm text-gray-500">152****1817</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 弹窗标题 -->
+            <!-- <div class="h-12 flex items-center px-6 border-b border-gray-100 flex-shrink-0 bg-white">
+                <h2 class="text-lg font-bold text-gray-700">权益置换</h2>
+            </div> -->
+
+            <!-- 弹窗主体 - 左右布局 -->
+            <div class="flex-1 flex overflow-hidden">
+                <!-- 左侧：目标权益列表（全屏高度） -->
+                <div class="w-1/2 border-r border-gray-100 flex flex-col">
+                    <div class="p-4 border-b border-gray-100">
+                        <div class="flex gap-2 mb-3">
+                            <!-- <button class="px-3 py-1.5 text-xs rounded-full hover:bg-gray-200 transition-colors">全部</button> -->
+                            <button class="px-3 py-1.5 text-xs bg-gray-100 rounded-full hover:bg-gray-100 transition-colors">居家产品</button>
+                            <button class="px-3 py-1.5 text-xs rounded-full hover:bg-gray-100 transition-colors">单次护理</button>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <input type="text" id="searchInput" placeholder="请输入产品/疗程名称" class="flex-1 px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:border-brand-pink">
+                            <button class="px-4 py-2 bg-brand-pink text-white text-sm rounded-lg hover:bg-pink-500 transition-colors" onclick="searchBenefits()">
+                                搜索
+                            </button>
+                        </div>
+                    </div>
+                    <div class="flex-1 overflow-y-auto p-4 space-y-3">
+                        <div class="benefit-item flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-pink-200 hover:bg-pink-50/50 transition-colors">
+                            <div class="w-16 text-center">
+                                <p class="text-xs text-pink-500 font-medium">CHLITINA</p>
+                                <p class="text-xs text-gray-400">克丽缇娜</p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="benefit-name text-base font-medium text-gray-800">面部护理</p>
+                                <p class="text-brand-pink font-bold mt-1">¥198</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="text-pink-500 text-sm hover:text-pink-600">详情 ></button>
+                                <button class="w-8 h-8 rounded-full border border-pink-300 flex items-center justify-center text-pink-500 hover:bg-pink-50 hover:border-pink-400 transition-colors" onclick="addTargetBenefit('facial')">
+                                    <iconify-icon icon="mdi:plus" width="18"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="benefit-item flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-pink-200 hover:bg-pink-50/50 transition-colors">
+                            <div class="w-16 text-center">
+                                <p class="text-xs text-pink-500 font-medium">CHLITINA</p>
+                                <p class="text-xs text-gray-400">克丽缇娜</p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="benefit-name text-base font-medium text-gray-800">水光针护理</p>
+                                <p class="text-brand-pink font-bold mt-1">¥328</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="text-pink-500 text-sm hover:text-pink-600">详情 ></button>
+                                <button class="w-8 h-8 rounded-full border border-pink-300 flex items-center justify-center text-pink-500 hover:bg-pink-50 hover:border-pink-400 transition-colors" onclick="addTargetBenefit('shimmer')">
+                                    <iconify-icon icon="mdi:plus" width="18"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="benefit-item flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-pink-200 hover:bg-pink-50/50 transition-colors">
+                            <div class="w-16 text-center">
+                                <p class="text-xs text-pink-500 font-medium">CHLITINA</p>
+                                <p class="text-xs text-gray-400">克丽缇娜</p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="benefit-name text-base font-medium text-gray-800">眼部护理</p>
+                                <p class="text-brand-pink font-bold mt-1">¥258</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="text-pink-500 text-sm hover:text-pink-600">详情 ></button>
+                                <button class="w-8 h-8 rounded-full border border-pink-300 flex items-center justify-center text-pink-500 hover:bg-pink-50 hover:border-pink-400 transition-colors" onclick="addTargetBenefit('eye')">
+                                    <iconify-icon icon="mdi:plus" width="18"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="benefit-item flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-pink-200 hover:bg-pink-50/50 transition-colors">
+                            <div class="w-16 text-center">
+                                <p class="text-xs text-pink-500 font-medium">CHLITINA</p>
+                                <p class="text-xs text-gray-400">克丽缇娜</p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="benefit-name text-base font-medium text-gray-800">精华液</p>
+                                <p class="text-brand-pink font-bold mt-1">¥88</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="text-pink-500 text-sm hover:text-pink-600">详情 ></button>
+                                <button class="w-8 h-8 rounded-full border border-pink-300 flex items-center justify-center text-pink-500 hover:bg-pink-50 hover:border-pink-400 transition-colors" onclick="addTargetBenefit('essence')">
+                                    <iconify-icon icon="mdi:plus" width="18"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="benefit-item flex items-center gap-4 p-4 border border-gray-200 rounded-xl hover:border-pink-200 hover:bg-pink-50/50 transition-colors">
+                            <div class="w-16 text-center">
+                                <p class="text-xs text-pink-500 font-medium">CHLITINA</p>
+                                <p class="text-xs text-gray-400">克丽缇娜</p>
+                            </div>
+                            <div class="flex-1">
+                                <p class="benefit-name text-base font-medium text-gray-800">补水面膜</p>
+                                <p class="text-brand-pink font-bold mt-1">¥98</p>
+                            </div>
+                            <div class="flex items-center gap-3">
+                                <button class="text-pink-500 text-sm hover:text-pink-600">详情 ></button>
+                                <button class="w-8 h-8 rounded-full border border-pink-300 flex items-center justify-center text-pink-500 hover:bg-pink-50 hover:border-pink-400 transition-colors" onclick="addTargetBenefit('mask')">
+                                    <iconify-icon icon="mdi:plus" width="18"></iconify-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 右侧：已选权益 + 待置换权益 + 其他内容 -->
+                <div class="w-1/2 flex flex-col overflow-hidden">
+                    <div class="flex-1 overflow-y-auto p-4">
+                        <!-- 选择待置换权益 -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-bold">1</span>
+                                选择待置换权益
+                            </h3>
+                            <div class="space-y-3">
+                                <div class="bg-gray-50 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center gap-2">
+                                            <span class="bg-pink-100 px-2 py-0.5 rounded text-xs text-pink-600">权益</span>
+                                            <span class="text-sm font-medium">产品消耗</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center border border-gray-200 rounded-lg">
+                                                <button class="px-2 py-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-l-lg" onclick="adjustSourceQty('product', -1)">
+                                                    <iconify-icon icon="mdi:minus" width="14"></iconify-icon>
+                                                </button>
+                                                <input type="number" id="sourceQty-product" value="1" min="0" max="1" class="w-10 px-2 py-1 text-center text-sm border-x border-gray-200 focus:outline-none" onchange="updateSourceTotal()">
+                                                <button class="px-2 py-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-r-lg" onclick="adjustSourceQty('product', 1)">
+                                                    <iconify-icon icon="mdi:plus" width="14"></iconify-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <div>
+                                            <span class="text-gray-400">可用次数:</span>
+                                            <span class="ml-2 font-medium">1</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-400">单次价值:</span>
+                                            <span class="ml-2 font-medium brand-pink">¥100</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-gray-50 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-3">
+                                        <div class="flex items-center gap-2">
+                                            <span class="bg-pink-100 px-2 py-0.5 rounded text-xs text-pink-600">权益</span>
+                                            <span class="text-sm font-medium">面部护理</span>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="flex items-center border border-gray-200 rounded-lg">
+                                                <button class="px-2 py-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-l-lg" onclick="adjustSourceQty('facial', -1)">
+                                                    <iconify-icon icon="mdi:minus" width="14"></iconify-icon>
+                                                </button>
+                                                <input type="number" id="sourceQty-facial" value="0" min="0" max="5" class="w-10 px-2 py-1 text-center text-sm border-x border-gray-200 focus:outline-none" onchange="updateSourceTotal()">
+                                                <button class="px-2 py-1 text-gray-400 hover:text-gray-600 hover:bg-gray-100 rounded-r-lg" onclick="adjustSourceQty('facial', 1)">
+                                                    <iconify-icon icon="mdi:plus" width="14"></iconify-icon>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="grid grid-cols-2 gap-2 text-xs">
+                                        <div>
+                                            <span class="text-gray-400">可用次数:</span>
+                                            <span class="ml-2 font-medium">5</span>
+                                        </div>
+                                        <div>
+                                            <span class="text-gray-400">单次价值:</span>
+                                            <span class="ml-2 font-medium brand-pink">¥198</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 已选目标权益列表 -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-bold text-gray-700 mb-3 flex items-center gap-2">
+                                <span class="w-6 h-6 bg-gray-100 rounded-full flex items-center justify-center text-xs font-bold">2</span>
+                                选择目标权益
+                            </h3>
+                            <div class="space-y-2" id="selectedBenefitsList" style="display: none;">
+                            </div>
+                            <!-- 空状态提示 -->
+                            <div id="emptySelectedHint" class="py-8 text-center text-gray-400 text-sm" style="display: block;">
+                                <!-- <iconify-icon icon="mdi:shopping-cart" width="32" height="32" class="mx-auto mb-2 opacity-50"></iconify-icon> -->
+                                <p>请先从左侧选择商品</p>
+                            </div>
+                        </div>
+
+                        <!-- 金额计算区域 -->
+                        <div id="amountSection" class="bg-gray-50 rounded-xl p-4 mb-6" style="display: none;">
+                            <h3 class="text-sm font-bold text-gray-700 mb-3">金额计算</h3>
+                            <div class="grid grid-cols-2 gap-4">
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">零售价</p>
+                                    <p class="text-lg font-bold" id="retailPrice">¥0</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">抵扣金额</p>
+                                    <p class="text-lg font-bold" id="deductAmount">¥0</p>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">优惠金额</p>
+                                    <div class="relative">
+                                        <span class="absolute left-2 top-1/2 -translate-y-1/2 text-gray-400">¥</span>
+                                        <input type="number" id="discountAmount" value="0" min="0" class="w-full pl-6 pr-3 py-2 border border-gray-200 rounded-lg text-lg font-bold focus:outline-none focus:border-brand-pink" oninput="calculatePayable()">
+                                    </div>
+                                </div>
+                                <div>
+                                    <p class="text-xs text-gray-400 mb-1">应付金额</p>
+                                    <p class="text-xl font-bold text-red-500" id="payableAmount">¥0</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 新增字段区域 -->
+                        <div id="fieldsSection" class="bg-white rounded-xl shadow-sm p-4" style="display: none;">
+                            <div class="grid grid-cols-2 gap-4 mb-3">
+                                <div>
+                                    <label class="text-xs text-gray-400 mb-1 block">美容师</label>
+                                    <select class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-brand-pink">
+                                        <option value="">请选择美容师</option>
+                                        <option value="张美美">张美美</option>
+                                        <option value="李芳芳">李芳芳</option>
+                                        <option value="王小丽">王小丽</option>
+                                        <option value="赵小雪">赵小雪</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label class="text-xs text-gray-400 mb-1 block">下单时间</label>
+                                    <input type="datetime-local" id="orderTime" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-brand-pink">
+                                </div>
+                            </div>
+                            <div>
+                                <label class="text-xs text-gray-400 mb-1 block">备注</label>
+                                <textarea id="remark" maxlength="200" placeholder="" class="w-full px-3 py-2 border border-gray-200 rounded-lg focus:outline-none focus:border-brand-pink resize-none" rows="3"></textarea>
+                                <p class="text-xs text-gray-400 mt-1 text-right"><span id="remarkCount">0</span>/200</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 底部汇总栏 -->
+                    <div id="bottomBar" class="h-14 bg-white border-t border-gray-100 flex items-center justify-between px-4" style="display: none;">
+                        <div class="flex items-center gap-4">
+                            <div>
+                                <span class="text-sm text-gray-500">已选</span>
+                                <span class="text-lg font-bold brand-pink ml-1" id="selectedCountBottom">0</span>
+                                <span class="text-sm text-gray-500">件</span>
+                            </div>
+                            <div>
+                                <span class="text-sm text-gray-500">合计</span>
+                                <span class="text-xl font-bold text-red-500 ml-1" id="totalAmount">¥0</span>
+                            </div>
+                        </div>
+                        <button class="px-6 py-2 bg-brand-pink rounded-lg text-white font-medium shadow-lg shadow-pink-200" onclick="submitOrder()">提交订单</button>
+                    </div>
+                </div>
+            </div>
+            </div> <!-- 关闭80%宽度内容区域 -->
+        </div>
+    </div>
+
+    <script>
+        // 权益价格映射
+        const sourcePrices = {
+            'product': 100,
+            'facial': 198
+        };
+        
+        const targetPrices = {
+            'facial': 198,
+            'shimmer': 328,
+            'eye': 258,
+            'essence': 88,
+            'mask': 98
+        };
+        
+        // 权益名称映射
+        const targetNames = {
+            'facial': '面部护理',
+            'shimmer': '水光针护理',
+            'eye': '眼部护理',
+            'essence': '精华液',
+            'mask': '补水面膜'
+        };
+        
+        // 权益单位映射
+        const targetUnits = {
+            'facial': '次',
+            'shimmer': '次',
+            'eye': '次',
+            'essence': '瓶',
+            'mask': '盒'
+        };
+
+        function openSwitchModal() {
+            document.getElementById('switchModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            const now = new Date();
+            const dateTimeStr = now.toISOString().slice(0, 16);
+            document.getElementById('orderTime').value = dateTimeStr;
+            updateSourceTotal();
+            updateSelectedBenefitsTotal();
+        }
+
+        function closeSwitchModal() {
+            document.getElementById('switchModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function adjustSourceQty(key, delta) {
+            const input = document.getElementById(`sourceQty-${key}`);
+            const max = parseInt(input.max);
+            const min = parseInt(input.min);
+            let value = parseInt(input.value) || 0;
+            value = Math.max(min, Math.min(max, value + delta));
+            input.value = value;
+            updateSourceTotal();
+        }
+
+        function toggleSourceBenefit(el, key) {
+            el.classList.toggle('checked');
+            const icon = el.querySelector('iconify-icon');
+            icon.classList.toggle('opacity-0');
+            
+            const input = document.getElementById(`sourceQty-${key}`);
+            const max = parseInt(input.max);
+            if (el.classList.contains('checked')) {
+                input.value = 1;
+            } else {
+                input.value = 0;
+            }
+            updateSourceTotal();
+        }
+
+        // 搜索商品列表
+        function searchBenefits() {
+            const searchText = document.getElementById('searchInput').value.toLowerCase().trim();
+            const items = document.querySelectorAll('.benefit-item');
+            
+            items.forEach(item => {
+                const name = item.querySelector('.benefit-name').textContent.toLowerCase();
+                if (name.includes(searchText) || searchText === '') {
+                    item.classList.remove('hidden');
+                } else {
+                    item.classList.add('hidden');
+                }
+            });
+        }
+
+        // 添加目标权益到已选列表
+        function addTargetBenefit(key) {
+            const list = document.getElementById('selectedBenefitsList');
+            const emptyHint = document.getElementById('emptySelectedHint');
+            
+            if (!list || !emptyHint) {
+                console.error('Elements not found');
+                return;
+            }
+            
+            const existingItem = list.querySelector(`[data-key="${key}"]`);
+            
+            if (existingItem) {
+                // 如果已存在，数量+1
+                const input = existingItem.querySelector('input');
+                if (input) {
+                    const currentValue = parseInt(input.value) || 0;
+                    input.value = currentValue + 1;
+                }
+            } else {
+                // 如果不存在，创建新项
+                const price = targetPrices[key];
+                const name = targetNames[key];
+                const unit = targetUnits[key];
+                
+                if (!price || !name || !unit) {
+                    console.error('Benefit data not found for key:', key);
+                    return;
+                }
+                
+                // 先显示列表，隐藏空状态提示
+                list.style.display = 'block';
+                emptyHint.style.display = 'none';
+                
+                const item = document.createElement('div');
+                item.className = 'flex items-center justify-between p-3 bg-pink-50 rounded-lg';
+                item.setAttribute('data-key', key);
+                item.innerHTML = `
+                    <div>
+                        <p class="text-sm font-medium">${name}</p>
+                        <p class="text-xs text-gray-400">¥${price}</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <div class="flex items-center border border-brand-pink rounded-lg">
+                            <button class="px-2 py-1 text-brand-pink hover:bg-pink-100 rounded-l-lg" onclick="updateSelectedQty('${key}', -1)">
+                                <iconify-icon icon="mdi:minus" width="14"></iconify-icon>
+                            </button>
+                            <input type="number" id="selectedQty-${key}" value="1" min="1" class="w-10 px-2 py-1 text-center text-sm border-x border-brand-pink focus:outline-none">
+                            <button class="px-2 py-1 text-brand-pink hover:bg-pink-100 rounded-r-lg" onclick="updateSelectedQty('${key}', 1)">
+                                <iconify-icon icon="mdi:plus" width="14"></iconify-icon>
+                            </button>
+                        </div>
+                        <button class="hover:text-red-500" onclick="removeSelectedBenefit('${key}')">
+                            <iconify-icon icon="mdi:trash-can-outline" width="16" style="color: #E91E8C;"></iconify-icon>
+                        </button>
+                    </div>
+                `;
+                list.appendChild(item);
+            }
+            
+            updateSelectedBenefitsTotal();
+        }
+
+        // 更新已选权益数量
+        function updateSelectedQty(key, delta) {
+            const input = document.getElementById(`selectedQty-${key}`);
+            let value = parseInt(input.value) || 1;
+            value = Math.max(1, value + delta);
+            input.value = value;
+            updateSelectedBenefitsTotal();
+        }
+
+        // 删除已选权益
+        function removeSelectedBenefit(key) {
+            const item = document.querySelector(`#selectedBenefitsList [data-key="${key}"]`);
+            if (item) {
+                item.remove();
+            }
+            updateSelectedBenefitsTotal();
+        }
+
+        // 更新已选权益汇总
+        function updateSelectedBenefitsTotal() {
+            let total = 0;
+            let count = 0;
+            
+            const items = document.querySelectorAll('#selectedBenefitsList > div');
+            items.forEach(item => {
+                const key = item.getAttribute('data-key');
+                const input = item.querySelector('input');
+                const qty = input ? parseInt(input.value) || 0 : 0;
+                const price = targetPrices[key] || 0;
+                total += qty * price;
+                count += qty;
+            });
+            
+            // 更新所有显示数量和金额的地方
+            const retailPriceEl = document.getElementById('retailPrice');
+            const selectedCountBottomEl = document.getElementById('selectedCountBottom');
+            
+            if (retailPriceEl) {
+                retailPriceEl.textContent = '¥' + total;
+            }
+            if (selectedCountBottomEl) {
+                selectedCountBottomEl.textContent = count;
+            }
+            
+            // 显示/隐藏空状态提示
+            const list = document.getElementById('selectedBenefitsList');
+            const emptyHint = document.getElementById('emptySelectedHint');
+            
+            // 获取金额计算区域、新增字段区域和底部汇总栏
+            const amountSection = document.getElementById('amountSection');
+            const fieldsSection = document.getElementById('fieldsSection');
+            const bottomBar = document.getElementById('bottomBar');
+            
+            if (count === 0) {
+                list.style.display = 'none';
+                emptyHint.style.display = 'block';
+                // 隐藏金额计算区域、新增字段区域和底部汇总栏
+                if (amountSection) amountSection.style.display = 'none';
+                if (fieldsSection) fieldsSection.style.display = 'none';
+                if (bottomBar) bottomBar.style.display = 'none';
+            } else {
+                list.style.display = 'block';
+                emptyHint.style.display = 'none';
+                // 显示金额计算区域、新增字段区域和底部汇总栏
+                if (amountSection) amountSection.style.display = 'block';
+                if (fieldsSection) fieldsSection.style.display = 'block';
+                if (bottomBar) bottomBar.style.display = 'flex';
+            }
+            
+            // 更新抵扣金额
+            updateSourceTotal();
+        }
+
+        function updateSourceTotal() {
+            let total = 0;
+            Object.keys(sourcePrices).forEach(key => {
+                const input = document.getElementById(`sourceQty-${key}`);
+                const qty = input ? parseInt(input.value) || 0 : 0;
+                const price = sourcePrices[key] || 0;
+                total += qty * price;
+            });
+            
+            // 重新计算目标权益总价值
+            let targetTotal = 0;
+            const list = document.getElementById('selectedBenefitsList');
+            if (list) {
+                const items = list.querySelectorAll(':scope > div');
+                items.forEach(item => {
+                    const key = item.getAttribute('data-key');
+                    const input = item.querySelector('input');
+                    const qty = input ? parseInt(input.value) || 0 : 0;
+                    const price = targetPrices[key] || 0;
+                    targetTotal += qty * price;
+                });
+            }
+            
+            let deductAmount = total;
+            if (total >= targetTotal) {
+                deductAmount = targetTotal;
+            }
+            
+            const deductAmountEl = document.getElementById('deductAmount');
+            if (deductAmountEl) {
+                deductAmountEl.textContent = '¥' + deductAmount;
+            }
+            calculatePayable();
+        }
+
+        function calculatePayable() {
+            // 重新计算待置换权益的总价值
+            let sourceTotal = 0;
+            Object.keys(sourcePrices).forEach(key => {
+                const input = document.getElementById(`sourceQty-${key}`);
+                const qty = input ? parseInt(input.value) || 0 : 0;
+                const price = sourcePrices[key] || 0;
+                sourceTotal += qty * price;
+            });
+            
+            // 重新计算目标权益的总价值（从已选列表中计算）
+            let targetTotal = 0;
+            const list = document.getElementById('selectedBenefitsList');
+            if (list) {
+                const items = list.querySelectorAll(':scope > div');
+                items.forEach(item => {
+                    const key = item.getAttribute('data-key');
+                    const input = item.querySelector('input');
+                    const qty = input ? parseInt(input.value) || 0 : 0;
+                    const price = targetPrices[key] || 0;
+                    targetTotal += qty * price;
+                });
+            }
+            
+            const discountInput = document.getElementById('discountAmount');
+            const discount = discountInput ? (!isNaN(parseInt(discountInput.value)) ? parseInt(discountInput.value) : 0) : 0;
+            
+            const payable = targetTotal - sourceTotal - discount;
+            
+            const payableAmountEl = document.getElementById('payableAmount');
+            const totalAmountEl = document.getElementById('totalAmount');
+            
+            if (payableAmountEl) {
+                payableAmountEl.textContent = '¥' + Math.max(0, payable);
+            }
+            if (totalAmountEl) {
+                totalAmountEl.textContent = '¥' + Math.max(0, payable);
+            }
+        }
+
+        function submitOrder() {
+            alert('订单已提交，正在跳转支付页面...');
+            closeSwitchModal();
+        }
+
+        function closePage() {
+            window.close();
+        }
+
+        document.getElementById('remark').addEventListener('input', function() {
+            document.getElementById('remarkCount').textContent = this.value.length;
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            updateSourceTotal();
+            updateSelectedBenefitsTotal();
+        });
+    </script>
+</body>
+</html>

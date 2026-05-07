@@ -218,12 +218,12 @@
                     </div>
                     <p class="text-[10px] text-gray-300 mt-2">欠款金额 578.00</p>
                 </div>
-                <!-- 美容师选择 -->
+    <!-- 美容师选择 -->
                 <div>
                     <label class="block text-gray-400 text-xs mb-2">美容师选择</label>
                     <div class="flex items-center justify-between border-b border-gray-100 pb-2 cursor-pointer"
                         onclick="toggleBeauticianList()">
-                        <span class="text-[14px] text-gray-700" id="selected-beautician">请选择服务美容师</span>
+                        <span class="text-[14px] text-black" id="selected-beautician">张美美</span>
                         <iconify-icon class="text-gray-300" icon="mdi:chevron-down"></iconify-icon>
                     </div>
                     <!-- 隐藏的下拉列表 -->
@@ -236,6 +236,16 @@
                             (技术主管)</div>
                         <div class="py-2 px-3 hover:bg-white rounded-lg text-sm" onclick="selectBeautician('赵晓雅')">赵晓雅
                             (金牌服务)</div>
+                    </div>
+                </div>
+                <!-- 还款日期 -->
+                <div>
+                    <label class="block text-gray-400 text-xs mb-2">还款日期</label>
+                    <div class="relative">
+                        <input
+                            class="w-full h-12 px-4 border border-gray-200 rounded-lg focus:border-[#F1A3B8] focus:ring-0 outline-none"
+                            id="repayDate" type="datetime-local" />
+                        <iconify-icon class="absolute right-4 top-3 text-gray-400" icon="mdi:calendar"></iconify-icon>
                     </div>
                 </div>
                 <!-- 支付方式选择 -->
@@ -314,7 +324,7 @@
         <div class="absolute bottom-2 left-1/2 -translate-x-1/2 w-32 h-1.5 bg-gray-200 rounded-full z-50"></div>
     </div>
     <script>
-        function toggleDrawer(isOpen) {
+function toggleDrawer(isOpen) {
             const drawer = document.getElementById('repayment-drawer');
             const overlay = document.getElementById('drawer-overlay');
             const mainContent = document.getElementById('main-content');
@@ -327,6 +337,10 @@
                 }, 10);
                 mainContent.style.transition = 'filter 0.3s ease';
                 mainContent.style.filter = 'blur(4px)';
+                // 设置默认还款日期为当前时间
+                const now = new Date();
+                const dateStr = now.toISOString().slice(0, 16);
+                document.getElementById('repayDate').value = dateStr;
             } else {
                 drawer.style.transform = 'translateY(100%)';
                 overlay.style.opacity = '0';
@@ -365,8 +379,39 @@
             document.getElementById('word-count').innerText = `${count}/200`;
         }
 
-        function confirmRepayment() {
-            alert('还款申请已提交！');
+function confirmRepayment() {
+            // 获取表单数据
+            const amount = document.querySelector('input[type="number"]').value;
+            const beautician = document.getElementById('selected-beautician').innerText;
+            const repayDate = document.getElementById('repayDate').value;
+            const selectedPayment = document.querySelector('.payment-option.active');
+            
+            // 验证还款金额
+            if (!amount || parseFloat(amount) <= 0) {
+                alert('请输入有效的还款金额');
+                return;
+            }
+            
+            // 验证美容师选择
+            if (beautician === '请选择服务美容师') {
+                alert('请选择美容师');
+                return;
+            }
+            
+            // 验证还款日期
+            if (!repayDate) {
+                alert('请选择还款日期');
+                return;
+            }
+            
+            // 验证支付方式
+            if (!selectedPayment) {
+                alert('请选择支付方式');
+                return;
+            }
+            
+            // 提交成功
+            alert('还款申请已提交！\n金额：¥' + amount + '\n美容师：' + beautician + '\n日期：' + repayDate);
             toggleDrawer(false);
         }
     </script>

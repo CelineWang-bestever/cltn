@@ -28,7 +28,7 @@
         }
 
         body {
-            background-color: #f8f9fa;
+            background-color: #ffffff;
         }
 
         .page-container {
@@ -57,8 +57,8 @@
     <div class="page-container relative">
         <!-- 顶部导航 -->
         <header class="flex items-center justify-between px-4 py-4 border-b border-gray-100">
-            <button class="p-2 hover:bg-gray-50 rounded-full transition-colors">
-                <iconify-icon class="text-xl text-gray-400" icon="line-md:close"></iconify-icon>
+            <button class="p-2 hover:bg-gray-50 rounded-full transition-colors w-10 flex items-center justify-center">
+                <span class="text-xl text-gray-400 font-bold">&times;</span>
             </button>
             <h1 class="text-lg font-bold">支付确认</h1>
             <div class="w-10"></div>
@@ -66,7 +66,7 @@
         <!-- 主要内容区域 -->
         <main class="flex-grow px-4 py-6 space-y-6 pb-48 overflow-y-auto" style="padding-bottom: 14rem;">
             <!-- 基础支付明细 -->
-            <section class="bg-gray-50 rounded-2xl p-5 space-y-3">
+            <section class=" rounded-2xl p-5 space-y-3">
                 <div class="flex justify-between items-center text-sm">
                     <span class="text-gray-500">商品金额</span>
                     <span class="font-medium text-gray-700" id="display-product-amount">¥560.00</span>
@@ -125,10 +125,9 @@
                     </div>
                 </div>
             </section> -->
-            <!-- 支付方式 (多选/横向) -->
+<!-- 支付方式 (多选/横向) -->
             <section class="space-y-3">
                 <div class="flex items-center gap-2 px-1">
-                    <iconify-icon class="text-gray-400 text-lg" icon="solar:wallet-money-bold-duotone"></iconify-icon>
                     <h2 class="text-sm font-bold text-gray-600 uppercase tracking-wider">选择支付方式</h2>
                 </div>
                 <div class="grid grid-cols-4 gap-2" id="payment-methods-grid">
@@ -188,12 +187,11 @@
                         <span class="text-xs font-medium">云店支付</span>
                     </div>
                 </div>
-                <p class="text-[10px] text-gray-400 px-1 mt-1" id="selected-methods-tip">当前已选: 无</p>
+
             </section>
-            <!-- 支付金额分配 (新添加) -->
+<!-- 支付金额分配 (新添加) -->
             <section class="space-y-3 hidden" id="allocation-section">
                 <div class="flex items-center gap-2 px-1">
-                    <iconify-icon class="brand-color text-lg" icon="solar:bill-check-bold-duotone"></iconify-icon>
                     <h2 class="text-sm font-bold text-gray-600 uppercase tracking-wider">支付金额分配</h2>
                 </div>
                 <div class="space-y-2" id="method-inputs-container">
@@ -201,15 +199,12 @@
                 </div>
                 <p class="text-[10px] text-red-500 px-1 hidden" id="allocation-error">实付总额不能超过应付总额！</p>
             </section>
-            <!-- 本次新产生的欠款 -->
+<!-- 本次新产生的欠款 -->
             <section class="bg-red-50/40 border border-red-100 rounded-2xl p-4 flex justify-between items-center"
                 id="new-arrears-section">
-                <div class="flex items-center gap-2">
-                    <iconify-icon class="text-red-400 text-xl" icon="solar:danger-bold-duotone"></iconify-icon>
-                    <div>
-                        <p class="text-sm font-bold text-gray-700">本次新产生欠款</p>
-                        <p class="text-[10px] text-gray-400">总支付额 - 实付金额</p>
-                    </div>
+                <div>
+                    <p class="text-sm font-bold text-gray-700">本次新产生欠款</p>
+                    <p class="text-[10px] text-gray-400">应付金额 - 实付金额</p>
                 </div>
                 <span class="text-red-500 font-black" id="new-arrears-amount">¥0.00</span>
             </section>
@@ -500,7 +495,7 @@
             const actualPaid = parseFloat(document.getElementById('actual-paid').value) || 0;
             const originalContent = btn.innerHTML;
             btn.disabled = true;
-            btn.innerHTML = '<iconify-icon icon="line-md:loading-twotone-loop" class="text-2xl"></iconify-icon><span>支付请求中...</span>';
+            btn.innerHTML = '<span>支付请求中...</span>';
 
             setTimeout(() => {
                 // 由于支付金额分配区域已隐藏，直接使用实付金额作为所有选中支付方式的金额
