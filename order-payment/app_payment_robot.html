@@ -116,19 +116,37 @@
             <div class="bg-white px-4 py-3 mb-4">
                 <div class="flex justify-between items-center py-2 text-sm">
                     <span class="text-gray-500">商品金额</span>
-                    <span class="font-medium">¥ 158.00</span>
+                    <span class="font-medium">¥ <span id="product-amount">158.00</span></span>
                 </div>
                 <div class="flex justify-between items-center py-2 text-sm">
                     <span class="text-gray-500">折后金额</span>
-                    <span class="font-medium">¥ 128.00</span>
+                    <span class="font-medium">¥ <span id="discounted-amount">128.00</span></span>
                 </div>
                 <div class="flex justify-between items-center py-2 text-sm">
                     <span class="text-gray-500">抵扣金额</span>
-                    <span class="text-red-500">- ¥ 0.00</span>
+                    <span class="text-[#F1A3B8] font-medium">- ¥ <span id="deduction-total">45.00</span></span>
                 </div>
-                <div class="border-t border-gray-50 mt-1 pt-2 flex justify-between items-center">
+                <!-- 抵扣明细 -->
+                <div class="bg-gray-50 rounded-xl mt-2 px-3 py-3">
+                    <p class="text-xs text-gray-400 mb-2">抵扣明细</p>
+                    <div id="deductions-list">
+                        <div class="flex justify-between items-center py-1.5 text-sm">
+                            <span class="text-gray-600">金额卡-产品卡（白金卡）</span>
+                            <span class="text-[#F1A3B8]">- ¥ 20.00</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 text-sm">
+                            <span class="text-gray-600">金额卡-产品卡（黄金卡）</span>
+                            <span class="text-[#F1A3B8]">- ¥ 15.00</span>
+                        </div>
+                        <div class="flex justify-between items-center py-1.5 text-sm">
+                            <span class="text-gray-600">有限卡-客户定制权益</span>
+                            <span class="text-[#F1A3B8]">- ¥ 10.00</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="border-t border-gray-50 mt-3 pt-3 flex justify-between items-center">
                     <span class="text-gray-900 font-bold">本单应付</span>
-                    <span class="text-[#F1A3B8] font-bold">¥ 128.00</span>
+                    <span class="text-[#F1A3B8] font-bold">¥ <span id="base-payable">128.00</span></span>
                 </div>
             </div>
             <!-- 历史欠款功能区 -->
@@ -174,67 +192,73 @@
                     <!-- 微信支付 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="wechat" />
-                            <iconify-icon class="text-2xl" icon="logos:wechat-pay"></iconify-icon>
+                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c4.801 0 8.692-3.287 8.692-7.343 0-4.054-3.891-7.342-8.692-7.342zm-3.11 5.313a.96.96 0 1 1 0-1.92.96.96 0 0 1 0 1.92zm5.813 0a.96.96 0 1 1 0-1.92.96.96 0 0 1 0 1.92zm3.26 2.86c-1.797-.052-3.444.717-4.686 1.986-.598.597-.944 1.361-.944 2.174 0 1.583 1.286 2.87 2.87 2.87.814 0 1.577-.346 2.175-.944 1.269-1.242 1.938-2.889 1.986-4.686.013-.167.027-.336.027-.504 0-4.245-3.455-7.699-7.7-7.699l.245 1.837c.218-.027.436-.065.654-.065zm-1.626 3.28c-.709 0-1.286-.577-1.286-1.286 0-.709.577-1.286 1.286-1.286.709 0 1.286.577 1.286 1.286 0 .709-.577 1.286-1.286 1.286zm4.88 0c-.709 0-1.286-.577-1.286-1.286 0-.709.577-1.286 1.286-1.286.71 0 1.286.577 1.286 1.286 0 .709-.576 1.286-1.286 1.286z"/>
+                                </svg>
+                            </div>
                             <span class="text-gray-700 font-medium">微信支付</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="wechat" />
                     </label>
                     <!-- 支付宝 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="alipay" />
-                            <iconify-icon class="text-2xl" icon="logos:alipay"></iconify-icon>
+                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <iconify-icon class="text-white w-5 h-5" icon="simple-icons:alipay"></iconify-icon>
+                            </div>
                             <span class="text-gray-700 font-medium">支付宝</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="alipay" />
                     </label>
                     <!-- 现金支付 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="cash" />
                             <iconify-icon class="text-2xl text-green-600" icon="mdi:cash-multiple"></iconify-icon>
                             <span class="text-gray-700 font-medium">现金支付</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="cash" />
                     </label>
                     <!-- 银联支付 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox"
-                                value="unionpay" />
                             <iconify-icon class="text-xl" icon="logos:unionpay"></iconify-icon>
                             <span class="text-gray-700 font-medium">银联卡支付</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox"
+                            value="unionpay" />
                     </label>
                     <!-- 美团/点评 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="meituan" />
                             <iconify-icon class="text-2xl text-yellow-500" icon="simple-icons:meituan"></iconify-icon>
                             <span class="text-gray-700 font-medium">美团/大众点评</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="meituan" />
                     </label>
                     <!-- 抖音支付 -->
                     <label class="flex items-center justify-between py-3 border-b border-gray-50 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="douyin" />
                             <iconify-icon class="text-xl" icon="logos:tiktok-icon"></iconify-icon>
                             <span class="text-gray-700 font-medium">抖音支付</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="douyin" />
                     </label>
                     <!-- 线上支付 -->
                     <label class="flex items-center justify-between py-3 cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
-                                name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="online"
-                                id="online-payment" />
                             <iconify-icon class="text-xl" icon="mdi:credit-card-outline"></iconify-icon>
                             <span class="text-gray-700 font-medium">线上支付</span>
                         </div>
+                        <input class="w-5 h-5 rounded border-gray-300 text-[#F1A3B8] focus:ring-[#F1A3B8]"
+                            name="pay-method" onchange="handleMethodChange(this)" type="checkbox" value="online"
+                            id="online-payment" />
                     </label>
                 </div>
             </div>
@@ -245,7 +269,18 @@
                     <!-- 动态生成的输入框将在这里 -->
                 </div>
             </div>
+    
+            <div class="bg-white px-4 py-3 flex items-center justify-between" style="margin-top: 12px;">
+                <div>
+                    <p class="text-sm font-bold text-gray-700">剩余待支付</p>
+                    <p class="text-[10px] text-gray-400">应付金额 <span class="text-xs text-gray-400" id="arrears-label"> + 归还 </span> - 支付金额</p>
+                </div>
+                <span class="text-red-500 font-black text-lg" id="new-arrears-amount">¥0.00</span>
+            </div>
+        
         </div>
+        <!-- 剩余待支付 -->
+
         <!-- 确认支付按钮容器 -->
         <div class="absolute bottom-0 left-0 right-0 p-6 bg-white border-t border-gray-100">
             <button
@@ -261,7 +296,13 @@
     </div>
     <script>
         const STATE = {
-            baseAmount: 128.00,
+            baseAmount: 158.00, // 商品原价
+            discountedAmount: 128.00, // 折后金额
+            deductions: [
+                { name: '金额卡-产品卡（白金卡）', amount: 20.00 },
+                { name: '金额卡-产品卡（黄金卡）', amount: 15.00 },
+                { name: '有限卡-客户定制权益', amount: 10.00 }
+            ],
             debtTotal: 50.00,
             debtAmount: 50.00,
             isReturningDebt: false,
@@ -344,13 +385,20 @@
         // 更新总应付金额
         function updateTotal() {
             const returnAmount = STATE.isReturningDebt ? STATE.debtAmount : 0;
-            STATE.totalPayable = STATE.baseAmount + returnAmount;
+            // 总应付 = 折后金额 + 归还欠款
+            STATE.totalPayable = STATE.discountedAmount + returnAmount;
             displayTotal.innerText = STATE.totalPayable.toFixed(2);
 
             // 更新确认支付按钮中的金额
             const btnAmount = document.getElementById('btn-amount');
             if (btnAmount) {
                 btnAmount.innerText = STATE.totalPayable.toFixed(2);
+            }
+
+            // 更新剩余待支付的公式显示
+            const arrearsLabel = document.getElementById('arrears-label');
+            if (arrearsLabel) {
+                arrearsLabel.innerText = STATE.isReturningDebt ? ' + 归还 ' : '';
             }
 
             // 更新显示在支付总额下的提示文字 (本单应付 + 归还欠款)
@@ -407,61 +455,39 @@
                 }
             }
 
+            // 清空之前的内容
+            allocationInputs.innerHTML = '';
+            
             STATE.selectedMethods.forEach((method, index) => {
                 const isReadOnly = STATE.selectedMethods.length === 1;
 
-                // 当本单含机器人项目时，线上支付的金额不允许低于机器人项目金额60元
-                if (STATE.hasRobotProject && method.id === 'online') {
-                    if (method.amount < STATE.robotAmount) {
-                        method.amount = STATE.robotAmount;
-                    }
-                }
-
                 const div = document.createElement('div');
-                div.className = 'bg-gray-50 border border-gray-200 rounded-xl p-3 transition-all';
+                div.className = 'bg-white border border-gray-100 rounded-xl p-3 shadow-sm mb-2';
+                
+                let hintText = '';
+                if (method.id === 'online' && STATE.hasRobotProject) {
+                    hintText = `<div class="text-[10px] text-gray-400 mt-2">含机器人项目 <span class="text-[#F1A3B8] font-bold">¥${STATE.robotAmount}</span> 元，实付金额不允许低于${STATE.robotAmount}元</div>`;
+                }
+                
                 div.innerHTML = `
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center space-x-2">
-                        <span class="text-xs font-bold text-[#F1A3B8] bg-[#FDF2F5] px-2 py-1 rounded">${method.name}</span>
-                        ${STATE.hasRobotProject && method.id === 'online' ? '<span class="text-xs text-orange-500 ml-1">(≥¥60)</span>' : ''}
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-gray-600">${method.name}</span>
+                        <div class="flex items-center gap-1 bg-gray-50 px-3 py-1.5 rounded-lg border border-gray-100 focus-within:border-pink-200 transition-all">
+                            <span class="text-xs text-gray-400">￥</span>
+                            <input type="number" step="0.01" value="${method.amount === 0 && index === 1 ? '' : method.amount.toFixed(2)}" placeholder="0.00" ${isReadOnly ? 'readonly' : ''} oninput="updateAllocationAmount('${method.id}', this.value)" onblur="validateRobotAmount(this, '${method.id}')" class="bg-transparent text-sm font-bold text-gray-800 w-20 outline-none text-right">
+                        </div>
                     </div>
-                    <div class="flex items-center">
-                        <span class="text-gray-400 mr-1">¥</span>
-                        <input type="number" 
-                            class="bg-transparent text-right font-bold w-24 outline-none ${isReadOnly ? 'text-gray-400' : 'text-gray-900'}" 
-                            value="${method.amount === 0 && index === 1 ? '' : method.amount.toFixed(2)}" 
-                            placeholder="0.00"
-                            ${isReadOnly ? 'readonly' : ''}
-                            oninput="updateAllocationAmount('${method.id}', this.value)">
-                    </div>
-                </div>
-                ${STATE.hasRobotProject && method.id === 'online' ? `
-                <div class="mt-2 text-xs text-orange-600 bg-orange-50 p-2 rounded-lg">
-                    含机器人项目￥60元，实付金额不允许低于60元
-                </div>
-                ` : ''}
-            `;
+                    ${hintText}
+                `;
+                
                 allocationInputs.appendChild(div);
             });
         }
 
-        // 联动逻辑：调整一个金额，自动更新另一个
+        // 更新分配金额
         function updateAllocationAmount(id, value) {
-            let val = parseFloat(value) || 0;
-
-            // 当本单含机器人项目时，线上支付的金额不允许低于机器人项目金额60元
-            if (STATE.hasRobotProject && id === 'online') {
-                if (val < STATE.robotAmount) {
-                    val = STATE.robotAmount;
-                    // 更新输入框的值
-                    const inputs = allocationInputs.querySelectorAll('input');
-                    const currentIndex = STATE.selectedMethods.findIndex(m => m.id === id);
-                    if (inputs[currentIndex]) {
-                        inputs[currentIndex].value = val.toFixed(2);
-                    }
-                }
-            }
-
+            const val = parseFloat(value) || 0;
+            
             // 当输入的支付金额超过总支付金额时，自动还原到总支付金额
             if (val > STATE.totalPayable) {
                 val = STATE.totalPayable;
@@ -482,25 +508,26 @@
                 const other = STATE.selectedMethods.find(m => m.id !== id);
                 other.amount = Math.max(0, STATE.totalPayable - val);
 
-                // 当本单含机器人项目时，确保线上支付的金额不允许低于机器人项目金额60元
-                if (STATE.hasRobotProject && other.id === 'online' && other.amount < STATE.robotAmount) {
-                    other.amount = STATE.robotAmount;
-                    target.amount = Math.max(0, STATE.totalPayable - other.amount);
-
-                    // 更新输入框的值
-                    const inputs = allocationInputs.querySelectorAll('input');
-                    const targetIndex = STATE.selectedMethods.findIndex(m => m.id === id);
-                    if (inputs[targetIndex]) {
-                        inputs[targetIndex].value = target.amount.toFixed(2);
-                    }
-                }
-
                 // 查找另一个输入框并更新视图，但不重新渲染整个区域以防丢失焦点
                 const inputs = allocationInputs.querySelectorAll('input');
                 const otherIndex = STATE.selectedMethods.indexOf(other);
                 if (inputs[otherIndex]) {
-                    inputs[otherIndex].value = other.amount.toFixed(2);
+                    inputs[otherIndex].value = other.amount === 0 ? '' : other.amount.toFixed(2);
                 }
+            }
+
+            // 更新实付金额显示
+            const actualPaidInput = document.getElementById('actual-paid');
+            if (actualPaidInput) {
+                actualPaidInput.value = STATE.selectedMethods.reduce((sum, m) => sum + m.amount, 0).toFixed(2);
+            }
+
+            // 剩余待支付 = 应付金额 + 归还金额 - 实付金额
+            const actualPaid = STATE.selectedMethods.reduce((sum, m) => sum + m.amount, 0);
+            const newArrears = Math.max(0, STATE.totalPayable - actualPaid);
+            const newArrearsElement = document.getElementById('new-arrears-amount');
+            if (newArrearsElement) {
+                newArrearsElement.innerText = `¥${newArrears.toFixed(2)}`;
             }
         }
 
@@ -555,6 +582,62 @@
         }
 
         init();
+    
+        function validateRobotAmount(input, id) {
+            if (STATE.hasRobotProject && id === 'online') {
+                const amount = parseFloat(input.value) || 0;
+                if (amount < STATE.robotAmount && amount > 0) {
+                    input.value = STATE.robotAmount.toFixed(2);
+                    
+                    // Update the amount in STATE
+                    const target = STATE.selectedMethods.find(m => m.id === id);
+                    if (target) target.amount = STATE.robotAmount;
+                    
+                    // Recalculate total
+                    let sum = 0;
+                    STATE.selectedMethods.forEach(m => {
+                        sum += m.amount;
+                    });
+                    
+                    // Check if total exceeds payable amount
+                    if (sum > STATE.totalPayable) {
+                        // Adjust the amount if needed
+                        const otherSum = sum - STATE.robotAmount;
+                        const allowed = Math.max(STATE.robotAmount, STATE.totalPayable - otherSum);
+                        input.value = allowed.toFixed(2);
+                        if (target) target.amount = allowed;
+                    }
+                    
+                    // If there are two payment methods, update the other one
+                    if (STATE.selectedMethods.length === 2) {
+                        const other = STATE.selectedMethods.find(m => m.id !== id);
+                        other.amount = Math.max(0, STATE.totalPayable - (STATE.selectedMethods.find(m => m.id === id).amount));
+                        
+                        // Update the other input field
+                        const inputs = allocationInputs.querySelectorAll('input');
+                        const otherIndex = STATE.selectedMethods.findIndex(m => m.id === other.id);
+                        if (inputs[otherIndex]) {
+                            inputs[otherIndex].value = other.amount === 0 ? '' : other.amount.toFixed(2);
+                        }
+                    }
+                    
+                    // Update total payment display
+                    const actualPaidInput = document.getElementById('actual-paid');
+                    if (actualPaidInput) {
+                        actualPaidInput.value = STATE.selectedMethods.reduce((sum, m) => sum + m.amount, 0).toFixed(2);
+                    }
+
+                    // 剩余待支付 = 应付金额 + 归还金额 - 实付金额
+                    const actualPaid = STATE.selectedMethods.reduce((sum, m) => sum + m.amount, 0);
+                    const newArrears = Math.max(0, STATE.totalPayable - actualPaid);
+                    const newArrearsElement = document.getElementById('new-arrears-amount');
+                    if (newArrearsElement) {
+                        newArrearsElement.innerText = `¥${newArrears.toFixed(2)}`;
+                    }
+                }
+            }
+        }
+
     </script>
 </body>
 

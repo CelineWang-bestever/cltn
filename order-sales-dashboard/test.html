@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>测试页面</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .test-card { background: white; padding: 20px; margin: 10px; border-radius: 8px; }
+        .test-value { font-size: 24px; font-weight: bold; }
+        .mini-chart { height: 40px; }
+    </style>
+</head>
+<body>
+    <h1>测试页面</h1>
+    <div class="test-card">
+        <div class="test-value" id="testValue">¥ 0.00</div>
+        <canvas class="mini-chart" id="testChart"></canvas>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('页面加载完成');
+            
+            const ctx = document.getElementById('testChart').getContext('2d');
+            const chart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['一', '二', '三', '四', '五', '六', '日'],
+                    datasets: [{
+                        data: [10, 20, 15, 25, 30, 22, 18],
+                        borderColor: '#E85D75',
+                        backgroundColor: 'rgba(232, 93, 117, 0.1)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { display: false }, x: { display: false } }
+                }
+            });
+            
+            const animateNumber = function(element, targetValue) {
+                const startValue = 0;
+                const duration = 1000;
+                const startTime = performance.now();
+                
+                const update = function(currentTime) {
+                    const elapsed = currentTime - startTime;
+                    const progress = Math.min(elapsed / duration, 1);
+                    const currentValue = startValue + (targetValue - startValue) * progress;
+                    element.textContent = '¥ ' + currentValue.toFixed(2);
+                    
+                    if (progress < 1) {
+                        requestAnimationFrame(update);
+                    }
+                };
+                
+                requestAnimationFrame(update);
+            };
+            
+            setTimeout(function() {
+                animateNumber(document.getElementById('testValue'), 1234.56);
+            }, 500);
+            
+            console.log('脚本执行完成');
+        });
+    </script>
+</body>
+</html>

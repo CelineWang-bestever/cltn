@@ -40,14 +40,6 @@
             display: none;
         }
 
-        .switch-checkbox:checked+.switch-label {
-            background-color: #F1A3B8;
-        }
-
-        .switch-checkbox:checked+.switch-label .switch-dot {
-            transform: translateX(20px);
-        }
-
         .brand-text {
             color: #F1A3B8;
         }
@@ -86,7 +78,7 @@
                 <div class="flex flex-col items-center justify-center text-center">
                     <span class="text-gray-500 text-sm mb-2">支付金额</span>
                     <span class="text-3xl font-black text-gray-800 mb-2" id="finalTotalDisplay">¥ 128.00</span>
-                    <span class="text-xs text-gray-400" id="totalLabel">本单应付 + 归还欠款</span>
+                    <span class="text-xs text-gray-400">本单应付</span>
                 </div>
             </div>
             <!-- 金额明细卡片 -->
@@ -101,45 +93,30 @@
                 </div>
                 <div class="flex justify-between mb-3 text-gray-500 text-sm">
                     <span>抵扣金额</span>
-                    <span class="text-red-400 font-medium">- ¥ 0.00</span>
+                    <span class="text-[#F1A3B8] font-medium">- ¥ 45.00</span>
+                </div>
+                <!-- 抵扣明细 -->
+                <div class="bg-gray-50 rounded-xl mt-2 px-4 py-3">
+                    <p class="text-xs text-gray-400 mb-2">抵扣明细</p>
+                    <div class="space-y-2">
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">金额卡-产品卡（白金卡）</span>
+                            <span class="text-[#F1A3B8]">- ¥ 20.00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">金额卡-产品卡（黄金卡）</span>
+                            <span class="text-[#F1A3B8]">- ¥ 15.00</span>
+                        </div>
+                        <div class="flex justify-between items-center text-sm">
+                            <span class="text-gray-600">有限卡-客户定制权益</span>
+                            <span class="text-[#F1A3B8]">- ¥ 10.00</span>
+                        </div>
+                    </div>
                 </div>
                 <div class="border-t border-dashed border-gray-100 my-4"></div>
                 <div class="flex justify-between items-center">
                     <span class="text-gray-800 font-bold">本单应付</span>
                     <span class="text-xl font-bold brand-text">¥ 128.00</span>
-                </div>
-            </div>
-            <!-- 历史欠款功能区 -->
-            <div class="mx-4 mt-4 bg-white rounded-2xl p-5 shadow-sm">
-                <div class="flex justify-between items-center mb-4">
-                    <div class="flex items-center gap-2">
-                        <iconify-icon class="text-xl brand-text" icon="mdi:history"></iconify-icon>
-                        <span class="font-bold text-gray-800">历史欠款</span>
-                    </div>
-                    <span class="text-sm font-medium text-gray-500">¥ 50.00</span>
-                </div>
-                <div class="flex justify-between items-center pt-4 border-t border-gray-50">
-                    <span class="font-bold text-gray-800">归还历史欠款</span>
-                    <div
-                        class="relative inline-block w-11 h-6 align-middle select-none transition duration-200 ease-in">
-                        <input
-                            class="switch-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-transparent appearance-none cursor-pointer z-10"
-                            id="debtToggle" type="checkbox" />
-                        <label
-                            class="switch-label block overflow-hidden h-6 rounded-full bg-gray-300 cursor-pointer transition-colors duration-200"
-                            for="debtToggle"></label>
-                        <span
-                            class="switch-dot absolute top-0 left-0 w-6 h-6 bg-white rounded-full transition-transform duration-200 pointer-events-none shadow-sm"></span>
-                    </div>
-                </div>
-                <div class="hidden mt-4 pt-4 border-t border-gray-50" id="debtInputArea">
-                    <div class="relative">
-                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 font-medium">¥</span>
-                        <input
-                            class="w-full bg-gray-50 rounded-xl py-3 pl-8 pr-4 text-lg font-bold brand-text focus:outline-none focus:ring-1 brand-border"
-                            id="debtAmount" type="number" value="50.00" />
-                    </div>
-                    <p class="text-[11px] text-gray-400 mt-2">* 默认填充全部欠款，支持按需修改</p>
                 </div>
             </div>
             <!-- 支付方式列表 -->
@@ -150,7 +127,11 @@
                     <label
                         class="flex items-center justify-between p-4 border-b border-gray-50 active:bg-gray-50 cursor-pointer">
                         <div class="flex items-center gap-3">
-                            <iconify-icon class="text-2xl" icon="logos:wechat-pay"></iconify-icon>
+                            <div class="w-8 h-8 bg-green-500 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M8.691 2.188C3.891 2.188 0 5.476 0 9.53c0 2.212 1.17 4.203 3.002 5.55a.59.59 0 0 1 .213.665l-.39 1.48c-.019.07-.048.141-.048.213 0 .163.13.295.29.295a.326.326 0 0 0 .167-.054l1.903-1.114a.864.864 0 0 1 .717-.098 10.16 10.16 0 0 0 2.837.403c4.801 0 8.692-3.287 8.692-7.343 0-4.054-3.891-7.342-8.692-7.342zm-3.11 5.313a.96.96 0 1 1 0-1.92.96.96 0 0 1 0 1.92zm5.813 0a.96.96 0 1 1 0-1.92.96.96 0 0 1 0 1.92zm3.26 2.86c-1.797-.052-3.444.717-4.686 1.986-.598.597-.944 1.361-.944 2.174 0 1.583 1.286 2.87 2.87 2.87.814 0 1.577-.346 2.175-.944 1.269-1.242 1.938-2.889 1.986-4.686.013-.167.027-.336.027-.504 0-4.245-3.455-7.699-7.7-7.699l.245 1.837c.218-.027.436-.065.654-.065zm-1.626 3.28c-.709 0-1.286-.577-1.286-1.286 0-.709.577-1.286 1.286-1.286.709 0 1.286.577 1.286 1.286 0 .709-.577 1.286-1.286 1.286zm4.88 0c-.709 0-1.286-.577-1.286-1.286 0-.709.577-1.286 1.286-1.286.71 0 1.286.577 1.286 1.286 0 .709-.576 1.286-1.286 1.286z"/>
+                                </svg>
+                            </div>
                             <span class="font-medium text-gray-800">微信支付</span>
                         </div>
                         <input checked="" class="w-5 h-5 accent-[#F1A3B8]" name="pay_method" type="radio"
@@ -160,7 +141,9 @@
                     <label
                         class="flex items-center justify-between p-4 border-b border-gray-50 active:bg-gray-50 cursor-pointer">
                         <div class="flex items-center gap-3">
-                            <iconify-icon class="text-2xl" icon="logos:alipay"></iconify-icon>
+                            <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center">
+                                <iconify-icon class="text-white w-5 h-5" icon="simple-icons:alipay"></iconify-icon>
+                            </div>
                             <span class="font-medium text-gray-800">支付宝</span>
                         </div>
                         <input class="w-5 h-5 accent-[#F1A3B8]" name="pay_method" type="radio" value="alipay" />
@@ -202,6 +185,23 @@
                     </label>
                 </div>
             </div>
+            <!-- 实付金额输入框 -->
+            <div class="mx-4 mt-6">
+                <div class="bg-white rounded-xl p-4 shadow-sm">
+                    <div class="flex items-center justify-between">
+                        <label class="text-gray-700 font-medium">
+                            <span class="text-red-500 mr-1">*</span>实付金额
+                        </label>
+                        <div class="flex items-center">
+                            <input
+                                class="text-xl font-bold text-gray-800 w-32 text-center bg-transparent border-b border-gray-200 focus:border-[#F1A3B8] focus:outline-none transition-colors"
+                                id="actual-paid" type="number" step="0.01" value="128.00"
+                                placeholder="请输入金额" />
+                            <span class="ml-2 text-gray-500 font-medium">元</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- 底部操作栏 -->
         <div
@@ -214,44 +214,10 @@
         </div>
     </div>
     <script>
-        const baseAmount = 128.00;
-        const debtToggle = document.getElementById('debtToggle');
-        const debtInputArea = document.getElementById('debtInputArea');
-        const debtAmountInput = document.getElementById('debtAmount');
-        const finalTotalDisplay = document.getElementById('finalTotalDisplay');
-        const totalLabel = document.getElementById('totalLabel');
-        const btnAmount = document.getElementById('btnAmount');
-
-        function updateCalculations() {
-            let currentDebt = 0;
-            if (debtToggle.checked) {
-                currentDebt = parseFloat(debtAmountInput.value) || 0;
-                debtInputArea.classList.remove('hidden');
-                totalLabel.classList.remove('hidden');
-            } else {
-                debtInputArea.classList.add('hidden');
-                totalLabel.classList.add('hidden');
-            }
-
-            const total = baseAmount + currentDebt;
-            const formattedTotal = total.toFixed(2);
-
-            finalTotalDisplay.innerText = `¥ ${formattedTotal}`;
-            btnAmount.innerText = formattedTotal;
-        }
-
-        debtToggle.addEventListener('change', updateCalculations);
-        debtAmountInput.addEventListener('input', updateCalculations);
-
         function handlePay() {
             // 跳转到成功页
             window.location.href = 'success.html';
         }
-
-        // 初始化标注显示状态
-        totalLabel.classList.add('hidden');
-        // 初始化计算
-        updateCalculations();
     </script>
 </body>
 
