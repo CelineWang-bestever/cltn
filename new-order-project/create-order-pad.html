@@ -3187,8 +3187,16 @@
                     </div>
                     <div class="sidebar-customer-balance">
                         <div class="sidebar-balance-item">
-                            <span class="sidebar-balance-label">余额</span>
-                            <span class="sidebar-balance-value">¥1200.00</span>
+                            <span class="sidebar-balance-label">钱包余额</span>
+                            <span class="sidebar-balance-value">¥1,200.00</span>
+                        </div>
+                        <div class="sidebar-balance-item">
+                            <span class="sidebar-balance-label">金额卡余额</span>
+                            <span class="sidebar-balance-value">¥5,500.00</span>
+                        </div>
+                        <div class="sidebar-balance-item">
+                            <span class="sidebar-balance-label"></span>
+                            <span class="sidebar-balance-label">(含赠金 ¥500.00)</span>
                         </div>
                         <div class="sidebar-balance-item debt-section">
                             <span class="sidebar-balance-label">欠款</span>
@@ -3211,7 +3219,7 @@
                         <div class="action-card-icon">
                             <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
                         </div>
-                        <span class="action-card-label">添加单次疗程</span>
+                        <span class="action-card-label">添加单次护理</span>
                         <span class="action-card-desc">面部护理/身体SPA</span>
                     </div>
 
@@ -3229,7 +3237,7 @@
                         <div class="action-card-icon">
                             <svg viewBox="0 0 24 24"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V8l5 5 5-5v10c0 .55-.45 1-1 1z"/></svg>
                         </div>
-                        <span class="action-card-label">添加方案</span>
+                        <span class="action-card-label">添加疗程</span>
                         <span class="action-card-desc">疗程方案/组合优惠</span>
                     </div>
 
@@ -3256,10 +3264,10 @@
                     </div>
                     <!-- 已选商品区域 -->
                     <div class="selected-items-area">
-                        <!-- 服务分类区域 -->
+                        <!-- 单次护理分类区域 -->
                         <div class="category-section">
                             <div class="category-header">
-                                <h3 class="category-title">疗程</h3>
+                                <h3 class="category-title">单次护理</h3>
                                 <button class="btn-consume-all" onclick="consumeAllService(this)">全部消耗</button>
                             </div>
                             <div class="empty-state" id="service-empty" style="display: none;">
@@ -3637,7 +3645,7 @@
     <div class="add-service-modal-overlay" id="addServiceModalOverlay">
         <div class="add-service-modal">
             <div class="add-service-modal-header">
-                <span class="add-service-modal-title">添加单次疗程</span>
+                <span class="add-service-modal-title">添加单次护理</span>
                 <div class="add-service-modal-close" id="addServiceModalClose">×</div>
             </div>
             <div class="add-service-modal-body">
@@ -3909,7 +3917,7 @@
                 if (hasServiceOrProduct()) {
                     window.confirmCallback = function() {
                         clearAllItems();
-                        showToast('已清空已选商品，可以继续添加方案');
+                        showToast('已清空已选商品，可以继续添加疗程');
                     };
                     showConfirmModal(
                         '确认添加促销方案',
