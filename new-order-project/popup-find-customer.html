@@ -3,36 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>选择会员</title>
+    <title>查找会员</title>
     <style>
-        :root {
-            --primary-50: #FFF1F5;
-            --primary-100: #FFE4EC;
-            --primary-200: #FFC7D9;
-            --primary-300: #FFA0BE;
-            --primary-400: #F1A3B8;
-            --primary-500: #E87C9A;
-            --primary-600: #D66B85;
-            --success-500: #10B981;
-            --warning-500: #F59E0B;
-            --error-500: #EF4444;
-            --neutral-50: #F8FAFC;
-            --neutral-100: #F1F5F9;
-            --neutral-200: #E2E8F0;
-            --neutral-300: #CBD5E1;
-            --neutral-400: #94A3B8;
-            --neutral-500: #64748B;
-            --neutral-600: #475569;
-            --neutral-700: #334155;
-            --neutral-800: #1E293B;
-            --neutral-900: #0F172A;
-            --bg-primary: #FFFFFF;
-            --radius-sm: 6px;
-            --radius-md: 10px;
-            --radius-lg: 16px;
-            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-        }
-
         * {
             margin: 0;
             padding: 0;
@@ -41,384 +13,286 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: transparent;
+            background: #FFFFFF;
         }
 
-        .member-modal {
-            width: 480px;
-            max-width: 90vw;
-            max-height: 80vh;
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-lg);
+        .find-customer-container {
+            width: 100%;
+            height: 100vh;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
+            overflow-y: auto;
         }
 
-        .member-modal-header {
+        /* 顶部导航栏 */
+        .header {
+            background: #E87C9A;
+            padding: 18px 24px;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--neutral-100);
             flex-shrink: 0;
         }
 
-        .member-modal-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: var(--neutral-800);
-        }
-
-        .member-modal-close {
-            width: 28px;
-            height: 28px;
+        .header-close {
+            width: 36px;
+            height: 36px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
-            color: var(--neutral-400);
+            color: #FFFFFF;
+            font-size: 26px;
             cursor: pointer;
             border-radius: 50%;
-            transition: all 0.2s ease;
+            transition: background 0.2s;
         }
 
-        .member-modal-close:hover {
-            background: var(--neutral-100);
-            color: var(--neutral-600);
+        .header-close:hover {
+            background: rgba(255,255,255,0.2);
         }
 
-        .member-modal-search {
-            padding: 16px 20px;
-            border-bottom: 1px solid var(--neutral-100);
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+        }
+
+        .header-new-btn {
+            padding: 8px 18px;
+            background: #FFFFFF;
+            color: #E87C9A;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .header-new-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            padding: 32px 24px 24px;
             flex-shrink: 0;
         }
 
-        .member-modal-search-input {
-            width: 100%;
-            padding: 10px 14px;
-            border: 1px solid var(--neutral-200);
-            border-radius: var(--radius-md);
-            font-size: 14px;
-            color: var(--neutral-700);
-            outline: none;
-            transition: all 0.2s ease;
+        .search-hint {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 20px;
         }
 
-        .member-modal-search-input:focus {
-            border-color: var(--primary-400);
-            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.15);
-        }
-
-        .member-modal-body {
-            flex: 1;
-            overflow-y: auto;
-            padding: 12px;
-        }
-
-        .member-list {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .member-item {
+        .search-bar {
             display: flex;
             align-items: center;
             gap: 12px;
-            padding: 12px;
-            background: var(--neutral-50);
-            border-radius: var(--radius-md);
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: 1px solid #DDDDDD;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px 16px;
+            font-size: 16px;
+            color: #333333;
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: #CCCCCC;
+        }
+
+        .search-btn {
+            padding: 14px 28px;
+            background: #E87C9A;
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            border: 2px solid transparent;
+            transition: background 0.2s;
         }
 
-        .member-item:hover {
-            background: var(--primary-50);
-            border-color: var(--primary-200);
+        .search-btn:hover {
+            background: #D66B85;
         }
 
-        .member-item.selected {
-            background: var(--primary-50);
-            border-color: var(--primary-400);
+        /* 数字键盘区域 */
+        .keypad-section {
+            flex: 1;
+            padding: 36px 48px 24px;
+            display: flex;
+            justify-content: center;
         }
 
-        .member-avatar {
-            width: 44px;
-            height: 44px;
-            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 86px);
+            gap: 18px 24px;
+        }
+
+        .key-item {
+            width: 86px;
+            height: 86px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .member-avatar svg {
-            width: 22px;
-            height: 22px;
-            fill: white;
-        }
-
-        .member-info {
-            flex: 1;
-            min-width: 0;
-        }
-
-        .member-name-row {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            margin-bottom: 4px;
-        }
-
-        .member-name {
-            font-size: 15px;
-            font-weight: 600;
-            color: var(--neutral-800);
-        }
-
-        .member-tag {
-            padding: 2px 6px;
-            background: var(--primary-100);
-            color: var(--primary-600);
-            font-size: 10px;
-            font-weight: 500;
-            border-radius: 4px;
-        }
-
-        .member-phone {
-            font-size: 12px;
-            color: var(--neutral-500);
-        }
-
-        .member-balance {
-            text-align: right;
-            flex-shrink: 0;
-        }
-
-        .member-balance-value {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--primary-500);
-        }
-
-        .member-modal-footer {
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-            padding: 16px 20px;
-            border-top: 1px solid var(--neutral-100);
-            flex-shrink: 0;
-        }
-
-        .btn-modal {
-            padding: 10px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 500;
+            font-size: 30px;
+            font-weight: 400;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .key-number {
+            background: #F5F5F5;
+            color: #333333;
             border: none;
         }
 
-        .btn-modal.secondary {
-            background: var(--bg-primary);
-            border: 1px solid var(--neutral-200);
-            color: var(--neutral-600);
+        .key-number:hover {
+            background: #EBEBEB;
         }
 
-        .btn-modal.secondary:hover {
-            border-color: var(--neutral-400);
-            color: var(--neutral-800);
+        .key-number:active {
+            background: #E0E0E0;
         }
 
-        .btn-modal.primary {
-            background: var(--primary-500);
-            color: white;
+        /* 功能键样式 */
+        .key-action {
+            background: #333333;
+            color: #FFFFFF;
+            font-size: 26px;
         }
 
-        .btn-modal.primary:hover {
-            background: var(--primary-600);
+        .key-action:hover {
+            background: #444444;
         }
 
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            color: var(--neutral-400);
-        }
-
-        .empty-state-icon {
-            width: 64px;
-            height: 64px;
-            background: var(--neutral-100);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 12px;
-        }
-
-        .empty-state-icon svg {
-            width: 32px;
-            height: 32px;
-            fill: var(--neutral-300);
-        }
-
-        .empty-state-text {
-            font-size: 14px;
+        .key-action:active {
+            background: #555555;
         }
     </style>
 </head>
 <body>
-    <div class="member-modal" id="memberModal">
-        <div class="member-modal-header">
-            <span class="member-modal-title">选择会员</span>
-            <div class="member-modal-close" id="modalClose">×</div>
+    <div class="find-customer-container">
+        <!-- 顶部栏 -->
+        <div class="header">
+            <div class="header-close" id="btnClose">×</div>
+            <span class="header-title">查找会员</span>
+            <button class="header-new-btn" id="btnNewMember">新建会员</button>
         </div>
-        <div class="member-modal-search">
-            <input type="text" class="member-modal-search-input" id="searchInput" placeholder="请输入会员姓名/手机号搜索">
-        </div>
-        <div class="member-modal-body">
-            <div class="member-list" id="memberList">
-                <div class="member-item" data-id="1">
-                    <div class="member-avatar">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
-                    <div class="member-info">
-                        <div class="member-name-row">
-                            <span class="member-name">小张</span>
-                            <span class="member-tag">新客</span>
-                        </div>
-                        <div class="member-phone">135****8889</div>
-                    </div>
-                    <div class="member-balance">
-                        <div class="member-balance-value">¥1200.00</div>
-                    </div>
+
+        <!-- 搜索区域 -->
+        <div class="search-section">
+            <div class="search-hint">您想要查找哪位会员？</div>
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input" id="searchInput" placeholder="姓名/手机号" readonly>
                 </div>
-                <div class="member-item" data-id="2">
-                    <div class="member-avatar">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
-                    <div class="member-info">
-                        <div class="member-name-row">
-                            <span class="member-name">李女士</span>
-                            <span class="member-tag">会员</span>
-                        </div>
-                        <div class="member-phone">138****6666</div>
-                    </div>
-                    <div class="member-balance">
-                        <div class="member-balance-value">¥3500.00</div>
-                    </div>
-                </div>
-                <div class="member-item" data-id="3">
-                    <div class="member-avatar">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
-                    <div class="member-info">
-                        <div class="member-name-row">
-                            <span class="member-name">王小姐</span>
-                            <span class="member-tag">VIP</span>
-                        </div>
-                        <div class="member-phone">139****9999</div>
-                    </div>
-                    <div class="member-balance">
-                        <div class="member-balance-value">¥8800.00</div>
-                    </div>
-                </div>
-                <div class="member-item" data-id="4">
-                    <div class="member-avatar">
-                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                    </div>
-                    <div class="member-info">
-                        <div class="member-name-row">
-                            <span class="member-name">陈女士</span>
-                            <span class="member-tag">会员</span>
-                        </div>
-                        <div class="member-phone">136****5555</div>
-                    </div>
-                    <div class="member-balance">
-                        <div class="member-balance-value">¥2000.00</div>
-                    </div>
-                </div>
+                <button class="search-btn" id="btnSearch">查询</button>
             </div>
         </div>
-        <div class="member-modal-footer">
-            <button class="btn-modal secondary" id="btnCancel">取消</button>
-            <button class="btn-modal primary" id="btnConfirm">确认</button>
+
+        <!-- 数字键盘 -->
+        <div class="keypad-section">
+            <div class="keypad-grid" id="keypadGrid">
+                <div class="key-item key-number" data-key="1">1</div>
+                <div class="key-item key-number" data-key="2">2</div>
+                <div class="key-item key-number" data-key="3">3</div>
+                <div class="key-item key-action" data-key="backspace">←</div>
+
+                <div class="key-item key-number" data-key="4">4</div>
+                <div class="key-item key-number" data-key="5">5</div>
+                <div class="key-item key-number" data-key="6">6</div>
+                <div class="key-item key-action" data-key="close">×</div>
+
+                <div class="key-item key-number" data-key="7">7</div>
+                <div class="key-item key-number" data-key="8">8</div>
+                <div class="key-item key-number" data-key="9">9</div>
+                <div class="key-item key-action" data-key="confirm">✓</div>
+
+                <div class="key-item key-number" data-key="0">0</div>
+                <div class="key-item key-number" data-key=".">.</div>
+            </div>
         </div>
     </div>
 
     <script>
-        const modalClose = document.getElementById('modalClose');
-        const searchInput = document.getElementById('searchInput');
-        const memberList = document.getElementById('memberList');
-        const btnCancel = document.getElementById('btnCancel');
-        const btnConfirm = document.getElementById('btnConfirm');
-        
-        let selectedMemberId = null;
+        var searchInput = document.getElementById('searchInput');
+        var keypadGrid = document.getElementById('keypadGrid');
+        var btnClose = document.getElementById('btnClose');
+        var btnSearch = document.getElementById('btnSearch');
+        var btnNewMember = document.getElementById('btnNewMember');
 
-        memberList.addEventListener('click', (e) => {
-            const memberItem = e.target.closest('.member-item');
-            if (memberItem) {
-                document.querySelectorAll('.member-item').forEach(item => {
-                    item.classList.remove('selected');
-                });
-                memberItem.classList.add('selected');
-                selectedMemberId = memberItem.dataset.id;
+        // 键盘点击
+        keypadGrid.addEventListener('click', function(e) {
+            var keyItem = e.target.closest('.key-item');
+            if (!keyItem) return;
+
+            var key = keyItem.dataset.key;
+
+            switch(key) {
+                case 'backspace':
+                    searchInput.value = searchInput.value.slice(0, -1);
+                    break;
+                case 'close':
+                    closeModal();
+                    break;
+                case 'confirm':
+                    doSearch();
+                    break;
+                default:
+                    searchInput.value += key;
             }
         });
 
-        searchInput.addEventListener('input', (e) => {
-            const keyword = e.target.value.toLowerCase();
-            const memberItems = document.querySelectorAll('.member-item');
-            memberItems.forEach(item => {
-                const name = item.querySelector('.member-name').textContent.toLowerCase();
-                const phone = item.querySelector('.member-phone').textContent.toLowerCase();
-                if (name.includes(keyword) || phone.includes(keyword)) {
-                    item.style.display = 'flex';
-                } else {
-                    item.style.display = 'none';
-                }
-            });
+        // 查询按钮
+        btnSearch.addEventListener('click', doSearch);
+
+        // 新建会员
+        btnNewMember.addEventListener('click', function() {
+            window.parent.postMessage({ type: 'newMember' }, '*');
         });
+
+        // 关闭
+        btnClose.addEventListener('click', closeModal);
 
         function closeModal() {
-            window.parent.postMessage({ type: 'closeMemberModal' }, '*');
+            window.parent.postMessage({ type: 'closeFindCustomer' }, '*');
         }
 
-        function confirmSelection() {
-            if (selectedMemberId) {
-                const selectedItem = document.querySelector('.member-item.selected');
-                const memberData = {
-                    id: selectedMemberId,
-                    name: selectedItem.querySelector('.member-name').textContent,
-                    tag: selectedItem.querySelector('.member-tag').textContent,
-                    phone: selectedItem.querySelector('.member-phone').textContent,
-                    balance: selectedItem.querySelector('.member-balance-value').textContent
-                };
-                window.parent.postMessage({ type: 'selectMember', data: memberData }, '*');
-            }
-            closeModal();
+        function doSearch() {
+            var keyword = searchInput.value.trim();
+            if (!keyword) return;
+            window.parent.postMessage({
+                type: 'searchCustomer',
+                keyword: keyword
+            }, '*');
         }
 
-        modalClose.addEventListener('click', closeModal);
-        btnCancel.addEventListener('click', closeModal);
-        btnConfirm.addEventListener('click', confirmSelection);
-
-        window.addEventListener('message', (e) => {
-            if (e.data.type === 'refreshMembers') {
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function(e) {
+            if (e.data.type === 'clearSearch') {
                 searchInput.value = '';
-                document.querySelectorAll('.member-item').forEach(item => {
-                    item.style.display = 'flex';
-                    item.classList.remove('selected');
-                });
-                selectedMemberId = null;
+            } else if (e.data.type === 'setSearchValue') {
+                searchInput.value = e.data.value || '';
             }
         });
     </script>
