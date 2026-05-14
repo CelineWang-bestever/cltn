@@ -1,0 +1,4187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>克丽缇娜 - 开单</title>
+    <style>
+        /* Toast 动画 */
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        @keyframes toastFadeOut {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* 复制按钮点击反馈 */
+        @keyframes copySuccess {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        .copy-btn.copied {
+            animation: copySuccess 0.3s ease;
+            color: var(--success-500) !important;
+        }
+
+        :root {
+            /* ========== 品牌主色调 ========== */
+            --primary-50: #FFF1F5;
+            --primary-100: #FFE4EC;
+            --primary-200: #FFC7D9;
+            --primary-300: #FFA0BE;
+            --primary-400: #F1A3B8;
+            --primary-500: #E87C9A;
+            --primary-600: #D66B85;
+            --primary-700: #B75A70;
+            --primary-800: #9A4C5E;
+            --primary-900: #804051;
+
+            /* ========== 辅助色 ========== */
+            --success-500: #10B981;
+            --warning-500: #F59E0B;
+            --error-500: #EF4444;
+            --info-500: #3B82F6;
+
+            /* ========== 中性色 ========== */
+            --neutral-50: #F8FAFC;
+            --neutral-100: #F1F5F9;
+            --neutral-200: #E2E8F0;
+            --neutral-300: #CBD5E1;
+            --neutral-400: #94A3B8;
+            --neutral-500: #64748B;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1E293B;
+            --neutral-900: #0F172A;
+
+            /* ========== 背景色 ========== */
+            --bg-primary: #FFFFFF;
+            --bg-secondary: var(--neutral-50);
+            --bg-tertiary: var(--primary-50);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            min-height: 100vh;
+            display: flex;
+            color: var(--neutral-800);
+        }
+
+        /* 左侧导航栏 */
+        .sidebar {
+            width: 60px;
+            background-color: var(--bg-primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding-top: 20px;
+            border-right: 1px solid var(--neutral-200);
+            position: relative;
+        }
+
+        .sidebar::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 160px;
+            width: 4px;
+            height: 40px;
+            background: linear-gradient(180deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 0 4px 4px 0;
+        }
+
+        .nav-item {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 10px;
+            margin-bottom: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background-color: transparent;
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-50);
+            box-shadow: 0 4px 12px rgba(241, 163, 184, 0.25);
+        }
+
+        .nav-item:hover:not(.active) {
+            background-color: var(--neutral-100);
+        }
+
+        .nav-item img {
+            width: 22px;
+            height: 22px;
+            filter: brightness(0) saturate(100%) invert(40%) sepia(10%) saturate(100%) hue-rotate(0deg);
+        }
+
+        .nav-item.active img {
+            filter: brightness(0) saturate(100%) invert(60%) sepia(45%) saturate(500%) hue-rotate(310deg) brightness(90%);
+        }
+
+        /* 主内容区域 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 20px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary-600);
+            letter-spacing: 1px;
+        }
+
+        .logo-sub {
+            font-size: 12px;
+            color: var(--neutral-400);
+            margin-left: 4px;
+        }
+
+        .header-title {
+            font-size: 15px;
+            color: var(--neutral-700);
+            font-weight: 500;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .action-btn:hover {
+            background-color: var(--neutral-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .action-btn img {
+            width: 14px;
+            height: 14px;
+            filter: brightness(0) saturate(100%) invert(40%) sepia(10%) saturate(100%) hue-rotate(0deg);
+        }
+
+        .action-btn:hover img {
+            filter: brightness(0) saturate(100%) invert(60%) sepia(45%) saturate(500%) hue-rotate(310deg) brightness(90%);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .user-avatar::before {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 10px;
+            height: 10px;
+            background-color: var(--success-500);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .user-avatar img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .user-name {
+            font-size: 13px;
+            color: var(--neutral-800);
+            font-weight: 500;
+        }
+
+        .user-role {
+            font-size: 12px;
+            color: var(--primary-600);
+        }
+
+        .dropdown-arrow {
+            width: 12px;
+            height: 12px;
+            filter: brightness(0) saturate(100%) invert(40%) sepia(10%) saturate(100%) hue-rotate(0deg);
+        }
+
+        /* 页面主体内容 - 三栏水平布局 */
+        .content-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+            gap: 0;
+        }
+
+        /* 左侧客户与权益展示区域 - 缩小20% */
+        .left-panel {
+            flex: 0.25;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-primary);
+            border-right: 1px solid var(--neutral-200);
+            position: relative;
+            z-index: 1;
+            min-width: 280px;
+        }
+
+        /* 右侧区域容器 - 上下分布 - 缩小30% */
+        .right-container {
+            flex: 0.40;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-primary);
+            position: relative;
+            z-index: 1;
+            min-width: 300px;
+            overflow-y: auto;
+            height: calc(100vh - 60px);
+        }
+
+        /* 中间已选商品展示区域 - 可滚动 */
+        .middle-panel {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            min-height: 200px;
+            overflow-y: auto;
+        }
+
+        /* 订单信息区域 - 固定在底部 */
+        .order-form-panel {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            z-index: 10;
+        }
+
+        /* 已选商品区域占满空间 */
+        .middle-panel .selected-items-scroll {
+            flex: 1;
+            overflow-y: auto;
+        }
+
+        /* 订单表单区域 */
+        .order-form-panel .order-form {
+            overflow-y: auto;
+            max-height: 200px;
+            transition: max-height 0.3s ease;
+        }
+
+        .order-form-panel .order-form.expanded {
+            max-height: 400px;
+        }
+
+        /* 订单信息折叠头部 */
+        .order-form-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 16px;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .order-form-header:hover {
+            background-color: var(--neutral-100);
+        }
+
+        .order-form-header-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .order-form-header-toggle {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--neutral-500);
+            transition: all 0.2s ease;
+        }
+
+        .order-form-header-toggle img {
+            transition: transform 0.3s ease;
+        }
+
+        .order-form-header.expanded .order-form-header-toggle img {
+            transform: rotate(180deg);
+        }
+
+        /* 订单信息折叠内容 */
+        .order-form-collapse-content {
+            padding: 12px 16px;
+            display: flex;
+            align-items: center;
+            gap: 32px;
+            font-size: 13px;
+        }
+
+        .collapse-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .collapse-item label {
+            color: var(--neutral-600);
+            font-weight: 500;
+        }
+
+        .collapse-item .value {
+            color: var(--neutral-800);
+            font-weight: 500;
+        }
+
+        .collapse-item select {
+            padding: 4px 24px 4px 8px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 4px;
+            font-size: 13px;
+            background-color: var(--bg-primary);
+        }
+
+        /* 订单日期输入框 */
+        .order-date-input {
+            padding: 4px 8px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 4px;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--neutral-800);
+            background-color: var(--bg-primary);
+            cursor: pointer;
+            transition: border-color 0.2s ease;
+        }
+
+        .order-date-input:hover {
+            border-color: var(--primary-300);
+        }
+
+        .order-date-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 2px rgba(232, 124, 154, 0.15);
+        }
+
+        /* 日期时间选择器移除默认样式箭头 */
+        .order-date-input::-webkit-calendar-picker-indicator {
+            opacity: 0.6;
+            cursor: pointer;
+            margin-left: 4px;
+        }
+
+        .order-date-input::-webkit-calendar-picker-indicator:hover {
+            opacity: 1;
+        }
+
+        .collapse-item select {
+            cursor: pointer;
+            appearance: auto;
+        }
+
+        /* 底部固定操作栏 */
+        .bottom-bar {
+            position: sticky;
+            bottom: 0;
+            flex-shrink: 0;
+            padding: 12px 16px;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.06);
+            z-index: 100;
+        }
+
+        /* 金额信息区域 */
+        .amount-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .amount-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .amount-item label {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .amount-item .amount-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--error-500);
+        }
+
+        .amount-item .discount-value {
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--success-500);
+        }
+
+        /* 查看明细链接 */
+        .view-detail-link {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--primary-600);
+            cursor: pointer;
+            padding: 6px 12px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+
+        .view-detail-link:hover {
+            background-color: var(--primary-50);
+        }
+
+        /* 操作按钮组 */
+        .bottom-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .bottom-actions .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 1px solid transparent;
+        }
+
+        .bottom-actions .btn-secondary-action {
+            background-color: var(--bg-primary);
+            color: var(--primary-500);
+            border: 1px solid var(--primary-500) !important;
+        }
+
+        .bottom-actions .btn-secondary-action:hover {
+            background-color: var(--primary-50);
+            border: 1px solid var(--primary-600) !important;
+            color: var(--primary-600);
+        }
+
+        .btn-primary-action {
+            background-color: var(--primary-500);
+            color: var(--bg-primary);
+        }
+
+        .btn-primary-action:hover {
+            background-color: var(--primary-600);
+        }
+
+        /* 会员搜索框 */
+        .member-search-box {
+            display: flex;
+            gap: 8px;
+            padding: 12px;
+            border-bottom: 1px solid var(--neutral-200);
+            transition: all 0.3s ease;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .member-search-box.show {
+            opacity: 1;
+            max-height: 60px;
+        }
+
+        .member-search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-size: 12px;
+            color: var(--neutral-700);
+            background-color: var(--bg-primary);
+        }
+
+        .member-search-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.1);
+        }
+
+        .member-search-btn {
+            padding: 8px 16px;
+            background-color: var(--primary-500);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .member-search-btn:hover {
+            background-color: var(--primary-600);
+        }
+
+        /* 客户卡片 */
+        .customer-card {
+            margin: 12px;
+            background: linear-gradient(135deg, var(--primary-50) 0%, var(--bg-primary) 100%);
+            border-radius: 12px;
+            padding: 16px;
+            border: 1px solid var(--primary-200);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(241, 163, 184, 0.08);
+            transition: all 0.3s ease;
+        }
+
+        .customer-card.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            max-height: 0;
+            margin: 0 12px;
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .customer-card::before {
+            content: '';
+            position: absolute;
+            top: -40px;
+            right: -40px;
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, rgba(241, 163, 184, 0.15) 0%, transparent 50%);
+            border-radius: 50%;
+        }
+
+        .customer-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* 顶部会员信息栏 - 强制单行横向内联布局 */
+        .header-customer-card {
+            flex: 1;
+            min-width: 0;
+            display: flex !important;
+            align-items: center;
+            gap: 16px;
+            padding: 6px 12px;
+            margin-left: -20px;
+            position: relative;
+            overflow-x: auto;
+            white-space: nowrap;
+            flex-wrap: nowrap !important;
+            transition: all 0.3s ease;
+        }
+
+        .header-customer-card.hide {
+            opacity: 0;
+            transform: translateY(-10px);
+            max-height: 0;
+            padding: 0;
+            margin: 0;
+            overflow: hidden;
+        }
+
+        /* 所有内容扁平化单行，不再嵌套层级占用空间 */
+        .customer-main {
+            display: flex !important;
+            align-items: center;
+            gap: 12px;
+            position: relative;
+            z-index: 1;
+            flex-shrink: 0;
+            width: max-content;
+        }
+
+        /* 关键修复：移除 flex:1，不抢占空间 */
+        .header-customer-card .customer-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            flex: none;
+        }
+
+        .header-customer-card .customer-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .header-customer-card .tag-new {
+            padding: 1px 6px;
+            font-size: 10px;
+            line-height: 1.4;
+        }
+
+        .header-customer-card .customer-phone {
+            font-size: 11px;
+            color: var(--neutral-400);
+            line-height: 1.3;
+            white-space: nowrap;
+        }
+
+        /* 本月消费次数 - 与手机号同行 */
+        .header-customer-card .monthly-count {
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+            font-size: 11px;
+            color: var(--primary-500);
+            white-space: nowrap;
+        }
+
+        .header-customer-card .monthly-count img {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+        }
+
+        /* 选择其他会员按钮 - 行内 */
+        .header-customer-card .btn-change-member {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #fff;
+            background-color: var(--primary-500);
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 4px rgba(232, 124, 154, .25);
+        }
+
+        .header-customer-card .btn-change-member:hover {
+            background-color: var(--primary-600);
+            box-shadow: 0 2px 8px rgba(232, 124, 154, .35);
+            transform: translateY(-1px);
+        }
+
+        /* 散客收银按钮 - 替代关闭图标 */
+        .header-customer-card .btn-walk-in {
+            display: inline-flex;
+            align-items: center;
+            padding: 7px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+            background-color: #fff;
+            border: 1px solid var(--neutral-300);
+            border-radius: 6px;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .header-customer-card .btn-walk-in:hover {
+            color: var(--neutral-900);
+            border-color: var(--neutral-400);
+            background-color: var(--neutral-50);
+            box-shadow: 0 1px 6px rgba(0, 0, 0, .08);
+        }
+
+        /* 待还款信息 - 参考截图样式：文字 + 红色金额 + 灰色去还款箭头 */
+        .header-customer-card .debt-repay-info {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding-left: 10px;
+            margin-left: 4px;
+            margin-right: 16px;
+            border-left: 1px solid var(--neutral-200);
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .header-customer-card .debt-label {
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .header-customer-card .debt-amount {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--primary-500);
+            letter-spacing: -0.5px;
+        }
+
+        .header-customer-card .btn-debt-repay {
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+            padding: 0;
+            font-size: 13px;
+            font-weight: normal;
+            color: var(--neutral-400);
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+            transition: all 0.15s ease;
+        }
+
+        .header-customer-card .btn-debt-repay::after {
+            content: '›';
+            font-size: 16px;
+            line-height: 1;
+            margin-left: 1px;
+        }
+
+        .header-customer-card .btn-debt-repay:hover {
+            color: var(--primary-500);
+        }
+
+        /* 顶部会员搜索框 */
+        .header-member-search {
+            flex: 1;
+            min-width: 20px;
+            max-width: 220px;
+            display: flex;
+            gap: 8px;
+            padding: 6px 12px;
+            background-color: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            transition: all 0.3s ease;
+            opacity: 0;
+            max-height: 0;
+            overflow: hidden;
+        }
+
+        .header-member-search.show {
+            opacity: 1;
+            max-height: 40px;
+        }
+
+        .header-member-search .member-search-input {
+            flex: 1;
+            background: transparent;
+            border: none;
+            outline: none;
+            font-size: 13px;
+            color: var(--neutral-700);
+        }
+
+        .header-member-search .member-search-btn {
+            padding: 6px 14px;
+            background-color: var(--primary-500);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .header-member-search .member-search-btn:hover {
+            background-color: var(--primary-600);
+        }
+
+        .close-icon {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+            z-index: 2;
+        }
+
+        .close-icon:hover {
+            background-color: var(--neutral-100);
+            color: var(--error-500);
+        }
+
+        .customer-footer {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--neutral-200);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-change-member {
+            padding: 7px 16px;
+            background-color: var(--primary-500);
+            color: #fff;
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-change-member:hover {
+            background-color: var(--primary-600);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(232, 124, 154, .3);
+        }
+
+        .customer-avatar {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-primary);
+            box-shadow: 0 3px 10px rgba(232, 124, 154, 0.3);
+        }
+
+        .customer-avatar img {
+            width: 24px;
+            height: 24px;
+        }
+
+        .customer-info {
+            flex: 1;
+        }
+
+        .customer-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .customer-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .tag-new {
+            padding: 2px 6px;
+            background-color: var(--primary-500);
+            color: var(--bg-primary);
+            font-size: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .customer-phone {
+            font-size: 12px;
+            color: var(--neutral-400);
+        }
+
+        .customer-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 4px;
+        }
+
+        .monthly-count {
+            font-size: 11px;
+            color: var(--primary-600);
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .monthly-count img {
+            width: 12px;
+            height: 12px;
+            filter: brightness(0) saturate(100%) invert(60%) sepia(45%) saturate(500%) hue-rotate(310deg) brightness(90%);
+        }
+
+        /* 权益标签切换 */
+        .tabs-switch {
+            display: flex;
+            margin: 16px 16px 0;
+            background-color: var(--bg-primary);
+            /* border-radius: 10px; */
+            padding: 4px;
+            border: 1px solid var(--neutral-200);
+        }
+
+        .tab-switch-item {
+            flex: 1;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 13px;
+            line-height: 1.4;
+            color: var(--neutral-500);
+            /* border-radius: 7px; */
+            cursor: pointer;
+            transition: all 0.25s ease;
+            background-color: var(--bg-primary);
+            user-select: none;
+        }
+
+        .tab-switch-item:hover:not(.active) {
+            color: #333;
+            /* border: 1px solid var(--neutral-50); */
+            background-color: var(--neutral-50);
+        }
+
+        .tab-switch-item.active {
+            background-color: var(--primary-500);
+            color: #fff;
+            font-weight: 600;
+            box-shadow: 0 1px 4px rgba(232, 124, 154, .25);
+        }
+
+        /* 权益列表区域 */
+        .benefits-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background-color: var(--neutral-50);
+        }
+
+        /* 搜索权益区域 - 新增样式 */
+        .benefits-search-section {
+            padding: 12px 16px 10px;
+            background-color: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        /* 搜索框 */
+        .search-box {
+            display: flex;
+            gap: 8px;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid var(--neutral-200);
+            /* border-radius: 6px; */
+            font-size: 12px;
+            color: var(--neutral-700);
+            background-color: var(--bg-primary);
+        }
+
+        .search-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.1);
+        }
+
+        .search-btn,
+        .reset-btn {
+            padding: 8px 16px;
+            /* border-radius: 6px; */
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+
+        .search-btn {
+            background-color: var(--bg-primary);
+            color: var(--neutral-600);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .search-btn:hover {
+            background-color: var(--neutral-50);
+            border-color: var(--neutral-300);
+        }
+
+        .reset-btn {
+            background-color: var(--bg-primary);
+            color: var(--neutral-600);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .reset-btn:hover {
+            background-color: var(--neutral-50);
+            border-color: var(--neutral-300);
+        }
+
+        /* 权益卡片 */
+        .benefit-card {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid var(--neutral-200);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .benefit-card::before {
+            content: '';
+            position: absolute;
+            top: -1px;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: transparent;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .benefit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .benefit-title-row {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .benefit-type-tag {
+            padding: 2px 6px;
+            background-color: var(--primary-50);
+            color: var(--primary-600);
+            font-size: 10px;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        .benefit-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .benefit-date {
+            font-size: 10px;
+            color: var(--neutral-400);
+            display: flex;
+            align-items: center;
+            gap: 3px;
+        }
+
+        .benefit-date img {
+            width: 10px;
+            height: 10px;
+            filter: brightness(0) saturate(100%) invert(40%) sepia(10%) saturate(100%) hue-rotate(0deg);
+        }
+
+        .benefit-items {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .benefit-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px;
+            background-color: var(--neutral-50);
+            border-radius: 6px;
+            border: 1px solid var(--neutral-100);
+        }
+
+        .benefit-item-left {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .benefit-item-name {
+            font-size: 12px;
+            color: var(--neutral-800);
+            font-weight: 500;
+        }
+
+        .benefit-item-detail {
+            font-size: 10px;
+            color: var(--neutral-400);
+        }
+
+        .benefit-item-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .benefit-item-count {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+
+        .btn-select {
+            padding: 4px 12px;
+            background-color: var(--primary-500);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-select:hover {
+            background-color: var(--primary-600);
+        }
+
+        /* 会员卡展示区域 */
+        .card-benefits-section {
+            padding: 12px 16px;
+            background-color: var(--bg-primary);
+        }
+
+        .card-header-bar {
+            display: flex;
+            flex-direction: column;
+            padding: 16px 18px;
+            margin-bottom: 12px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            gap: 0;
+            position: relative;
+            z-index: auto;
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            min-width: 0;
+            overflow: visible;
+        }
+
+        .card-discount-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .discount-tag {
+            padding: 3px 9px;
+            background-color: var(--warning-500);
+            color: var(--bg-primary);
+            font-size: 11px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .discount-balance { 
+            padding: 3px 9px;
+            background-color: #434D86;
+            color: var(--bg-primary);
+            font-size: 11px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        .discount-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+
+        .card-meta-info {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+            font-size: 13px;
+            line-height: 2.2;
+            color: var(--neutral-600);
+            padding-top: 6px;
+            padding-bottom: 2px;
+        }
+
+        .card-meta-info > span {
+            color: var(--neutral-600);
+            display: inline-flex;
+            align-items: center;
+            gap: 2px;
+        }
+
+        .card-meta-info .meta-highlight {
+            color: var(--neutral-800);
+            font-weight: 600;
+        }
+
+        .card-meta-inline {
+            display: inline-flex;
+            align-items: baseline;
+            gap: 16px;
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--neutral-600);
+            flex-shrink: 0;
+            white-space: nowrap;
+            padding-top: 4px;
+            padding-bottom: 2px;
+        }
+
+        .card-meta-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--neutral-200);
+            flex-shrink: 0;
+            align-self: center;
+        }
+
+        .card-header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .card-action-btn {
+            padding: 6px 14px;
+            background-color: var(--bg-primary);
+            color: var(--neutral-700);
+            border: 1px solid var(--neutral-300);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .card-action-btn:hover {
+            background-color: var(--neutral-50);
+            border-color: var(--neutral-400);
+            color: var(--neutral-900);
+            box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+        }
+
+        /* 卡片展开收起按钮 */
+        .card-toggle-btn {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            background: transparent;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            color: var(--neutral-500);
+            padding: 5px 8px;
+            font-size: 13px;
+        }
+
+        .card-toggle-btn:hover {
+            background-color: var(--neutral-50);
+            color: var(--neutral-700);
+        }
+
+        .card-toggle-btn .toggle-text {
+            transition: opacity 0.2s ease;
+        }
+
+        .card-toggle-btn .toggle-icon {
+            width: 14px;
+            height: 14px;
+            transition: transform 0.3s ease;
+        }
+
+        .card-toggle-btn .toggle-icon.collapsed {
+            transform: rotate(180deg);
+        }
+
+        /* 卡片内容区域折叠样式 */
+        .card-body-content {
+            overflow: hidden;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            max-height: 2000px;
+            opacity: 1;
+        }
+
+        .card-body-content.collapsed {
+            max-height: 0;
+            opacity: 0;
+        }
+
+        .card-section {
+            margin-bottom: 16px;
+        }
+
+        .card-section-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 0px 8px;
+            /* background-color: var(--neutral-50); */
+            border-radius: 6px;
+            margin-bottom: 8px;
+            color: #64748B;
+        }
+
+        .card-section-icon {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            background-color: var(--primary-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-size: 10px;
+            font-weight: 600;
+        }
+
+        .card-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .card-item {
+            position: relative;
+            background-color: #F5F6FA;
+            /* border-radius: 8px; */
+            padding: 12px 12px 12px 16px;
+            margin-bottom: 8px;
+            /* border: 1px solid var(--neutral-200); */
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+            transition: all 0.2s ease;
+        }
+
+        .card-item:hover {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            border-color: var(--primary-200);
+        }
+
+        .card-item.gift-card::before {
+            content: '赠';
+            position: absolute;
+            top: 0;
+            right: 0;
+            z-index: 1;
+            padding: 2px 8px;
+            background-color: var(--error-500);
+            color: var(--bg-primary);
+            font-size: 10px;
+            font-weight: 600;
+            border-radius: 0 8px 0 8px;
+        }
+
+        /* 赠送卡片 - 剩余次数避开"赠"标签遮挡 */
+        .card-item.gift-card .card-usage {
+            padding-right: 28px;
+        }
+
+        /* 赠送卡片 - header 确保不与标签冲突 */
+        .card-item.gift-card .card-item-header {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-item.disabled {
+            opacity: 0.6;
+        }
+
+        .card-item.disabled::after {
+            content: '已下架';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            padding: 2px 6px;
+            background-color: var(--neutral-300);
+            color: var(--neutral-600);
+            font-size: 10px;
+            border-radius: 4px;
+        }
+
+        .card-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 8px;
+        }
+
+        .card-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .card-usage {
+            font-size: 11px;
+            color: var(--neutral-500);
+        }
+
+        .card-subtitle {
+            font-size: 11px;
+            color: var(--neutral-400);
+            margin-bottom: 8px;
+        }
+
+        .card-price-info {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .card-original-price {
+            font-size: 12px;
+            color: var(--neutral-400);
+            text-decoration: line-through;
+        }
+
+        .card-current-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--error-500);
+        }
+
+        .card-consume-price {
+            font-size: 11px;
+            color: var(--neutral-500);
+        }
+
+        .card-item-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 8px;
+            border-top: 1px dashed var(--neutral-200);
+        }
+
+        .card-item-actions {
+            display: flex;
+            gap: 6px;
+        }
+
+        .card-mini-btn {
+            padding: 3px 8px;
+            background-color: var(--bg-primary);
+            color: var(--neutral-600);
+            border: 1px solid var(--neutral-200);
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .card-mini-btn:hover {
+            background-color: var(--neutral-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        /* 中间已选商品区域头部 */
+        .middle-header {
+            padding: 10px 16px;
+            /* background-color: var(--primary-50); */
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .middle-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .middle-title img {
+            width: 14px;
+            height: 14px;
+            filter: brightness(0) saturate(100%) invert(60%) sepia(45%) saturate(500%) hue-rotate(310deg) brightness(90%);
+        }
+
+        .middle-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .middle-action {
+            font-size: 12px;
+            color: var(--primary-600);
+            cursor: pointer;
+            transition: color 0.2s ease;
+        }
+
+        .middle-action:hover {
+            color: var(--primary-700);
+            text-decoration: underline;
+        }
+
+        .selected-items-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+            background-color: var(--neutral-50);
+        }
+
+        /* 已选商品卡片 */
+        /* ========== 已选商品卡片 ========== */
+        .selected-item-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+            padding: 14px 14px;
+            margin-bottom: 14px;
+            border-bottom: 1px solid var(--neutral-200);
+            background-color: var(--bg-primary);
+        }
+
+        .selected-item-card:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+
+        /* 商品主体 */
+        .selected-item-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        /* ========== 新布局：第一行 - 名称 + 右上方金额 + 操作图标 ========== */
+        .selected-item-header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            padding-right: 70px; /* 为右侧操作图标留出空间 */
+        }
+
+        /* 右上角固定操作图标区域 */
+        .item-actions-fixed {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        /* 删除按钮特殊样式 */
+        .item-action-btn.delete-btn {
+            color: var(--neutral-400);
+        }
+
+        .item-action-btn.delete-btn:hover {
+            background-color: rgba(229, 62, 62, 0.08);
+            color: #E53E3E;
+        }
+
+        .item-action-btn.delete-btn:active {
+            transform: scale(0.95);
+        }
+
+        .item-left-col {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        /* 右上方金额区域 */
+        .item-price-area {
+            text-align: right;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .price-main-amount {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            letter-spacing: -0.3px;
+        }
+
+        .price-edit-link {
+            font-size: 12px;
+            color: var(--primary-500);
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .price-edit-link:hover {
+            color: var(--primary-600);
+            text-decoration: underline;
+        }
+
+        .price-sub {
+            margin-top: 2px;
+            font-size: 12px;
+            color: var(--neutral-400);
+        }
+
+        .price-original {
+            text-decoration: line-through;
+            margin-right: 4px;
+        }
+
+        .price-deduction {
+            color: #E53E3E; /* 红色抵扣 */
+            margin-right: 2px;
+        }
+
+        /* ========== 新布局：第二行 - 数量/赠送/消耗/删除 ========== */
+        .selected-item-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 6px;
+        }
+
+        .meta-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meta-right {
+            flex-shrink: 0;
+        }
+
+        /* 购买数量（文本形式） */
+        .qty-meta {
+            font-size: 12px;
+            color: var(--neutral-600);
+            white-space: nowrap;
+        }
+        .qty-meta-label {
+            margin-right: 3px;
+        }
+        .qty-meta-val {
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        /* 商品名称行（保留旧类名兼容，新结构中不再使用） */
+        .selected-item-name-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .selected-item-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            line-height: 1.4;
+        }
+
+        /* 商品名称与操作按钮容器 */
+        .item-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        /* 操作按钮组 */
+        .item-actions {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            flex-shrink: 0;
+        }
+
+        /* 操作按钮（复制等） */
+        .item-action-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-500);
+            transition: all 0.2s ease;
+        }
+
+        .item-action-btn:hover {
+            background-color: var(--neutral-100);
+            color: var(--primary-500);
+        }
+
+        .item-action-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* 本次消耗输入框 */
+        .consume-item {
+            margin-left: auto;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .consume-item::before {
+            content: '|';
+            margin: 0 8px;
+            color: var(--neutral-200);
+        }
+
+        .consume-input {
+            width: 50px;
+            padding: 2px 6px;
+            border: 1px solid var(--neutral-300);
+            border-radius: 4px;
+            font-size: 12px;
+            font-family: inherit;
+            color: var(--neutral-800);
+            background-color: var(--bg-primary);
+            text-align: center;
+            transition: all 0.2s ease;
+        }
+
+        .consume-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 2px rgba(232, 124, 154, 0.15);
+        }
+
+        .consume-input:hover:not(:focus) {
+            border-color: var(--neutral-400);
+        }
+
+        .consume-input::placeholder {
+            color: var(--neutral-400);
+        }
+
+        /* 数字输入校验 */
+        .consume-input:invalid {
+            border-color: var(--error-400);
+        }
+
+        .selected-item-right {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-shrink: 0;
+        }
+
+        /* 设为赠送 */
+        .is-gift-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            color: var(--neutral-500);
+            white-space: nowrap;
+        }
+
+        /* 数量控制 */
+        .quantity-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--neutral-200);
+        }
+
+        .qty-btn {
+            width: 28px;
+            height: 28px;
+            background-color: var(--neutral-50);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .qty-btn:hover {
+            background-color: var(--primary-50);
+        }
+
+        .qty-btn img {
+            width: 12px;
+            height: 12px;
+        }
+
+        .qty-value {
+            min-width: 36px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: var(--neutral-800);
+            border-left: 1px solid var(--neutral-200);
+            border-right: 1px solid var(--neutral-200);
+            font-weight: 500;
+        }
+
+        /* 本次消耗数量控制 */
+        .consume-control {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--neutral-200);
+            margin-left: 12px;
+        }
+
+        .consume-btn {
+            width: 28px;
+            height: 28px;
+            background-color: var(--neutral-50);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .consume-btn:hover {
+            background-color: var(--primary-50);
+        }
+
+        .consume-btn img {
+            width: 12px;
+            height: 12px;
+        }
+
+        .consume-value {
+            min-width: 48px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            color: var(--neutral-800);
+            border-left: 1px solid var(--neutral-200);
+            border-right: 1px solid var(--neutral-200);
+            font-weight: 500;
+            background-color: #fff;
+        }
+
+        .consume-label {
+            font-size: 11px;
+            color: var(--neutral-500);
+            margin-right: 0px;
+            white-space: nowrap;
+        }
+
+        /* 已选商品分区样式 */
+        .selected-items-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .items-section {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .items-section-header {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-600);
+            background-color: var(--neutral-100);
+            border-radius: 6px 6px 0 0;
+        }
+
+        .items-section-header svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        .items-section-header .section-title {
+            margin-right: 8px;
+        }
+
+        .section-action-btn {
+            padding: 4px 10px;
+            font-size: 11px;
+            border-radius: 4px;
+            border: 1px solid var(--primary-500);
+            background-color: transparent;
+            color: var(--primary-500);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .section-action-btn:hover:not(:disabled) {
+            background-color: var(--primary-50);
+        }
+
+        .section-action-btn:disabled {
+            border-color: var(--neutral-300);
+            color: var(--neutral-400);
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .section-action-btn.btn-consume-all,
+        .section-action-btn.btn-take-all {
+            border-color: var(--accent-500);
+            color: var(--accent-500);
+        }
+
+        .section-action-btn.btn-consume-all:hover:not(:disabled),
+        .section-action-btn.btn-take-all:hover:not(:disabled) {
+            background-color: #334155(255, 152, 0, 0.1);
+        }
+
+        .section-action-btn.btn-consume-all.active,
+        .section-action-btn.btn-take-all.active {
+            background-color: #334155;
+            color: #ffffff;
+        }
+
+        .section-action-btn.btn-consume-all.active:hover:not(:disabled),
+        .section-action-btn.btn-take-all.active:hover:not(:disabled) {
+            background-color: #1E293B;
+        }
+
+        .items-section-content {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .items-section:empty,
+        .items-section .selected-item-card:empty {
+            display: none;
+        }
+
+        .items-section[data-empty="true"] {
+            display: none;
+        }
+
+        /* 删除按钮 */
+        .remove-item {
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+            display: flex;
+            align-items: center;
+        }
+
+        .remove-item:hover {
+            opacity: 0.6;
+        }
+
+        .remove-item img {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 价格信息行 */
+        .price-info {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            flex-wrap: wrap;
+        }
+
+        .price-item {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .price-item + .price-item::before {
+            content: '|';
+            margin: 0 8px;
+            color: var(--neutral-200);
+        }
+
+        .price-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .price-value {
+            font-size: 12px;
+            color: var(--neutral-700);
+        }
+
+        .price-value.highlight {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+
+        /* 美容师区域 */
+        .meikebi-section {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+            align-items: center;
+            padding: 10px 12px;
+            background-color: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+        }
+
+        .meikebi-label {
+            font-size: 12px;
+            color: var(--neutral-600);
+            white-space: nowrap;
+        }
+
+        .meikebi-select,
+        .meikebi-input {
+            padding: 4px 8px;
+            border: 1px solid var(--neutral-200);
+            font-size: 12px;
+            color: var(--neutral-700);
+            background-color: var(--bg-primary);
+        }
+
+        .meikebi-select:focus,
+        .meikebi-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+        }
+
+        .meikebi-select {
+            min-width: 100px;
+            appearance: auto;
+        }
+
+        .meikebi-input {
+            width: 80px;
+        }
+
+        .meikebi-tip {
+            font-size: 11px;
+            color: var(--neutral-500);
+            flex-basis: 100%;
+            margin-top: 2px;
+        }
+
+        /* 美容师/护理师选择器 - 虚线按钮样式 */
+        .beautician-picker {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 14px;
+            border: 1px dashed #CCCCCC;
+            background-color: #FFFFFF;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .beautician-picker:hover {
+            border-color: #E87C9A;
+            background-color: #FFF9FA;
+        }
+
+        .beautician-picker-icon {
+            font-size: 16px;
+            color: #999999;
+            line-height: 1;
+        }
+
+        .beautician-picker-text {
+            font-size: 13px;
+            color: #666666;
+            font-weight: 400;
+        }
+
+        /* 订单信息区域头部 */
+        .right-header {
+            padding: 10px 16px;
+            background-color: var(--primary-50);
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .right-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .order-form {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px 16px 20px;
+            background-color: var(--bg-primary);
+        }
+
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .form-label {
+            font-size: 12px;
+            color: var(--neutral-600);
+            min-width: 70px;
+            font-weight: 500;
+        }
+
+        .form-value {
+            font-size: 12px;
+            color: var(--neutral-800);
+            flex: 1;
+        }
+
+        .form-input {
+            flex: 1;
+            padding: 6px 10px;
+            border: 1px solid var(--neutral-200);
+            font-size: 13px;
+            color: var(--neutral-800);
+            background-color: var(--bg-primary);
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.1);
+        }
+
+        .form-unit {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .form-tip {
+            font-size: 10px;
+            color: var(--neutral-400);
+            margin-left: 82px;
+            margin-top: 4px;
+        }
+
+        .form-textarea {
+            width: calc(100% - 82px);
+            margin-left: 82px;
+            padding: 8px 10px;
+            border: 1px solid var(--neutral-200);
+            font-size: 13px;
+            resize: none;
+            min-height: 50px;
+            outline: none;
+            color: var(--neutral-800);
+            background-color: var(--bg-primary);
+        }
+
+        .form-textarea:focus {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.1);
+        }
+
+        .textarea-counter {
+            text-align: right;
+            font-size: 10px;
+            color: var(--neutral-400);
+            margin-top: 4px;
+        }
+
+        /* 底部操作栏 */
+        .bottom-bar {
+            padding: 12px 16px;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 -1px 3px rgba(0, 0, 0, 0.04);
+        }
+
+        .order-summary {
+            font-size: 12px;
+            color: var(--neutral-600);
+        }
+
+        .order-summary strong {
+            color: var(--primary-600);
+            font-weight: 600;
+        }
+
+        .bottom-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-secondary {
+            padding: 8px 20px;
+            background-color: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--neutral-100);
+            border-color: var(--neutral-300);
+        }
+
+        .btn-primary {
+            padding: 8px 24px;
+            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-600) 100%);
+            color: var(--bg-primary);
+            border: none;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.3);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-600) 0%, var(--primary-700) 100%);
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.4);
+            transform: translateY(-1px);
+        }
+
+        /* 滚动条样式 */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--neutral-100);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-400);
+        }
+
+        /* 会员选择弹窗 */
+        .member-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .member-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .member-modal {
+            width: 500px;
+            max-height: 80vh;
+            background-color: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.9) translateY(-20px);
+            transition: all 0.3s ease;
+        }
+
+        .member-modal-overlay.show .member-modal {
+            transform: scale(1) translateY(0);
+        }
+
+        .member-modal-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .member-modal-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .member-modal-close {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .member-modal-close:hover {
+            background-color: var(--neutral-100);
+            color: var(--neutral-600);
+        }
+
+        .member-modal-search {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .member-modal-search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--neutral-700);
+            background-color: var(--bg-primary);
+        }
+
+        .member-modal-search-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.1);
+        }
+
+        .member-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 12px;
+        }
+
+        .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background-color: var(--neutral-50);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: 2px solid transparent;
+        }
+
+        .member-item:hover {
+            background-color: var(--primary-50);
+        }
+
+        .member-item.selected {
+            background-color: var(--primary-50);
+            border-color: var(--primary-300);
+        }
+
+        .member-avatar {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .member-avatar img {
+            width: 22px;
+            height: 22px;
+        }
+
+        .member-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .member-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .member-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .member-level {
+            padding: 1px 6px;
+            background-color: var(--primary-100);
+            color: var(--primary-600);
+            font-size: 10px;
+            border-radius: 4px;
+        }
+
+        .member-phone {
+            font-size: 12px;
+            color: var(--neutral-400);
+        }
+
+        .member-modal-footer {
+            padding: 16px 20px;
+            border-top: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* 确认提示框 */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-modal {
+            width: 360px;
+            background-color: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+            transform: scale(0.9);
+            transition: all 0.3s ease;
+        }
+
+        .confirm-modal-overlay.show .confirm-modal {
+            transform: scale(1);
+        }
+
+        .confirm-modal-content {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .confirm-modal-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            background-color: var(--warning-500);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--bg-primary);
+            font-size: 24px;
+        }
+
+        .confirm-modal-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 8px;
+        }
+
+        .confirm-modal-desc {
+            font-size: 13px;
+            color: var(--neutral-500);
+            line-height: 1.5;
+        }
+
+        .confirm-modal-footer {
+            padding: 12px 24px 20px;
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+        }
+
+        /* 响应式 - 1200px以下 */
+        @media (max-width: 1200px) {
+            .header-customer-card {
+                gap: 12px;
+            }
+
+            .header-customer-card .customer-name {
+                font-size: 13px;
+            }
+
+            .header-customer-card .monthly-count,
+            .header-customer-card .btn-change-member {
+                font-size: 12px;
+            }
+        }
+
+        /* 响应式 - 900px以下（隐藏底部操作按钮，三栏保持） */
+        @media (max-width: 900px) {
+            .header {
+                flex-wrap: wrap;
+            }
+
+            .header-customer-card {
+                order: 3;
+                flex-basis: 100%;
+                overflow-x: auto;
+                gap: 10px;
+            }
+
+            .action-buttons {
+                gap: 6px;
+            }
+
+            .action-btn span,
+            .action-btn img {
+                display: inline;
+            }
+
+            .action-btn {
+                padding: 5px 8px;
+                font-size: 11px;
+            }
+        }
+
+        /* 响应式 - 768px以下（垂直堆叠） */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 50px;
+            }
+
+            .nav-item {
+                width: 36px;
+                height: 36px;
+            }
+
+            .nav-item img {
+                width: 18px;
+                height: 18px;
+            }
+
+            .content-body {
+                flex-direction: column;
+            }
+
+            .left-panel,
+            .right-container {
+                flex: none;
+                width: 100%;
+                min-width: unset;
+                border-right: none;
+                height: auto;
+                overflow: visible;
+            }
+
+            .left-panel {
+                border-bottom: 1px solid var(--neutral-200);
+            }
+
+            .right-container {
+                flex: 1;
+            }
+
+            .middle-panel {
+                flex-shrink: 0;
+                width: 100%;
+                min-width: unset;
+                border-right: none;
+                border-bottom: 1px solid var(--neutral-200);
+            }
+
+            .action-buttons {
+                display: none;
+            }
+
+            /* 移动端各区域内部布局 */
+            .middle-panel .selected-items-scroll {
+                max-height: none;
+            }
+
+            .order-form-panel .order-form {
+                max-height: 400px;
+            }
+
+            .bottom-bar {
+                position: sticky;
+                bottom: 0;
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .bottom-actions {
+                width: 100%;
+            }
+
+            .bottom-actions button {
+                flex: 1;
+            }
+
+            /* 移动端搜索权益区域 */
+            .benefits-search-section {
+                padding: 10px 12px;
+            }
+
+            .benefits-search-section .search-box {
+                flex-wrap: wrap;
+            }
+
+            .benefits-search-section .search-input {
+                flex: 1 1 100%;
+                min-width: 0;
+            }
+
+            .benefits-search-section .search-btn,
+            .benefits-search-section .reset-btn {
+                flex: 1;
+                padding: 8px 12px;
+            }
+
+            /* 移动端权益卡片区域 */
+            .card-benefits-section {
+                padding: 10px 12px;
+            }
+
+            .card-header-bar {
+                flex-direction: column;
+                gap: 6px;
+                padding: 12px 14px;
+            }
+
+            .card-header-left {
+                flex-wrap: wrap;
+                justify-content: space-between;
+                gap: 8px 10px;
+            }
+
+            .card-discount-info {
+                width: auto;
+            }
+
+            .card-meta-inline {
+                order: -1;
+                width: 100%;
+                white-space: normal;
+                flex-wrap: wrap;
+                font-size: 14px;
+                line-height: 1.7;
+            }
+
+            .card-meta-info {
+                flex-wrap: wrap;
+                gap: 4px 10px;
+                line-height: 2;
+                font-size: 12px;
+            }
+
+            .card-meta-info > span:last-child {
+                margin-left: 0 !important;
+            }
+
+            .card-meta-divider {
+                display: none;
+            }
+
+            .card-header-right {
+                width: 100%;
+                justify-content: flex-start;
+                flex-wrap: wrap;
+            }
+
+            .card-action-btn {
+                flex: 1;
+                text-align: center;
+            }
+
+            /* 移动端会员信息栏 - 紧凑单行，可横向滚动 */
+            .header-customer-card {
+                padding: 6px 8px;
+                gap: 8px;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: none;
+            }
+
+            .header-customer-card::-webkit-scrollbar {
+                display: none;
+            }
+
+            .header-customer-card .customer-main {
+                gap: 6px;
+            }
+
+            .header-customer-card .customer-name {
+                font-size: 13px;
+            }
+
+            .header-customer-card .customer-phone {
+                font-size: 10px;
+            }
+
+            .header-customer-card .tag-new {
+                font-size: 9px;
+                padding: 1px 4px;
+            }
+
+            .header-customer-card .monthly-count {
+                font-size: 10px;
+            }
+
+            .header-customer-card .monthly-count img {
+                width: 10px;
+                height: 10px;
+            }
+
+            .header-customer-card .btn-walk-in {
+                font-size: 11px;
+                padding: 5px 10px;
+                margin: 0px 32px;
+            }
+
+            .header-customer-card .btn-change-member {
+                font-size: 12px;
+                padding: 6px 14px;
+            }
+
+            .header-customer-card .debt-repay-info {
+                gap: 4px;
+                padding-left: 6px;
+                border-left-color: var(--neutral-200);
+                margin-right:40px;
+            }
+
+            .header-customer-card .debt-label {
+                font-size: 12px;
+            }
+
+            .header-customer-card .debt-amount {
+                font-size: 13px;
+            }
+
+            .header-customer-card .btn-debt-repay {
+                font-size: 12px;
+                margin-right: 24px;
+            }
+
+            /* 移动端已选商品卡片 */
+            .selected-item-card {
+                gap: 10px;
+                padding: 12px 0;
+            }
+
+            .selected-item-header {
+                flex-direction: column;
+                gap: 8px;
+                padding-right: 0;
+            }
+
+            /* 移动端右上角操作图标调整 */
+            .item-actions-fixed {
+                position: static;
+                flex-direction: row;
+                justify-content: flex-end;
+                margin-bottom: 4px;
+            }
+
+            .item-price-area {
+                text-align: left;
+                align-self: flex-start;
+            }
+
+            .price-main-amount {
+                font-size: 16px;
+            }
+
+            .selected-item-name-row {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+
+            .selected-item-right {
+                width: 100%;
+                justify-content: flex-start;
+                gap: 8px;
+                flex-wrap: wrap;
+            }
+
+            .is-gift-checkbox {
+                font-size: 11px;
+            }
+
+            .meta-left {
+                gap: 8px;
+            }
+
+            .consume-control {
+                margin-left: 0;
+            }
+
+            .price-info {
+                gap: 0;
+            }
+
+            .price-item + .price-item::before {
+                margin: 0 6px;
+            }
+
+            .meikebi-section {
+                gap: 6px 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- 左侧导航栏 -->
+    <div class="sidebar">
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z'/%3E%3C/svg%3E"
+                alt="首页"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"
+                alt="客户"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z'/%3E%3C/svg%3E"
+                alt="预约"></div>
+        <div class="nav-item active"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M11 9h2v2h-2V9zm4 0h2v2h-2V9zm4 0h2v2h-2V9zm-8 4h2v2h-2v-2zm4 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-12-5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2H2zm0 2h18v10H2V10z'/%3E%3C/svg%3E"
+                alt="收银"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M20 2H4c-1.1 0-1.99.9-1.99 2L2 20c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-6 6l-2 3h-4l2-3H8l-4 6h12l-4-6h-2z'/%3E%3C/svg%3E"
+                alt="商品"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M21 5V3H3v14l8-4 8 4V5zm-2 9l-6-3-6 3V5h12v9z'/%3E%3C/svg%3E"
+                alt="库存"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 12h5v5H7z'/%3E%3C/svg%3E"
+                alt="报表"></div>
+        <div class="nav-item"><img
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-7 0c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 4c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm0 5c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0 8c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1z'/%3E%3C/svg%3E"
+                alt="设置"></div>
+    </div>
+
+    <!-- 主内容区域 -->
+    <div class="main-content">
+        <!-- 顶部导航栏 -->
+        <div class="header">
+            <div class="header-left">
+                <div>
+                    <span class="logo-text">CHLITLINA</span>
+                    <span class="logo-sub">克丽缇娜</span>
+                </div>
+                <span class="header-title">开单</span>
+            </div>
+
+            <!-- 会员搜索输入框 -->
+            <div class="header-member-search" id="memberSearchBox">
+                <input type="text" class="member-search-input" id="memberSearchInput" placeholder="请输入会员姓名/手机号搜索">
+                <button class="member-search-btn" id="memberSearchBtn">搜索</button>
+            </div>
+
+            <!-- 会员卡片 -->
+            <div class="header-customer-card" id="customerCard">
+                <div class="customer-main">
+                    <div class="customer-info">
+                        <span class="customer-name" id="customerName">张兰</span>
+                        <span class="tag-new" id="customerTag">新客</span>
+                        <span class="customer-phone" id="customerPhone">138****8888</span>
+                        <span class="monthly-count">
+                            <img
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11zM9 11H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z'/%3E%3C/svg%3E">
+                            本月消费 20 次
+                        </span>
+                    </div>
+                    <div class="debt-repay-info">
+                        <span class="debt-label">待还款</span>
+                        <span class="debt-amount" id="debtAmount">￥888.00</span>
+                        <button class="btn-debt-repay" id="btnDebtRepay">去还款</button>
+                    </div>
+                    <button class="btn-walk-in" id="closeMemberIcon">散客收银</button>
+                    <button class="btn-change-member" id="changeMemberBtn">搜索会员</button>
+                </div>
+            </div>
+
+            <div class="header-right">
+                <div class="action-buttons">
+                    <button class="action-btn"><img
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z'/%3E%3C/svg%3E">核销</button>
+                    <button class="action-btn"><img
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M19 8h-4V4H9v4H5l7 7 7-7zM5 18v2h14v-2H5z'/%3E%3C/svg%3E">取单</button>
+                    <button class="action-btn"><img
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V5h14v14zM7 12h5v5H7z'/%3E%3C/svg%3E">订单</button>
+                    <button class="action-btn"><img
+                            src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-7 14l-5-5 1.41-1.41L12 14.17l7.59-7.59L21 8l-9 9z'/%3E%3C/svg%3E">当日台账</button>
+                </div>
+                <div class="user-info">
+                    <div class="user-avatar">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E"
+                            alt="用户头像">
+                    </div>
+                    <div>
+                        <div class="user-name">roger</div>
+                        <div class="user-role">测试店1</div>
+                    </div>
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E"
+                        class="dropdown-arrow" alt="下拉">
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面主体内容 -->
+        <div class="content-body">
+            <!-- 左侧客户/权益区域 -->
+            <div class="left-panel">
+                <!-- 标签切换 -->
+                <div class="tabs-switch">
+                    <div class="tab-switch-item active">会员权益</div>
+                    <div class="tab-switch-item">选购服务</div>
+                    <div class="tab-switch-item">选购产品</div>
+                    <div class="tab-switch-item">开卡</div>
+                </div>
+
+                <!-- 搜索权益区域 -->
+                <div class="benefits-search-section">
+                    <div class="search-box">
+                        <input type="text" class="search-input" placeholder="搜索权益">
+                        <button class="search-btn">搜索</button>
+                        <button class="reset-btn">重置</button>
+                    </div>
+                </div>
+
+                <!-- 会员卡展示区域 - 面部护理卡 -->
+                <div class="card-benefits-section">
+                    <!-- 卡片头部信息 -->
+                    <div class="card-header-bar" id="cardHeaderBar" onclick="toggleCardBenefits()">
+                        <div class="card-header-left">
+                            <div class="card-discount-info">
+                                <span class="discount-balance">有限次卡</span>
+                                <span class="discount-text">面部护理卡</span>
+                            </div>
+                            <div class="card-header-right">
+                                <button class="card-action-btn">权益置换</button>
+                                <button class="card-action-btn">卡升级</button>
+                                <button class="card-toggle-btn" id="cardToggleBtn" onclick="toggleCardBenefits(event)">
+                                    <span class="toggle-text">收起</span>
+                                    <svg class="toggle-icon expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-meta-info">
+                            <span>卡项有效期: 永久有效</span>
+                        </div>
+                    </div>
+
+                    <!-- 权益内容区域（可折叠） -->
+                    <div class="card-body-content" id="cardBodyContent">
+                        <!-- 服务类卡片（属于面部护理卡） -->
+                        <div class="card-section">
+                            <div class="card-section-header">
+                                <span class="card-section-title">服务</span>
+                            </div>
+
+                            <!-- 服务卡片1 -->
+                            <div class="card-item">
+                                <div class="card-item-header">
+                                    <span class="card-name">深度放松精油SPA</span>
+                                    <span class="card-usage">3/3次</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥288.00</span>
+                                    <span class="card-current-price">¥133.33</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+
+                            <!-- 服务卡片2 - 赠送卡片 -->
+                            <div class="card-item gift-card">
+                                <div class="card-item-header">
+                                    <span class="card-name">补水护理</span>
+                                    <span class="card-usage">7/8次</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥1.00</span>
+                                    <span class="card-current-price">¥0.00</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品类卡片（属于面部护理卡） -->
+                        <div class="card-section">
+                            <div class="card-section-header">
+                                <span class="card-section-title">产品</span>
+                            </div>
+                            <div class="card-item">
+                                <div class="card-item-header">
+                                    <span class="card-name">艾地苯焕颜修护精华液</span>
+                                    <span class="card-usage">1/3瓶</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥288.00</span>
+                                    <span class="card-current-price">¥133.33</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                <div class="card-header-bar" id="cardHeaderBar" onclick="toggleCardBenefits()">
+                        <div class="card-header-left">
+                            <div class="card-discount-info">
+                                <span class="discount-balance">金额卡</span>
+                                <span class="discount-text">充值卡</span>
+                            </div>
+                            <div class="card-header-right">
+                                <button class="card-action-btn">权益置换</button>
+                                <button class="card-action-btn">卡升级</button>
+                                <button class="card-action-btn">卡续充</button>
+                                <button class="card-toggle-btn" id="cardToggleBtn2" onclick="toggleCardBenefits(event, 'cardToggleBtn2')">
+                                    <span class="toggle-text">收起</span>
+                                    <svg class="toggle-icon expanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <polyline points="18 15 12 9 6 15"></polyline>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card-meta-info">
+                                <span><span class="meta-highlight">余额</span> ￥1200.00</span>
+                                <span><span class="meta-highlight"> 赠金</span> ￥300.00</span>
+                            
+                            <span style="margin-left:auto;"></span>居家产品 5折 | 服务疗程 5折 | 次卡 8折</span>
+                            <span style="margin-left:auto;">有效期: <span class="meta-highlight">2029-12-31</span></span>
+                        </div>
+                    </div>
+
+                    <!-- 权益内容区域（可折叠） -->
+                    <div class="card-body-content" id="cardBodyContent2">
+                        <!-- 服务类卡片（属于面部护理卡） -->
+                        <div class="card-section">
+                            <div class="card-section-header">
+                                <span class="card-section-title">服务</span>
+                            </div>
+
+                            <!-- 服务卡片1 -->
+                            <div class="card-item gift-card">
+                                <div class="card-item-header">
+                                    <span class="card-name">深度放松精油SPA</span>
+                                    <span class="card-usage">3/3次</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥288.00</span>
+                                    <span class="card-current-price">¥0.00</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+
+                            <!-- 服务卡片2 - 赠送卡片 -->
+                            <div class="card-item gift-card">
+                                <div class="card-item-header">
+                                    <span class="card-name">补水护理</span>
+                                    <span class="card-usage">7/8次</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥1.00</span>
+                                    <span class="card-current-price">¥0.00</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品类卡片（属于面部护理卡） -->
+                        <div class="card-section">
+                            <div class="card-section-header">
+                                <span class="card-section-title">产品</span>
+                            </div>
+                            <div class="card-item  gift-card">
+                                <div class="card-item-header">
+                                    <span class="card-name">艾地苯焕颜修护精华液</span>
+                                    <span class="card-usage">1/3瓶</span>
+                                </div>
+                                <div class="card-price-info">
+                                    <span class="card-original-price">¥288.00</span>
+                                    <span class="card-current-price">¥0.00</span>
+                                    <span class="card-consume-price">(耗卡价)</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 右侧区域容器 -->
+            <div class="right-container">
+                <!-- 已选商品区域 -->
+                <div class="middle-panel">
+                    <div class="middle-header">
+                        <span class="middle-title">
+                            <img
+                                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.5 18H15c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.44-.87-1.44H5.21l-.94-2H1zm6.92 6c.09.32.29.58.58.72l1.15.65.94-1.68c.27-.48.96-.36 1.21.12l1.1 1.99 2.85-2.03c.23-.16.5-.16.73 0l2.85 2.03 1.1-1.99c.25-.48.94-.6 1.21-.12l.94 1.68 1.15-.65c.29-.14.49-.4.58-.72H7.92z'/%3E%3C/svg%3E">
+                            已选商品
+                        </span>
+                        <div class="middle-actions">
+                            <span class="middle-action">清空</span>
+                        </div>
+                    </div>
+
+                    <div class="selected-items-scroll">
+                        <div class="selected-items-container">
+                            <!-- 服务区域 -->
+                            <div class="items-section" id="service-section">
+                                <div class="items-section-header">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/>
+                                    </svg>
+                                    <span class="section-title">服务</span>
+                                    <button class="section-action-btn btn-consume-all" id="consume-all-btn" disabled>全部消耗</button>
+                                </div>
+                                <div class="items-section-content" id="service-items">
+                                    <!-- 服务类商品卡片将动态插入此处 -->
+                                </div>
+                            </div>
+
+                            <!-- 产品区域 -->
+                            <div class="items-section" id="product-section">
+                                <div class="items-section-header">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                                        <path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/>
+                                    </svg>
+                                    <span class="section-title">产品</span>
+                                    <button class="section-action-btn btn-take-all" id="take-all-btn" disabled>全部拿走</button>
+                                </div>
+                                <div class="items-section-content" id="product-items">
+                                    <!-- 产品类商品卡片将动态插入此处 -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 已选商品卡片1 (产品示例) -->
+                        <div class="selected-item-card" data-item-type="product">
+                            <div class="selected-item-body">
+                                <!-- 第一行：名称 + 右上方金额 + 操作图标 -->
+                                <div class="selected-item-header">
+                                    <!-- 右上角操作图标（复制+删除） -->
+                                    <div class="item-actions-fixed">
+                                        <button class="item-action-btn copy-btn" title="复制">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="item-action-btn delete-btn" title="删除">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="item-left-col">
+                                        <div class="item-name-wrapper">
+                                            <span class="selected-item-name">精粹霜</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-price-area">
+                                        <div class="price-main">
+                                            <span class="price-main-amount">¥200.00</span>
+                                            <a href="#" class="price-edit-link">改价</a>
+                                        </div>
+                                        <div class="price-sub">
+                                            <span class="price-original">原价¥398.00</span>
+                                            <span class="price-deduction">- ¥196.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 第二行：数量 / 赠送 / 消耗 -->
+                                <div class="selected-item-meta">
+                                    <div class="meta-left">
+                                        <label class="is-gift-checkbox">
+                                            <input type="checkbox">赠送
+                                        </label>
+                                        <span class="consume-label">购买</span>
+                                        <div class="consume-control">
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M20 12H4v-2h16v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                            <span class="consume-value">1</span>
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                        </div>
+                                        <span class="consume-label">拿走数量</span>
+                                        <div class="consume-control">
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M20 12H4v-2h16v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                            <span class="consume-value">0</span>
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="meikebi-section">
+                                    <div class="beautician-picker" id="beauticianPicker">
+                                        <span class="beautician-picker-icon">+</span>
+                                        <span class="beautician-picker-text">美容师/销售</span>
+                                    </div>
+                                    <span class="meikebi-label">卡项</span>
+                                    <select class="meikebi-select">
+                                        <option value="">请选择卡项</option>
+                                        <option value="尊享金卡">尊享金卡</option>
+                                    </select>
+                                    <!-- <span class="meikebi-label">折后价</span> -->
+                                    <input type="text" class="meikebi-input" value="150.00">
+                                    <span class="meikebi-tip" style="display:none;">抵扣后余额: 0.00  居家产品7.0 | 服务7.0折 | 次卡7.0折</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 已选商品卡片2 (服务示例) -->
+                        <div class="selected-item-card" data-item-type="service">
+                            <div class="selected-item-body">
+                                <!-- 第一行：名称 + 右上方金额 + 操作图标 -->
+                                <div class="selected-item-header">
+                                    <!-- 右上角操作图标（复制+删除） -->
+                                    <div class="item-actions-fixed">
+                                        <button class="item-action-btn copy-btn" title="复制">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                                            </svg>
+                                        </button>
+                                        <button class="item-action-btn delete-btn" title="删除">
+                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="16" height="16">
+                                                <path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/>
+                                            </svg>
+                                        </button>
+                                    </div>
+                                    <div class="item-left-col">
+                                        <div class="item-name-wrapper">
+                                            <span class="selected-item-name">单次皮肤护理</span>
+                                        </div>
+                                    </div>
+                                    <div class="item-price-area">
+                                        <div class="price-main">
+                                            <span class="price-main-amount">¥200.00</span>
+                                            <a href="#" class="price-edit-link">改价</a>
+                                        </div>
+                                        <div class="price-sub">
+                                            <span class="price-original">原价¥398.00</span>
+                                            <span class="price-deduction">- ¥196.00</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- 第二行：数量 / 赠送 / 消耗 -->
+                                <div class="selected-item-meta">
+                                    <div class="meta-left">
+                                        <label class="is-gift-checkbox">
+                                            <input type="checkbox">赠送
+                                        </label>
+                                        <span class="consume-label">购买</span>
+                                        <div class="consume-control">
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M20 12H4v-2h16v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                            <span class="consume-value">1</span>
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                        </div>
+                                        <span class="consume-label">本次消耗</span>
+                                        <div class="consume-control">
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M20 12H4v-2h16v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                            <span class="consume-value">0</span>
+                                            <div class="consume-btn">
+                                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23666'%3E%3Cpath d='M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z'/%3E%3C/svg%3E">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="meikebi-section">
+                                    <div class="beautician-picker" id="beauticianPicker">
+                                        <span class="beautician-picker-icon">+</span>
+                                        <span class="beautician-picker-text">美容师/销售</span>
+                                    </div>
+                                    <span class="meikebi-label">卡项</span>
+                                    <select class="meikebi-select">
+                                        <option value="">请选择卡项</option>
+                                        <option value="尊享金卡">尊享金卡</option>
+                                    </select>
+                                    <!-- <span class="meikebi-label">折后价</span> -->
+                                    <input type="text" class="meikebi-input" value="150.00">
+                                    <span class="meikebi-tip" style="display:none;">抵扣后余额: 0.00  居家产品7.0 | 服务7.0折 | 次卡7.0折</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 订单信息区域 - 可折叠 -->
+                <div class="order-form-panel">
+                    <!-- 折叠头部 -->
+                    <div class="order-form-header" id="orderFormHeader">
+                        <span class="order-form-header-title">订单信息</span>
+                        <div class="order-form-header-toggle">
+                            <span>收起</span>
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 14l5-5 5 5H7z'/%3E%3C/svg%3E" style="width:14px;height:14px;">
+                        </div>
+                    </div>
+
+                    <!-- 默认显示的核心信息 -->
+                    <div class="order-form-collapse-content">
+                        <div class="collapse-item">
+                            <label>下单时间:</label>
+                            <input type="datetime-local" class="order-date-input" id="orderDateInput" value="2026-10-04T13:23">
+                        </div>
+                        <div class="collapse-item">
+                            <label>批量分配美容师:</label>
+                            <select>
+                                <option>请选择美容师</option>
+                                <option>张美容师</option>
+                                <option>李美容师</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 展开后显示的完整订单信息 -->
+                    <div class="order-form" id="orderFormContent">
+                        <div class="form-group">
+                            <div class="form-row">
+                                <span class="form-label">优惠金额</span>
+                                <input type="text" class="form-input" value="0">
+                                <span class="form-unit">元</span>
+                            </div>
+                            <div class="form-tip">(若输入优惠金额，则不支持改价；反之则支持；改价后，优惠金额不可输入)</div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-row">
+                                <span class="form-label">应付金额</span>
+                                <input type="text" class="form-input" value="100.00">
+                                <span class="form-unit">元</span>
+                            </div>
+                            <div class="form-tip">(修改金额，优惠金额同步修改)</div>
+                        </div>
+
+                        <div class="form-group">
+                            <span class="form-label" style="display:inline-block;">备注</span>
+                            <textarea class="form-textarea" placeholder="请输入备注"></textarea>
+                            <div class="textarea-counter">0/200</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 底部固定操作栏 -->
+                <div class="bottom-bar">
+                    <div class="amount-section">
+                        <div class="amount-item">
+                            <label>待收款:</label>
+                            <span class="amount-value">¥100.00</span>
+                        </div>
+                        <div class="amount-item">
+                            <label>共减¥38.00</label>
+                            <!-- <span class="discount-value">/span> -->
+                        </div>
+                        <div class="view-detail-link">
+                            <span>查看明细</span>
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23E87C9A'%3E%3Cpath d='M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z'/%3E%3C/svg%3E" style="width:14px;height:14px;">
+                        </div>
+                    </div>
+                    <div class="bottom-actions">
+                        <button class="btn btn-secondary-action">配料</button>
+                        <button class="btn btn-secondary-action">整单改价</button>
+                        <button class="btn btn-secondary-action">欠款</button>
+                        <button class="btn btn-secondary-action">挂单</button>
+                        <button class="btn btn-primary-action">结账</button>
+                    </div>
+                </div>
+            </div>
+
+        <!-- 会员选择弹窗 -->
+        <div class="member-modal-overlay" id="memberModalOverlay">
+            <div class="member-modal">
+                <div class="member-modal-header">
+                    <span class="member-modal-title">选择会员</span>
+                    <div class="member-modal-close" id="memberModalClose">×</div>
+                </div>
+                <div class="member-modal-search">
+                    <input type="text" class="member-modal-search-input" id="memberModalSearchInput"
+                        placeholder="请输入会员姓名/手机号搜索">
+                </div>
+                <div class="member-modal-body">
+                    <div class="member-list" id="memberList">
+                        <!-- 会员列表项将通过JavaScript动态生成 -->
+                    </div>
+                </div>
+                <div class="member-modal-footer">
+                    <button class="btn-secondary" id="memberModalCancel">取消</button>
+                    <button class="btn-primary" id="memberModalConfirm">确认</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 确认提示框 -->
+        <div class="confirm-modal-overlay" id="confirmModalOverlay">
+            <div class="confirm-modal">
+                <div class="confirm-modal-content">
+                    <div class="confirm-modal-icon">!</div>
+                    <div class="confirm-modal-title">确认散客开单</div>
+                    <div class="confirm-modal-desc">散客开单将移除当前已选会员，移除后需要重新选择会员。</div>
+                </div>
+                <div class="confirm-modal-footer">
+                    <button class="btn-secondary" id="confirmCancel">取消</button>
+                    <button class="btn-primary" id="confirmOk">确定</button>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // 模拟会员数据
+            const mockMembers = [
+                { id: 1, name: '张兰', phone: '13812348888', level: '新客', tag: '新客' },
+                { id: 2, name: '李芳', phone: '13987654321', level: '银卡会员', tag: '老客' },
+                { id: 3, name: '王艳', phone: '13711223344', level: '金卡会员', tag: '老客' },
+                { id: 4, name: '赵静', phone: '13655667788', level: '铂金会员', tag: 'VIP' },
+                { id: 5, name: '孙丽', phone: '13599887766', level: '钻石会员', tag: 'VIP' },
+                { id: 6, name: '周萍', phone: '13422334455', level: '银卡会员', tag: '老客' },
+                { id: 7, name: '吴敏', phone: '13366554433', level: '金卡会员', tag: '老客' },
+                { id: 8, name: '郑华', phone: '13288990011', level: '新客', tag: '新客' },
+            ];
+
+            // DOM元素
+            const customerCard = document.getElementById('customerCard');
+            const memberSearchBox = document.getElementById('memberSearchBox');
+            const closeMemberIcon = document.getElementById('closeMemberIcon');
+            const changeMemberBtn = document.getElementById('changeMemberBtn');
+            const customerName = document.getElementById('customerName');
+            const customerTag = document.getElementById('customerTag');
+            const customerPhone = document.getElementById('customerPhone');
+
+            // 弹窗元素
+            const memberModalOverlay = document.getElementById('memberModalOverlay');
+            const memberModalClose = document.getElementById('memberModalClose');
+            const memberModalSearchInput = document.getElementById('memberModalSearchInput');
+            const memberList = document.getElementById('memberList');
+            const memberModalCancel = document.getElementById('memberModalCancel');
+            const memberModalConfirm = document.getElementById('memberModalConfirm');
+
+            // 订单信息折叠相关元素
+            const orderFormHeader = document.getElementById('orderFormHeader');
+            const orderFormContent = document.getElementById('orderFormContent');
+
+            // 确认提示框元素
+            const confirmModalOverlay = document.getElementById('confirmModalOverlay');
+            const confirmCancel = document.getElementById('confirmCancel');
+            const confirmOk = document.getElementById('confirmOk');
+
+            // 当前选中的会员
+            let selectedMember = null;
+
+            // 渲染会员列表
+            function renderMemberList(members) {
+                memberList.innerHTML = '';
+                members.forEach(member => {
+                    const item = document.createElement('div');
+                    item.className = 'member-item';
+                    item.dataset.id = member.id;
+                    item.innerHTML = `
+                    <div class="member-avatar">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="${member.name}">
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name-row">
+                            <span class="member-name">${member.name}</span>
+                            <span class="member-level">${member.level}</span>
+                        </div>
+                        <div class="member-phone">${formatPhone(member.phone)}</div>
+                    </div>
+                `;
+                    item.addEventListener('click', () => {
+                        selectMember(member);
+                    });
+                    memberList.appendChild(item);
+                });
+            }
+
+            // 格式化手机号
+            function formatPhone(phone) {
+                return phone.replace(/(\d{3})\d{4}(\d{4})/, '$1****$2');
+            }
+
+            // 选择会员
+            function selectMember(member) {
+                selectedMember = member;
+                // 移除所有选中状态
+                document.querySelectorAll('.member-item').forEach(item => {
+                    item.classList.remove('selected');
+                });
+                // 添加选中状态
+                document.querySelector(`.member-item[data-id="${member.id}"]`).classList.add('selected');
+            }
+
+            // 更新客户卡片信息
+            function updateCustomerCard(member) {
+                customerName.textContent = member.name;
+                customerTag.textContent = member.tag;
+                customerPhone.textContent = formatPhone(member.phone);
+                // 显示卡片，隐藏搜索框
+                customerCard.classList.remove('hide');
+                memberSearchBox.classList.remove('show');
+            }
+
+            // 显示会员选择弹窗
+            function showMemberModal() {
+                memberModalOverlay.classList.add('show');
+                memberModalSearchInput.value = '';
+                selectedMember = null;
+                renderMemberList(mockMembers);
+                // 自动聚焦搜索框
+                setTimeout(() => {
+                    memberModalSearchInput.focus();
+                }, 100);
+            }
+
+            // 隐藏会员选择弹窗
+            function hideMemberModal() {
+                memberModalOverlay.classList.remove('show');
+            }
+
+            // 显示确认提示框
+            function showConfirmModal() {
+                confirmModalOverlay.classList.add('show');
+            }
+
+            // 隐藏确认提示框
+            function hideConfirmModal() {
+                confirmModalOverlay.classList.remove('show');
+            }
+
+            // 会员搜索
+            function searchMembers(keyword) {
+                if (!keyword.trim()) {
+                    renderMemberList(mockMembers);
+                    return;
+                }
+                const filtered = mockMembers.filter(member =>
+                    member.name.includes(keyword) || member.phone.includes(keyword)
+                );
+                renderMemberList(filtered);
+            }
+
+            // 关闭图标点击事件 - 显示确认提示
+            closeMemberIcon.addEventListener('click', showConfirmModal);
+
+            // 确认删除
+            confirmOk.addEventListener('click', () => {
+                hideConfirmModal();
+                // 隐藏客户卡片，显示搜索框
+                customerCard.classList.add('hide');
+                setTimeout(() => {
+                    memberSearchBox.classList.add('show');
+                    // 唤起会员选择弹窗
+                    setTimeout(showMemberModal, 300);
+                }, 300);
+            });
+
+            // 取消删除
+            confirmCancel.addEventListener('click', hideConfirmModal);
+
+            // 选择其他会员按钮点击事件
+            changeMemberBtn.addEventListener('click', showMemberModal);
+
+            // 会员弹窗搜索
+            memberModalSearchInput.addEventListener('input', (e) => {
+                searchMembers(e.target.value);
+            });
+
+            // ========== 按商品类型分配卡片到对应区域 ==========
+            function categorizeItems() {
+                const serviceSection = document.getElementById('service-section');
+                const productSection = document.getElementById('product-section');
+                const serviceItems = document.getElementById('service-items');
+                const productItems = document.getElementById('product-items');
+                const consumeAllBtn = document.getElementById('consume-all-btn');
+                const takeAllBtn = document.getElementById('take-all-btn');
+                
+                // 移动商品卡片到对应的区域
+                document.querySelectorAll('.selected-item-card').forEach(card => {
+                    const itemType = card.getAttribute('data-item-type');
+                    
+                    if (itemType === 'service') {
+                        serviceItems.appendChild(card);
+                    } else if (itemType === 'product') {
+                        productItems.appendChild(card);
+                    }
+                });
+                
+                // 更新按钮禁用状态和选中状态
+                if (consumeAllBtn) {
+                    consumeAllBtn.disabled = serviceItems.children.length === 0;
+                    if (serviceItems.children.length === 0) {
+                        consumeAllBtn.classList.remove('active');
+                    }
+                }
+                if (takeAllBtn) {
+                    takeAllBtn.disabled = productItems.children.length === 0;
+                    if (productItems.children.length === 0) {
+                        takeAllBtn.classList.remove('active');
+                    }
+                }
+                
+                // 检查并隐藏空区域
+                if (serviceItems.children.length === 0) {
+                    serviceSection.setAttribute('data-empty', 'true');
+                    serviceSection.style.display = 'none';
+                } else {
+                    serviceSection.setAttribute('data-empty', 'false');
+                    serviceSection.style.display = 'flex';
+                }
+                
+                if (productItems.children.length === 0) {
+                    productSection.setAttribute('data-empty', 'true');
+                    productSection.style.display = 'none';
+                } else {
+                    productSection.setAttribute('data-empty', 'false');
+                    productSection.style.display = 'flex';
+                }
+            }
+            
+            // 页面加载时分类商品
+            categorizeItems();
+
+            // ========== 为所有现有卡片初始化事件 ==========
+            document.querySelectorAll('.selected-item-card').forEach(card => {
+                bindCardEvents(card);
+            });
+
+            // ========== 全部消耗按钮事件 ==========
+            const consumeAllBtn = document.getElementById('consume-all-btn');
+            if (consumeAllBtn) {
+                consumeAllBtn.addEventListener('click', function() {
+                    const isActive = this.classList.contains('active');
+                    
+                    if (isActive) {
+                        // 取消选中，重置为0
+                        this.classList.remove('active');
+                        const serviceItems = document.getElementById('service-items');
+                        serviceItems.querySelectorAll('.selected-item-card').forEach(card => {
+                            const consumeValue = card.querySelector('.consume-value');
+                            if (consumeValue) {
+                                consumeValue.textContent = '0';
+                            }
+                        });
+                    } else {
+                        // 选中，设置为数量
+                        this.classList.add('active');
+                        const serviceItems = document.getElementById('service-items');
+                        serviceItems.querySelectorAll('.selected-item-card').forEach(card => {
+                            const consumeValue = card.querySelector('.consume-value');
+                            const qtyValue = card.querySelector('.qty-value');
+                            if (consumeValue && qtyValue) {
+                                const qty = parseInt(qtyValue.textContent) || 0;
+                                consumeValue.textContent = qty;
+                            }
+                        });
+                    }
+                });
+            }
+
+            // ========== 全部拿走按钮事件 ==========
+            const takeAllBtn = document.getElementById('take-all-btn');
+            if (takeAllBtn) {
+                takeAllBtn.addEventListener('click', function() {
+                    const isActive = this.classList.contains('active');
+                    
+                    if (isActive) {
+                        // 取消选中，重置为0
+                        this.classList.remove('active');
+                        const productItems = document.getElementById('product-items');
+                        productItems.querySelectorAll('.selected-item-card').forEach(card => {
+                            const consumeValue = card.querySelector('.consume-value');
+                            if (consumeValue) {
+                                consumeValue.textContent = '0';
+                            }
+                        });
+                    } else {
+                        // 选中，设置为数量
+                        this.classList.add('active');
+                        const productItems = document.getElementById('product-items');
+                        productItems.querySelectorAll('.selected-item-card').forEach(card => {
+                            const consumeValue = card.querySelector('.consume-value');
+                            const qtyValue = card.querySelector('.qty-value');
+                            if (consumeValue && qtyValue) {
+                                const qty = parseInt(qtyValue.textContent) || 0;
+                                consumeValue.textContent = qty;
+                            }
+                        });
+                    }
+                });
+            }
+
+            // ========== 复制按钮功能 ==========
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    const card = this.closest('.selected-item-card');
+                    const itemName = card.querySelector('.selected-item-name').textContent;
+                    
+                    // 创建复制数据
+                    const copyData = {
+                        name: itemName,
+                        qty: card.querySelector('.qty-value').textContent
+                    };
+                    
+                    // 复制到剪贴板
+                    navigator.clipboard.writeText(JSON.stringify(copyData)).then(() => {
+                        // 显示复制成功提示
+                        showToast('已复制商品信息');
+                    }).catch(() => {
+                        // 降级处理
+                        const textArea = document.createElement('textarea');
+                        textArea.value = JSON.stringify(copyData);
+                        document.body.appendChild(textArea);
+                        textArea.select();
+                        document.execCommand('copy');
+                        document.body.removeChild(textArea);
+                        showToast('已复制商品信息');
+                    });
+                    
+                    // 克隆卡片并在原卡片下方插入副本
+                    const clonedCard = card.cloneNode(true);
+                    
+                    // 为克隆的卡片生成新的唯一ID
+                    const newCardId = 'card-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                    clonedCard.setAttribute('data-card-id', newCardId);
+                    
+                    // 保留原卡片的类型
+                    const itemType = card.getAttribute('data-item-type');
+                    
+                    // 重置克隆卡片的状态
+                    const clonedQtyValue = clonedCard.querySelector('.qty-value');
+                    if (clonedQtyValue) {
+                        clonedQtyValue.textContent = '1'; // 重置数量为1
+                    }
+                    
+                    // 重置赠送服务复选框
+                    const clonedGiftCheckbox = clonedCard.querySelector('.is-gift-checkbox input[type="checkbox"]');
+                    if (clonedGiftCheckbox) {
+                        clonedGiftCheckbox.checked = false;
+                    }
+                    
+                    // 重置本次消耗值
+                    const clonedConsumeValue = clonedCard.querySelector('.consume-value');
+                    if (clonedConsumeValue) {
+                        clonedConsumeValue.textContent = '0';
+                    }
+                    
+                    // 获取原卡片所属的区域
+                    const targetContainer = card.parentNode;
+                    
+                    // 在原卡片后插入克隆卡片
+                    targetContainer.insertBefore(clonedCard, card.nextSibling);
+                    
+                    // 为克隆卡片重新绑定事件
+                    bindCardEvents(clonedCard);
+                    
+                    // 重新检查按钮状态
+                    setTimeout(categorizeItems, 0);
+                    
+                    // 显示复制成功提示
+                    showToast('已添加商品副本');
+                    
+                    // 添加点击反馈动画
+                    this.classList.add('copied');
+                    setTimeout(() => this.classList.remove('copied'), 300);
+                });
+            });
+            
+            // 卡片事件绑定函数（供复制功能调用）
+            function bindCardEvents(card) {
+                // 删除按钮事件
+                const removeBtn = card.querySelector('.remove-item');
+                if (removeBtn) {
+                    removeBtn.onclick = function() {
+                        card.remove();
+                        // 删除后重新检查并隐藏空区域
+                        setTimeout(categorizeItems, 0);
+                    };
+                }
+                
+                // 数量增减按钮事件
+                const qtyBtns = card.querySelectorAll('.qty-btn');
+                qtyBtns.forEach((btn, index) => {
+                    btn.onclick = function() {
+                        const qtyValue = card.querySelector('.qty-value');
+                        let qty = parseInt(qtyValue.textContent) || 1;
+                        if (index === 0 && qty > 1) {
+                            qty--;
+                        } else if (index === 1) {
+                            qty++;
+                        }
+                        qtyValue.textContent = qty;
+                    };
+                });
+                
+                // 本次消耗步进器事件
+                const consumeControl = card.querySelector('.consume-control');
+                if (consumeControl) {
+                    const consumeBtns = consumeControl.querySelectorAll('.consume-btn');
+                    consumeBtns.forEach((btn, index) => {
+                        btn.onclick = function() {
+                            const consumeValue = card.querySelector('.consume-value');
+                            let qty = parseInt(consumeValue.textContent) || 0;
+                            if (index === 0 && qty > 0) {
+                                qty--;
+                            } else if (index === 1) {
+                                qty++;
+                            }
+                            consumeValue.textContent = qty;
+                        };
+                    });
+                }
+                
+                // 卡项选择事件 - 控制折扣信息显示/隐藏
+                const meikebiSelect = card.querySelector('.meikebi-select');
+                if (meikebiSelect) {
+                    meikebiSelect.addEventListener('change', function() {
+                        const meikebiTip = card.querySelector('.meikebi-tip');
+                        if (meikebiTip) {
+                            // 如果选择了卡项（value不为空），显示折扣信息
+                            if (this.value) {
+                                meikebiTip.style.display = 'inline';
+                            } else {
+                                // 如果取消选择（value为空），隐藏折扣信息
+                                meikebiTip.style.display = 'none';
+                            }
+                        }
+                    });
+                }
+                
+                // 复制按钮事件（确保克隆的卡片也能复制）
+                const copyBtn = card.querySelector('.copy-btn');
+                if (copyBtn) {
+                    // 移除旧事件
+                    const newCopyBtn = copyBtn.cloneNode(true);
+                    copyBtn.parentNode.replaceChild(newCopyBtn, copyBtn);
+                    
+                    // 重新绑定复制事件
+                    document.querySelectorAll('.copy-btn').forEach(btn => {
+                        if (!btn.onclick) {
+                            btn.addEventListener('click', function(e) {
+                                const card = this.closest('.selected-item-card');
+                                const itemName = card.querySelector('.selected-item-name').textContent;
+                                
+                                const copyData = {
+                                    name: itemName,
+                                    qty: card.querySelector('.qty-value').textContent
+                                };
+                                
+                                navigator.clipboard.writeText(JSON.stringify(copyData)).then(() => {
+                                    showToast('已复制商品信息');
+                                }).catch(() => {
+                                    const textArea = document.createElement('textarea');
+                                    textArea.value = JSON.stringify(copyData);
+                                    document.body.appendChild(textArea);
+                                    textArea.select();
+                                    document.execCommand('copy');
+                                    document.body.removeChild(textArea);
+                                    showToast('已复制商品信息');
+                                });
+                                
+                                const clonedCard = card.cloneNode(true);
+                                const newCardId = 'card-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+                                clonedCard.setAttribute('data-card-id', newCardId);
+                                
+                                // 保留原卡片的类型
+                                const itemType = card.getAttribute('data-item-type');
+                                
+                                const clonedQtyValue = clonedCard.querySelector('.qty-value');
+                                if (clonedQtyValue) {
+                                    clonedQtyValue.textContent = '1';
+                                }
+                                
+                                const clonedGiftCheckbox = clonedCard.querySelector('.is-gift-checkbox input[type="checkbox"]');
+                                if (clonedGiftCheckbox) {
+                                    clonedGiftCheckbox.checked = false;
+                                }
+                                
+                                const clonedConsumeValue = clonedCard.querySelector('.consume-value');
+                                if (clonedConsumeValue) {
+                                    clonedConsumeValue.textContent = '0';
+                                }
+                                
+                                // 获取原卡片所属的区域
+                                const targetContainer = card.parentNode;
+                                
+                                // 在原卡片后插入克隆卡片
+                                targetContainer.insertBefore(clonedCard, card.nextSibling);
+                                bindCardEvents(clonedCard);
+                                showToast('已添加商品副本');
+                                
+                                this.classList.add('copied');
+                                setTimeout(() => this.classList.remove('copied'), 300);
+                            });
+                        }
+                    });
+                }
+            }
+
+            // ========== 本次消耗输入框校验（保留用于其他可能的输入框） ==========
+            document.querySelectorAll('.consume-input').forEach(input => {
+                // 输入时只允许数字和小数点
+                input.addEventListener('input', function(e) {
+                    this.value = this.value.replace(/[^0-9.]/g, '');
+                    
+                    // 防止多个小数点
+                    const parts = this.value.split('.');
+                    if (parts.length > 2) {
+                        this.value = parts[0] + '.' + parts.slice(1).join('');
+                    }
+                    
+                    // 限制小数位数（最多2位）
+                    if (parts.length === 2 && parts[1].length > 2) {
+                        this.value = parts[0] + '.' + parts[1].substring(0, 2);
+                    }
+                });
+                
+                // 失焦时格式化
+                input.addEventListener('blur', function() {
+                    if (this.value && !isNaN(this.value)) {
+                        // 如果是整数，补上 .00
+                        if (this.value.indexOf('.') === -1) {
+                            this.value = parseFloat(this.value).toFixed(2);
+                        }
+                    }
+                });
+            });
+
+            // Toast提示函数
+            function showToast(message) {
+                const toast = document.createElement('div');
+                toast.className = 'toast-message';
+                toast.textContent = message;
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    background: rgba(0,0,0,0.75);
+                    color: white;
+                    padding: 8px 16px;
+                    border-radius: 4px;
+                    font-size: 13px;
+                    z-index: 9999;
+                    animation: toastFadeIn 0.3s ease;
+                `;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.animation = 'toastFadeOut 0.3s ease forwards';
+                    setTimeout(() => toast.remove(), 300);
+                }, 1500);
+            }
+
+            // 会员弹窗关闭
+            memberModalClose.addEventListener('click', hideMemberModal);
+
+            // 会员弹窗取消
+            memberModalCancel.addEventListener('click', hideMemberModal);
+
+            // 会员弹窗确认
+            memberModalConfirm.addEventListener('click', () => {
+                if (selectedMember) {
+                    updateCustomerCard(selectedMember);
+                    hideMemberModal();
+                }
+            });
+
+            // 点击弹窗外部关闭
+            memberModalOverlay.addEventListener('click', (e) => {
+                if (e.target === memberModalOverlay) {
+                    hideMemberModal();
+                }
+            });
+
+            confirmModalOverlay.addEventListener('click', (e) => {
+                if (e.target === confirmModalOverlay) {
+                    hideConfirmModal();
+                }
+            });
+
+            // 初始化渲染会员列表
+            renderMemberList(mockMembers);
+
+            // 订单信息折叠/展开功能
+            let isOrderFormExpanded = false;
+
+            if (orderFormHeader && orderFormContent) {
+                // 初始化时隐藏完整内容
+                orderFormContent.style.display = 'none';
+
+                orderFormHeader.addEventListener('click', () => {
+                    isOrderFormExpanded = !isOrderFormExpanded;
+                    
+                    if (isOrderFormExpanded) {
+                        orderFormContent.style.display = 'block';
+                        orderFormContent.classList.add('expanded');
+                        orderFormHeader.classList.add('expanded');
+                        orderFormHeader.querySelector('.order-form-header-toggle span').textContent = '收起';
+                    } else {
+                        orderFormContent.classList.remove('expanded');
+                        setTimeout(() => {
+                            orderFormContent.style.display = 'none';
+                        }, 300);
+                        orderFormHeader.classList.remove('expanded');
+                        orderFormHeader.querySelector('.order-form-header-toggle span').textContent = '展开';
+                    }
+                });
+            }
+
+            // 卡片展开收起功能
+            let isCardExpanded = true;
+
+            function toggleCardBenefits(event, btnId) {
+                event.stopPropagation();
+
+                const btn = btnId ? document.getElementById(btnId) : event.currentTarget;
+                const icon = btn.querySelector('.toggle-icon');
+                const text = btn.querySelector('.toggle-text');
+                const bodyContent = btnId === 'cardToggleBtn2'
+                    ? document.getElementById('cardBodyContent2')
+                    : document.getElementById('cardBodyContent');
+
+                isCardExpanded = !isCardExpanded;
+
+                if (isCardExpanded) {
+                    // 展开状态
+                    icon.classList.remove('collapsed');
+                    if (text) text.textContent = '收起';
+                    if (bodyContent) {
+                        bodyContent.classList.remove('collapsed');
+                    }
+                } else {
+                    // 收起状态
+                    icon.classList.add('collapsed');
+                    if (text) text.textContent = '展开';
+                    if (bodyContent) {
+                        bodyContent.classList.add('collapsed');
+                    }
+                }
+            }
+        </script>
+</body>
+</html>

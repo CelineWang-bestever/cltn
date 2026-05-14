@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欠款提醒</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: rgba(0, 0, 0, 0.5);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        /* 弹窗容器 */
+        .popup-container {
+            width: 750px;
+            height: 380px;
+            background-color: #FFFFFF;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部标题栏 */
+        .popup-header {
+            background-color: #F1A3B8;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .popup-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+        }
+
+        .btn-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.25);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            position: absolute;
+            right: 16px;
+        }
+
+        .btn-close:hover {
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+
+        .btn-close:active {
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+
+        .btn-close img {
+            width: 16px;
+            height: 16px;
+        }
+
+        /* 主要内容区域 */
+        .popup-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 60px;
+        }
+
+        /* 警告图标 */
+        /* 提醒标题 */
+        .reminder-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #333333;
+            margin-bottom: 16px;
+            text-align: center;
+        }
+
+        /* 欠款金额 */
+        .debt-amount {
+            font-size: 32px;
+            font-weight: 700;
+            color: #E85A76;
+            margin-bottom: 0;
+            text-align: center;
+        }
+
+        /* 提示文字 */
+        .hint-text {
+            font-size: 14px;
+            color: #999999;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* 底部操作区域 */
+        .popup-footer {
+            padding: 20px 60px 30px;
+            display: flex;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            flex: 1;
+            height: 48px;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-cancel {
+            background-color: #FFFFFF;
+            border: 1px solid #F1A3B8;
+            color: #F1A3B8;
+        }
+
+        .btn-cancel:hover {
+            background-color: #FFF5F7;
+            border-color: #E87C9A;
+            color: #E87C9A;
+        }
+
+        .btn-cancel:active {
+            background-color: #FFE8EE;
+            transform: scale(0.98);
+        }
+
+        .btn-confirm {
+            background-color: #F1A3B8;
+            border: none;
+            color: #FFFFFF;
+        }
+
+        .btn-confirm:hover {
+            background-color: #E87C9A;
+        }
+
+        .btn-confirm:active {
+            background-color: #D66B88;
+            transform: scale(0.98);
+        }
+    </style>
+</head>
+<body>
+    <div class="popup-container">
+        <!-- 顶部标题栏 -->
+        <div class="popup-header">
+            <div class="popup-title">欠款提醒</div>
+            <button class="btn-close">
+                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z'/%3E%3C/svg%3E" alt="关闭">
+            </button>
+        </div>
+
+        <!-- 主要内容区域 -->
+        <div class="popup-content">
+            <!-- 提醒标题 -->
+            <div class="reminder-title">客户存在欠款金额</div>
+            
+            <!-- 欠款金额 -->
+            <div class="debt-amount">￥888.00</div>
+        </div>
+
+        <!-- 底部操作按钮 -->
+        <div class="popup-footer">
+            <button class="btn btn-cancel">取消</button>
+            <button class="btn btn-confirm">还款</button>
+        </div>
+    </div>
+
+    <script>
+        // 关闭按钮功能
+        document.querySelector('.btn-close').addEventListener('click', function() {
+            console.log('关闭弹窗');
+            // 实际项目中可以调用关闭回调或移除弹窗
+        });
+
+        // 取消按钮功能
+        document.querySelector('.btn-cancel').addEventListener('click', function() {
+            console.log('取消操作');
+            // 实际项目中可以调用取消回调或关闭弹窗
+        });
+
+        // 还款按钮功能
+        document.querySelector('.btn-confirm').addEventListener('click', function() {
+            console.log('确认还款');
+            // 实际项目中可以调用还款确认接口
+            alert('即将进入还款流程');
+        });
+    </script>
+</body>
+</html>

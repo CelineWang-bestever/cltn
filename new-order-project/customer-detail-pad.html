@@ -1,0 +1,2083 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>客户详情 - 克丽缇娜（Pad端）</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: #f5f7fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* ===== 页面主体布局 - 左右双栏 ===== */
+        .page-body {
+            display: flex;
+            flex: 1;
+            overflow: hidden;
+            height: 100vh;
+        }
+
+        /* ===== 左侧信息栏 ===== */
+        .left-sidebar {
+            width: 300px;
+            min-width: 300px;
+            background-color: #FFF5F7;
+            border-right: 1px solid #F0E0E4;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px 16px;
+            gap: 20px;
+        }
+
+        /* 左侧客户头像区 */
+        .sidebar-avatar-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid rgba(232,124,154,0.15);
+        }
+
+        .sidebar-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 4px solid #FFFFFF;
+            box-shadow: 0 4px 16px rgba(241,163,184,0.35);
+        }
+        .sidebar-avatar img { width: 40px; height: 40px; }
+
+        .sidebar-customer-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .vip-badge-lg {
+            display: inline-block;
+            padding: 2px 8px;
+            background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
+            color: #8B4513;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 3px;
+        }
+
+        .sidebar-phone {
+            font-size: 13px;
+            color: #999;
+        }
+
+        /* 左侧会员信息 */
+        .sidebar-member-section {
+            background: linear-gradient(135deg, #E87C9A 0%, #D96A8A 100%);
+            border-radius: 10px;
+            padding: 14px;
+            color: #fff;
+        }
+
+        .member-header-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .member-icon-sm {
+            width: 28px;
+            height: 28px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .member-icon-sm img { width: 14px; height: 14px; }
+
+        .member-level-text { font-size: 14px; font-weight: 600; }
+
+        .member-expire-text {
+            font-size: 11px;
+            opacity: 0.85;
+        }
+
+        /* 左侧关键信息 */
+        .sidebar-key-info {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .sidebar-info-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 10px;
+            background: #FFFFFF;
+            border-radius: 6px;
+        }
+
+        .sidebar-info-label {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .sidebar-info-value {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .info-tag-highlight {
+            display: inline-block;
+            padding: 2px 6px;
+            font-size: 10px;
+            font-weight: 600;
+            background-color: #FFF0F5;
+            color: #E87C9A;
+            border-radius: 4px;
+            margin-left: 6px;
+        }
+
+        /* 左侧余额信息 */
+        .sidebar-balance-section {
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .sidebar-balance-title {
+            font-size: 12px;
+            color: #999;
+            margin-bottom: 10px;
+        }
+
+        .sidebar-balance-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 16px;
+        }
+
+        .sidebar-balance-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .sidebar-balance-label {
+            font-size: 13px;
+            color: #666;
+            font-weight: 500;
+        }
+        .sidebar-balance-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            line-height: 1.3;
+        }
+
+        /* 可点击的余额项 */
+        .sidebar-balance-clickable {
+            cursor: pointer;
+        }
+        .sidebar-balance-clickable:hover .sidebar-balance-value {
+            opacity: 0.8;
+        }
+
+        /* 金额卡总余额 - 统一样式，独占整行，上下换行布局 */
+        .sidebar-balance-total {
+            grid-column: 1 / -1;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            padding-top: 12px;
+            border-top: 1px dashed #E8E8E8;
+            margin-top: 4px;
+        }
+        .sidebar-balance-total .sidebar-balance-label {
+            color: #666;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .sidebar-balance-total-val-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 2px;
+        }
+        .sidebar-balance-total-val {
+            font-size: 18px;
+            font-weight: 700;
+            color: #E87C9A;
+            line-height: 1.3;
+        }
+        .sidebar-balance-total-gift {
+            font-size: 12px;
+            color: #999;
+            font-weight: 400;
+        }
+
+        /* 左侧快捷操作按钮组 */
+        .sidebar-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 16px;
+            padding-top: 0;
+            border-top: none;
+        }
+
+        .sidebar-btn {
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .sidebar-btn-primary {
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            box-shadow: 0 3px 10px rgba(232,124,154,0.35);
+        }
+        .sidebar-btn-primary:hover { opacity: 0.92; transform: translateY(-1px); }
+
+        .sidebar-btn-secondary {
+            background: #FFFFFF;
+            color: #E87C9A;
+            border: 1px solid #E87C9A;
+        }
+        .sidebar-btn-secondary:hover { background: #FFF5F7; }
+
+        .sidebar-btn-outline {
+            background: transparent;
+            color: #666;
+            border: 1px solid #DDD;
+        }
+        .sidebar-btn-outline:hover { background: #FAFAFA; }
+
+        /* ===== 右侧主内容区 ===== */
+        .main-content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+            padding: 20px 24px 90px;
+            gap: 16px;
+            width: 0; /* 防止flex子项溢出导致并排 */
+            min-width: 0;
+            background: #FFFFFF;
+        }
+
+        /* 确保主内容区内的所有直接子元素都独占一行，不并排 */
+        .main-content-area > * {
+            width: 100%;
+            flex-shrink: 0;
+            min-width: 0;
+        }
+
+        /* ===== TAB导航 ===== */
+        .tab-nav {
+            display: flex;
+            gap: 4px;
+            background: #FFFFFF;
+            padding: 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            margin-bottom: 4px;
+        }
+        .tab-nav-item {
+            flex: 1;
+            padding: 10px 12px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 500;
+            color: #666;
+            background: transparent;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            white-space: nowrap;
+        }
+        .tab-nav-item:hover {
+            background: #FFF5F7;
+            color: #E87C9A;
+        }
+        .tab-nav-item.active {
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(232,124,154,0.35);
+        }
+        .tab-content {
+            display: none;
+        }
+        .tab-content.active {
+            display: flex;
+            flex-direction: column;
+        }
+        /* 其他标签页的空内容提示 */
+        .tab-placeholder {
+            padding: 60px 20px;
+            text-align: center;
+            color: #999;
+            font-size: 14px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+        .tab-placeholder-icon {
+            width: 64px;
+            height: 64px;
+            background: #F5F5F5;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .tab-placeholder-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: #CCC;
+        }
+
+        /* 搜索框 - 增强视觉突出度 */
+        .pad-search-container {
+            padding: 0 0 14px;
+        }
+
+        .pad-search-box {
+            display: flex;
+            align-items: center;
+            background-color: #FFFFFF;
+            border: 2px solid #E8E8E8;
+            padding: 10px 16px;
+            gap: 10px;
+            border-radius: 10px;
+            transition: all 0.25s ease;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+        .pad-search-box:focus-within {
+            border-color: #E87C9A;
+            box-shadow: 0 2px 12px rgba(232,124,154,0.2);
+        }
+
+        .pad-search-box img { width: 18px; height: 18px; flex-shrink: 0; opacity: 0.6; }
+        .pad-search-box input {
+            flex: 1;
+            background: none;
+            border: none;
+            outline: none;
+            font-size: 15px;
+            color: #333;
+        }
+        .pad-search-box input::placeholder { color: #B0B0B0; font-size: 14px; }
+
+        .search-clear {
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .search-clear img { width: 14px; height: 14px; }
+
+        /* ===== 权益卡片 - Pad横屏优化 ===== */
+        .card-item {
+            background-color: #FFFFFF;
+            border-radius: 0;
+            position: relative;
+            overflow: visible;
+            border: none;
+            margin-bottom: 0;
+            box-shadow: none;
+            border-bottom: 1px solid #F0F0F0;
+        }
+        .card-item:active,
+        .card-item:focus-within,
+        .card-item:has(button:active) {
+            background-color: #FFFFFF;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+        }
+
+        .card-header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-type {
+            display: inline-flex;
+            align-items: center;
+            padding: 0;
+            background-color: transparent;
+            color: #434D86;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        .card-name { font-size: 16px; font-weight: 600; color: #999; }
+
+        .card-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .card-action-btn {
+            padding: 6px 14px;
+            background-color: #FFFFFF;
+            color: #E87C9A;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            border: 1px solid #E87C9A;
+            transition: all 0.2s;
+            border-radius: 4px;
+        }
+        .card-action-btn:hover { background-color: #FFF5F7; }
+
+        .card-collapse {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        .card-collapse img { width: 12px; height: 12px; }
+
+        .card-info {
+            padding: 10px 18px;
+            font-size: 12px;
+            color: #999;
+            background-color: #FFFFFF;
+            display: none;
+        }
+
+        .card-detail-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 18px;
+            background-color: #FFFFFF;
+            gap: 24px;
+            flex-wrap: wrap;
+        }
+
+        .card-detail-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .card-detail-item.card-info-hidden {
+            display: none;
+        }
+        .card-detail-label { font-size: 12px; color: #999; }
+        .card-detail-value { font-size: 13px; color: #333; font-weight: 600; }
+        .card-detail-divider { width: 1px; height: 16px; background-color: #E8E8E8; }
+
+        /* 服务/产品项 - Pad横屏优化：一行紧凑排列 */
+        .card-section { padding: 0 18px; }
+        .section-title {
+            font-size: 13px; font-weight: 600; color: #999;
+            padding: 12px 0 8px; margin-bottom: 4px;
+        }
+
+        .service-item, .product-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5F5F5;
+            gap: 16px;
+            transition: background-color 0.2s ease;
+        }
+        .service-item:last-child, .product-item:last-child { border-bottom: none; }
+        .service-item:hover, .product-item:hover { background-color: #FAFAFA; }
+
+        .item-left { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+        .item-header { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+        .item-name { font-size: 14px; font-weight: 600; color: #333; }
+        .item-detail-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            color: #999;
+            font-size: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        .item-detail-link img { width: 12px; height: 12px; }
+        .item-gift {
+            display: inline-flex; align-items: center; padding: 2px 6px;
+            background-color: #FF4081; color: #FFFFFF; font-size: 10px; flex-shrink: 0; border-radius: 2px;
+        }
+
+        .item-center {
+            flex: 1; display: flex; align-items: center; gap: 6px; min-width: 120px;
+        }
+
+        .progress-bar {
+            width: 140px; height: 6px; background-color: #F0F0F0; border-radius: 3px;
+            position: relative; overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%; background: linear-gradient(90deg, #F1A3B8 0%, #E87C9A 100%);
+            border-radius: 3px; transition: width 0.5s ease-out;
+        }
+
+        .progress-text { font-size: 12px; color: #666; font-weight: 500; white-space: nowrap; }
+
+        .item-right { flex-shrink: 0; }
+        .item-actions { display: flex; gap: 8px; }
+
+        .btn-use, .btn-exchange {
+            padding: 6px 16px; font-size: 12px; font-weight: 500;
+            cursor: pointer; transition: all 0.2s; border: none; border-radius: 4px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-use { background-color: #E87C9A; color: #FFFFFF; }
+        .btn-use:hover { background-color: #D96B8A; }
+        .btn-use:active { background-color: #E87C9A; }
+        .btn-exchange { background-color: #FFFFFF; color: #E87C9A; border: 1px solid #E87C9A; }
+        .btn-exchange:hover { background-color: #FFF5F7; }
+        .btn-exchange:active { background-color: #FFFFFF; }
+
+        /* 金额卡样式 */
+        .card-item.gold { background-color: #FFFFFF; }
+        .card-item.gold .card-type {
+            background-color: transparent;
+            color: #434D86;
+            font-size: 11px;
+            font-weight: 600;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+        }
+
+
+        /* ===== 已选项目区域 ===== */
+        .selected-items-section {
+            background: #FFFFFF;
+            border-radius: 10px;
+            border: 1px solid #E8E8E8;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+            overflow: hidden;
+            display: none;
+        }
+        .selected-items-section.show {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .selected-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: #e87c9a26;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .selected-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .selected-count-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 22px;
+            height: 22px;
+            padding: 0 6px;
+            background: linear-gradient(135deg, #E87C9A 0%, #D96A8A 100%);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 600;
+            border-radius: 11px;
+        }
+
+        .selected-clear-btn {
+            font-size: 12px;
+            color: #E87C9A;
+            cursor: pointer;
+            padding: 4px 10px;
+            border: 1px solid #E87C9A;
+            border-radius: 4px;
+            background: transparent;
+            transition: all 0.2s;
+        }
+        .selected-clear-btn:hover { background: #FFF5F7; }
+
+        .selected-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: #BBB;
+            font-size: 14px;
+        }
+
+        .selected-table-wrapper { overflow-x: auto; }
+
+        .selected-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .selected-table thead th {
+            padding: 10px 14px;
+            text-align: left;
+            font-weight: 600;
+            color: #666;
+            background: #FAFAFA;
+            border-bottom: 1px solid #EEE;
+            white-space: nowrap;
+        }
+
+        .selected-table tbody td {
+            padding: 12px 14px;
+            border-bottom: 1px solid #F5F5F5;
+            vertical-align: middle;
+        }
+        .selected-table tbody tr:hover { background: #FAFAFA; }
+        .selected-table tbody tr:last-child td { border-bottom: none; }
+
+        .selected-item-name {
+            font-weight: 600;
+            color: #333;
+            max-width: 200px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .selected-item-source {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        /* 数字步进器 */
+        .stepper {
+            display: flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            overflow: hidden;
+            width: fit-content;
+        }
+
+        .stepper-btn {
+            width: 30px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #FAFAFA;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #666;
+            transition: all 0.15s;
+            user-select: none;
+        }
+        .stepper-btn:hover { background: #F0F0F0; color: #E87C9A; }
+        .stepper-btn:active { background: #FFE4E8; }
+
+        .stepper-input {
+            width: 44px;
+            height: 32px;
+            text-align: center;
+            border: none;
+            border-left: 1px solid #DDD;
+            border-right: 1px solid #DDD;
+            font-size: 13px;
+            font-weight: 600;
+            color: #333;
+            outline: none;
+            -moz-appearance: textfield;
+        }
+        .stepper-input::-webkit-inner-spin-button,
+        .stepper-input::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+
+        /* 美容师下拉选择框 */
+        .beautician-select {
+            padding: 7px 28px 7px 10px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            background: #FFFFFF url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E") no-repeat right 8px center;
+            background-size: 14px;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            min-width: 100px;
+        }
+        .beautician-select:focus { border-color: #E87C9A; outline: none; }
+
+        /* 操作按钮列 */
+        .action-cell { white-space: nowrap; }
+        .row-action-btn {
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-right: 6px;
+        }
+        .row-copy-btn, .row-delete-btn {
+            background: #FFFFFF;
+            color: #666666;
+            border: 1px solid #CCCCCC;
+        }
+        .row-copy-btn:hover, .row-delete-btn:hover {
+            background: #F5F5F5;
+        }
+
+        /* ===== 订单信息区域 ===== */
+        .order-section {
+            background: transparent;
+            border-radius: 0;
+            border: none;
+            box-shadow: none;
+            overflow: visible;
+            flex-shrink: 0;
+            display: none;
+            flex-direction: column;
+        }
+        .order-section.show {
+            display: flex;
+        }
+
+        .order-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 18px;
+            background: #FFFFFF;
+            border-bottom: 1px solid #F5F5F5;
+        }
+
+        .order-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .order-body {
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .order-field {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .order-field-label {
+            font-size: 13px;
+            color: #666;
+            min-width: 72px;
+            font-weight: 500;
+        }
+
+        .order-field-value {
+            font-size: 13px;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .order-field-control {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .order-btn {
+            padding: 7px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #E87C9A;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #E87C9A;
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        .order-btn:hover { background: #FFF5F7; }
+
+        .order-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        .order-input:focus { border-color: #E87C9A; }
+        .order-input::placeholder { color: #CCC; }
+
+        .order-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #DDD;
+            border-radius: 6px;
+            font-size: 13px;
+            color: #333;
+            outline: none;
+            resize: vertical;
+            min-height: 60px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .order-textarea:focus { border-color: #E87C9A; }
+
+        /* ===== 底部固定确认服务按钮 ===== */
+        .bottom-bar {
+            position: fixed;
+            bottom: 0;
+            left: 300px;
+            right: 0;
+            height: 68px;
+            background: #FFFFFF;
+            border-top: 1px solid #E8E8E8;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 28px;
+            z-index: 100;
+            box-shadow: 0 -2px 12px rgba(0,0,0,0.06);
+            display: none;
+        }
+        .bottom-bar.show {
+            display: flex;
+        }
+
+        .bottom-summary {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .bottom-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .bottom-supplement {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .supplement-btn {
+            padding: 8px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #E87C9A;
+            background: #FFFFFF;
+            border: 1px solid #E87C9A;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .supplement-btn:hover {
+            background: #FFF5F7;
+        }
+
+        .supplement-time-display-bottom {
+            font-size: 13px;
+            color: #E87C9A;
+            font-weight: 600;
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .summary-label { font-size: 11px; color: #999; }
+        .summary-value { font-size: 16px; font-weight: 700; color: #E87C9A; }
+
+        .confirm-service-btn {
+            padding: 14px 52px;
+            font-size: 17px;
+            font-weight: 700;
+            color: #FFFFFF;
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            box-shadow: 0 4px 16px rgba(232,124,154,0.4);
+            letter-spacing: 2px;
+        }
+        .confirm-service-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px rgba(232,124,154,0.5);
+        }
+        .confirm-service-btn:active { transform: translateY(0); }
+
+        /* ===== 弹窗通用样式 ===== */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 200;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.show { display: flex; }
+
+        .modal-panel {
+            background: #FFFFFF;
+            border-radius: 14px;
+            width: 420px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid #F0F0F0;
+        }
+
+        .modal-title { font-size: 16px; font-weight: 700; color: #333; }
+        .modal-close {
+            width: 30px; height: 30px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; cursor: pointer; background: #F5F5F5;
+            border: none; transition: all 0.2s;
+        }
+        .modal-close:hover { background: #EEE; }
+
+        .modal-body { padding: 20px 22px; }
+
+        .datetime-picker-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+
+        .picker-label { font-size: 13px; color: #666; font-weight: 500; }
+        .picker-input {
+            width: 100%; padding: 10px 14px;
+            border: 1px solid #DDD; border-radius: 8px;
+            font-size: 14px; color: #333; outline: none;
+        }
+        .picker-input:focus { border-color: #E87C9A; }
+
+        .modal-footer {
+            display: flex; justify-content: flex-end; gap: 10px;
+            padding: 16px 22px; border-top: 1px solid #F0F0F0;
+        }
+
+        .modal-btn {
+            padding: 9px 24px; font-size: 14px; font-weight: 500;
+            border: none; border-radius: 6px; cursor: pointer; transition: all 0.2s;
+        }
+        .modal-btn-cancel {
+            background: #F5F5F5; color: #666;
+        }
+        .modal-btn-cancel:hover { background: #EEE; }
+        .modal-btn-confirm {
+            background: linear-gradient(135deg, #E87C9A 0%, #D96A8A 100%);
+            color: #FFFFFF;
+        }
+        .modal-btn-confirm:hover { opacity: 0.9; }
+
+        /* Toast 提示 */
+        .toast {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-20px);
+            padding: 10px 24px;
+            background: rgba(51,51,51,0.88);
+            color: #fff;
+            font-size: 13px;
+            border-radius: 8px;
+            z-index: 300;
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+        }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        /* ===== 悬浮返回顶部按钮 ===== */
+        .back-to-top {
+            position: fixed;
+            bottom: 90px;
+            right: 28px;
+            width: 44px;
+            height: 44px;
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(232,124,154,0.4);
+            z-index: 99;
+            transition: all 0.3s ease;
+        }
+        .back-to-top:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(232,124,154,0.5);
+        }
+        .back-to-top svg { width: 20px; height: 20px; }
+
+        /* ===== 隐藏补单时间区域 ===== */
+        .supplement-row { display: none; }
+
+        /* ===== 响应式适配 ===== */
+        @media (max-width: 1024px) {
+            .left-sidebar { width: 260px; min-width: 260px; }
+            .bottom-bar { left: 260px; }
+            .progress-bar { width: 100px; }
+        }
+
+        @media (max-width: 900px) {
+            .page-body { flex-direction: column; }
+            .left-sidebar {
+                width: 100%; min-width: unset;
+                flex-direction: row; flex-wrap: wrap;
+                padding: 12px 16px; gap: 12px;
+                border-right: none; border-bottom: 1px solid #F0E0E4;
+            }
+            .sidebar-avatar-area {
+                flex-direction: row; padding-bottom: 0; border-bottom: none;
+                gap: 12px;
+            }
+            .sidebar-avatar { width: 48px; height: 48px; border-width: 2px; }
+            .sidebar-avatar img { width: 24px; height: 24px; }
+            .sidebar-member-section { flex: 1; min-width: 180px; }
+            .sidebar-key-info { display: none; }
+            .sidebar-balance-section { flex: 1; min-width: 160px; }
+            .sidebar-actions {
+                flex-direction: row; margin-top: 0; padding-top: 0;
+                border-top: none; width: 100%;
+                justify-content: center;
+            }
+            .bottom-bar { left: 0; right: 0; }
+        }
+
+        @media (max-width: 768px) {
+            .header { padding: 0 12px; }
+            .breadcrumb { display: none; }
+            .main-content-area { padding: 12px 12px 80px; }
+            .bottom-bar { padding: 0 16px; height: 60px; }
+            .confirm-service-btn { padding: 12px 36px; font-size: 15px; }
+            .item-center { display: none; }
+            .selected-table { font-size: 12px; }
+            .selected-table thead th, .selected-table tbody td { padding: 8px 10px; }
+        }
+    </style>
+</head>
+<body>
+    <!-- 页面主体 -->
+    <div class="page-body">
+
+        <!-- ========== 左侧信息栏 ========== -->
+        <div class="left-sidebar">
+            <!-- 客户头像与基本信息 -->
+            <div class="sidebar-avatar-area">
+                <div class="sidebar-avatar">
+                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="头像">
+                </div>
+                <div class="sidebar-customer-name">
+                    付小姐
+                    <span class="vip-badge-lg">会员</span>
+                </div>
+                <div class="sidebar-phone">131****7967</div>
+            </div>
+
+<!-- 关键信息列表 -->
+            <div class="sidebar-key-info">
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">入会时间</span>
+                    <span class="sidebar-info-value">2025-5-11</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">阳历生日</span>
+                    <span class="sidebar-info-value">1990-10-20</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">阴历生日</span>
+                    <span class="sidebar-info-value">未设置</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">美容师</span>
+                    <span class="sidebar-info-value">周炜</span>
+                </div>
+                <div class="sidebar-info-item">
+                    <span class="sidebar-info-label">上次服务</span>
+                    <div>
+                        <span class="sidebar-info-value">2026-5-11</span>
+                        <span class="info-tag-highlight">21天没来</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 余额信息 -->
+            <div class="sidebar-balance-section">
+                <div class="sidebar-balance-title">账户概览</div>
+                <div class="sidebar-balance-grid">
+                    <div class="sidebar-balance-item sidebar-balance-clickable">
+                        <span class="sidebar-balance-label">余额</span>
+                        <span class="sidebar-balance-value">¥0 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                    </div>
+                    <div class="sidebar-balance-item sidebar-balance-clickable">
+                        <span class="sidebar-balance-label">欠款</span>
+                        <span class="sidebar-balance-value" style="color:#E87C9A;">¥20.00 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                    </div>
+                    <div class="sidebar-balance-total">
+                        <span class="sidebar-balance-label">金额卡总余额</span>
+                        <div class="sidebar-balance-total-val-wrap">
+                            <span class="sidebar-balance-total-val" id="sidebar-gold-card-total">￥5,500.00</span>
+                            <span class="sidebar-balance-total-gift">(含赠金500.00)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 快捷操作按钮 -->
+            <div class="sidebar-actions">
+                <button class="sidebar-btn sidebar-btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                    预 约
+                </button>
+                <button class="sidebar-btn sidebar-btn-primary" onclick="window.location.href='create-order.html'">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    开 单
+                </button>
+                <button class="sidebar-btn sidebar-btn-secondary">充 值</button>
+                <button class="sidebar-btn sidebar-btn-secondary">还 款</button>
+            </div>
+        </div>
+
+        <!-- ========== 右侧主内容区 ========== -->
+        <div class="main-content-area">
+
+            <!-- ===== TAB导航 ===== -->
+            <div class="tab-nav">
+                <button class="tab-nav-item active" data-tab="benefits">客户权益</button>
+                <button class="tab-nav-item" data-tab="transaction">交易记录</button>
+                <button class="tab-nav-item" data-tab="service-record">服务记录</button>
+                <button class="tab-nav-item" data-tab="service-log">服务日志</button>
+                <button class="tab-nav-item" data-tab="deposit">物品寄存</button>
+                <button class="tab-nav-item" data-tab="verify">平台核销</button>
+                <button class="tab-nav-item" data-tab="skin-test">测肤记录</button>
+            </div>
+
+            <!-- ===== 客户权益标签页内容 ===== -->
+            <div class="tab-content active" id="tab-benefits">
+
+                <!-- 权益搜索 -->
+                <div class="pad-search-container">
+                    <div class="pad-search-box">
+                        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z'/%3E%3C/svg%3E" alt="搜索">
+                        <input type="text" placeholder="搜索权益..." id="pad-benefit-search">
+                        <button class="search-clear" id="pad-search-clear" style="display:none;">
+                            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z'/%3E%3C/svg%3E" alt="清除">
+                        </button>
+                    </div>
+                </div>
+
+                <!-- 卡片列表 -->
+                <div id="cards-list">
+
+                    <!-- 次卡：面部护理卡 -->
+                    <div class="card-item benefit-card" data-card-name="面部护理卡">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <span class="card-type">有限次卡</span>
+                                <span class="card-name">面部护理卡</span>
+                                <span class="item-detail-link" onclick="toggleCardDetail(this)">
+                                    <span>查看详情</span>
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E" alt="展开">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-info">卡项有效期: 永久有效</div>
+                        <div class="card-section">
+                            <div class="service-item">
+                                <div class="item-left">
+                                    <div class="item-header">
+                                        <span class="item-name">深度放松精油SPA</span>
+                                    </div>
+                                </div>
+                                <div class="item-center">
+                                    <div style="flex:1;">
+                                        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                                    </div>
+                                    <span class="progress-text">剩余 3 / 共 3</span>
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-actions">
+                                        <button class="btn-use" data-item-id="spa-001"
+                                            data-name="深度放松精油SPA"
+                                            data-source="面部护理卡"
+                                            data-max="3"
+                                            data-remain="3"
+                                        >使用</button>
+                                        <button class="btn-exchange">置换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-section">
+                            <div class="product-item">
+                                <div class="item-left">
+                                    <div class="item-header">
+                                        <span class="item-name">艾地苯焕颜修护精华液</span>
+                                    </div>
+                                </div>
+                                <div class="item-center">
+                                    <div style="flex:1;">
+                                        <div class="progress-bar"><div class="progress-fill" style="width:33.33%"></div></div>
+                                    </div>
+                                    <span class="progress-text">剩余 1 / 共 3</span>
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-actions">
+                                        <button class="btn-use" data-item-id="prod-001"
+                                            data-name="艾地苯焕颜修护精华液"
+                                            data-source="面部护理卡"
+                                            data-max="3"
+                                            data-remain="1"
+                                        >使用</button>
+                                        <button class="btn-exchange">置换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 金额卡：储值卡 -->
+                    <div class="card-item gold benefit-card" data-card-name="储值卡">
+                        <div class="card-header">
+                            <div class="card-header-left">
+                                <span class="card-type">金额卡</span>
+                                <span class="card-name">储值卡</span>
+                                <span class="item-detail-link" onclick="toggleCardDetail(this)">
+                                    <span>查看详情</span>
+                                    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23999'%3E%3Cpath d='M7 10l5 5 5-5H7z'/%3E%3C/svg%3E" alt="展开">
+                                </span>
+                            </div>
+                        </div>
+                        <div class="card-detail-row">
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">卡片余额</span>
+                                <span class="card-detail-value">¥5,000.00</span>
+                            </div>
+                            <div class="card-detail-divider"></div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">赠金</span>
+                                <span class="card-detail-value">¥500.00</span>
+                            </div>
+                            <div class="card-detail-divider"></div>
+                            <div class="card-detail-item">
+                                <span class="card-detail-label">居家产品 5折 | 服务疗程 5折 | 次卡 8折</span>
+                            </div>
+                            <div class="card-detail-divider"></div>
+                            <div class="card-detail-item card-info-hidden">
+                                <span class="card-detail-label">有效期: 2026-04-16 至 2027-04-16</span>
+                            </div>
+                        </div>
+                        <div class="card-section">
+                             <div class="service-item">
+                                <div class="item-left">
+                                    <div class="item-header">
+                                        <span class="item-gift">赠</span>
+                                        <span class="item-name">素颜霜</span>
+                                    </div>
+                                </div>
+                                <div class="item-center">
+                                    <div style="flex:1;">
+                                        <div class="progress-bar"><div class="progress-fill" style="width:87.5%"></div></div>
+                                    </div>
+                                    <span class="progress-text">剩余 7 / 共 8</span>
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-actions">
+                                        <button class="btn-use" data-item-id="gift-001"
+                                            data-name="素颜霜（赠）"
+                                            data-source="储值卡"
+                                            data-max="8"
+                                            data-remain="7"
+                                            data-is-gift="true"
+                                        >使用</button>
+                                        <button class="btn-exchange">置换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div><!-- /cards-list -->
+            </div><!-- /tab-benefits -->
+
+            <!-- ===== 交易记录标签页内容 ===== -->
+            <div class="tab-content" id="tab-transaction">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    </div>
+                    <span>暂无交易记录</span>
+                </div>
+            </div>
+
+            <!-- ===== 服务记录标签页内容 ===== -->
+            <div class="tab-content" id="tab-service-record">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
+                    </div>
+                    <span>暂无服务记录</span>
+                </div>
+            </div>
+
+            <!-- ===== 服务日志标签页内容 ===== -->
+            <div class="tab-content" id="tab-service-log">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M19 3h-4.18C14.4 1.84 13.3 1 12 1s-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM7 17h10v-2H7v2zm5-5H7v-2h10v2zm0-4H7V6h10v2z"/></svg>
+                    </div>
+                    <span>暂无服务日志</span>
+                </div>
+            </div>
+
+            <!-- ===== 物品寄存标签页内容 ===== -->
+            <div class="tab-content" id="tab-deposit">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M20 6h-8l-2-2H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 12H4V8h16v10z"/></svg>
+                    </div>
+                    <span>暂无物品寄存</span>
+                </div>
+            </div>
+
+            <!-- ===== 平台核销标签页内容 ===== -->
+            <div class="tab-content" id="tab-verify">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>
+                    </div>
+                    <span>暂无平台核销记录</span>
+                </div>
+            </div>
+
+            <!-- ===== 测肤记录标签页内容 ===== -->
+            <div class="tab-content" id="tab-skin-test">
+                <div class="tab-placeholder">
+                    <div class="tab-placeholder-icon">
+                        <svg viewBox="0 0 24 24"><path d="M9 11.75c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zm6 0c-.69 0-1.25.56-1.25 1.25s.56 1.25 1.25 1.25 1.25-.56 1.25-1.25-.56-1.25-1.25-1.25zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8 0-.29.02-.58.05-.86 2.36-1.05 4.23-2.98 5.21-5.37C11.07 8.33 14.05 10 17.42 10c.78 0 1.53-.09 2.25-.26.21.71.33 1.47.33 2.26 0 4.41-3.59 8-8 8z"/></svg>
+                    </div>
+                    <span>暂无测肤记录</span>
+                </div>
+            </div>
+
+            <!-- ===== 已选项目区域 ===== -->
+            <div class="selected-items-section" id="selected-section">
+                <div class="selected-header">
+                    <div class="selected-title">
+                        已选项目
+                        <span class="selected-count-badge" id="selected-count">0</span>
+                    </div>
+                    <button class="selected-clear-btn" id="clear-all-selected">清空全部</button>
+                </div>
+                <div id="selected-content">
+                    <div class="selected-empty" id="selected-empty-tip">
+                        尚未选择项目，请点击上方权益项的「使用」按钮添加
+                    </div>
+                    <div class="selected-table-wrapper" id="selected-table-wrap" style="display:none;">
+                        <table class="selected-table">
+                            <thead>
+                                <tr>
+                                    <th>项目名称</th>
+                                    <th>来源卡项</th>
+                                    <th>使用数量</th>
+                                    <th>美容师</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody id="selected-tbody">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ===== 订单信息区域 ===== -->
+            <div class="order-section" id="order-section">
+                <div class="order-body" id="order-body">
+                    <!-- 批量美容师 -->
+                    <div class="order-field" id="beautician-field">
+                        <span class="order-field-label">批量美容师</span>
+                        <div class="order-field-control">
+                            <select class="beautician-select" id="batch-beautician" style="flex:1;">
+                                <option value="">请选择美容师（批量设置）</option>
+                                <option value="周炜">周炜</option>
+                                <option value="李婷">李婷</option>
+                                <option value="王芳">王芳</option>
+                                <option value="陈静">陈静</option>
+                                <option value="张敏">张敏</option>
+                            </select>
+                            <button class="order-btn" id="apply-beautician">应用到全部</button>
+                        </div>
+                    </div>
+                    <!-- 备注 -->
+                    <div class="order-field" id="remark-field">
+                        <span class="order-field-label" style="padding-top:9px;">备注</span>
+                        <textarea class="order-textarea" id="order-remark" placeholder="请输入订单备注..."></textarea>
+                    </div>
+
+                </div>
+            </div>
+
+        </div><!-- /main-content-area -->
+
+    </div><!-- /page-body -->
+
+    <!-- 底部固定操作栏 -->
+    <div class="bottom-bar">
+        <div class="bottom-bar-left">
+            <div class="bottom-summary">
+                <div class="summary-item">
+                    <span class="summary-label">总使用次数</span>
+                    <span class="summary-value" id="bottom-total-qty">0</span>
+                </div>
+            </div>
+            <div class="bottom-supplement">
+                <span class="supplement-time-display" id="supplement-time-display-bottom" style="display:none;"></span>
+                <button class="supplement-btn" id="btn-supplement-time-bottom" onclick="openSupplementModal()">补单</button>
+            </div>
+        </div>
+        <button class="confirm-service-btn" id="btn-confirm-service">确认服务</button>
+    </div>
+
+    <!-- ===== 补单日期弹窗 ===== -->
+    <div class="modal-overlay" id="supplement-modal">
+        <div class="modal-panel">
+            <div class="modal-header">
+                <span class="modal-title">选择补单日期和时间</span>
+                <button class="modal-close" onclick="closeSupplementModal()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="datetime-picker-group">
+                    <label class="picker-label">日期</label>
+                    <input type="date" class="picker-input" id="supplement-date">
+                    <label class="picker-label">时间</label>
+                    <input type="time" class="picker-input" id="supplement-time">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-cancel" onclick="closeSupplementModal()">取消</button>
+                <button class="modal-btn modal-btn-confirm" onclick="confirmSupplement()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast 提示 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 悬浮返回顶部按钮 -->
+    <button class="back-to-top" id="back-to-top" title="返回顶部">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M7.41 15.41L12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>
+        </svg>
+    </button>
+
+<script>
+(function() {
+    // ========== 数据模型 ==========
+    var selectedItems = [];          // 已选项目数组
+    var itemIdCounter = 0;           // 行ID自增计数器
+
+    // 权益剩余次数追踪（用于删除时还原）
+    var remainTracker = {};
+
+    // 初始化追踪数据
+    function initRemainTracker() {
+        document.querySelectorAll('.btn-use').forEach(function(btn) {
+            var id = btn.dataset.itemId;
+            remainTracker[id] = parseInt(btn.dataset.remain) || 0;
+        });
+    }
+    initRemainTracker();
+
+    // ========== DOM 元素引用 ==========
+    var selectedTbody       = document.getElementById('selected-tbody');
+    var selectedTableWrap   = document.getElementById('selected-table-wrap');
+    var selectedEmptyTip    = document.getElementById('selected-empty-tip');
+    var selectedCountBadge  = document.getElementById('selected-count');
+    var totalQtyEl          = document.getElementById('bottom-total-qty');
+
+    // ========== 工具函数 ==========
+    function showToast(msg) {
+        var t = document.getElementById('toast');
+        t.textContent = msg;
+        t.classList.add('show');
+        setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
+
+    function updateSummary() {
+        var count = selectedItems.length;
+        var totalQty = selectedItems.reduce(function(s, item) { return s + item.qty; }, 0);
+
+        selectedCountBadge.textContent = count;
+        totalQtyEl.textContent = totalQty;
+
+        if (count === 0) {
+            selectedEmptyTip.style.display = '';
+            selectedTableWrap.style.display = 'none';
+        } else {
+            selectedEmptyTip.style.display = 'none';
+            selectedTableWrap.style.display = '';
+        }
+    }
+
+    function renderSelectedTable() {
+        selectedTbody.innerHTML = '';
+
+        selectedItems.forEach(function(item, idx) {
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td>' +
+                    '<div class="selected-item-name">' + escapeHtml(item.name) + '</div>' +
+                    '<div class="selected-item-source">' + escapeHtml(item.source) + '</div>' +
+                '</td>' +
+                '<td>' + escapeHtml(item.source) + '</td>' +
+                '<td>' + buildStepperHtml(idx, item.qty, item.maxQty) + '</td>' +
+                '<td>' + buildBeauticianSelectHtml(idx, item.beautician) + '</td>' +
+                '<td class="action-cell">' +
+                    '<button class="row-action-btn row-copy-btn" data-idx="' + idx + '">复制</button>' +
+                    '<button class="row-action-btn row-delete-btn" data-idx="' + idx + '">删除</button>' +
+                '</td>';
+            selectedTbody.appendChild(tr);
+        });
+
+        bindStepperEvents();
+        bindBeauticianEvents();
+        bindRowActionEvents();
+        updateSummary();
+
+        // 调用统一的状态管理函数控制模块显示/隐藏
+        if (window.updateBenefitModules) {
+            window.updateBenefitModules();
+        }
+    }
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    }
+
+    function buildStepperHtml(idx, qty, max) {
+        return '' +
+            '<div class="stepper" data-idx="' + idx + '">' +
+                '<button class="stepper-btn stepper-minus">−</button>' +
+                '<input type="number" class="stepper-input stepper-val" value="' + qty + '" min="1" max="' + max + '">' +
+                '<button class="stepper-btn stepper-plus">+</button>' +
+            '</div>';
+    }
+
+    function buildBeauticianSelectHtml(idx, val) {
+        var options = ['请选择','周炜','李婷','王芳','陈静','张敏'];
+        var html = '<select class="beautician-select beautician-sel" data-idx="' + idx + '">';
+        options.forEach(function(opt) {
+            var selected = opt === val ? ' selected' : '';
+            html += '<option value="' + opt + '"' + selected + '>' + opt + '</option>';
+        });
+        html += '</select>';
+        return html;
+    }
+
+    // ========== 步进器事件绑定 ==========
+    function bindStepperEvents() {
+        document.querySelectorAll('.stepper').forEach(function(container) {
+            var minusBtn  = container.querySelector('.stepper-minus');
+            var plusBtn   = container.querySelector('.stepper-plus');
+            var input     = container.querySelector('.stepper-val');
+            var idx       = parseInt(container.dataset.idx);
+            var item      = selectedItems[idx];
+            if (!item) return;
+
+            minusBtn.addEventListener('click', function() {
+                var v = parseInt(input.value) || 1;
+                if (v > 1) {
+                    input.value = v - 1;
+                    item.qty = v - 1;
+                    updateSummary();
+                }
+            });
+
+            plusBtn.addEventListener('click', function() {
+                var v = parseInt(input.value) || 1;
+                if (v < item.maxQty) {
+                    input.value = v + 1;
+                    item.qty = v + 1;
+                    updateSummary();
+                } else {
+                    showToast('已达最大可用数量 (' + item.maxQty + ')');
+                }
+            });
+
+            input.addEventListener('change', function() {
+                var v = parseInt(input.value) || 1;
+                if (v < 1) v = 1;
+                if (v > item.maxQty) { v = item.maxQty; showToast('已达最大可用数量'); }
+                input.value = v;
+                item.qty = v;
+                updateSummary();
+            });
+        });
+    }
+
+    // ========== 美容师选择事件 ==========
+    function bindBeauticianEvents() {
+        document.querySelectorAll('.beautician-sel').forEach(function(sel) {
+            sel.addEventListener('change', function() {
+                var idx = parseInt(this.dataset.idx);
+                selectedItems[idx].beautician = this.value;
+            });
+        });
+    }
+
+    // ========== 行操作事件（复制/删除）==========
+    function bindRowActionEvents() {
+        document.querySelectorAll('.row-copy-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var idx = parseInt(this.dataset.idx);
+                copyItem(idx);
+            });
+        });
+
+        document.querySelectorAll('.row-delete-btn').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+                var idx = parseInt(this.dataset.idx);
+                deleteItem(idx);
+            });
+        });
+    }
+
+    // ========== 使用按钮：将权益项添加到已选项目 ==========
+    document.querySelectorAll('.btn-use').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            var itemId    = this.dataset.itemId;
+            var name      = this.dataset.name;
+            var source    = this.dataset.source;
+            var maxQty    = parseInt(this.dataset.max) || 99;
+            var remain    = remainTracker[itemId];
+
+            if (!remain || remain <= 0) {
+                showToast('该项目的剩余次数已用完');
+                return;
+            }
+
+            // 新增到已选项目
+            var newItem = {
+                _id: ++itemIdCounter,
+                sourceId: itemId,
+                name: name,
+                source: source,
+                qty: Math.min(1, remain),     // 默认取1，不超过剩余
+                maxQty: maxQty,
+                beautician: '',
+                originalMaxRemain: remain      // 用于还原判断
+            };
+            selectedItems.push(newItem);
+            renderSelectedTable();
+            showToast('已添加：「' + name + '」');
+
+            // 更新进度条和文字（视觉上减少1）
+            decreaseProgressByOne(itemId, remain - 1);
+            remainTracker[itemId] = remain - 1;
+        });
+    });
+
+    // 减少进度条显示
+    function decreaseProgressByOne(itemId, newRemain) {
+        var useBtn = document.querySelector('.btn-use[data-item-id="' + itemId + '"]');
+        if (!useBtn) return;
+
+        var card = useBtn.closest('.service-item') || useBtn.closest('.product-item');
+        if (!card) return;
+
+        var progressFill = card.querySelector('.progress-fill');
+        var progressText = card.querySelector('.progress-text');
+
+        // 从按钮上获取总次数
+        var total = parseInt(useBtn.dataset.max) || 1;
+        var pct = total > 0 ? ((newRemain / total) * 100).toFixed(2) : 0;
+
+        if (progressFill) progressFill.style.width = pct + '%';
+        if (progressText) progressText.textContent = '剩余 ' + newRemain + ' / 共 ' + total;
+
+        // 同步更新 dataset
+        useBtn.dataset.remain = String(newRemain);
+    }
+
+    // 还原进度条显示
+    function increaseProgressByOne(itemId, newRemain) {
+        var useBtn = document.querySelector('.btn-use[data-item-id="' + itemId + '"]');
+        if (!useBtn) return;
+
+        var card = useBtn.closest('.service-item') || useBtn.closest('.product-item');
+        if (!card) return;
+
+        var progressFill = card.querySelector('.progress-fill');
+        var progressText = card.querySelector('.progress-text');
+
+        var total = parseInt(useBtn.dataset.max) || 1;
+        var pct = total > 0 ? ((newRemain / total) * 100).toFixed(2) : 0;
+
+        if (progressFill) progressFill.style.width = pct + '%';
+        if (progressText) progressText.textContent = '剩余 ' + newRemain + ' / 共 ' + total;
+        useBtn.dataset.remain = String(newRemain);
+    }
+
+    // ========== 复制行 ==========
+    function copyItem(idx) {
+        var orig = selectedItems[idx];
+        if (!orig) return;
+
+        // 检查源权益是否还有足够剩余
+        var currentRemain = remainTracker[orig.sourceId] || 0;
+        if (currentRemain < 1) {
+            showToast('该来源的剩余次数不足，无法继续复制');
+            return;
+        }
+
+        var copied = {
+            _id: ++itemIdCounter,
+            sourceId: orig.sourceId,
+            name: orig.name,
+            source: orig.source,
+            qty: Math.min(orig.qty, currentRemain),
+            maxQty: orig.maxQty,
+            beautician: orig.beautician
+        };
+
+        selectedItems.push(copied);
+
+        // 扣减对应数量的剩余次数
+        var usedQty = copied.qty;
+        remainTracker[orig.sourceId] = currentRemain - usedQty;
+        for (var i = 0; i < usedQty; i++) {
+            decreaseProgressByOne(orig.sourceId, remainTracker[orig.sourceId] + usedQty - i - 1);
+        }
+
+        renderSelectedTable();
+        showToast('已复制：「' + orig.name + '」');
+    }
+
+    // ========== 删除行（还原权益次数）==========
+    function deleteItem(idx) {
+        var item = selectedItems[idx];
+        if (!item) return;
+
+        var restoreQty = item.qty;
+
+        // 还原剩余次数
+        var currentRemain = remainTracker[item.sourceId] || 0;
+        remainTracker[item.sourceId] = currentRemain + restoreQty;
+
+        // 更新进度条显示
+        increaseProgressByOne(item.sourceId, remainTracker[item.sourceId]);
+
+        // 移除该项
+        selectedItems.splice(idx, 1);
+        renderSelectedTable();
+        showToast('已删除，已还原 ' + restoreQty + ' 次权益');
+    }
+
+    // ========== 清空全部 ==========
+    document.getElementById('clear-all-selected').addEventListener('click', function() {
+        if (selectedItems.length === 0) {
+            showToast('当前没有已选项目');
+            return;
+        }
+
+        // 逐项还原
+        for (var i = selectedItems.length - 1; i >= 0; i--) {
+            var item = selectedItems[i];
+            var currentRemain = remainTracker[item.sourceId] || 0;
+            remainTracker[item.sourceId] = currentRemain + item.qty;
+            increaseProgressByOne(item.sourceId, remainTracker[item.sourceId]);
+        }
+
+        selectedItems = [];
+        renderSelectedTable();
+        showToast('已清空所有已选项目');
+    });
+
+    // ========== 批量设置美容师 ==========
+    document.getElementById('apply-beautician').addEventListener('click', function() {
+        var batchSel = document.getElementById('batch-beautician');
+        var val = batchSel.value;
+        if (!val) {
+            showToast('请先选择一位美容师');
+            return;
+        }
+        if (selectedItems.length === 0) {
+            showToast('暂无已选项目可应用');
+            return;
+        }
+        selectedItems.forEach(function(item) { item.beautician = val; });
+        renderSelectedTable();
+        showToast('已为全部项目设置美容师：' + val);
+    });
+
+    // ========== 补单弹窗逻辑 ==========
+    var supplementModal = document.getElementById('supplement-modal');
+
+    document.getElementById('btn-supplement-time-bottom').addEventListener('click', function() {
+        supplementModal.classList.add('show');
+        // 默认值设为当前日期时间
+        var now = new Date();
+        document.getElementById('supplement-date').value = now.toISOString().slice(0,10);
+        document.getElementById('supplement-time').value = now.toTimeString().slice(0,5);
+    });
+
+    window.closeSupplementModal = function() {
+        supplementModal.classList.remove('show');
+    };
+
+    window.confirmSupplement = function() {
+        var dateVal = document.getElementById('supplement-date').value;
+        var timeVal = document.getElementById('supplement-time').value;
+
+        if (!dateVal) {
+            showToast('请选择日期');
+            return;
+        }
+
+        supplementModal.classList.remove('show');
+
+        // 格式化时间显示 yyyy-mm-dd hh:mm
+        var displayTime = dateVal + ' ' + (timeVal ? timeVal : '00:00');
+
+        // 在底部栏显示补单时间
+        var timeDisplay = document.getElementById('supplement-time-display-bottom');
+        timeDisplay.textContent = displayTime;
+        timeDisplay.style.display = 'inline';
+
+        showToast('补单时间已设置为 ' + displayTime);
+    };
+
+    window.openSupplementModal = function() {
+        supplementModal.classList.add('show');
+    };
+
+    // 点击遮罩关闭
+    supplementModal.addEventListener('click', function(e) {
+        if (e.target === supplementModal) closeSupplementModal();
+    });
+
+    // ========== 确认服务按钮 ==========
+    document.getElementById('btn-confirm-service').addEventListener('click', function() {
+        if (selectedItems.length === 0) {
+            showToast('请至少选择一个项目');
+            return;
+        }
+
+        // 简易校验：检查每项的美容师
+        var noBeautyList = [];
+        selectedItems.forEach(function(item) {
+            if (!item.beautician) noBeautyList.push(item.name);
+        });
+
+        if (noBeautyList.length > 0) {
+            showToast('以下项目尚未选择美容师：' + noBeautyList.join('、'));
+            return;
+        }
+
+        var remark = document.getElementById('order-remark').value.trim();
+
+        console.log('=== 确认服务 ===');
+        console.log('已选项目:', JSON.parse(JSON.stringify(selectedItems)));
+        console.log('订单备注:', remark);
+
+        showToast('服务确认成功！');
+    });
+
+    // ========== 权益搜索功能 ==========
+    var padSearchInput = document.getElementById('pad-benefit-search');
+    var padSearchClear = document.getElementById('pad-search-clear');
+
+    padSearchInput.addEventListener('input', function(e) {
+        var term = e.target.value.toLowerCase().trim();
+        padSearchClear.style.display = term ? 'block' : 'none';
+
+        document.querySelectorAll('.benefit-card').forEach(function(card) {
+            var cardName = (card.dataset.cardName || '').toLowerCase();
+            var names = [];
+            card.querySelectorAll('.item-name').forEach(function(el) { names.push(el.textContent.toLowerCase()); });
+
+            var match = cardName.includes(term);
+            if (!match) {
+                for (var i = 0; i < names.length; i++) {
+                    if (names[i].includes(term)) { match = true; break; }
+                }
+            }
+            card.style.display = match ? '' : 'none';
+        });
+    });
+
+    padSearchClear.addEventListener('click', function() {
+        padSearchInput.value = '';
+        padSearchClear.style.display = 'none';
+        document.querySelectorAll('.benefit-card').forEach(function(card) {
+            card.style.display = '';
+        });
+    });
+
+    // ========== TAB切换功能（带状态保持） ==========
+    (function() {
+        var tabNavItems = document.querySelectorAll('.tab-nav-item');
+        var tabContents = document.querySelectorAll('.tab-content');
+        var benefitsContent = document.getElementById('tab-benefits');
+        var selectedSection = document.getElementById('selected-section');
+        var orderSection = document.getElementById('order-section');
+        var bottomBar = document.querySelector('.bottom-bar');
+
+        // 保存当前活动标签
+        var currentTab = 'benefits';
+
+        // 控制权益相关模块的显示/隐藏
+        function updateBenefitModules() {
+            var isBenefitsTab = (currentTab === 'benefits');
+            var hasSelectedItems = (typeof selectedItems !== 'undefined' && selectedItems.length > 0);
+
+            if (isBenefitsTab && hasSelectedItems) {
+                // 在客户权益TAB且有选中项时，显示已选项目和底部汇总
+                if (selectedSection) selectedSection.classList.add('show');
+                if (bottomBar) bottomBar.classList.add('show');
+                // 有选中项时才显示订单信息
+                if (orderSection) orderSection.classList.add('show');
+            } else {
+                // 非客户权益TAB 或 无选中项时，隐藏所有权益相关模块
+                if (selectedSection) selectedSection.classList.remove('show');
+                if (orderSection) orderSection.classList.remove('show');
+                if (bottomBar) bottomBar.classList.remove('show');
+            }
+        }
+
+        // 切换标签
+        function switchTab(tabId) {
+            // 移除所有active
+            tabNavItems.forEach(function(item) { item.classList.remove('active'); });
+            tabContents.forEach(function(content) { content.classList.remove('active'); });
+
+            // 激活目标标签
+            var targetNav = document.querySelector('[data-tab="' + tabId + '"]');
+            var targetContent = document.getElementById('tab-' + tabId);
+            if (targetNav) targetNav.classList.add('active');
+            if (targetContent) targetContent.classList.add('active');
+
+            currentTab = tabId;
+            updateBenefitModules();
+        }
+
+        // 绑定点击事件
+        tabNavItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                var tabId = this.getAttribute('data-tab');
+                switchTab(tabId);
+            });
+        });
+
+        // 暴露update函数供其他模块调用（如选择/取消选择项目时）
+        window.updateBenefitModules = updateBenefitModules;
+    })();
+
+    // ========== 返回顶部按钮 ==========
+    var backToTopBtn = document.getElementById('back-to-top');
+    var mainContent = document.querySelector('.main-content-area');
+
+    // 点击返回顶部
+    backToTopBtn.addEventListener('click', function() {
+        mainContent.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+
+})();
+</script>
+</body>
+</html>

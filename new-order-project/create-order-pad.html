@@ -1,0 +1,2919 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>克丽缇娜 - 开单</title>
+    <style>
+        /* ========== CSS变量 ========== */
+        :root {
+            --primary-50: #FFF1F5;
+            --primary-100: #FFE4EC;
+            --primary-200: #FFC7D9;
+            --primary-300: #FFA0BE;
+            --primary-400: #F1A3B8;
+            --primary-500: #E87C9A;
+            --primary-600: #D66B85;
+            --primary-700: #B75A70;
+            --success-500: #10B981;
+            --warning-500: #F59E0B;
+            --error-500: #EF4444;
+            --neutral-50: #F8FAFC;
+            --neutral-100: #F1F5F9;
+            --neutral-200: #E2E8F0;
+            --neutral-300: #CBD5E1;
+            --neutral-400: #94A3B8;
+            --neutral-500: #64748B;
+            --neutral-600: #475569;
+            --neutral-700: #334155;
+            --neutral-800: #1E293B;
+            --neutral-900: #0F172A;
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F5F7FA;
+            --bg-tertiary: var(--primary-50);
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 16px;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--neutral-800);
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ========== 整体布局 ========== */
+        .app-container {
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ========== 左侧操作入口区 ========== */
+        .action-sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, var(--bg-primary) 0%, var(--neutral-50) 100%);
+            border-right: 1px solid var(--neutral-200);
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            box-shadow: 2px 0 8px rgba(0,0,0,0.04);
+        }
+
+        .sidebar-header {
+            padding: 20px;
+            background: var(--bg-primary);
+        }
+
+        .sidebar-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .sidebar-logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-logo-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .sidebar-logo-text {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-600);
+            letter-spacing: 1px;
+        }
+
+        /* 客户信息卡片 */
+        .sidebar-customer-card {
+            padding: 16px;
+            margin: 0 16px 16px;
+            background: linear-gradient(135deg, var(--primary-50) 0%, var(--bg-primary) 100%);
+            border: 1px solid var(--primary-100);
+            border-radius: var(--radius-lg);
+        }
+
+        .sidebar-customer-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .sidebar-customer-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .sidebar-customer-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .sidebar-customer-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .sidebar-customer-name-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+
+        .sidebar-customer-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .sidebar-customer-tag {
+            padding: 2px 6px;
+            background: var(--primary-100);
+            color: var(--primary-600);
+            font-size: 10px;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .sidebar-customer-phone {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .sidebar-customer-balance {
+            display: flex;
+            flex-direction: column;
+            padding: 10px 12px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .sidebar-balance-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            text-align: left;
+        }
+
+        .sidebar-balance-label {
+            font-size: 11px;
+            color: var(--neutral-400);
+            margin-bottom: 2px;
+        }
+
+        .sidebar-balance-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-500);
+        }
+
+        
+
+        .debt-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0;
+            width: 100%;
+            box-sizing: border-box;
+            min-width: 0;
+            gap: 8px;
+        }
+
+        .debt-section .sidebar-balance-label {
+            flex: 0 0 auto;
+            white-space: nowrap;
+        }
+
+        .debt-section .sidebar-balance-value {
+            flex: 1;
+            text-align: right;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .debt-repay-btn {
+            padding: 4px 8px;
+            background: var(--error-500);
+            border: none;
+            border-radius: var(--radius-sm);
+            font-size: 11px;
+            font-weight: 600;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .debt-repay-btn:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.3);
+        }
+
+        .debt-repay-btn:active {
+            transform: translateY(0);
+        }
+
+        .customer-quick-actions {
+            display: flex;
+            gap: 12px;
+            padding: 0 16px 16px;
+        }
+
+        .quick-action-btn {
+            width: 140px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 12px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--neutral-700);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .quick-action-btn:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+            color: var(--primary-600);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.15);
+        }
+
+        .quick-action-btn:active {
+            transform: translateY(0);
+            box-shadow: none;
+        }
+
+        .quick-action-btn.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-color: var(--primary-500);
+            color: white;
+        }
+
+        .quick-action-btn.primary:hover {
+            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+            border-color: var(--primary-600);
+            color: white;
+            box-shadow: 0 4px 16px rgba(232, 124, 154, 0.35);
+        }
+
+        .sidebar-customer-actions {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 8px;
+        }
+
+        .sidebar-action-btn {
+            padding: 8px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .sidebar-action-btn:hover {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        /* 无客户状态 */
+        .sidebar-no-customer {
+            padding: 24px 16px;
+            text-align: center;
+        }
+
+        .sidebar-no-customer-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 12px;
+            background: var(--neutral-100);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .sidebar-no-customer-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: var(--neutral-400);
+        }
+
+        .sidebar-no-customer-text {
+            font-size: 13px;
+            color: var(--neutral-500);
+            margin-bottom: 16px;
+        }
+
+        .sidebar-select-customer-btn {
+            width: 100%;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            color: white;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .sidebar-select-customer-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.4);
+        }
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            background: var(--neutral-50);
+            border-radius: var(--radius-md);
+        }
+
+        .sidebar-user-avatar {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .sidebar-user-avatar::after {
+            content: '';
+            position: absolute;
+            top: 1px;
+            right: 1px;
+            width: 10px;
+            height: 10px;
+            background: var(--success-500);
+            border-radius: 50%;
+            border: 2px solid var(--bg-primary);
+        }
+
+        .sidebar-user-avatar svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .sidebar-user-info {
+            flex: 1;
+        }
+
+        .sidebar-user-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .sidebar-user-role {
+            font-size: 12px;
+            color: var(--primary-600);
+        }
+
+        /* 操作按钮区域 */
+        .action-section {
+            flex: 1;
+            padding: 0 16px 16px;
+            overflow-y: auto;
+        }
+
+        .action-section-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            padding-left: 4px;
+        }
+
+        .action-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .action-card {
+            background: var(--bg-primary);
+            border: 2px solid var(--neutral-200);
+            border-radius: var(--radius-lg);
+            padding: 20px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-height: 120px;
+        }
+
+        .action-card:hover {
+            border-color: var(--primary-400);
+            background: var(--primary-50);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .action-card:active {
+            transform: translateY(0);
+        }
+
+        .action-card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-card-icon svg {
+            width: 28px;
+            height: 28px;
+            fill: white;
+        }
+
+        .action-card.service .action-card-icon {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        }
+
+        .action-card.product .action-card-icon {
+            background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+        }
+
+        .action-card.package .action-card-icon {
+            background: linear-gradient(135deg, #4FACFE 0%, #00F2FE 100%);
+        }
+
+        .action-card.quick .action-card-icon {
+            background: linear-gradient(135deg, #43E97B 0%, #38F9D7 100%);
+        }
+
+        .action-card:hover .action-card-icon {
+            transform: scale(1.1);
+        }
+
+        .action-card-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .action-card-desc {
+            font-size: 11px;
+            color: var(--neutral-400);
+            text-align: center;
+        }
+
+        /* 全宽按钮 */
+        .action-card-full {
+            grid-column: span 2;
+            flex-direction: row;
+            padding: 16px 20px;
+            gap: 16px;
+        }
+
+        .action-card-full .action-card-icon {
+            width: 44px;
+            height: 44px;
+        }
+
+        .action-card-full .action-card-icon svg {
+            width: 24px;
+            height: 24px;
+        }
+
+        .action-card-full .action-text {
+            flex: 1;
+            text-align: left;
+        }
+
+        .action-card-arrow {
+            width: 24px;
+            height: 24px;
+            fill: var(--neutral-300);
+        }
+
+        /* 备注按钮样式 */
+        .remark-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remark-btn:hover {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .remark-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
+
+        .remark-btn.has-content {
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        /* 备注输入弹窗 */
+        .remark-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .remark-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .remark-modal {
+            width: 400px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .remark-modal-overlay.show .remark-modal {
+            transform: scale(1);
+        }
+
+        .remark-modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .remark-modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .remark-modal-close {
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: var(--neutral-400);
+            cursor: pointer;
+            border-radius: 50%;
+            transition: all 0.2s ease;
+        }
+
+        .remark-modal-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-600);
+        }
+
+        .remark-modal-body {
+            padding: 20px;
+        }
+
+        .remark-modal-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--neutral-700);
+            resize: vertical;
+            min-height: 120px;
+            font-family: inherit;
+        }
+
+        .remark-modal-textarea:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.15);
+        }
+
+        .remark-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding: 16px 20px;
+            border-top: 1px solid var(--neutral-200);
+        }
+
+        .remark-modal-btn {
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .remark-modal-btn.cancel {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            color: var(--neutral-600);
+        }
+
+        .remark-modal-btn.cancel:hover {
+            border-color: var(--neutral-400);
+            color: var(--neutral-800);
+        }
+
+        .remark-modal-btn.confirm {
+            background: var(--primary-500);
+            border: none;
+            color: white;
+        }
+
+        .remark-modal-btn.confirm:hover {
+            background: var(--primary-600);
+        }
+
+        /* 统一样式：购买数量步进器 */
+        .qty-stepper {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-primary);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+            transition: all 0.25s ease;
+        }
+
+        .qty-stepper:hover {
+            border-color: var(--neutral-300);
+        }
+
+        .qty-stepper:focus-within {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.15), inset 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .qty-stepper-btn {
+            width: 34px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            color: var(--neutral-600);
+        }
+
+        .qty-stepper-btn:hover {
+            background: var(--neutral-50);
+            color: var(--neutral-800);
+        }
+
+        .qty-stepper-btn:active {
+            background: var(--neutral-100);
+        }
+
+        .qty-stepper-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .qty-stepper-value {
+            min-width: 40px;
+            width: 40px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            border: none;
+            border-left: 1px solid var(--neutral-100);
+            border-right: 1px solid var(--neutral-100);
+            padding: 0;
+            line-height: 32px;
+            background: transparent;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .qty-stepper-value::-webkit-outer-spin-button,
+        .qty-stepper-value::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .qty-stepper-value[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* 统一消耗数量步进器（与服务类一致） */
+        .consume-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            background: var(--bg-primary);
+            box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+            transition: all 0.25s ease;
+        }
+
+        .consume-control:hover {
+            border-color: var(--neutral-300);
+        }
+
+        .consume-control:focus-within {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.15), inset 0 1px 2px rgba(0,0,0,0.04);
+        }
+
+        .consume-btn {
+            width: 34px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            border: none;
+            color: var(--neutral-600);
+        }
+
+        .consume-btn:hover {
+            background: var(--neutral-50);
+            color: var(--neutral-800);
+        }
+
+        .consume-btn:active {
+            background: var(--neutral-100);
+        }
+
+        .consume-btn img,
+        .consume-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .consume-value {
+            min-width: 40px;
+            width: 40px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            border: none;
+            border-left: 1px solid var(--neutral-100);
+            border-right: 1px solid var(--neutral-100);
+            padding: 0;
+            line-height: 32px;
+            background: transparent;
+            outline: none;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .consume-value::-webkit-outer-spin-button,
+        .consume-value::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+
+        .consume-value[type=number] {
+            -moz-appearance: textfield;
+        }
+
+        /* ========== 右侧主内容区 ========== */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 顶部导航 */
+        .top-header {
+            height: 60px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 24px;
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .header-breadcrumb {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .header-breadcrumb a {
+            color: var(--primary-500);
+            text-decoration: none;
+        }
+
+        .header-breadcrumb a:hover {
+            text-decoration: underline;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .header-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .header-btn:hover {
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .header-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        /* 内容区域 */
+        .content-body {
+            flex: 1;
+            display: flex;
+            overflow: hidden;
+        }
+
+        /* ========== 订单主体区 ========== */
+        .order-main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: var(--bg-secondary);
+        }
+
+        /* 客户信息栏 */
+        .customer-bar {
+            background: var(--bg-primary);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+            flex-shrink: 0;
+        }
+
+        .customer-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--bg-primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .customer-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .customer-info {
+            flex: 1;
+        }
+
+        .customer-name-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .customer-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .customer-tag {
+            padding: 2px 8px;
+            background: var(--primary-100);
+            color: var(--primary-600);
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .customer-phone {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .customer-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .customer-balance {
+            text-align: right;
+        }
+
+        .balance-label {
+            font-size: 11px;
+            color: var(--neutral-400);
+        }
+
+        .balance-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--primary-500);
+        }
+
+        .btn-select-customer {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.3);
+        }
+
+        .btn-select-customer:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.4);
+        }
+
+        /* 已选商品区域 */
+        .selected-items-area {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 24px;
+        }
+
+        .items-section {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            margin-bottom: 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .items-section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px 20px;
+            background: var(--neutral-50);
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .section-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .section-icon.service {
+            background: linear-gradient(135deg, #667EEA 0%, #764BA2 100%);
+        }
+
+        .section-icon.product {
+            background: linear-gradient(135deg, #F093FB 0%, #F5576C 100%);
+        }
+
+        .section-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: white;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .section-count {
+            padding: 2px 8px;
+            background: var(--primary-100);
+            color: var(--primary-600);
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 10px;
+        }
+
+        .section-action-btn {
+            padding: 6px 14px;
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .section-action-btn:hover {
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .section-action-btn.active {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+            color: white;
+        }
+
+        .items-list {
+            padding: 12px;
+        }
+
+        /* 商品卡片 */
+        .selected-item-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            margin-bottom: 12px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .selected-item-card:hover {
+            border-color: var(--primary-300);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .selected-item-card:active {
+            border-color: var(--neutral-200);
+            box-shadow: none;
+        }
+
+        .selected-item-card:last-child {
+            margin-bottom: 0;
+        }
+
+        .selected-item-body {
+            padding: 16px;
+        }
+
+        /* 商品头部：第一行 - 名称 + 右上方金额 + 操作图标 */
+        .selected-item-header {
+            position: relative;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            padding-right: 140px;
+        }
+
+        /* 右上角固定操作图标区域 */
+        .item-actions-fixed {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-shrink: 0;
+        }
+
+        .item-action-btn {
+            width: 28px;
+            height: 28px;
+            border: none;
+            background: transparent;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-400);
+            transition: all 0.2s ease;
+        }
+
+        .item-action-btn:hover {
+            background-color: var(--neutral-100);
+            color: var(--primary-500);
+        }
+
+        .item-action-btn.delete-btn:hover {
+            background-color: rgba(229, 62, 62, 0.1);
+            color: var(--error-500);
+        }
+
+        .item-action-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .item-left-col {
+            min-width: 0;
+            display: flex;
+            align-items: center;
+        }
+
+        .item-name-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            flex: 1;
+        }
+
+        .selected-item-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        /* 数量区域 */
+        .item-qty-area {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            flex-shrink: 0;
+        }
+
+        /* 赠送徽章 */
+        .gift-badge {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .gift-checkbox {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .gift-text {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 24px;
+            height: 24px;
+            padding: 0 6px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--neutral-500);
+            background: white;
+            border: 1px solid var(--neutral-300);
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            user-select: none;
+        }
+
+        .gift-checkbox:checked + .gift-text {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+            color: white !important;
+        }
+
+        .gift-checkbox:hover + .gift-text {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+        }
+
+        .gift-checkbox:checked:hover + .gift-text {
+            background: var(--primary-600);
+            border-color: var(--primary-600);
+        }
+
+        /* 右上方金额区域 */
+        .item-price-area {
+            text-align: right;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .price-main {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .price-main-amount {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+
+        .price-edit-link {
+            font-size: 13px;
+            color: var(--primary-500);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .price-edit-link:hover {
+            color: var(--primary-600);
+            text-decoration: underline;
+        }
+
+        .price-sub {
+            margin-top: 4px;
+            font-size: 12px;
+            color: var(--neutral-400);
+            display: flex;
+            gap: 8px;
+        }
+
+        .price-original {
+            text-decoration: line-through;
+        }
+
+        .price-deduction {
+            color: var(--error-500);
+        }
+
+        /* 商品元信息行：数量 / 赠送 / 消耗 */
+        .selected-item-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-top: 12px;
+            margin-top: 12px;
+            border-top: 1px dashed var(--neutral-200);
+        }
+
+        .meta-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .qty-meta {
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .qty-meta-label {
+            margin-right: 4px;
+        }
+
+        .qty-meta-val {
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .consume-label {
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .consume-control {
+            display: inline-flex;
+            align-items: center;
+            gap: 0;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            background: var(--bg-primary);
+        }
+
+        .consume-btn {
+            width: 32px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+        }
+
+        .consume-btn:hover {
+            background: var(--neutral-100);
+        }
+
+        .consume-btn img {
+            width: 16px;
+            height: 16px;
+        }
+
+        .consume-value {
+            min-width: 32px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            border-left: 1px solid var(--neutral-200);
+            border-right: 1px solid var(--neutral-200);
+            padding: 0 8px;
+            line-height: 28px;
+        }
+
+        /* 梅可碧区域 */
+        .meikebi-section {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .meikebi-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .beautician-picker {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: var(--bg-primary);
+            border: 1px dashed var(--neutral-300);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .beautician-picker:hover {
+            border-color: var(--primary-400);
+            background: var(--primary-50);
+        }
+
+        .beautician-picker-icon {
+            width: 20px;
+            height: 20px;
+            background: var(--primary-100);
+            color: var(--primary-600);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .beautician-picker-text {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .meikebi-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .meikebi-select {
+            padding: 6px 10px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--neutral-700);
+            background: var(--bg-primary);
+            min-width: 120px;
+        }
+
+        .meikebi-input {
+            width: 80px;
+            padding: 6px 10px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            color: var(--neutral-700);
+            text-align: right;
+        }
+
+        .meikebi-tip {
+            font-size: 11px;
+            color: var(--primary-600);
+            background: var(--primary-50);
+            padding: 4px 8px;
+            border-radius: var(--radius-sm);
+        }
+
+        /* 订单信息折叠面板 */
+        .order-form-panel {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            margin: 0 24px 16px;
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .order-form-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 20px;
+            background: var(--neutral-50);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .order-form-header:hover {
+            background: var(--neutral-100);
+        }
+
+        .order-form-header-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .order-form-header-toggle {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .order-form-header-toggle svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+            transition: transform 0.3s ease;
+        }
+
+        .order-form-header.expanded .order-form-header-toggle svg {
+            transform: rotate(180deg);
+        }
+
+        .order-form-collapse-content {
+            padding: 16px 20px;
+            display: flex;
+            gap: 20px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .collapse-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .collapse-item label {
+            font-size: 13px;
+            color: var(--neutral-600);
+            white-space: nowrap;
+        }
+
+        .collapse-item select,
+        .order-date-input {
+            padding: 8px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--neutral-700);
+            background: var(--bg-primary);
+        }
+
+        .order-form {
+            padding: 16px 20px;
+            display: none;
+        }
+
+        .order-form.expanded {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .form-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: var(--neutral-600);
+            min-width: 70px;
+        }
+
+        .form-input {
+            flex: 1;
+            max-width: 200px;
+            padding: 8px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--neutral-700);
+        }
+
+        .form-unit {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .form-tip {
+            font-size: 11px;
+            color: var(--neutral-400);
+            margin-top: 6px;
+            padding-left: 80px;
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--neutral-700);
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+        }
+
+        /* ========== 底部支付汇总栏 ========== */
+        .payment-bar {
+            background: var(--bg-primary);
+            border-top: 1px solid var(--neutral-200);
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+
+        .payment-summary {
+            display: flex;
+            align-items: center;
+            gap: 32px;
+        }
+
+        .payment-item {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .payment-item-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .payment-item-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--neutral-900);
+        }
+
+        .payment-item-value.highlight {
+            color: var(--primary-500);
+        }
+
+        .payment-item-value.discount {
+            color: var(--error-500);
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .payment-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .btn-action {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-action svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
+        .btn-action.secondary {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-300);
+            color: var(--neutral-700);
+        }
+
+        .btn-action.secondary:hover {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .btn-action.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border: none;
+            color: white;
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.4);
+            min-width: 140px;
+            justify-content: center;
+        }
+
+        .btn-action.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.5);
+        }
+
+        /* ========== 会员选择弹窗 ========== */
+        .member-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .member-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .member-modal {
+            width: 90%;
+            max-width: 500px;
+            max-height: 80vh;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .member-modal-overlay.show .member-modal {
+            transform: scale(1);
+        }
+
+        #memberModalIframe {
+            width: 100%;
+            height: 100%;
+            min-height: 500px;
+            border: none;
+        }
+
+        .member-modal-close:hover {
+            background: var(--neutral-100);
+            color: var(--neutral-600);
+        }
+
+        .member-modal-search {
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--neutral-200);
+        }
+
+        .member-modal-search-input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            color: var(--neutral-700);
+        }
+
+        .member-modal-search-input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(241, 163, 184, 0.15);
+        }
+
+        .member-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 16px;
+        }
+
+        .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .member-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            padding: 14px;
+            background: var(--neutral-50);
+            border: 2px solid transparent;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .member-item:hover {
+            background: var(--primary-50);
+        }
+
+        .member-item.selected {
+            background: var(--primary-50);
+            border-color: var(--primary-400);
+        }
+
+        .member-avatar {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .member-avatar svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .member-info {
+            flex: 1;
+        }
+
+        .member-name-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 4px;
+        }
+
+        .member-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .member-level {
+            padding: 2px 8px;
+            background: var(--primary-100);
+            color: var(--primary-600);
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+        }
+
+        .member-phone {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+
+        .member-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 24px;
+            border-top: 1px solid var(--neutral-200);
+        }
+
+        .btn-modal {
+            padding: 10px 24px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-modal.secondary {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-300);
+            color: var(--neutral-700);
+        }
+
+        .btn-modal.secondary:hover {
+            border-color: var(--neutral-400);
+            color: var(--neutral-900);
+        }
+
+        .btn-modal.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border: none;
+            color: white;
+        }
+
+        .btn-modal.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.4);
+        }
+
+        /* Toast提示 */
+        .toast-message {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.75);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            z-index: 9999;
+            animation: toastFadeIn 0.3s ease;
+        }
+
+        @keyframes toastFadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+
+        @keyframes toastFadeOut {
+            from { opacity: 1; transform: translateX(-50%) translateY(0); }
+            to { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* ========== 响应式适配 ========== */
+        
+        /* 横屏模式（宽度大于高度） */
+        @media (orientation: landscape) {
+            .action-sidebar {
+                width: 260px;
+            }
+            
+            .action-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .action-card-full {
+                grid-column: span 1;
+            }
+            
+            .selected-items-area {
+                padding: 16px 20px;
+            }
+        }
+
+        /* 竖屏模式（高度大于宽度） */
+        @media (orientation: portrait) {
+            .app-container {
+                flex-direction: column;
+            }
+            
+            .action-sidebar {
+                width: 100%;
+                height: auto;
+                flex-direction: row;
+                border-right: none;
+                border-bottom: 1px solid var(--neutral-200);
+                overflow-x: auto;
+            }
+            
+            .sidebar-header {
+                display: none;
+            }
+            
+            .action-section {
+                padding: 12px 16px;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+            }
+            
+            .action-section-title {
+                display: none;
+            }
+            
+            .action-grid {
+                display: flex;
+                flex-direction: row;
+                gap: 10px;
+                flex: 1;
+            }
+            
+            .action-card {
+                min-width: 100px;
+                min-height: 80px;
+                padding: 12px;
+            }
+            
+            .action-card-icon {
+                width: 36px;
+                height: 36px;
+            }
+            
+            .action-card-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+            
+            .action-card-label {
+                font-size: 12px;
+            }
+            
+            .action-card-desc {
+                display: none;
+            }
+            
+            .action-card-full {
+                grid-column: span 1;
+                flex-direction: column;
+            }
+            
+            .content-body {
+                flex-direction: column;
+            }
+            
+            .order-main {
+                flex: 1;
+            }
+            
+            .selected-items-area {
+                padding: 12px 16px;
+            }
+            
+            .payment-bar {
+                flex-direction: column;
+                gap: 12px;
+                padding: 12px 16px;
+            }
+            
+            .payment-summary {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .payment-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+            
+            .btn-action {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        /* 小尺寸平板 */
+        @media (max-width: 768px) {
+            .action-sidebar {
+                width: 220px;
+            }
+            
+            .action-card {
+                padding: 14px 10px;
+                min-height: 100px;
+            }
+            
+            .action-card-icon {
+                width: 40px;
+                height: 40px;
+            }
+            
+            .action-card-icon svg {
+                width: 22px;
+                height: 22px;
+            }
+            
+            .action-card-label {
+                font-size: 13px;
+            }
+            
+            .selected-item-header {
+                padding-right: 70px;
+            }
+            
+            .meta-left {
+                gap: 10px;
+            }
+            
+            .payment-summary {
+                gap: 20px;
+            }
+            
+            .payment-item-value {
+                font-size: 16px;
+            }
+        }
+
+        /* 大尺寸平板横屏 */
+        @media (min-width: 1024px) and (orientation: landscape) {
+            .action-sidebar {
+                width: 300px;
+            }
+            
+            .action-card {
+                padding: 24px 20px;
+                min-height: 140px;
+            }
+            
+            .action-card-icon {
+                width: 56px;
+                height: 56px;
+            }
+            
+            .action-card-icon svg {
+                width: 32px;
+                height: 32px;
+            }
+            
+            .action-card-label {
+                font-size: 16px;
+            }
+            
+            .action-card-desc {
+                font-size: 12px;
+            }
+        }
+
+        /* 确认弹窗 */
+        .confirm-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .confirm-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .confirm-modal {
+            width: 400px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: transform 0.3s ease;
+        }
+
+        .confirm-modal-overlay.show .confirm-modal {
+            transform: scale(1);
+        }
+
+        .confirm-modal-content {
+            padding: 24px;
+            text-align: center;
+        }
+
+        .confirm-modal-icon {
+            width: 48px;
+            height: 48px;
+            margin: 0 auto 16px;
+            background: var(--warning-500);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            font-weight: bold;
+        }
+
+        .confirm-modal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 8px;
+        }
+
+        .confirm-modal-desc {
+            font-size: 14px;
+            color: var(--neutral-500);
+            line-height: 1.5;
+        }
+
+        .confirm-modal-footer {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            padding: 16px 24px 24px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 左侧操作入口区 -->
+        <aside class="action-sidebar">
+            <div class="sidebar-header">
+                <div class="sidebar-logo">
+                    <div class="sidebar-logo-icon">
+                        <svg viewBox="0 0 24 24"><path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12L8.5 18H15c.75 0 1.41-.41 1.75-1.03l3.58-6.49c.37-.66-.11-1.44-.87-1.44H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/></svg>
+                    </div>
+                    <span class="sidebar-logo-text">克丽缇娜</span>
+                </div>
+
+                <!-- 客户信息卡片 -->
+                <div class="sidebar-customer-card" id="sidebarCustomerCard">
+                    <div class="sidebar-customer-header">
+                        <div class="sidebar-customer-avatar">
+                            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                        </div>
+                        <div class="sidebar-customer-info">
+                            <div class="sidebar-customer-name-row">
+                                <span class="sidebar-customer-name">小张</span>
+                                <span class="sidebar-customer-tag">新客</span>
+                            </div>
+                            <div class="sidebar-customer-phone">135****8889</div>
+                        </div>
+                    </div>
+                    <div class="sidebar-customer-balance">
+                        <div class="sidebar-balance-item">
+                            <span class="sidebar-balance-label">余额</span>
+                            <span class="sidebar-balance-value">¥1200.00</span>
+                        </div>
+                        <div class="sidebar-balance-item debt-section">
+                            <span class="sidebar-balance-label">欠款</span>
+                            <span class="sidebar-balance-value">¥0.00</span>
+                            <button class="debt-repay-btn" onclick="showToast('还款功能')">还款</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="customer-quick-actions">
+                <button class="quick-action-btn" onclick="showToast('散客开单')">散客开单</button>
+                <button class="quick-action-btn primary" onclick="openMemberModal()">选择会员</button>
+            </div>
+
+            <div class="action-section">
+                <div class="action-section-title">快速选购</div>
+                <div class="action-grid">
+                    <!-- 添加服务 -->
+                    <div class="action-card service" onclick="navigateTo('service')">
+                        <div class="action-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
+                        </div>
+                        <span class="action-card-label">添加服务</span>
+                        <span class="action-card-desc">面部护理/身体SPA</span>
+                    </div>
+
+                    <!-- 添加产品 -->
+                    <div class="action-card product" onclick="navigateTo('product')">
+                        <div class="action-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>
+                        </div>
+                        <span class="action-card-label">添加产品</span>
+                        <span class="action-card-desc">居家护肤/化妆品</span>
+                    </div>
+
+                    <!-- 添加套餐 -->
+                    <div class="action-card package" onclick="navigateTo('package')">
+                        <div class="action-card-icon">
+                            <svg viewBox="0 0 24 24"><path d="M20 5H4c-1.1 0-1.99.9-1.99 2L2 17c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-1 14H5c-.55 0-1-.45-1-1V8l5 5 5-5v10c0 .55-.45 1-1 1z"/></svg>
+                        </div>
+                        <span class="action-card-label">添加方案</span>
+                        <span class="action-card-desc">疗程方案/组合优惠</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 右侧主内容区 -->
+        <main class="main-content">
+            <!-- 内容区域 -->
+            <div class="content-body">
+                <div class="order-main">
+                    <!-- 已选商品区域 -->
+                    <div class="selected-items-area">
+                        <!-- 服务类商品 -->
+                        <div class="items-section" id="service-section">
+                            <div class="items-section-header">
+                                <div class="section-title-row">
+                                    <div class="section-icon service">
+                                        <svg viewBox="0 0 24 24"><path d="M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z"/></svg>
+                                    </div>
+                                    <span class="section-title">服务</span>
+                                    <span class="section-count" id="service-count">1</span>
+                                </div>
+                                <button class="section-action-btn" id="consume-all-btn">全部消耗</button>
+                            </div>
+                            <div class="items-list" id="service-items">
+                                <!-- 服务卡片 -->
+                                <div class="selected-item-card" data-item-type="service">
+                                    <div class="selected-item-body">
+                                        <div class="selected-item-header">
+                                            <div class="item-actions-fixed">
+                                                <button class="remark-btn" title="备注" onclick="openRemarkModal(this)">备注</button>
+                                                <button class="item-action-btn copy-btn" title="复制" onclick="copyItem(this)">
+                                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                                </button>
+                                                <button class="item-action-btn delete-btn" title="删除">
+                                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                                </button>
+                                            </div>
+                                            <div class="item-left-col">
+                                                <div class="item-name-wrapper">
+                                                    <span class="selected-item-name">单次皮肤护理</span>
+                                                    <label class="gift-badge">
+                                                        <input type="checkbox" class="gift-checkbox">
+                                                        <span class="gift-text">赠</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="item-qty-area">
+                                                <span class="qty-meta"><span class="qty-meta-label">购买</span></span>
+                                                <div class="qty-stepper">
+                                                    <div class="qty-stepper-btn" onclick="stepDown(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                                    </div>
+                                                    <input type="number" class="qty-stepper-value" value="1" min="1">
+                                                    <div class="qty-stepper-btn" onclick="stepUp(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                                    </div>
+                                                </div>
+                                                <span class="consume-label">本次消耗</span>
+                                                <div class="qty-stepper">
+                                                    <div class="qty-stepper-btn" onclick="stepDown(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                                    </div>
+                                                    <input type="number" class="qty-stepper-value" value="0" min="0">
+                                                    <div class="qty-stepper-btn" onclick="stepUp(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item-price-area">
+                                                <div class="price-main">
+                                                    <span class="price-main-amount">¥200.00</span>
+                                                    <a href="#" class="price-edit-link">改价</a>
+                                                </div>
+                                                <div class="price-sub">
+                                                    <span class="price-original">原价¥398.00</span>
+                                                    <span class="price-deduction">- ¥196.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="selected-item-meta">
+                                        </div>
+                                        <div class="meikebi-section">
+                                            <div class="beautician-picker">
+                                                <span class="beautician-picker-icon">+</span>
+                                                <span class="beautician-picker-text">美容师/销售</span>
+                                            </div>
+                                            <div class="meikebi-right">
+                                                <span class="meikebi-label">卡项</span>
+                                                <select class="meikebi-select">
+                                                    <option value="">请选择卡项</option>
+                                                    <option value="尊享金卡">尊享金卡</option>
+                                                </select>
+                                                <input type="text" class="meikebi-input" value="150.00">
+                                                <span class="meikebi-tip" style="display:none;">抵扣后余额: 0.00  居家产品7.0 | 服务7.0折 | 次卡7.0折</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 产品类商品 -->
+                        <div class="items-section" id="product-section">
+                            <div class="items-section-header">
+                                <div class="section-title-row">
+                                    <div class="section-icon product">
+                                        <svg viewBox="0 0 24 24"><path d="M18 6h-2c0-2.21-1.79-4-4-4S8 3.79 8 6H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2c1.1 0 2 .9 2 2h-4c0-1.1.9-2 2-2zm6 16H6V8h2v2c0 .55.45 1 1 1s1-.45 1-1V8h4v2c0 .55.45 1 1 1s1-.45 1-1V8h2v12z"/></svg>
+                                    </div>
+                                    <span class="section-title">产品</span>
+                                    <span class="section-count" id="product-count">1</span>
+                                </div>
+                                <button class="section-action-btn" id="take-all-btn">全部拿走</button>
+                            </div>
+                            <div class="items-list" id="product-items">
+                                <!-- 产品卡片 -->
+                                <div class="selected-item-card" data-item-type="product">
+                                    <div class="selected-item-body">
+                                        <div class="selected-item-header">
+                                            <div class="item-actions-fixed">
+                                                <button class="remark-btn" title="备注" onclick="openRemarkModal(this)">备注</button>
+                                                <button class="item-action-btn copy-btn" title="复制" onclick="copyItem(this)">
+                                                    <svg viewBox="0 0 24 24"><path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/></svg>
+                                                </button>
+                                                <button class="item-action-btn delete-btn" title="删除">
+                                                    <svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg>
+                                                </button>
+                                            </div>
+                                            <div class="item-left-col">
+                                                <div class="item-name-wrapper">
+                                                    <span class="selected-item-name">精粹霜</span>
+                                                    <label class="gift-badge">
+                                                        <input type="checkbox" class="gift-checkbox">
+                                                        <span class="gift-text">赠</span>
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="item-qty-area">
+                                                <span class="qty-meta"><span class="qty-meta-label">购买</span></span>
+                                                <div class="qty-stepper">
+                                                    <div class="qty-stepper-btn" onclick="stepDown(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                                    </div>
+                                                    <input type="number" class="qty-stepper-value" value="1" min="1">
+                                                    <div class="qty-stepper-btn" onclick="stepUp(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                                    </div>
+                                                </div>
+                                                <span class="consume-label">拿走数量</span>
+                                                <div class="qty-stepper">
+                                                    <div class="qty-stepper-btn" onclick="stepDown(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                                    </div>
+                                                    <input type="number" class="qty-stepper-value" value="0" min="0">
+                                                    <div class="qty-stepper-btn" onclick="stepUp(this)">
+                                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="item-price-area">
+                                                <div class="price-main">
+                                                    <span class="price-main-amount">¥200.00</span>
+                                                    <a href="#" class="price-edit-link">改价</a>
+                                                </div>
+                                                <div class="price-sub">
+                                                    <span class="price-original">原价¥398.00</span>
+                                                    <span class="price-deduction">- ¥196.00</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="selected-item-meta">
+                                        </div>
+                                        <div class="meikebi-section">
+                                            <div class="beautician-picker">
+                                                <span class="beautician-picker-icon">+</span>
+                                                <span class="beautician-picker-text">美容师/销售</span>
+                                            </div>
+                                            <div class="meikebi-right">
+                                                <span class="meikebi-label">卡项</span>
+                                                <select class="meikebi-select">
+                                                    <option value="">请选择卡项</option>
+                                                    <option value="尊享金卡">尊享金卡</option>
+                                                </select>
+                                                <input type="text" class="meikebi-input" value="150.00">
+                                                <span class="meikebi-tip" style="display:none;">抵扣后余额: 0.00  居家产品7.0 | 服务7.0折 | 次卡7.0折</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 订单信息折叠面板 -->
+                    <div class="order-form-panel">
+                        <div class="order-form-header" id="orderFormHeader">
+                            <span class="order-form-header-title">订单信息</span>
+                            <div class="order-form-header-toggle">
+                                <span>收起</span>
+                                <svg viewBox="0 0 24 24"><path d="M7 14l5-5 5 5H7z"/></svg>
+                            </div>
+                        </div>
+                        <div class="order-form-collapse-content">
+                            <div class="collapse-item">
+                                <label>下单时间:</label>
+                                <input type="datetime-local" class="order-date-input" id="orderDateInput" value="2026-10-04T13:23">
+                            </div>
+                            <div class="collapse-item">
+                                <label>批量分配美容师:</label>
+                                <select>
+                                    <option>请选择美容师</option>
+                                    <option>张美容师</option>
+                                    <option>李美容师</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="order-form" id="orderFormContent">
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <span class="form-label">优惠金额</span>
+                                    <input type="text" class="form-input" value="0">
+                                    <span class="form-unit">元</span>
+                                </div>
+                                <div class="form-tip">(若输入优惠金额，则不支持改价；反之则支持；改价后，优惠金额不可输入)</div>
+                            </div>
+                            <div class="form-group">
+                                <div class="form-row">
+                                    <span class="form-label">应付金额</span>
+                                    <input type="text" class="form-input" value="100.00">
+                                    <span class="form-unit">元</span>
+                                </div>
+                                <div class="form-tip">(修改金额，优惠金额同步修改)</div>
+                            </div>
+                            <div class="form-group">
+                                <span class="form-label">备注</span>
+                                <textarea class="form-textarea" placeholder="请输入备注"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部支付汇总栏 -->
+            <div class="payment-bar">
+                <div class="payment-summary">
+                    <div class="payment-item">
+                        <span class="payment-item-label">待收款</span>
+                        <span class="payment-item-value highlight">¥100.00</span>
+                    </div>
+                    <div class="payment-item">
+                        <span class="payment-item-label">共减</span>
+                        <span class="payment-item-value discount">¥38.00</span>
+                    </div>
+                </div>
+                <div class="payment-actions">
+                    <button class="btn-action secondary">配料</button>
+                    <button class="btn-action secondary">整单改价</button>
+                    <button class="btn-action secondary">挂单</button>
+                    <button class="btn-action primary">结账</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- 会员选择弹窗 -->
+    <div class="member-modal-overlay" id="memberModalOverlay">
+        <div class="member-modal">
+            <iframe id="memberModalIframe" src="popup-find-customer.html" frameborder="0"></iframe>
+        </div>
+    </div>
+
+        <!-- 确认提示框 -->
+    <div class="confirm-modal-overlay" id="confirmModalOverlay">
+        <div class="confirm-modal">
+            <div class="confirm-modal-content">
+                <div class="confirm-modal-icon">!</div>
+                <div class="confirm-modal-title">确认散客开单</div>
+                <div class="confirm-modal-desc">散客开单将移除当前已选会员，移除后需要重新选择会员。</div>
+            </div>
+            <div class="confirm-modal-footer">
+                <button class="btn-modal secondary" id="confirmCancel">取消</button>
+                <button class="btn-modal primary" id="confirmOk">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 备注弹窗 -->
+    <div class="remark-modal-overlay" id="remarkModalOverlay">
+        <div class="remark-modal">
+            <div class="remark-modal-header">
+                <span class="remark-modal-title">备注</span>
+                <div class="remark-modal-close" id="remarkModalClose">×</div>
+            </div>
+            <div class="remark-modal-body">
+                <textarea class="remark-modal-textarea" id="remarkModalTextarea" placeholder="请输入备注信息..."></textarea>
+            </div>
+            <div class="remark-modal-footer">
+                <button class="remark-modal-btn cancel" id="remarkModalCancel">取消</button>
+                <button class="remark-modal-btn confirm" id="remarkModalConfirm">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 模拟会员数据
+        const mockMembers = [
+            { id: 1, name: '张兰', phone: '13812348888', level: '新客' },
+            { id: 2, name: '李芳', phone: '13987654321', level: '银卡会员' },
+            { id: 3, name: '王艳', phone: '13711223344', level: '金卡会员' },
+            { id: 4, name: '赵静', phone: '13655667788', level: '铂金会员' },
+            { id: 5, name: '孙丽', phone: '13599887766', level: '钻石会员' },
+        ];
+
+        // DOM元素
+        const changeMemberBtn = document.getElementById('changeMemberBtn');
+        const memberModalOverlay = document.getElementById('memberModalOverlay');
+        const memberModalClose = document.getElementById('memberModalClose');
+        const memberModalSearchInput = document.getElementById('memberModalSearchInput');
+        const memberList = document.getElementById('memberList');
+        const memberModalCancel = document.getElementById('memberModalCancel');
+        const memberModalConfirm = document.getElementById('memberModalConfirm');
+        const orderFormHeader = document.getElementById('orderFormHeader');
+        const orderFormContent = document.getElementById('orderFormContent');
+        const confirmModalOverlay = document.getElementById('confirmModalOverlay');
+        const confirmCancel = document.getElementById('confirmCancel');
+        const confirmOk = document.getElementById('confirmOk');
+
+        let selectedMember = null;
+
+        // 渲染会员列表
+        function renderMemberList(members) {
+            memberList.innerHTML = '';
+            members.forEach(member => {
+                const item = document.createElement('div');
+                item.className = 'member-item';
+                item.innerHTML = `
+                    <div class="member-avatar">
+                        <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                    </div>
+                    <div class="member-info">
+                        <div class="member-name-row">
+                            <span class="member-name">${member.name}</span>
+                            <span class="member-level">${member.level}</span>
+                        </div>
+                        <div class="member-phone">${member.phone}</div>
+                    </div>
+                `;
+                item.addEventListener('click', () => selectMember(member, item));
+                memberList.appendChild(item);
+            });
+        }
+
+        // 选择会员
+        function selectMember(member, element) {
+            document.querySelectorAll('.member-item').forEach(item => item.classList.remove('selected'));
+            element.classList.add('selected');
+            selectedMember = member;
+        }
+
+        // 显示/隐藏会员弹窗
+        window.openMemberModal = function() {
+            memberModalOverlay.classList.add('show');
+        };
+
+        window.hideMemberModal = function() {
+            memberModalOverlay.classList.remove('show');
+            selectedMember = null;
+        };
+
+        // 显示/隐藏确认弹窗
+        function showConfirmModal() {
+            confirmModalOverlay.classList.add('show');
+        }
+
+        function hideConfirmModal() {
+            confirmModalOverlay.classList.remove('show');
+        }
+
+        // 搜索会员
+        function searchMembers(query) {
+            const filtered = mockMembers.filter(m => 
+                m.name.includes(query) || m.phone.includes(query)
+            );
+            renderMemberList(filtered);
+        }
+
+        // 导航功能
+        function navigateTo(type) {
+            const titles = {
+                'service': '服务选购',
+                'product': '产品选购',
+                'package': '套餐选购',
+                'quick': '快速选购'
+            };
+            showToast(`正在跳转到${titles[type]}页面...`);
+            // 实际项目中这里应该跳转到对应页面
+            // window.location.href = `/select-${type}.html`;
+        }
+
+        // Toast提示
+        function showToast(message) {
+            const existing = document.querySelector('.toast-message');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast-message';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'toastFadeOut 0.3s ease forwards';
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
+
+        // 事件绑定
+        if (changeMemberBtn) {
+            changeMemberBtn.addEventListener('click', openMemberModal);
+        }
+        if (memberModalClose) {
+            memberModalClose.addEventListener('click', hideMemberModal);
+        }
+        if (memberModalCancel) {
+            memberModalCancel.addEventListener('click', hideMemberModal);
+        }
+        if (memberModalConfirm) {
+            memberModalConfirm.addEventListener('click', () => {
+                if (selectedMember) {
+                    showToast(`已选择会员: ${selectedMember.name}`);
+                    hideMemberModal();
+                }
+            });
+        }
+        if (memberModalSearchInput) {
+            memberModalSearchInput.addEventListener('input', (e) => searchMembers(e.target.value));
+        }
+        memberModalOverlay.addEventListener('click', (e) => {
+            if (e.target === memberModalOverlay) hideMemberModal();
+        });
+        confirmModalOverlay.addEventListener('click', (e) => {
+            if (e.target === confirmModalOverlay) hideConfirmModal();
+        });
+        confirmCancel.addEventListener('click', hideConfirmModal);
+        confirmOk.addEventListener('click', hideConfirmModal);
+
+        // 监听来自iframe的消息
+        window.addEventListener('message', (e) => {
+            if (e.data.type === 'closeMemberModal') {
+                hideMemberModal();
+            } else if (e.data.type === 'selectMember') {
+                const memberData = e.data.data;
+                updateMemberInfo(memberData);
+            }
+        });
+
+        // 更新会员信息显示
+        function updateMemberInfo(member) {
+            const nameEl = document.querySelector('.sidebar-customer-name');
+            if (nameEl) nameEl.textContent = member.name;
+            const tagEl = document.querySelector('.sidebar-customer-tag');
+            if (tagEl) tagEl.textContent = member.tag;
+            const phoneEl = document.querySelector('.sidebar-customer-phone');
+            if (phoneEl) phoneEl.textContent = member.phone;
+            const balanceEl = document.querySelector('.sidebar-balance-value');
+            if (balanceEl) balanceEl.textContent = member.balance;
+            showToast(`已选择会员: ${member.name}`);
+        }
+
+        // 订单信息折叠
+        orderFormHeader.addEventListener('click', () => {
+            orderFormHeader.classList.toggle('expanded');
+            orderFormContent.classList.toggle('expanded');
+            const toggleText = orderFormHeader.querySelector('.order-form-header-toggle span');
+            toggleText.textContent = orderFormHeader.classList.contains('expanded') ? '收起' : '展开';
+        });
+
+        // 全部消耗/拿走按钮
+        document.getElementById('consume-all-btn')?.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const text = this.classList.contains('active') ? '取消全部' : '全部消耗';
+            this.textContent = text;
+            showToast(this.classList.contains('active') ? '已设置全部服务消耗' : '已取消全部消耗');
+        });
+
+        document.getElementById('take-all-btn')?.addEventListener('click', function() {
+            this.classList.toggle('active');
+            const text = this.classList.contains('active') ? '取消全部' : '全部拿走';
+            this.textContent = text;
+            showToast(this.classList.contains('active') ? '已设置全部产品拿走' : '已取消全部拿走');
+        });
+
+        // 初始化（仅在 memberList 元素存在时执行）
+        if (memberList) {
+            renderMemberList(mockMembers);
+        }
+
+        // ========== 商品复制功能 ==========
+        function copyItem(btn) {
+            const card = btn.closest('.selected-item-card');
+            if (!card) return;
+            
+            const itemType = card.dataset.itemType;
+            const newCard = card.cloneNode(true);
+            
+            // 生成唯一ID
+            const uniqueId = 'item-' + Date.now() + '-' + Math.random().toString(36).substr(2, 9);
+            newCard.dataset.itemId = uniqueId;
+            
+            // 重置输入框的值（保持与原商品一致）
+            const inputs = newCard.querySelectorAll('input');
+            inputs.forEach(input => {
+                // 如果是数量输入框，保持原值
+                if (input.classList.contains('qty-stepper-value')) {
+                    // 保持当前值
+                } else {
+                    // 其他输入框保持原值
+                }
+            });
+            
+            // 移除可能的选中状态
+            newCard.classList.remove('selected');
+            
+            // 在当前卡片后面插入新卡片
+            card.parentNode.insertBefore(newCard, card.nextSibling);
+            
+            showToast('商品已复制');
+        }
+
+        // ========== 步进器功能 ==========
+        function stepUp(btn) {
+            const container = btn.closest('.qty-stepper');
+            const input = container.querySelector('input[type="number"]');
+            const min = parseInt(input.min) || 0;
+            let value = parseInt(input.value) || min;
+            value++;
+            input.value = value;
+        }
+
+        function stepDown(btn) {
+            const container = btn.closest('.qty-stepper');
+            const input = container.querySelector('input[type="number"]');
+            const min = parseInt(input.min) || 0;
+            let value = parseInt(input.value) || min;
+            if (value > min) {
+                value--;
+                input.value = value;
+            }
+        }
+
+        // ========== 备注弹窗功能 ==========
+        let currentRemarkBtn = null;
+
+        function openRemarkModal(btn) {
+            currentRemarkBtn = btn;
+            const remarkModalOverlay = document.getElementById('remarkModalOverlay');
+            const remarkModalTextarea = document.getElementById('remarkModalTextarea');
+
+            // 获取当前备注内容
+            const currentRemark = btn.getAttribute('data-remark') || '';
+            remarkModalTextarea.value = currentRemark;
+
+            remarkModalOverlay.classList.add('show');
+            remarkModalTextarea.focus();
+        }
+
+        function closeRemarkModal() {
+            const remarkModalOverlay = document.getElementById('remarkModalOverlay');
+            remarkModalOverlay.classList.remove('show');
+            currentRemarkBtn = null;
+        }
+
+        function saveRemark() {
+            const remarkModalTextarea = document.getElementById('remarkModalTextarea');
+            const remark = remarkModalTextarea.value.trim();
+
+            if (currentRemarkBtn) {
+                if (remark) {
+                    currentRemarkBtn.setAttribute('data-remark', remark);
+                    currentRemarkBtn.classList.add('has-content');
+                    showToast('备注已保存');
+                } else {
+                    currentRemarkBtn.removeAttribute('data-remark');
+                    currentRemarkBtn.classList.remove('has-content');
+                }
+            }
+
+            closeRemarkModal();
+        }
+
+        // 备注弹窗事件绑定
+        document.getElementById('remarkModalClose')?.addEventListener('click', closeRemarkModal);
+        document.getElementById('remarkModalCancel')?.addEventListener('click', closeRemarkModal);
+        document.getElementById('remarkModalConfirm')?.addEventListener('click', saveRemark);
+        document.getElementById('remarkModalOverlay')?.addEventListener('click', function(e) {
+            if (e.target === this) closeRemarkModal();
+        });
+
+        // 备注输入框支持Enter快捷保存
+        document.getElementById('remarkModalTextarea')?.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && e.ctrlKey) {
+                saveRemark();
+            }
+        });
+    </script>
+</body>
+</html>

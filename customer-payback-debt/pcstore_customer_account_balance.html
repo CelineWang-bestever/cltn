@@ -49,7 +49,9 @@
             <div class="text-sm text-gray-400">
                 <span class="hover:text-gray-600 cursor-pointer">客户列表</span>
                 <span class="mx-1">&gt;</span>
-                <span class="text-gray-600">客户详情</span>
+                <span class="hover:text-gray-600 cursor-pointer">客户详情</span>
+                <span class="mx-1">&gt;</span>
+                <span class="text-gray-600">钱包余额</span>
             </div>
         </div>
         <div class="flex items-center space-x-6">
@@ -95,18 +97,7 @@
             </div>
         </aside>
         <!-- 右侧主内容区 -->
-        <section class="flex-1 flex flex-col bg-[#F9FAFB] overflow-hidden">
-            <!-- 标签页导航 -->
-            <nav class="bg-white px-8 flex space-x-10 border-b border-gray-100 shrink-0">
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">客户权益</a>
-                <a class="py-4 text-sm font-medium active-tab" href="#">我的钱包</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">交易记录</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">服务记录</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">服务日志</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">物品寄存</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">平台核销</a>
-                <a class="py-4 text-sm font-medium text-gray-500 hover:text-[#FF7090]" href="#">测肤记录</a>
-            </nav>
+        <section class="flex-1 flex flex-col bg-[#F9FAFB] overflow-hidden max-w-[64%] mx-auto">
             <!-- 滚动内容区 -->
             <div class="flex-1 overflow-y-auto p-6 space-y-4">
                 <!-- 钱包概览卡片 -->
@@ -119,17 +110,7 @@
                             </div>
                             <div>
                                 <p class="text-xs text-gray-400 mb-1">钱包余额</p>
-                                <p class="text-2xl font-semibold text-gray-800">1</p>
-                            </div>
-                        </div>
-                        <!-- 分割线 -->
-                        <div class="h-10 w-px bg-gray-100"></div>
-                        <!-- 欠款 -->
-                        <div>
-                            <p class="text-xs text-gray-400 mb-1">欠款</p>
-                            <div class="flex items-baseline space-x-2">
-                                <span class="text-2xl font-semibold text-gray-800">150</span>
-                                <a class="text-xs text-[#F1A3B8] hover:underline" href="pcstore_customer_pay_debt.html">还欠款 &gt;</a>
+                                <p class="text-2xl font-semibold text-gray-800">888.00</p>
                             </div>
                         </div>
                     </div>
@@ -144,7 +125,7 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                     <div class="flex items-center space-x-2 mb-6">
                         <div class="w-1 h-4 bg-[#FF7090] rounded-full"></div>
-                        <h2 class="text-base font-medium text-gray-800">钱包账单明细</h2>
+                        <h2 class="text-base font-medium text-gray-800">钱包余额明细</h2>
                     </div>
                     <div class="overflow-x-auto">
                         <table class="w-full text-left">
@@ -175,62 +156,6 @@
                                 <!-- 填充空行以保持视觉平衡 -->
                                 <tr class="h-40">
                                     <td colspan="7"></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                <!-- 欠款明细表格区域 -->
-                <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                    <div class="flex items-center justify-between mb-6">
-                        <div class="flex items-center space-x-2">
-                            <div class="w-1 h-4 bg-[#FF7090] rounded-full"></div>
-                            <h2 class="text-base font-medium text-gray-800">欠款明细</h2>
-                        </div>
-                        <!-- <a href="pcstore_customer_pay_debt.html" class="px-4 py-2 bg-[#F1A3B8] text-white text-sm font-medium rounded-full hover:bg-pink-500 transition-colors shadow-md shadow-pink-100">
-                            立即还款
-                        </a> -->
-                    </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead>
-                                <tr class="bg-gray-50 text-gray-500 text-xs font-medium uppercase tracking-wider">
-                                    <th class="px-6 py-4 border-b border-gray-100">交易类型</th>
-                                    <th class="px-6 py-4 border-b border-gray-100">关联订单号</th>
-                                    <th class="px-6 py-4 border-b border-gray-100">支付方式</th>
-                                    <th class="px-6 py-4 border-b border-gray-100 text-center">金额</th>
-                                    <th class="px-6 py-4 border-b border-gray-100">交易日期</th>
-                                    <th class="px-6 py-4 border-b border-gray-100 text-center">美容师</th>
-                                    <th class="px-6 py-4 border-b border-gray-100 text-center">备注</th>
-                                </tr>
-                            </thead>
-                            <tbody class="text-sm text-gray-600">
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-5 border-b border-gray-50">欠款</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 font-medium text-gray-800">2026041700050207326</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">-</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center font-semibold text-gray-800">¥ 300.00</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">2026-03-15 14:30:22</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center">lisa</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center text-gray-400">关联订单填写的备注</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-5 border-b border-gray-50">还款</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 font-medium text-gray-800">--</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">微信支付</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center font-semibold text-gray-800">¥ 100.00</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">2026-02-28 10:15:08</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center">amy</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center text-gray-400">还款时的备注</td>
-                                </tr>
-                                <tr class="hover:bg-gray-50 transition-colors">
-                                    <td class="px-6 py-5 border-b border-gray-50">还款</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 font-medium text-gray-800">--</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">现金</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center font-semibold text-gray-800">¥ 50.00</td>
-                                    <td class="px-6 py-5 border-b border-gray-50">2026-02-18 10:15:08</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center">amy</td>
-                                    <td class="px-6 py-5 border-b border-gray-50 text-center text-gray-400">还款时的备注</td>
                                 </tr>
                             </tbody>
                         </table>

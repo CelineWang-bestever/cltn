@@ -420,6 +420,10 @@
                 <div class="flex items-center space-x-4 flex-wrap justify-between">
                     <div class="flex items-center space-x-4 flex-wrap">
                         <div class="flex items-center space-x-2">
+                            <label class="text-gray-700 font-medium">报名批次</label>
+                            <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入批次名称">
+                        </div>
+                        <div class="flex items-center space-x-2">
                             <label class="text-gray-700 font-medium">门店编码</label>
                             <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入门店编码">
                         </div>
@@ -428,10 +432,17 @@
                             <input type="text" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入门店名称">
                         </div>
                         <div class="flex items-center space-x-2">
-                            <label class="text-gray-700 font-medium">合同生效日期</label>
-                            <input type="date" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="开始日期">
-                            <span class="text-gray-500">-</span>
-                            <input type="date" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="结束日期">
+                            <label class="text-gray-700 font-medium">分公司</label>
+                            <select class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40">
+                                <option value="">全部</option>
+                                <option value="店销-北京">店销-北京</option>
+                                <option value="店销-天津">店销-天津</option>
+                                <option value="店销-河北">店销-河北</option>
+                                <option value="店销-上海">店销-上海</option>
+                                <option value="店销-广州">店销-广州</option>
+                                <option value="店销-深圳">店销-深圳</option>
+                                <option value="店销-杭州">店销-杭州</option>
+                            </select>
                         </div>
                         <div class="flex items-center space-x-2">
                             <label class="text-gray-700 font-medium">合同状态</label>
@@ -462,45 +473,53 @@
                 <table class="w-full">
                     <thead>
                         <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">报名批次</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">门店编码</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">门店名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">分公司</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">签署用户姓名</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同开始日期</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同结束日期</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">合同状态</th>
-                            <th class="py-4 px-6 text-left text-gray-600 font-medium">签署用户姓名</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">签署时间</th>
                             <th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">第2批</td>
                             <td class="py-4 px-6 text-gray-800">STORE001</td>
                             <td class="py-4 px-6 text-gray-800">克丽缇娜上海旗舰店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-上海</td>
+                            <td class="py-4 px-6 text-gray-600">张三</td>
                             <td class="py-4 px-6 text-gray-600">2026-06-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-08-31</td>
                             <td class="py-4 px-6"><span class="text-green-500 font-medium">已签署</span></td>
-                            <td class="py-4 px-6 text-gray-600">张三</td>
                             <td class="py-4 px-6 text-gray-600">2026-03-01 14:30:00</td>
                             <td class="py-4 px-6"><a href="#" class="text-primary hover:underline">下载合同</a></td>
                         </tr>
                         <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">第2批</td>
                             <td class="py-4 px-6 text-gray-800">STORE003</td>
                             <td class="py-4 px-6 text-gray-800">克丽缇娜广州天河店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-广州</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
                             <td class="py-4 px-6 text-gray-600">2026-06-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-08-31</td>
                             <td class="py-4 px-6"><span class="text-orange-500 font-medium">未签署</span></td>
-                            <td class="py-4 px-6 text-gray-600">-</td>
                             <td class="py-4 px-6 text-gray-400">-</td>
                             <td class="py-4 px-6">-</td>
                         </tr>
                         <tr class="table-row">
+                            <td class="py-4 px-6 text-gray-800">第1批</td>
                             <td class="py-4 px-6 text-gray-800">STORE002</td>
                             <td class="py-4 px-6 text-gray-800">克丽缇娜北京朝阳店</td>
+                            <td class="py-4 px-6 text-gray-600">店销-北京</td>
+                            <td class="py-4 px-6 text-gray-600">-</td>
                             <td class="py-4 px-6 text-gray-600">2026-04-01</td>
                             <td class="py-4 px-6 text-gray-600">2026-06-31</td>
                             <td class="py-4 px-6"><span class="text-orange-500 font-medium">已失效</span></td>
                             <td class="py-4 px-6 text-gray-600">-</td>
-                            <td class="py-4 px-6 text-gray-400">-</td>
                             <td class="py-4 px-6">-</td>
                         </tr>
                     </tbody>
@@ -560,6 +579,15 @@
                 <button class="close-btn" onclick="closeAddStoreModal()">×</button>
             </div>
             <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">选择报名批次</label>
+                    <select class="form-select" id="batchSelect">
+                        <option value="">请选择报名批次</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                    </select>
+                </div>
                 <div class="form-group">
                     <label class="form-label">选择门店</label>
                     <select class="form-select" id="storeSelect">
@@ -750,9 +778,15 @@
 
         // 保存门店报名
         function saveStoreRegistration() {
+            const batch = document.getElementById('batchSelect').value;
             const store = document.getElementById('storeSelect').value;
             const contractStartDate = document.getElementById('contractStartDate').value;
             const contractEndDate = document.getElementById('contractEndDate').value;
+
+            if (!batch) {
+                alert('请选择报名批次');
+                return;
+            }
 
             if (!store) {
                 alert('请选择门店');
@@ -776,6 +810,9 @@
 
             // 模拟保存操作
             alert('保存成功！');
+
+            // 更新对应批次的报名门店数量
+            updateStoreCount(batch);
 
             // 关闭弹窗
             closeAddStoreModal();
