@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>每日经营数据上传</title>
+    <style>
+        :root {
+            --primary: #E8A0B4;
+            --primary-dark: #D4879B;
+            --primary-light: #F5D5DE;
+            --primary-bg: #FFF5F7;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --bg-page: #FAFAFA;
+            --border-color: #EEEEEE;
+            --success: #52C41A;
+            --error: #FF4D4F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: PingFang SC, -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 页面容器 */
+        .page-container {
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+        }
+
+        .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 主内容区 */
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 24px 20px;
+        }
+
+        /* 按钮区域 */
+        .action-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+        }
+
+        .action-btn {
+            flex: 1;
+            min-height: 56px;
+            padding: 16px 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+
+        .action-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .action-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .action-btn.primary:active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        .action-btn.secondary {
+            background: var(--bg-page);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .action-btn.secondary:active {
+            background: var(--border-color);
+            transform: scale(0.98);
+        }
+
+        /* 已上传文件列表 */
+        .uploaded-section {
+            margin-top: 12px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .uploaded-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .uploaded-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .uploaded-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .uploaded-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .uploaded-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-page);
+        }
+
+        .uploaded-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .uploaded-item .delete-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 0;
+            transition: opacity 0.2s;
+        }
+
+        .uploaded-item:active .delete-btn {
+            opacity: 1;
+        }
+
+        .uploaded-item .delete-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #FFFFFF;
+        }
+
+        .uploaded-item .status {
+            position: absolute;
+            bottom: 4px;
+            left: 4px;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #FFFFFF;
+        }
+
+        .uploaded-item .status.success {
+            background: var(--success);
+        }
+
+        .uploaded-item .status.error {
+            background: var(--error);
+        }
+
+        .uploaded-item .status.uploading {
+            background: var(--primary);
+        }
+
+        /* 日期选择区域 */
+        .date-section {
+            background: #FFFFFF;
+            border-radius: 12px;
+        }
+
+        .date-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .date-label .required {
+            color: var(--error);
+            margin-left: 4px;
+        }
+
+        .date-label .hint {
+            font-size: 12px;
+            font-weight: normal;
+            color: var(--text-muted);
+            margin-left: 8px;
+        }
+
+        .date-input-wrap {
+            position: relative;
+        }
+
+        .date-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 48px 0 16px;
+            font-size: 16px;
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            background: #FFFFFF;
+            cursor: pointer;
+        }
+
+        .date-input:focus {
+            border-color: var(--primary);
+        }
+
+        .date-input.error {
+            border-color: var(--error);
+        }
+
+        .date-icon {
+            position: absolute;
+            right: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+        }
+
+        .date-icon svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
+        }
+
+        /* 日期选择器弹窗 */
+        .date-picker-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .date-picker-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .date-picker-content {
+            width: 100%;
+            max-width: 430px;
+            background: #FFFFFF;
+            border-radius: 20px 20px 0 0;
+            padding: 20px;
+            transform: translateY(100%);
+            transition: transform 0.3s;
+        }
+
+        .date-picker-modal.show .date-picker-content {
+            transform: translateY(0);
+        }
+
+        .date-picker-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .date-picker-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .date-picker-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .date-picker-close svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+        }
+
+        .date-picker-calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+        }
+
+        .date-picker-day {
+            aspect-ratio: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-picker-day.weekday {
+            font-size: 12px;
+            color: var(--text-muted);
+            cursor: default;
+        }
+
+        .date-picker-day.today {
+            background: var(--primary-light);
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .date-picker-day.selected {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .date-picker-day.disabled {
+            color: #E0E0E0;
+            cursor: not-allowed;
+        }
+
+        .date-picker-day:hover:not(.disabled):not(.weekday) {
+            background: var(--primary-bg);
+        }
+
+        .date-picker-nav {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 8px;
+        }
+
+        .date-picker-nav button {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .date-picker-nav button svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+        }
+
+        .date-picker-month {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .date-picker-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 20px;
+        }
+
+        .date-picker-btn {
+            flex: 1;
+            padding: 14px;
+            border-radius: 10px;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .date-picker-btn.secondary {
+            background: var(--bg-page);
+            color: var(--text-secondary);
+        }
+
+        .date-picker-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .date-picker-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* 备注区域 */
+        .remark-section {
+            margin-top: 20px;
+        }
+
+        .remark-input {
+            width: 100%;
+            height: 80px;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            resize: none;
+            outline: none;
+        }
+
+        .remark-input:focus {
+            border-color: var(--primary);
+        }
+
+        /* 底部按钮 */
+        .bottom-bar {
+            padding: 16px 20px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .bottom-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .bottom-buttons .action-buttons {
+            gap: 12px;
+        }
+
+        .bottom-buttons .action-btn {
+            min-height: 52px;
+            padding: 14px 20px;
+            font-size: 15px;
+            gap: 10px;
+        }
+
+        .bottom-buttons .action-btn svg {
+            width: 22px;
+            height: 22px;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            background: var(--primary);
+            color: #FFFFFF;
+            transition: all 0.2s;
+        }
+
+        .submit-btn:disabled {
+            background: #E8E8E8;
+            color: #999999;
+            cursor: not-allowed;
+        }
+
+        .submit-btn:not(:disabled):active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 14px 24px;
+            background: rgba(0, 0, 0, 0.75);
+            color: #FFFFFF;
+            border-radius: 8px;
+            font-size: 14px;
+            display: none;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 隐藏的文件选择器 */
+        #cameraInput,
+        #galleryInput {
+            display: none;
+        }
+
+        /* 空状态 */
+        .empty-uploaded {
+            text-align: center;
+            padding: 20px;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* 响应式适配 */
+        @media screen and (max-width: 360px) {
+            .action-btn {
+                min-height: 52px;
+                padding: 14px 20px;
+                font-size: 15px;
+            }
+
+            .action-btn svg {
+                width: 22px;
+                height: 22px;
+            }
+
+            .uploaded-grid {
+                gap: 8px;
+            }
+        }
+
+        @media screen and (min-width: 400px) {
+            .action-buttons {
+                gap: 20px;
+            }
+
+            .action-btn {
+                min-height: 60px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                </button>
+                <h1 class="header-title">每日经营数据</h1>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 日期选择 -->
+            <div class="date-section">
+                <label class="date-label">
+                    经营数据日期 <span class="required">*</span>
+                    <span class="hint">（选择数据对应的业务日期）</span>
+                </label>
+                <div class="date-input-wrap">
+                    <input type="text" class="date-input" id="businessDate" readonly placeholder="请选择日期"
+                        onclick="openDatePicker()">
+                    <div class="date-icon">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.11 0-1.99.9-1.99 2L3 20c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V9h14v11z" />
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <!-- 备注 -->
+            <div class="remark-section">
+                <label class="date-label">备注信息（选填）</label>
+                <textarea class="remark-input" id="remarkInput" placeholder="备注信息（选填）"></textarea>
+            </div>
+            <!-- 已上传文件列表 -->
+            <div class="uploaded-section" id="uploadedSection" style="display: none;">
+                <div class="uploaded-header">
+                    <span class="uploaded-title">已上传</span>
+                    <span class="uploaded-count" id="uploadedCount">0/10</span>
+                </div>
+                <div class="uploaded-grid" id="uploadedGrid"></div>
+            </div>
+
+
+        </main>
+
+        <!-- 底部按钮 -->
+        <footer class="bottom-bar">
+            <div class="bottom-buttons">
+                <!-- 操作按钮 -->
+                <div class="action-buttons">
+                    <button class="action-btn primary" onclick="triggerCamera()">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                        </svg>
+                        拍照上传
+                    </button>
+                    <button class="action-btn primary" onclick="triggerGallery()">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v3h-2.5V6h-1v3H15V6h-1v3H12.5V6h-1v3H10V6H8zm0 12H4v-1h16v1zm0-3H4v-1h16v1zm0-3H4V9h16v1zm0-3H4V6h16v1z" />
+                        </svg>
+                        相册选择
+                    </button>
+                </div>
+                <button class="submit-btn" id="submitBtn" disabled onclick="submitUpload()">确认上传</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 日期选择器弹窗 -->
+    <div class="date-picker-modal" id="datePickerModal" onclick="closeDatePicker()">
+        <div class="date-picker-content" onclick="event.stopPropagation()">
+            <div class="date-picker-header">
+                <span class="date-picker-title">选择经营数据日期</span>
+                <button class="date-picker-close" onclick="closeDatePicker()">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="date-picker-nav">
+                <button onclick="changeMonth(-1)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
+                    </svg>
+                </button>
+                <span class="date-picker-month" id="datePickerMonth"></span>
+                <button onclick="changeMonth(1)">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="date-picker-calendar" id="datePickerCalendar"></div>
+            <div class="date-picker-actions">
+                <button class="date-picker-btn secondary" onclick="closeDatePicker()">取消</button>
+                <button class="date-picker-btn primary" onclick="confirmDate()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 隐藏的文件选择器 -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple>
+    <input type="file" id="galleryInput" accept="image/jpeg,image/png,image/jpg" multiple>
+
+    <script>
+        // 已上传文件列表
+        let uploadedFiles = [];
+        const maxFiles = 10;
+        const imageExtensions = ['jpg', 'jpeg', 'png'];
+
+        // 经营数据日期
+        let selectedDate = null;
+        let currentDate = new Date();
+
+        // 初始化默认日期为今天
+        function initDefaultDate() {
+            const today = new Date();
+            const dateStr = formatDate(today);
+            document.getElementById('businessDate').value = dateStr;
+            selectedDate = today;
+        }
+
+        // 格式化日期为 YYYY-MM-DD
+        function formatDate(date) {
+            const year = date.getFullYear();
+            const month = String(date.getMonth() + 1).padStart(2, '0');
+            const day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        // 打开日期选择器
+        function openDatePicker() {
+            renderCalendar(selectedDate || currentDate);
+            document.getElementById('datePickerModal').classList.add('show');
+        }
+
+        // 关闭日期选择器
+        function closeDatePicker() {
+            document.getElementById('datePickerModal').classList.remove('show');
+        }
+
+        // 渲染日历
+        function renderCalendar(date) {
+            const year = date.getFullYear();
+            const month = date.getMonth();
+
+            // 更新月份显示
+            document.getElementById('datePickerMonth').textContent = `${year}年${month + 1}月`;
+
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const today = new Date();
+            const todayStr = formatDate(today);
+            const selectedStr = selectedDate ? formatDate(selectedDate) : null;
+
+            const weekdays = ['日', '一', '二', '三', '四', '五', '六'];
+            let calendarHtml = weekdays.map(day => `<div class="date-picker-day weekday">${day}</div>`).join('');
+
+            // 上月空白
+            for (let i = 0; i < firstDay.getDay(); i++) {
+                calendarHtml += '<div class="date-picker-day"></div>';
+            }
+
+            // 当月日期
+            const maxDate = today; // 最大可选日期为今天
+            for (let i = 1; i <= lastDay.getDate(); i++) {
+                const currentDate = new Date(year, month, i);
+                const dateStr = formatDate(currentDate);
+                const isToday = dateStr === todayStr;
+                const isSelected = dateStr === selectedStr;
+                const isDisabled = currentDate > maxDate;
+
+                let className = 'date-picker-day';
+                if (isToday) className += ' today';
+                if (isSelected) className += ' selected';
+                if (isDisabled) className += ' disabled';
+
+                calendarHtml += `<div class="${className}" ${!isDisabled ? `onclick="selectDate(${year}, ${month}, ${i})"` : ''}>${i}</div>`;
+            }
+
+            document.getElementById('datePickerCalendar').innerHTML = calendarHtml;
+        }
+
+        // 选择日期
+        function selectDate(year, month, day) {
+            selectedDate = new Date(year, month, day);
+            renderCalendar(selectedDate);
+        }
+
+        // 切换月份
+        function changeMonth(delta) {
+            const date = selectedDate || currentDate;
+            const newDate = new Date(date.getFullYear(), date.getMonth() + delta, 1);
+            renderCalendar(newDate);
+        }
+
+        // 确认日期
+        function confirmDate() {
+            if (selectedDate) {
+                document.getElementById('businessDate').value = formatDate(selectedDate);
+                document.getElementById('businessDate').classList.remove('error');
+                updateSubmitBtn();
+            }
+            closeDatePicker();
+        }
+
+        // 返回
+        function goBack() {
+            if (uploadedFiles.length > 0) {
+                if (confirm('您有未上传的文件，确定要离开吗？')) {
+                    window.history.back();
+                }
+            } else {
+                window.history.back();
+            }
+        }
+
+        // 触发拍照
+        function triggerCamera() {
+            document.getElementById('cameraInput').click();
+        }
+
+        // 触发相册选择
+        function triggerGallery() {
+            document.getElementById('galleryInput').click();
+        }
+
+        // 处理拍照选择
+        document.getElementById('cameraInput').addEventListener('change', handleFiles);
+
+        // 处理相册选择
+        document.getElementById('galleryInput').addEventListener('change', handleFiles);
+
+        // 处理选择的文件
+        function handleFiles(e) {
+            const files = e.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                if (uploadedFiles.length >= maxFiles) {
+                    showToast(`最多上传${maxFiles}个文件`);
+                    break;
+                }
+
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (!imageExtensions.includes(extension)) {
+                    showToast(`${file.name} 格式不支持`);
+                    continue;
+                }
+
+                const isDuplicate = uploadedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (isDuplicate) {
+                    continue;
+                }
+
+                uploadedFiles.push({
+                    id: Date.now() + i,
+                    name: file.name,
+                    file: file,
+                    thumb: URL.createObjectURL(file),
+                    status: 'success'
+                });
+            }
+
+            renderUploadedList();
+            updateSubmitBtn();
+
+            // 清空input以便重复选择同一文件
+            e.target.value = '';
+        }
+
+        // 渲染已上传列表
+        function renderUploadedList() {
+            const section = document.getElementById('uploadedSection');
+            const grid = document.getElementById('uploadedGrid');
+            const count = document.getElementById('uploadedCount');
+
+            if (uploadedFiles.length === 0) {
+                section.style.display = 'none';
+                return;
+            }
+
+            section.style.display = 'block';
+            count.textContent = `${uploadedFiles.length}/${maxFiles}`;
+
+            grid.innerHTML = uploadedFiles.map(item => `
+                <div class="uploaded-item">
+                    <img src="${item.thumb}" alt="${item.name}">
+                    <span class="status ${item.status}">${getStatusText(item.status)}</span>
+                    <div class="delete-btn" onclick="deleteFile(${item.id})">
+                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // 获取状态文本
+        function getStatusText(status) {
+            return { success: '已上传', error: '失败', uploading: '上传中' }[status] || status;
+        }
+
+        // 删除文件
+        function deleteFile(id) {
+            event.stopPropagation();
+            uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+            renderUploadedList();
+            updateSubmitBtn();
+        }
+
+        // 更新提交按钮状态
+        function updateSubmitBtn() {
+            const btn = document.getElementById('submitBtn');
+            const hasFiles = uploadedFiles.length > 0;
+            const hasDate = selectedDate !== null;
+            btn.disabled = !hasFiles || !hasDate;
+        }
+
+        // 提交上传
+        function submitUpload() {
+            // 验证日期
+            if (!selectedDate) {
+                document.getElementById('businessDate').classList.add('error');
+                showToast('请选择经营数据日期');
+                return;
+            }
+
+            // 验证文件
+            if (uploadedFiles.length === 0) {
+                showToast('请先选择文件');
+                return;
+            }
+
+            // 模拟API调用，包含业务日期参数
+            showToast(`正在上传 ${formatDate(selectedDate)} 的经营数据...`);
+
+            setTimeout(() => {
+                showToast('上传成功');
+                uploadedFiles = [];
+                renderUploadedList();
+                updateSubmitBtn();
+                document.getElementById('remarkInput').value = '';
+            }, 1500);
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            initDefaultDate();
+        });
+    </script>
+</body>
+
+</html>
