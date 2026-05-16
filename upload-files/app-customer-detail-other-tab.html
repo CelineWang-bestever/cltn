@@ -784,6 +784,8 @@
             background: #FFFFFF;
             border-radius: 16px 16px 0 0;
             overflow: hidden;
+            display: flex;
+            flex-direction: column;
             transform: translateY(100%);
             transition: transform 0.3s;
         }
@@ -825,7 +827,7 @@
 
         .modal-body {
             padding: 16px;
-            max-height: 60vh;
+            flex: 1;
             overflow-y: auto;
         }
 
@@ -1155,6 +1157,56 @@
         .confirm-actions .btn-danger:hover {
             background: #E64545;
         }
+
+        /* Form group */
+        .form-group {
+            margin-bottom: 16px;
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .file-section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .file-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .file-action-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            height: 32px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+            border: 1px solid var(--border-color);
+            background: #FFFFFF;
+            color: #e8a0b4;
+            cursor: pointer;
+        }
+
+        .file-action-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .file-action-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+        }
     </style>
 </head>
 
@@ -1271,8 +1323,8 @@
                 </div>
 
                 <!-- 资料类型选择 -->
-                <div class="type-selector">
-                    <div class="type-selector-label">资料类型</div>
+                <div class="form-group">
+                    <label class="form-label">资料类型</label>
                     <div class="type-options" id="typeOptions">
                         <div class="type-option" data-type="customer" onclick="selectType(this)">客户资料</div>
                         <div class="type-option" data-type="care" onclick="selectType(this)">护理记录</div>
@@ -1283,30 +1335,34 @@
                     </div>
                 </div>
 
-                <!-- 已上传列表 -->
-                <div class="uploaded-list" id="uploadedList"></div>
-
-                <!-- 上传区域 -->
-                <div class="upload-area">
-                    <div class="upload-btn-item" onclick="takePhoto()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0a3.2 3.2 0 1 0-6.4 0" />
-                            <path
-                                d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-                        </svg>
-                        <span>拍照上传</span>
+                <!-- 文件上传区域 -->
+                <div class="form-group">
+                    <div class="file-section-header">
+                        <label class="form-label">已上传文件</label>
+                        <div class="file-actions">
+                            <button class="file-action-btn" onclick="takePhoto()">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0a3.2 3.2 0 1 0-6.4 0" />
+                                    <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                                </svg>
+                                <span>拍照上传</span>
+                            </button>
+                            <button class="file-action-btn" onclick="selectFromAlbum()">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
+                                </svg>
+                                <span>选择相册</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="upload-btn-item" onclick="selectFromAlbum()">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
-                        </svg>
-                        <span>选择相册</span>
-                    </div>
+                    <div class="uploaded-list" id="uploadedList"></div>
                 </div>
 
                 <!-- 备注 -->
-                <textarea class="remark-input" id="remarkInput" placeholder="请输入备注信息（选填）"></textarea>
+                <div class="form-group">
+                    <label class="form-label">备注</label>
+                    <textarea class="remark-input" id="remarkInput" placeholder="请输入备注信息（选填）"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeUploadModal()">取消</button>
@@ -1336,8 +1392,8 @@
                     </div>
                 </div>
 
-                <div class="type-selector">
-                    <div class="type-selector-label">资料类型</div>
+                <div class="form-group">
+                    <label class="form-label">资料类型</label>
                     <div class="type-options" id="editTypeOptions">
                         <div class="type-option" data-type="customer" onclick="selectEditType(this)">客户资料</div>
                         <div class="type-option" data-type="care" onclick="selectEditType(this)">护理记录</div>
@@ -1348,27 +1404,32 @@
                     </div>
                 </div>
 
-                <div class="uploaded-list" id="editUploadedList"></div>
-
-                <div class="upload-area">
-                    <div class="upload-btn-item" onclick="editTakePhoto()">
-                        <svg viewBox="0 0 24 24">
-                            <path d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0a3.2 3.2 0 1 0-6.4 0" />
-                            <path
-                                d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z" />
-                        </svg>
-                        <span>拍照上传</span>
+                <div class="form-group">
+                    <div class="file-section-header">
+                        <label class="form-label">已上传文件</label>
+                        <div class="file-actions">
+                            <button class="file-action-btn" onclick="editTakePhoto()">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M12 12m-3.2 0a3.2 3.2 0 1 0 6.4 0a3.2 3.2 0 1 0-6.4 0" />
+                                    <path d="M9 2L7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                                </svg>
+                                <span>拍照上传</span>
+                            </button>
+                            <button class="file-action-btn" onclick="editSelectFromAlbum()">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z"/>
+                                </svg>
+                                <span>选择相册</span>
+                            </button>
+                        </div>
                     </div>
-                    <div class="upload-btn-item" onclick="editSelectFromAlbum()">
-                        <svg viewBox="0 0 24 24">
-                            <path
-                                d="M22 16V4c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2zm-11-4l2.03 2.71L16 11l4 5H8l3-4zM2 6v14c0 1.1.9 2 2 2h14v-2H4V6H2z" />
-                        </svg>
-                        <span>选择相册</span>
-                    </div>
+                    <div class="uploaded-list" id="editUploadedList"></div>
                 </div>
 
-                <textarea class="remark-input" id="editRemarkInput" placeholder="请输入备注信息（选填）"></textarea>
+                <div class="form-group">
+                    <label class="form-label">备注</label>
+                    <textarea class="remark-input" id="editRemarkInput" placeholder="请输入备注信息（选填）"></textarea>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeEditModal()">取消</button>
@@ -1727,12 +1788,29 @@
             showConfirmModal(id, '确定要删除这条记录吗？');
         }
 
+        // 更新上传区域显示状态
+        function updateUploadAreaVisibility() {
+            const uploadArea = document.getElementById('uploadArea');
+            if (uploadArea) {
+                uploadArea.style.display = uploadedFiles.length === 0 ? 'flex' : 'none';
+            }
+        }
+
+        // 更新编辑上传区域显示状态
+        function updateEditUploadAreaVisibility() {
+            const uploadArea = document.getElementById('editUploadArea');
+            if (uploadArea) {
+                uploadArea.style.display = editFiles.length === 0 ? 'flex' : 'none';
+            }
+        }
+
         // 打开上传弹窗
         function openUploadModal() {
             document.getElementById('uploadModal').classList.add('show');
             uploadedFiles = [];
             renderUploadedList();
             updateUploadBtn();
+            updateUploadAreaVisibility();
         }
 
         // 关闭上传弹窗
@@ -1758,6 +1836,7 @@
             uploadedFiles.push(newFile);
             renderUploadedList();
             updateUploadBtn();
+            updateUploadAreaVisibility();
         }
 
         // 从相册选择（模拟）
@@ -1774,6 +1853,7 @@
             uploadedFiles.push(newFile);
             renderUploadedList();
             updateUploadBtn();
+            updateUploadAreaVisibility();
         }
 
         // 渲染已上传列表
@@ -1800,6 +1880,7 @@
             uploadedFiles = uploadedFiles.filter(f => f.id !== id);
             renderUploadedList();
             updateUploadBtn();
+            updateUploadAreaVisibility();
         }
 
         // 更新上传按钮状态
@@ -1866,6 +1947,7 @@
             });
             document.getElementById('editRemarkInput').value = record.remark || '';
             renderEditUploadedList();
+            updateEditUploadAreaVisibility();
 
             document.getElementById('editModal').classList.add('show');
         }
@@ -1897,6 +1979,7 @@
         function removeEditFile(id) {
             editFiles = editFiles.filter(f => f.id !== id);
             renderEditUploadedList();
+            updateEditUploadAreaVisibility();
         }
 
         function editTakePhoto() {
@@ -1911,6 +1994,7 @@
             };
             editFiles.push(newFile);
             renderEditUploadedList();
+            updateEditUploadAreaVisibility();
         }
 
         function editSelectFromAlbum() {
@@ -1925,6 +2009,7 @@
             };
             editFiles.push(newFile);
             renderEditUploadedList();
+            updateEditUploadAreaVisibility();
         }
 
         function confirmEdit() {
