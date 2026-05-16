@@ -1346,8 +1346,8 @@
                     <h2 class="page-title">每日经营数据</h2>
                 </div>
                 <div class="tab-nav">
-                    <a href="pc-customer-records.html" class="tab-btn">客户资料</a>
-                    <a href="pc-daily-records.html" class="tab-btn active">每日经营</a>
+                    <a href="pad&pc-customer-records.html" class="tab-btn">客户资料</a>
+                    <a href="pad&pc-daily-records.html" class="tab-btn active">每日经营</a>
                 </div>
             </div>
 
@@ -1396,8 +1396,8 @@
                 <table class="data-table">
                     <thead>
                         <tr>
-                            <th>缩略图</th>
                             <th style="width: 120px;">经营日期</th>
+                            <th>缩略图</th>
                             <th style="width: 100px;">操作人</th>
                             <th style="width: 150px;">上传时间</th>
                             <th style="width: 100px;">操作</th>
@@ -1962,13 +1962,13 @@
 
                 return `
                     <tr class="record-row">
+                        <td>${item.businessDate}</td>
                         <td>
                             <div class="file-cell">
                                 ${filesHtml}
                                 ${noteHtml}
                             </div>
                         </td>
-                        <td>${item.businessDate}</td>
                         <td>${item.uploader}</td>
                         <td>${item.time}</td>
                         <td>

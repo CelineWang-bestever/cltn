@@ -1208,8 +1208,8 @@
                     <h2 class="page-title">客户资料</h2>
                 </div>
                 <div class="tab-nav">
-                    <a href="pc-customer-records.html" class="tab-btn active">客户资料</a>
-                    <a href="pc-daily-records.html" class="tab-btn">每日经营</a>
+                    <a href="pad&pc-customer-records.html" class="tab-btn active">客户资料</a>
+                    <a href="pad&pc-daily-records.html" class="tab-btn">每日经营</a>
                 </div>
             </div>
 
@@ -1257,9 +1257,9 @@
                 <table class="data-table">
                     <thead>
                         <tr>
+                            <th style="width: 140px;">客户</th>
                             <th>缩略图</th>
                             <th style="width: 100px;">资料类型</th>
-                            <th style="width: 140px;">客户</th>
                             <th style="width: 100px;">操作人</th>
                             <th style="width: 150px;">上传时间</th>
                             <th style="width: 100px;">操作</th>
@@ -1697,18 +1697,18 @@
                 return `
                     <tr class="record-row">
                         <td>
+                            <div class="customer-info">
+                                <div class="customer-name">${item.customerName}</div>
+                                <div class="customer-phone">${maskPhone(item.phone)}</div>
+                            </div>
+                        </td>
+                        <td>
                             <div class="file-cell">
                                 ${filesHtml}
                                 ${noteHtml}
                             </div>
                         </td>
                         <td><span class="type-tag ${item.type}">${item.typeName}</span></td>
-                        <td>
-                            <div class="customer-info">
-                                <div class="customer-name">${item.customerName}</div>
-                                <div class="customer-phone">${maskPhone(item.phone)}</div>
-                            </div>
-                        </td>
                         <td>${item.uploader}</td>
                         <td>${item.time}</td>
                         <td>
