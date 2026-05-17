@@ -40,51 +40,86 @@
             gap: 20px;
         }
 
-        /* 左侧客户头像区 */
+        /* 左侧客户头像区 - 水平布局 */
         .sidebar-avatar-area {
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             align-items: center;
-            gap: 8px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(232,124,154,0.15);
+            gap: 14px;
+            padding: 16px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            /* margin-bottom: 12px; */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
         }
 
         .sidebar-avatar {
-            width: 80px;
-            height: 80px;
+            flex-shrink: 0;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            border: 4px solid #FFFFFF;
-            box-shadow: 0 4px 16px rgba(241,163,184,0.35);
+            border: 3px solid #FFFFFF;
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.3);
         }
-        .sidebar-avatar img { width: 40px; height: 40px; }
+        .sidebar-avatar img { width: 30px; height: 30px; }
+
+        .sidebar-customer-info {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            min-width: 0;
+        }
 
         .sidebar-customer-name {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             color: #333;
             display: flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
+            flex-wrap: wrap;
         }
 
         .vip-badge-lg {
-            display: inline-block;
+            display: inline-flex;
             padding: 2px 8px;
             background: linear-gradient(135deg, #FFD700 0%, #FFA500 100%);
             color: #8B4513;
             font-size: 11px;
             font-weight: 600;
             border-radius: 3px;
+            flex-shrink: 0;
         }
 
         .sidebar-phone {
             font-size: 13px;
             color: #999;
+        }
+
+        .sidebar-more-info-btn {
+            align-self: flex-start;
+            padding: 5px 10px;
+            font-size: 12px;
+            color: #E87C9A;
+            background: transparent;
+            border: 1px solid #E87C9A;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+        }
+
+        .sidebar-more-info-btn:hover {
+            background: rgba(232, 124, 154, 0.1);
+        }
+
+        .sidebar-more-info-btn:active {
+            opacity: 0.8;
         }
 
         /* 左侧会员信息 */
@@ -122,6 +157,10 @@
 
         /* 左侧关键信息 */
         .sidebar-key-info {
+            border-radius: 10px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+            background-color: white;
             display: flex;
             flex-direction: column;
             gap: 10px;
@@ -173,15 +212,17 @@
         }
 
         .sidebar-balance-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
         .sidebar-balance-item {
             display: flex;
-            flex-direction: column;
-            gap: 6px;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-radius: 8px;
         }
 
         .sidebar-balance-label {
@@ -204,14 +245,34 @@
             opacity: 0.8;
         }
 
-        /* 金额卡总余额 - 统一样式，独占整行，上下换行布局 */
+        /* 小型还款按钮 */
+        .sidebar-repay-btn {
+            flex-shrink: 0;
+            padding: 4px 10px;
+            font-size: 11px;
+            font-weight: 500;
+            color: #E87C9A;
+            background: rgba(232, 124, 154, 0.1);
+            border: 1px solid #E87C9A;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+        .sidebar-repay-btn:hover {
+            background: rgba(232, 124, 154, 0.2);
+        }
+        .sidebar-repay-btn:active {
+            opacity: 0.8;
+        }
+
+        /* 金额卡总余额 - 统一样式，垂直布局 */
         .sidebar-balance-total {
-            grid-column: 1 / -1;
             display: flex;
-            flex-direction: column;
-            gap: 6px;
-            padding-top: 12px;
-            border-top: 1px dashed #E8E8E8;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            border-radius: 8px;
             margin-top: 4px;
         }
         .sidebar-balance-total .sidebar-balance-label {
@@ -221,7 +282,8 @@
         }
         .sidebar-balance-total-val-wrap {
             display: flex;
-            align-items: baseline;
+            flex-direction: column;
+            align-items: flex-end;
             gap: 2px;
         }
         .sidebar-balance-total-val {
@@ -417,6 +479,12 @@
             justify-content: center;
         }
         .search-clear img { width: 14px; height: 14px; }
+
+        /* ===== 无卡片权益列表模块 ===== */
+        .benefits-list-section {
+            border-radius: 12px;
+            margin-top: 16px;
+        }
 
         /* ===== 权益卡片 - Pad横屏优化 ===== */
         .card-item {
@@ -1130,6 +1198,348 @@
             .bottom-bar { left: 0; right: 0; }
         }
 
+        /* ===== 会员更多信息弹窗样式 ===== */
+        .member-info-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 300;
+            align-items: center;
+            justify-content: center;
+        }
+        .member-info-overlay.show { display: flex; }
+        
+        .member-info-panel {
+            background: #FFFFFF;
+            border-radius: 16px;
+            width: 90%;
+            max-width: 700px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.18);
+        }
+        
+        .member-info-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid #F0F0F0;
+            background: linear-gradient(135deg, #FFF5F7 0%, #FFFFFF 100%);
+        }
+        
+        .member-info-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .member-info-back {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            cursor: pointer;
+            color: #666;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .member-info-back:hover { color: #E87C9A; }
+        
+        .member-info-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            cursor: pointer;
+            background: #F5F5F5;
+            border: none;
+            transition: all 0.2s;
+        }
+        .member-info-close:hover { background: #E8E8E8; }
+        
+        .member-info-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 24px;
+        }
+        
+        .member-section {
+            margin-bottom: 28px;
+        }
+        
+        .member-section-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .edit-toggle-btn {
+            padding: 6px 16px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid #E87C9A;
+            border-radius: 6px;
+            background: #FFFFFF;
+            color: #E87C9A;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .edit-toggle-btn:hover { background: #FFF5F7; }
+        .edit-toggle-btn.active {
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            border-color: transparent;
+        }
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px 24px;
+        }
+        
+        .info-item {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        
+        .info-item.full-width { grid-column: 1 / -1; }
+        
+        .info-label {
+            font-size: 13px;
+            color: #999;
+            font-weight: 500;
+        }
+        
+        .info-value {
+            font-size: 14px;
+            color: #333;
+            font-weight: 500;
+            padding: 10px 12px;
+            background: #F9F9F9;
+            border-radius: 8px;
+            min-height: 40px;
+        }
+        
+        .info-input, .info-select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            transition: border-color 0.2s;
+            background: #FFFFFF;
+        }
+        .info-input:focus, .info-select:focus { border-color: #E87C9A; }
+        .info-input::placeholder { color: #CCC; }
+        
+        .info-textarea {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #DDD;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #333;
+            outline: none;
+            resize: vertical;
+            min-height: 80px;
+            font-family: inherit;
+            transition: border-color 0.2s;
+        }
+        .info-textarea:focus { border-color: #E87C9A; }
+        
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px;
+            background: #F9F9F9;
+            border-radius: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            background: #FFFFFF;
+            border: 1px solid #E0E0E0;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 13px;
+            color: #333;
+        }
+        .checkbox-item:hover { border-color: #E87C9A; }
+        .checkbox-item.checked {
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E8 100%);
+            border-color: #E87C9A;
+            color: #E87C9A;
+        }
+        
+        .checkbox-item input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #E87C9A;
+        }
+        
+        .tags-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        
+        .tag-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            background: linear-gradient(135deg, #FFF0F5 0%, #FFE4E8 100%);
+            border: 1px solid #F1A3B8;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #E87C9A;
+            font-weight: 500;
+        }
+        
+        .tag-remove {
+            width: 18px;
+            height: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(232,124,154,0.15);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tag-remove:hover { background: rgba(232,124,154,0.3); }
+        
+        .tag-add-container {
+            display: flex;
+            gap: 8px;
+            margin-top: 8px;
+        }
+        
+        .tag-input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px dashed #DDD;
+            border-radius: 8px;
+            font-size: 13px;
+            color: #333;
+            outline: none;
+            background: #F9F9F9;
+        }
+        .tag-input:focus { border-color: #E87C9A; border-style: solid; }
+        
+        .tag-add-btn {
+            padding: 8px 16px;
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .tag-add-btn:hover { opacity: 0.9; }
+        
+        .preset-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed #E0E0E0;
+        }
+        
+        .preset-tag {
+            padding: 6px 12px;
+            background: #F5F5F5;
+            border: 1px solid #E0E0E0;
+            border-radius: 20px;
+            font-size: 12px;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .preset-tag:hover {
+            background: #FFF0F5;
+            border-color: #E87C9A;
+            color: #E87C9A;
+        }
+        
+        .member-info-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 18px 24px;
+            border-top: 1px solid #F0F0F0;
+            background: #FAFAFA;
+        }
+        
+        .member-footer-btn {
+            padding: 10px 28px;
+            font-size: 14px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .member-footer-btn.cancel {
+            background: #F5F5F5;
+            color: #666;
+        }
+        .member-footer-btn.cancel:hover { background: #E8E8E8; }
+        
+        .member-footer-btn.save {
+            background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+            color: #FFFFFF;
+            box-shadow: 0 2px 8px rgba(232,124,154,0.3);
+        }
+        .member-footer-btn.save:hover { opacity: 0.9; transform: translateY(-1px); }
+        
+        .member-footer-btn.save:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .loading-spinner {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            border-top-color: #FFFFFF;
+            animation: spin 0.8s ease-in-out infinite;
+            margin-right: 6px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
         @media (max-width: 768px) {
             .header { padding: 0 12px; }
             .breadcrumb { display: none; }
@@ -1139,6 +1549,8 @@
             .item-center { display: none; }
             .selected-table { font-size: 12px; }
             .selected-table thead th, .selected-table tbody td { padding: 8px 10px; }
+            .member-info-panel { width: 95%; border-radius: 12px; }
+            .info-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -1153,11 +1565,14 @@
                 <div class="sidebar-avatar">
                     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="头像">
                 </div>
-                <div class="sidebar-customer-name">
-                    付小姐
-                    <span class="vip-badge-lg">会员</span>
+                <div class="sidebar-customer-info">
+                    <div class="sidebar-customer-name">
+                        付小姐
+                        <span class="vip-badge-lg">会员</span>
+                    </div>
+                    <div class="sidebar-phone">131****7967</div>
                 </div>
-                <div class="sidebar-phone">131****7967</div>
+                <button class="sidebar-more-info-btn" onclick="openMemberMoreInfo()">更多信息</button>
             </div>
 
 <!-- 关键信息列表 -->
@@ -1192,12 +1607,12 @@
                 <div class="sidebar-balance-title">账户概览</div>
                 <div class="sidebar-balance-grid">
                     <div class="sidebar-balance-item sidebar-balance-clickable">
-                        <span class="sidebar-balance-label">余额</span>
+                        <span class="sidebar-balance-label">钱包余额</span>
                         <span class="sidebar-balance-value">¥0 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
                     </div>
                     <div class="sidebar-balance-item sidebar-balance-clickable">
                         <span class="sidebar-balance-label">欠款</span>
-                        <span class="sidebar-balance-value" style="color:#E87C9A;">¥20.00 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                        <span class="sidebar-balance-value" style="color:#E87C9A;">¥20.00<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
                     </div>
                     <div class="sidebar-balance-total">
                         <span class="sidebar-balance-label">金额卡余额</span>
@@ -1215,12 +1630,10 @@
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                     预 约
                 </button>
-                <button class="sidebar-btn sidebar-btn-primary" onclick="window.location.href='create-order.html'">
+                <button class="sidebar-btn sidebar-btn-primary" onclick="window.location.href='create-order-pad%20选单次&选产品.html'">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
                     开 单
                 </button>
-                <button class="sidebar-btn sidebar-btn-secondary">充 值</button>
-                <button class="sidebar-btn sidebar-btn-secondary">还 款</button>
             </div>
         </div>
 
@@ -1383,6 +1796,61 @@
                         </div>
                     </div>
 
+                    <!-- ===== 无卡片权益列表 ===== -->
+                    <div class="benefits-list-section">
+                        <div class="card-section">
+                            <div class="service-item">
+                                <div class="item-left">
+                                    <div class="item-header">
+                                        <span class="item-name">深度放松精油SPA</span>
+                                    </div>
+                                </div>
+                                <div class="item-center">
+                                    <div style="flex:1;">
+                                        <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
+                                    </div>
+                                    <span class="progress-text">剩余 3 / 共 3</span>
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-actions">
+                                        <button class="btn-use" data-item-id="spa-001"
+                                            data-name="深度放松精油SPA"
+                                            data-source="会员权益"
+                                            data-max="3"
+                                            data-remain="3"
+                                        >使用</button>
+                                        <button class="btn-exchange">置换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-section">
+                            <div class="product-item">
+                                <div class="item-left">
+                                    <div class="item-header">
+                                        <span class="item-name">艾地苯焕颜修护精华液</span>
+                                    </div>
+                                </div>
+                                <div class="item-center">
+                                    <div style="flex:1;">
+                                        <div class="progress-bar"><div class="progress-fill" style="width:33.33%"></div></div>
+                                    </div>
+                                    <span class="progress-text">剩余 1 / 共 3</span>
+                                </div>
+                                <div class="item-right">
+                                    <div class="item-actions">
+                                        <button class="btn-use" data-item-id="prod-001"
+                                            data-name="艾地苯焕颜修护精华液"
+                                            data-source="会员权益"
+                                            data-max="3"
+                                            data-remain="1"
+                                        >使用</button>
+                                        <button class="btn-exchange">置换</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                 </div><!-- /cards-list -->
             </div><!-- /tab-benefits -->
@@ -1560,6 +2028,210 @@
         </svg>
     </button>
 
+    <!-- ===== 会员更多信息弹窗 ===== -->
+    <div class="member-info-overlay" id="memberInfoOverlay">
+        <div class="member-info-panel">
+            <div class="member-info-header">
+                <div class="member-info-title">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#E87C9A" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    会员更多信息
+                </div>
+                <button class="member-info-close" onclick="closeMemberMoreInfo()">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="member-info-body">
+                
+                <!-- 客户标签管理 -->
+                <div class="member-section">
+                    <div class="member-section-title">
+                        <span>客户标签</span>
+                        <button class="edit-toggle-btn" id="tagsEditBtn" onclick="toggleEditMode('tags')">
+                            编辑
+                        </button>
+                    </div>
+                    <div class="tags-container" id="memberTagsContainer">
+                    </div>
+                    <div class="tag-add-container" id="tagAddContainer" style="display:none;">
+                        <input type="text" class="tag-input" id="newTagInput" placeholder="输入新标签...">
+                        <button class="tag-add-btn" onclick="addNewTag()">添加</button>
+                    </div>
+                    <div class="preset-tags" id="presetTagsContainer" style="display:none;">
+                        <span class="preset-tag" onclick="selectPresetTag(this)">敏感肌</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">油性皮肤</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">干性皮肤</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">混合型皮肤</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">老顾客</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">新顾客</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">VIP顾客</span>
+                        <span class="preset-tag" onclick="selectPresetTag(this)">需要跟进</span>
+                    </div>
+                </div>
+
+                <!-- 基础信息 -->
+                <div class="member-section">
+                    <div class="member-section-title">
+                        <span>基础信息</span>
+                        <button class="edit-toggle-btn" id="basicEditBtn" onclick="toggleEditMode('basic')">
+                            编辑
+                        </button>
+                    </div>
+                    <div class="info-grid" id="basicInfoContainer">
+                        <div class="info-item">
+                            <label class="info-label">顾客姓名</label>
+                            <div class="info-value" data-field="name">付小姐</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">手机号码</label>
+                            <div class="info-value" data-field="phone">131****7967</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">进店渠道</label>
+                            <div class="info-value" data-field="channel">自然到店</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">责任美容师</label>
+                            <div class="info-value" data-field="beautician">周炜</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">婚姻状况</label>
+                            <div class="info-value" data-field="marriage">已婚</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">会员生日</label>
+                            <div class="info-value" data-field="birthday">1990-10-20</div>
+                        </div>
+                        <div class="info-item">
+                            <label class="info-label">职业</label>
+                            <div class="info-value" data-field="occupation">企业职员</div>
+                        </div>
+                        <div class="info-item full-width">
+                            <label class="info-label">家庭地址</label>
+                            <div class="info-value" data-field="address">北京市朝阳区建国路88号SOHO现代城1号楼1001室</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 补充信息 -->
+                <div class="member-section">
+                    <div class="member-section-title">
+                        <span>补充信息</span>
+                        <button class="edit-toggle-btn" id="extraEditBtn" onclick="toggleEditMode('extra')">
+                            编辑
+                        </button>
+                    </div>
+                    
+                    <div class="info-item full-width">
+                        <label class="info-label">皮肤情况</label>
+                        <div class="checkbox-group" id="skinCheckboxes" data-group="skin">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="敏感肌" checked> 敏感肌
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="干性皮肤" checked> 干性皮肤
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="油性皮肤"> 油性皮肤
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="混合型皮肤"> 混合型皮肤
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="暗沉"> 暗沉
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="有痘印"> 有痘印
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="info-item full-width">
+                        <label class="info-label">护肤习惯</label>
+                        <div class="checkbox-group" id="habitCheckboxes" data-group="habit">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="每天洁面" checked> 每天洁面
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="使用爽肤水" checked> 使用爽肤水
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="使用精华液"> 使用精华液
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="使用乳液/面霜" checked> 使用乳液/面霜
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="定期敷面膜"> 定期敷面膜
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="使用防晒霜"> 使用防晒霜
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="info-item full-width">
+                        <label class="info-label">护肤诉求</label>
+                        <div class="checkbox-group" id="demandCheckboxes" data-group="demand">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="补水保湿" checked> 补水保湿
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="美白淡斑"> 美白淡斑
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="抗衰紧致" checked> 抗衰紧致
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="修复敏感"> 修复敏感
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="控油祛痘"> 控油祛痘
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="收缩毛孔"> 收缩毛孔
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="info-item full-width">
+                        <label class="info-label">过往美容师</label>
+                        <div class="checkbox-group" id="pastBeauticians" data-group="past">
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="李婷" checked> 李婷
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="王芳"> 王芳
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="陈静"> 陈静
+                            </label>
+                            <label class="checkbox-item">
+                                <input type="checkbox" value="张敏"> 张敏
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="info-item full-width">
+                        <label class="info-label">补充说明</label>
+                        <div class="info-value" data-field="note" style="white-space: pre-wrap;">顾客皮肤比较敏感，推荐使用温和的产品。
+曾多次补水护理，效果较好。</div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="member-info-footer">
+                <button class="member-footer-btn cancel" onclick="cancelMemberEdit()">取消</button>
+                <button class="member-footer-btn save" id="memberSaveBtn" onclick="saveMemberInfo()">保存</button>
+            </div>
+        </div>
+    </div>
+
 <script>
 (function() {
     // ========== 数据模型 ==========
@@ -1617,7 +2289,6 @@
             tr.innerHTML =
                 '<td>' +
                     '<div class="selected-item-name">' + escapeHtml(item.name) + '</div>' +
-                    '<div class="selected-item-source">' + escapeHtml(item.source) + '</div>' +
                 '</td>' +
                 '<td>' + escapeHtml(item.source) + '</td>' +
                 '<td>' + buildStepperHtml(idx, item.qty, item.maxQty) + '</td>' +
@@ -2075,6 +2746,398 @@
             behavior: 'smooth'
         });
     });
+
+    // ========== 会员更多信息功能 ==========
+    (function() {
+        // 数据模型
+        var memberData = {
+            tags: ['老顾客', '敏感肌', 'VIP顾客'],
+            basic: {
+                name: '付小姐',
+                phone: '131****7967',
+                channel: '自然到店',
+                beautician: '周炜',
+                marriage: '已婚',
+                birthday: '1990-10-20',
+                occupation: '企业职员',
+                address: '北京市朝阳区建国路88号SOHO现代城1号楼1001室'
+            },
+            skin: ['敏感肌', '干性皮肤'],
+            habit: ['每天洁面', '使用爽肤水', '使用乳液/面霜'],
+            demand: ['补水保湿', '抗衰紧致'],
+            past: ['李婷'],
+            note: '顾客皮肤比较敏感，推荐使用温和的产品。\n曾多次补水护理，效果较好。'
+        };
+
+        // 备份数据（用于取消编辑）
+        var backupData = null;
+
+        // 当前编辑的模块
+        var activeEditModules = {
+            tags: false,
+            basic: false,
+            extra: false
+        };
+
+        // DOM元素
+        var memberOverlay = document.getElementById('memberInfoOverlay');
+        var tagsContainer = document.getElementById('memberTagsContainer');
+        var tagAddContainer = document.getElementById('tagAddContainer');
+        var presetTagsContainer = document.getElementById('presetTagsContainer');
+        var basicInfoContainer = document.getElementById('basicInfoContainer');
+        var tagsEditBtn = document.getElementById('tagsEditBtn');
+        var basicEditBtn = document.getElementById('basicEditBtn');
+        var extraEditBtn = document.getElementById('extraEditBtn');
+
+        // 初始化 - 尝试从本地存储加载数据
+        function initMemberData() {
+            var savedData = localStorage.getItem('memberMoreInfo');
+            if (savedData) {
+                try {
+                    memberData = JSON.parse(savedData);
+                } catch(e) {
+                    console.warn('Failed to load saved member data');
+                }
+            }
+        }
+        initMemberData();
+
+        // 渲染标签
+        function renderTags() {
+            tagsContainer.innerHTML = memberData.tags.map(function(tag, index) {
+                return '<div class="tag-item">' +
+                    '<span>' + tag + '</span>' +
+                    (activeEditModules.tags ? 
+                    '<span class="tag-remove" onclick="removeMemberTag(' + index + ')">' +
+                    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#E87C9A" stroke-width="2">' +
+                    '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>' +
+                    '</svg></span>' : '') +
+                    '</div>';
+            }).join('');
+        }
+
+        // 渲染基础信息
+        function renderBasicInfo() {
+            var container = basicInfoContainer;
+            var fields = ['name', 'phone', 'channel', 'beautician', 'marriage', 'birthday', 'occupation', 'address'];
+            var labels = ['顾客姓名', '手机号码', '进店渠道', '责任美容师', '婚姻状况', '会员生日', '职业', '家庭地址'];
+            
+            var html = '';
+            fields.forEach(function(field, index) {
+                var isFullWidth = (field === 'address');
+                var value = memberData.basic[field];
+                var label = labels[index];
+                
+                if (activeEditModules.basic) {
+                    if (field === 'phone') {
+                        html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                            '<label class="info-label">' + label + '</label>' +
+                            '<input type="tel" class="info-input" data-field="' + field + '" value="' + value + '" placeholder="请输入手机号码" pattern="[0-9]{11}">' +
+                            '</div>';
+                    } else if (field === 'birthday') {
+                        html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                            '<label class="info-label">' + label + '</label>' +
+                            '<input type="date" class="info-input" data-field="' + field + '" value="' + value + '">' +
+                            '</div>';
+                    } else if (field === 'marriage') {
+                        html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                            '<label class="info-label">' + label + '</label>' +
+                            '<select class="info-select" data-field="' + field + '">' +
+                            '<option value="未婚"' + (value === '未婚' ? ' selected' : '') + '>未婚</option>' +
+                            '<option value="已婚"' + (value === '已婚' ? ' selected' : '') + '>已婚</option>' +
+                            '<option value="保密"' + (value === '保密' ? ' selected' : '') + '>保密</option>' +
+                            '</select>' +
+                            '</div>';
+                    } else if (field === 'address') {
+                        html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                            '<label class="info-label">' + label + '</label>' +
+                            '<textarea class="info-textarea" data-field="' + field + '" placeholder="请输入家庭地址">' + value + '</textarea>' +
+                            '</div>';
+                    } else {
+                        html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                            '<label class="info-label">' + label + '</label>' +
+                            '<input type="text" class="info-input" data-field="' + field + '" value="' + value + '" placeholder="请输入' + label + '">' +
+                            '</div>';
+                    }
+                } else {
+                    html += '<div class="info-item' + (isFullWidth ? ' full-width' : '') + '">' +
+                        '<label class="info-label">' + label + '</label>' +
+                        '<div class="info-value" data-field="' + field + '"' + (isFullWidth ? ' style="white-space: pre-wrap;"' : '') + '>' + value + '</div>' +
+                        '</div>';
+                }
+            });
+            container.innerHTML = html;
+        }
+
+        // 渲染复选框组
+        function renderCheckboxes() {
+            var groups = ['skin', 'habit', 'demand', 'past'];
+            var groupIds = ['skinCheckboxes', 'habitCheckboxes', 'demandCheckboxes', 'pastBeauticians'];
+            
+            groups.forEach(function(group, gIndex) {
+                var container = document.getElementById(groupIds[gIndex]);
+                var checkboxes = container.querySelectorAll('.checkbox-item');
+                
+                checkboxes.forEach(function(item) {
+                    var input = item.querySelector('input');
+                    var isChecked = memberData[group].indexOf(input.value) > -1;
+                    input.checked = isChecked;
+                    item.classList.toggle('checked', isChecked);
+                    
+                    if (activeEditModules.extra) {
+                        item.style.cursor = 'pointer';
+                    }
+                });
+            });
+        }
+
+        // 渲染补充说明
+        function renderNote() {
+            var noteContainer = document.querySelector('[data-field="note"]');
+            if (activeEditModules.extra) {
+                noteContainer.outerHTML = '<textarea class="info-textarea" data-field="note" placeholder="请输入补充说明">' + memberData.note + '</textarea>';
+            } else {
+                noteContainer.outerHTML = '<div class="info-value" data-field="note" style="white-space: pre-wrap;">' + memberData.note + '</div>';
+            }
+        }
+
+        // 打开会员更多信息弹窗
+        window.openMemberMoreInfo = function() {
+            backupData = JSON.parse(JSON.stringify(memberData)); // 深拷贝备份
+            
+            // 重置编辑状态
+            activeEditModules = { tags: false, basic: false, extra: false };
+            tagsEditBtn.classList.remove('active');
+            basicEditBtn.classList.remove('active');
+            extraEditBtn.classList.remove('active');
+            
+            renderTags();
+            renderBasicInfo();
+            renderCheckboxes();
+            
+            tagAddContainer.style.display = 'none';
+            presetTagsContainer.style.display = 'none';
+            
+            memberOverlay.classList.add('show');
+        };
+
+        // 关闭会员更多信息弹窗
+        window.closeMemberMoreInfo = function() {
+            memberOverlay.classList.remove('show');
+        };
+
+        // 切换编辑模式
+        window.toggleEditMode = function(module) {
+            activeEditModules[module] = !activeEditModules[module];
+            
+            var btnMap = {
+                tags: tagsEditBtn,
+                basic: basicEditBtn,
+                extra: extraEditBtn
+            };
+            var btn = btnMap[module];
+            btn.classList.toggle('active', activeEditModules[module]);
+            btn.textContent = activeEditModules[module] ? '完成' : '编辑';
+            
+            if (module === 'tags') {
+                tagAddContainer.style.display = activeEditModules.tags ? 'flex' : 'none';
+                presetTagsContainer.style.display = activeEditModules.tags ? 'flex' : 'none';
+                renderTags();
+            } else if (module === 'basic') {
+                renderBasicInfo();
+            } else if (module === 'extra') {
+                renderCheckboxes();
+                renderNote();
+            }
+        };
+
+        // 移除标签
+        window.removeMemberTag = function(index) {
+            memberData.tags.splice(index, 1);
+            renderTags();
+        };
+
+        // 添加新标签
+        window.addNewTag = function() {
+            var input = document.getElementById('newTagInput');
+            var tag = input.value.trim();
+            
+            if (!tag) {
+                showToast('请输入标签内容');
+                return;
+            }
+            
+            if (memberData.tags.length >= 10) {
+                showToast('最多添加10个标签');
+                return;
+            }
+            
+            if (memberData.tags.indexOf(tag) > -1) {
+                showToast('该标签已存在');
+                return;
+            }
+            
+            memberData.tags.push(tag);
+            input.value = '';
+            renderTags();
+        };
+
+        // 选择预设标签
+        window.selectPresetTag = function(el) {
+            var tag = el.textContent.trim();
+            
+            if (memberData.tags.length >= 10) {
+                showToast('最多添加10个标签');
+                return;
+            }
+            
+            if (memberData.tags.indexOf(tag) > -1) {
+                showToast('该标签已存在');
+                return;
+            }
+            
+            memberData.tags.push(tag);
+            renderTags();
+        };
+
+        // 复选框点击事件
+        document.addEventListener('click', function(e) {
+            var checkboxItem = e.target.closest('.checkbox-item');
+            if (checkboxItem && activeEditModules.extra) {
+                var input = checkboxItem.querySelector('input');
+                if (e.target !== input) {
+                    input.checked = !input.checked;
+                }
+                
+                var group = checkboxItem.closest('[data-group]').dataset.group;
+                var value = input.value;
+                
+                var index = memberData[group].indexOf(value);
+                if (input.checked && index === -1) {
+                    memberData[group].push(value);
+                } else if (!input.checked && index > -1) {
+                    memberData[group].splice(index, 1);
+                }
+                
+                checkboxItem.classList.toggle('checked', input.checked);
+            }
+        });
+
+        // 取消编辑
+        window.cancelMemberEdit = function() {
+            if (backupData) {
+                memberData = JSON.parse(JSON.stringify(backupData));
+            }
+            
+            activeEditModules = { tags: false, basic: false, extra: false };
+            tagsEditBtn.classList.remove('active');
+            basicEditBtn.classList.remove('active');
+            extraEditBtn.classList.remove('active');
+            tagsEditBtn.textContent = '编辑';
+            basicEditBtn.textContent = '编辑';
+            extraEditBtn.textContent = '编辑';
+            
+            tagAddContainer.style.display = 'none';
+            presetTagsContainer.style.display = 'none';
+            
+            renderTags();
+            renderBasicInfo();
+            renderCheckboxes();
+            
+            // 恢复备注显示
+            var noteEl = document.querySelector('[data-field="note"]');
+            if (noteEl.tagName === 'TEXTAREA') {
+                renderNote();
+            }
+            
+            closeMemberMoreInfo();
+        };
+
+        // 验证手机号码
+        function validatePhone(phone) {
+            var phoneNum = phone.replace(/\D/g, '');
+            if (phoneNum.length !== 11) {
+                return false;
+            }
+            if (!/^1[3-9]\d{9}$/.test(phoneNum)) {
+                return false;
+            }
+            return true;
+        }
+
+        // 保存会员信息
+        window.saveMemberInfo = function() {
+            var saveBtn = document.getElementById('memberSaveBtn');
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<span class="loading-spinner"></span>保存中...';
+            
+            // 收集基础信息编辑数据
+            if (activeEditModules.basic) {
+                var inputs = basicInfoContainer.querySelectorAll('.info-input, .info-select, .info-textarea');
+                inputs.forEach(function(input) {
+                    var field = input.dataset.field;
+                    if (field) {
+                        memberData.basic[field] = input.value;
+                    }
+                });
+            }
+            
+            // 收集补充说明
+            var noteInput = document.querySelector('[data-field="note"]');
+            if (noteInput.tagName === 'TEXTAREA') {
+                memberData.note = noteInput.value;
+            }
+            
+            // 验证手机号码
+            var phone = memberData.basic.phone.replace(/\D/g, '');
+            if (phone && phone.length >= 11 && !validatePhone(phone)) {
+                showToast('请输入正确的手机号码');
+                saveBtn.disabled = false;
+                saveBtn.textContent = '保存';
+                return;
+            }
+            
+            // 模拟API调用
+            setTimeout(function() {
+                try {
+                    localStorage.setItem('memberMoreInfo', JSON.stringify(memberData));
+                    
+                    // 重置编辑状态
+                    activeEditModules = { tags: false, basic: false, extra: false };
+                    tagsEditBtn.classList.remove('active');
+                    basicEditBtn.classList.remove('active');
+                    extraEditBtn.classList.remove('active');
+                    tagsEditBtn.textContent = '编辑';
+                    basicEditBtn.textContent = '编辑';
+                    extraEditBtn.textContent = '编辑';
+                    
+                    tagAddContainer.style.display = 'none';
+                    presetTagsContainer.style.display = 'none';
+                    
+                    // 重新渲染只读模式
+                    renderTags();
+                    renderBasicInfo();
+                    renderCheckboxes();
+                    renderNote();
+                    
+                    showToast('保存成功');
+                    closeMemberMoreInfo();
+                } catch (err) {
+                    showToast('保存失败，请重试');
+                } finally {
+                    saveBtn.disabled = false;
+                    saveBtn.textContent = '保存';
+                }
+            }, 600);
+        };
+
+        // 回车键添加标签
+        document.getElementById('newTagInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addNewTag();
+            }
+        });
+    })();
 
 })();
 </script>

@@ -76,7 +76,7 @@
 
         /* 搜索区域 */
         .search-section {
-            padding: 32px 24px 24px;
+            padding: 12px 24px 24px;
             flex-shrink: 0;
         }
 
@@ -158,10 +158,68 @@
             background: #D66B85;
         }
 
+        /* 最近选择会员 */
+        .recent-members-section {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .recent-members-section.show {
+            display: block;
+        }
+
+        .recent-members-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .recent-members-title {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .recent-members-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .recent-member-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #F5F5F5;
+            color: #333333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            user-select: none;
+            max-width: 100%;
+        }
+
+        .recent-member-item:hover {
+            background: #FFF0F4;
+            color: #E87C9A;
+        }
+
+        .recent-member-item:active {
+            transform: scale(0.98);
+        }
+
+        .recent-member-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 240px;
+        }
+
         /* 数字键盘区域 */
         .keypad-section {
             flex: 1;
-            padding: 36px 48px 24px;
+            padding: 0px 48px 28px 48px;
             display: flex;
             justify-content: center;
         }
@@ -380,6 +438,13 @@
                 </div>
                 <button class="search-btn" id="btnSearch">查询</button>
             </div>
+
+            <div class="recent-members-section" id="recentMembersSection">
+                <div class="recent-members-header">
+                    <span class="recent-members-title">最近选择</span>
+                </div>
+                <div class="recent-members-list" id="recentMembersList"></div>
+            </div>
         </div>
 
         <!-- 数字键盘 -->
@@ -432,8 +497,79 @@
         var btnClose = document.getElementById('btnClose');
         var btnSearch = document.getElementById('btnSearch');
         var btnNewMember = document.getElementById('btnNewMember');
+        var recentMembersSection = document.getElementById('recentMembersSection');
+        var recentMembersList = document.getElementById('recentMembersList');
 
         var selectedMember = null;
+        var recentMembers = [];
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function loadRecentMembers() {
+            try {
+                var raw = localStorage.getItem('recentSelectedMembers') || '[]';
+                var parsed = JSON.parse(raw);
+                recentMembers = Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                recentMembers = [];
+            }
+        }
+
+        function saveRecentMembers() {
+            try {
+                localStorage.setItem('recentSelectedMembers', JSON.stringify(recentMembers));
+            } catch (e) {}
+        }
+
+        function addToRecentMembers(memberData) {
+            if (!memberData || !memberData.id) return;
+            var id = String(memberData.id);
+            recentMembers = recentMembers.filter(function (m) { return String(m && m.id) !== id; });
+            recentMembers.unshift(memberData);
+            if (recentMembers.length > 10) recentMembers = recentMembers.slice(0, 10);
+            saveRecentMembers();
+            renderRecentMembers();
+        }
+
+        function renderRecentMembers() {
+            if (!recentMembersSection || !recentMembersList) return;
+            var items = (recentMembers || []).slice(0, 10).filter(function (m) { return m && m.name; });
+            if (items.length === 0) {
+                recentMembersSection.classList.remove('show');
+                recentMembersList.innerHTML = '';
+                return;
+            }
+            recentMembersSection.classList.add('show');
+            recentMembersList.innerHTML = items.map(function (m) {
+                var safeName = escapeHtml(m.name || '');
+                var encId = encodeURIComponent(String(m.id || ''));
+                return '<div class="recent-member-item" data-id="' + encId + '"><span class="recent-member-name">' + safeName + '</span></div>';
+            }).join('');
+        }
+
+        recentMembersList && recentMembersList.addEventListener('click', function (e) {
+            var item = e.target.closest('.recent-member-item');
+            if (!item) return;
+            var encId = item.getAttribute('data-id') || '';
+            var id = '';
+            try { id = decodeURIComponent(encId); } catch (err) { id = encId; }
+            if (!id) return;
+            var found = (recentMembers || []).find(function (m) { return String(m && m.id) === String(id); });
+            if (!found) return;
+            selectedMember = found;
+            addToRecentMembers(found);
+            window.parent.postMessage({
+                type: 'selectMember',
+                data: found
+            }, '*');
+        });
 
         // 更新清除按钮显示状态
         function updateClearBtn() {
@@ -608,6 +744,7 @@
             };
             
             selectedMember = memberData;
+            addToRecentMembers(memberData);
             
             // 通知父窗口选择了会员
             window.parent.postMessage({
@@ -686,6 +823,9 @@
                 showToast(e.data.message || '搜索失败');
             }
         });
+
+        loadRecentMembers();
+        renderRecentMembers();
     </script>
 </body>
 </html>

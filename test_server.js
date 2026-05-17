@@ -12,7 +12,22 @@ const MIME_TYPES = {
 };
 
 const server = http.createServer((req, res) => {
-    let filePath = path.join(ROOT_DIR, req.url === '/' ? 'app_product_mgmt.html' : req.url);
+    let pathname = '/';
+    try {
+        const url = new URL(req.url, `http://localhost:${PORT}`);
+        pathname = decodeURIComponent(url.pathname || '/');
+    } catch {
+        pathname = '/';
+    }
+
+    if (pathname === '/') pathname = '/app_product_mgmt.html';
+    const relativePath = pathname.replace(/^\/+/, '');
+    const filePath = path.resolve(ROOT_DIR, relativePath);
+    if (!filePath.startsWith(path.resolve(ROOT_DIR))) {
+        res.writeHead(403);
+        res.end('Forbidden');
+        return;
+    }
     const ext = path.extname(filePath).toLowerCase();
     const contentType = MIME_TYPES[ext] || 'application/octet-stream';
 
