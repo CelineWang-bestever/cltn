@@ -2130,6 +2130,132 @@
             border-color: var(--primary-400);
         }
 
+        .use-card-btn {
+            width: 100%;
+            height: 48px;
+            min-height: 48px;
+            padding: 10px 10px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            text-align: left;
+            color: var(--neutral-700);
+            transition: all 0.2s ease;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .use-card-btn:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+        }
+
+        .moneycard-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .moneycard-modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .moneycard-modal {
+            width: 680px;
+            max-width: calc(100vw - 32px);
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.96);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .moneycard-modal-overlay.show .moneycard-modal {
+            transform: scale(1);
+        }
+
+        .moneycard-modal-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--neutral-200);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+
+        .moneycard-modal-body {
+            padding: 14px 18px;
+            max-height: 60vh;
+            overflow: auto;
+        }
+
+        .moneycard-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .moneycard-item {
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-md);
+            padding: 12px 12px;
+            background: var(--bg-primary);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .moneycard-item:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+        }
+
+        .moneycard-item.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-100);
+        }
+
+        .moneycard-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+
+        .moneycard-balance {
+            margin-top: 4px;
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .moneycard-discount {
+            margin-top: 6px;
+            font-size: 12px;
+            color: var(--neutral-500);
+            line-height: 1.4;
+            word-break: break-word;
+        }
+
+        .moneycard-modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 14px 18px;
+            border-top: 1px solid var(--neutral-200);
+        }
+
         .row-beautician-btn {
             width: 100%;
             height: 48px;
@@ -2965,12 +3091,10 @@
         }
 
         .upgrade-bottom-section {
-            border-top: 1px solid var(--neutral-100);
-            padding: 12px 16px;
+            padding: 0px 16px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: var(--neutral-50);
         }
 
         .upgrade-bottom-left {
@@ -2980,6 +3104,7 @@
         }
 
         .upgrade-bottom-label {
+            width:10%;
             font-size: 13px;
             color: var(--neutral-600);
             font-weight: 500;
@@ -3543,6 +3668,10 @@
             line-height: 1.5;
         }
 
+        .create-order-pad-page #orderFormContent .order-amount-row {
+            display: none !important;
+        }
+
         /* ========== 底部支付汇总栏 ========== */
         .payment-bar {
             background: var(--bg-primary);
@@ -3636,6 +3765,114 @@
         .btn-action.primary:hover {
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(232, 124, 154, 0.5);
+        }
+
+        .whole-order-change-popover {
+            position: fixed;
+            z-index: 9999;
+            width: 320px;
+            max-width: calc(100vw - 24px);
+            background: rgba(255, 255, 255, 0.92);
+            border: 1px solid rgba(229, 231, 235, 0.9);
+            border-radius: 14px;
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.18);
+            backdrop-filter: blur(10px);
+            padding: 12px 12px 10px;
+        }
+
+        .woc-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--neutral-900);
+            margin-bottom: 10px;
+        }
+
+        .woc-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .woc-field {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        .woc-label {
+            font-size: 12px;
+            color: var(--neutral-600);
+            line-height: 1;
+        }
+
+        .woc-input-wrap {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 10px 10px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 10px;
+            background: var(--bg-primary);
+            min-width: 0;
+        }
+
+        .woc-prefix,
+        .woc-suffix {
+            font-size: 12px;
+            color: var(--neutral-500);
+            flex-shrink: 0;
+        }
+
+        .woc-input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 0;
+            font-size: 14px;
+            color: var(--neutral-900);
+            background: transparent;
+            text-align: right;
+        }
+
+        .woc-tip {
+            margin-top: 10px;
+            font-size: 11px;
+            color: var(--neutral-400);
+            line-height: 1.35;
+        }
+
+        .woc-actions {
+            margin-top: 10px;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .woc-btn {
+            height: 32px;
+            padding: 0 14px;
+            border-radius: 10px;
+            font-size: 12px;
+            cursor: pointer;
+            border: 1px solid transparent;
+        }
+
+        .woc-btn.secondary {
+            background: var(--bg-primary);
+            border-color: var(--neutral-300);
+            color: var(--neutral-700);
+        }
+
+        .woc-btn.secondary:hover {
+            border-color: var(--primary-400);
+            color: var(--primary-600);
+            background: var(--primary-50);
+        }
+
+        .woc-btn.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: #fff;
         }
 
         /* ========== 会员选择弹窗 ========== */
@@ -5666,6 +5903,19 @@
             border-bottom: 1px solid var(--neutral-200);
         }
 
+        .recharge-gift-table thead th {
+            transition: padding 180ms ease, opacity 180ms ease, font-size 180ms ease, border-color 180ms ease;
+        }
+
+        .recharge-gift-table.table-head-hidden thead th {
+            padding-top: 0 !important;
+            padding-bottom: 0 !important;
+            font-size: 0 !important;
+            line-height: 0 !important;
+            opacity: 0 !important;
+            border-bottom-color: transparent !important;
+        }
+
         .course-detail-table td {
             padding: 10px 12px;
             font-size: 13px;
@@ -5893,7 +6143,7 @@
     </style>
 </head>
 
-<body>
+<body class="create-order-pad-page">
     <div class="app-container">
         <!-- 左侧操作入口区 -->
         <aside class="action-sidebar">
@@ -6276,18 +6526,18 @@
                             </div>
                         </div>
                         <div class="order-form" id="orderFormContent">
-                            <div class="form-group">
+                            <div class="form-group order-amount-row order-discount-row">
                                 <div class="form-row">
                                     <span class="form-label">优惠金额</span>
-                                    <input type="text" class="form-input" id="orderDiscountAmountInput" value="0">
+                                    <input type="text" class="form-input" id="orderDiscountAmountInput" inputmode="decimal" value="0">
                                     <span class="form-unit">元</span>
                                 </div>
                                 <div class="form-tip">(若输入优惠金额，则不支持改价；反之则支持；改价后，优惠金额不可输入)</div>
                             </div>
-                            <div class="form-group">
+                            <div class="form-group order-amount-row order-payable-row">
                                 <div class="form-row">
                                     <span class="form-label">应付金额</span>
-                                    <input type="text" class="form-input" id="orderPayableAmountInput" value="100.00">
+                                    <input type="text" class="form-input" id="orderPayableAmountInput" inputmode="decimal" value="100.00">
                                     <span class="form-unit">元</span>
                                 </div>
                                 <div class="form-tip">(修改金额，优惠金额同步修改)</div>
@@ -6314,10 +6564,35 @@
                     </div>
                 </div>
                 <div class="payment-actions">
-                    <button class="btn-action secondary">配料</button>
-                    <button class="btn-action secondary">整单改价</button>
+                    <button class="btn-action secondary" id="ingredientBtn" style="display:none;">配料</button>
+                    <button class="btn-action secondary" id="wholeOrderChangeBtn">整单改价</button>
                     <button class="btn-action secondary">挂单</button>
                     <button class="btn-action primary" id="checkoutBtn">结账</button>
+                </div>
+            </div>
+
+            <div class="whole-order-change-popover" id="wholeOrderChangePopover" style="display:none;">
+                <div class="woc-title">整单改价</div>
+                <div class="woc-fields">
+                    <div class="woc-field">
+                        <div class="woc-label">整单应收</div>
+                        <div class="woc-input-wrap">
+                            <span class="woc-prefix">¥</span>
+                            <input class="woc-input" id="wocAmountInput" inputmode="decimal" type="text" placeholder="0.00">
+                        </div>
+                    </div>
+                    <div class="woc-field">
+                        <div class="woc-label">折扣</div>
+                        <div class="woc-input-wrap">
+                            <input class="woc-input" id="wocDiscountInput" inputmode="decimal" type="text" placeholder="0.00">
+                            <span class="woc-suffix">折</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="woc-tip">最低改价金额为 ¥0.00（0折）</div>
+                <div class="woc-actions">
+                    <button type="button" class="woc-btn secondary" id="wocCancelBtn">取消</button>
+                    <button type="button" class="woc-btn primary" id="wocConfirmBtn">确定</button>
                 </div>
             </div>
         </main>
@@ -6386,6 +6661,19 @@
             <div class="confirm-modal-footer">
                 <button class="btn-modal secondary" id="confirmCancel">取消</button>
                 <button class="btn-modal primary" id="confirmOk">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="moneycard-modal-overlay" id="moneyCardModalOverlay">
+        <div class="moneycard-modal">
+            <div class="moneycard-modal-header">选择金额卡</div>
+            <div class="moneycard-modal-body">
+                <div class="moneycard-list" id="moneyCardList"></div>
+            </div>
+            <div class="moneycard-modal-footer">
+                <button class="btn-modal secondary" id="moneyCardCancelBtn">取消</button>
+                <button class="btn-modal primary" id="moneyCardConfirmBtn">确定</button>
             </div>
         </div>
     </div>
@@ -7015,6 +7303,16 @@
                     item.beauticianIds = beauticianIds.slice();
                 });
             }
+
+            const rechargeModules = document.querySelectorAll('.upgrade-card-module[data-module-type="recharge"]');
+            rechargeModules.forEach(module => setRowBeauticianValue(module, beauticianIds));
+            if (typeof rechargeCardList !== 'undefined' && Array.isArray(rechargeCardList)) {
+                const text = formatBeauticianText(beauticianIds);
+                rechargeCardList.forEach(item => {
+                    item.beautician = text;
+                    item.beauticianIds = beauticianIds.slice();
+                });
+            }
         }
 
         function setRowBeauticianClearVisibleByInput(inputEl, clearBtn) {
@@ -7083,6 +7381,17 @@
                     const cardId = module.getAttribute('data-old-card-id') || '';
                     if (cardId && Array.isArray(upgradeCardList)) {
                         const item = upgradeCardList.find(x => String(x.cardId) === String(cardId));
+                        if (item) {
+                            item.beauticianIds = beauticianIds.slice();
+                            item.beautician = formatBeauticianText(beauticianIds);
+                        }
+                    }
+                    setRowBeauticianValue(module, beauticianIds);
+                }
+                if (module && moduleType === 'recharge') {
+                    const cardId = (module.id || '').replace('recharge-module-', '');
+                    if (cardId && Array.isArray(rechargeCardList)) {
+                        const item = rechargeCardList.find(x => String(x.cardId) === String(cardId));
                         if (item) {
                             item.beauticianIds = beauticianIds.slice();
                             item.beautician = formatBeauticianText(beauticianIds);
@@ -7284,6 +7593,26 @@
                 });
             });
 
+            document.querySelectorAll('.upgrade-card-module[data-module-type="recharge"]').forEach(module => {
+                const cardId = (module.id || '').replace('recharge-module-', '');
+                const item = (typeof rechargeCardList !== 'undefined' && Array.isArray(rechargeCardList))
+                    ? rechargeCardList.find(x => String(x.cardId) === String(cardId))
+                    : null;
+                if (!item) return;
+                items.push({
+                    itemType: 'recharge',
+                    cardId: String(item.cardId || ''),
+                    rechargeAmount: parseInt(String(item.rechargeAmount || '0'), 10) || 0,
+                    giftAmount: parseInt(String(item.giftAmount || '0'), 10) || 0,
+                    beauticianIds: (item.beauticianIds || []).slice(),
+                    giftBenefits: item.giftBenefits ? {
+                        care: (item.giftBenefits.care || []).map(x => ({ name: x.name, spec: x.spec, duration: x.duration, price: x.price, giftQty: x.giftQty })),
+                        home: (item.giftBenefits.home || []).map(x => ({ name: x.name, spec: x.spec, price: x.price, giftQty: x.giftQty })),
+                        card: (item.giftBenefits.card || []).map(x => ({ name: x.name, cardType: x.cardType, price: x.price, giftQty: x.giftQty }))
+                    } : { care: [], home: [], card: [] }
+                });
+            });
+
             return {
                 beauticianBatchIds: persistedBeauticianIds.slice(),
                 items
@@ -7295,6 +7624,21 @@
                 showToast('金额卡名称不能为空');
                 return;
             }
+
+            const rechargeModules = document.querySelectorAll('.upgrade-card-module[data-module-type="recharge"]');
+            for (const module of rechargeModules) {
+                const cardId = (module.id || '').replace('recharge-module-', '');
+                const item = getRechargeItem(cardId);
+                if (!item) continue;
+                const amt = parseInt(String(item.rechargeAmount || '0'), 10) || 0;
+                if (amt <= 0) {
+                    showToast('请输入充值金额');
+                    const input = document.getElementById('recharge-amount-input-' + cardId);
+                    if (input) input.focus();
+                    return;
+                }
+            }
+
             const payload = buildCheckoutPayload();
             try {
                 const res = await fetch('/api/checkout', {
@@ -7303,11 +7647,23 @@
                     body: JSON.stringify(payload)
                 });
                 if (!res.ok) throw new Error('HTTP ' + res.status);
-                showToast('提交成功');
+                showToast('提交成功，跳转支付页');
             } catch (e) {
                 console.log('checkout payload (mock)', payload);
-                showToast('已生成提交数据（模拟）');
+                showToast('已生成提交数据（模拟），跳转支付页');
             }
+
+            try {
+                localStorage.setItem('latest_checkout_payload', JSON.stringify(payload));
+            } catch (e) { }
+
+            const orderId = 'ORDER_' + Date.now();
+            const payable = parseFloat(String(document.getElementById('orderPayableAmountInput')?.value || '0')) || 0;
+            const discount = parseFloat(String(document.getElementById('orderDiscountAmountInput')?.value || '0')) || 0;
+            const url = './payment.html?orderId=' + encodeURIComponent(orderId) +
+                '&payable=' + encodeURIComponent(String(payable.toFixed(2))) +
+                '&discount=' + encodeURIComponent(String(discount.toFixed(2)));
+            window.location.href = url;
         });
 
         beauticianSelectModalOverlay?.addEventListener('click', function (e) {
@@ -7988,6 +8344,7 @@
             tr.setAttribute('data-card-id', String(payload.cardId || ''));
             tr.setAttribute('data-available', String(available));
             tr.setAttribute('data-consume-mode', consumeMode);
+            tr.setAttribute('data-benefit-type', String(payload.benefitType || ''));
             tr.innerHTML = `
                 <td class="col-name"><span class="readonly-text">${payload.benefitName || ''}</span></td>
                 <td class="col-card"><span class="readonly-text">${payload.cardName || ''}</span></td>
@@ -8653,6 +9010,7 @@
                     break;
                 }
             }
+            const inferredBenefitType = normalizeItemType(card?.type) === '有限次卡' ? '单次护理' : '';
             var benefit = null;
             if (card && Array.isArray(card.benefits)) {
                 for (var j = 0; j < card.benefits.length; j++) {
@@ -8695,6 +9053,7 @@
                 available: remainingNow,
                 cardId: cardId,
                 cardName: cardName,
+                benefitType: inferredBenefitType,
                 consumeMode: 'use'
             });
             if (!ok) {
@@ -8718,6 +9077,7 @@
                     break;
                 }
             }
+            const inferredBenefitType = normalizeItemType(card?.type) === '有限次卡' ? '单次护理' : '';
             var benefit = null;
             if (card && Array.isArray(card.benefits)) {
                 for (var j = 0; j < card.benefits.length; j++) {
@@ -8760,6 +9120,7 @@
                 available: remainingNow,
                 cardId: cardId,
                 cardName: cardName,
+                benefitType: inferredBenefitType,
                 consumeMode: 'replace'
             });
             if (!ok) {
@@ -8803,6 +9164,10 @@
         }
 
         function guardAddEntryForCardOpConflict() {
+            if (bypassCardOpGuardOnce) {
+                bypassCardOpGuardOnce = false;
+                return true;
+            }
             const hasCardOp = isAnyUpgradeSelected() || isAnyRechargeSelected();
             if (!hasCardOp) return true;
             showToast('充卡或升卡业务不能与其他商品一起下单');
@@ -8872,6 +9237,317 @@
         // 已存储的升卡数据（用于后续可能的扩展）
         var upgradeCardList = [];
         var rechargeCardList = [];
+        let bypassCardOpGuardOnce = false;
+        let rechargeGiftBenefitModalType = null;
+        let rechargeGiftTargetCardId = '';
+
+        function getRechargeItem(cardId) {
+            const id = String(cardId || '');
+            if (!Array.isArray(rechargeCardList)) rechargeCardList = [];
+            return rechargeCardList.find(x => String(x.cardId) === id) || null;
+        }
+
+        function sanitizePositiveIntString(v) {
+            return String(v || '').replace(/[^\d]/g, '');
+        }
+
+        function isInvalidEmptyValue(v) {
+            if (v === null || v === undefined) return true;
+            if (typeof v === 'string' && v.trim() === '') return true;
+            return false;
+        }
+
+        function isRechargeGiftTableRowValid(tr, type) {
+            if (!tr) return false;
+            if (type === 'care') {
+                const name = tr.getAttribute('data-name');
+                const duration = tr.getAttribute('data-duration');
+                const spec = tr.getAttribute('data-spec');
+                return !(isInvalidEmptyValue(name) && isInvalidEmptyValue(duration) && isInvalidEmptyValue(spec));
+            }
+            if (type === 'home') {
+                const name = tr.getAttribute('data-name');
+                const spec = tr.getAttribute('data-spec');
+                return !(isInvalidEmptyValue(name) && isInvalidEmptyValue(spec));
+            }
+            const name = tr.getAttribute('data-name');
+            const cardType = tr.getAttribute('data-card-type');
+            return !(isInvalidEmptyValue(name) && isInvalidEmptyValue(cardType));
+        }
+
+        function updateRechargeGiftTableHeadVisibility(cardId, type) {
+            const id = String(cardId || '');
+            const bodyIdMap = {
+                care: 'rechargeGiftCareBody-',
+                home: 'rechargeGiftHomeBody-',
+                card: 'rechargeGiftCardBody-'
+            };
+            const tbody = document.getElementById(bodyIdMap[type] + id);
+            const table = tbody?.closest?.('table');
+            if (!table) return;
+            const rows = Array.from(tbody.querySelectorAll('tr'));
+            const hasValid = rows.some(tr => isRechargeGiftTableRowValid(tr, type));
+            const shouldHide = rows.length === 0 || !hasValid;
+            table.classList.toggle('table-head-hidden', shouldHide);
+        }
+
+        function updateRechargeGiftAllTableHeadVisibility(cardId) {
+            updateRechargeGiftTableHeadVisibility(cardId, 'care');
+            updateRechargeGiftTableHeadVisibility(cardId, 'home');
+            updateRechargeGiftTableHeadVisibility(cardId, 'card');
+        }
+
+        function onRechargeAmountInput(input, cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item || !input) return;
+            input.value = sanitizePositiveIntString(input.value);
+            item.rechargeAmount = parseInt(input.value || '0', 10) || 0;
+            updateOrderSummary();
+        }
+
+        function onRechargeAmountBlur(input, cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item || !input) return;
+            input.value = sanitizePositiveIntString(input.value);
+            const v = parseInt(input.value || '0', 10) || 0;
+            input.value = String(v);
+            item.rechargeAmount = v;
+            updateOrderSummary();
+        }
+
+        function onRechargeGiftAmountInput(input, cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item || !input) return;
+            input.value = sanitizePositiveIntString(input.value);
+            item.giftAmount = parseInt(input.value || '0', 10) || 0;
+        }
+
+        function onRechargeGiftAmountBlur(input, cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item || !input) return;
+            input.value = sanitizePositiveIntString(input.value);
+            const v = parseInt(input.value || '0', 10) || 0;
+            input.value = String(v);
+            item.giftAmount = v;
+        }
+
+        function applyRechargeQuickAmount(btn, cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item) return;
+            const v = parseInt(btn?.getAttribute?.('data-amt') || '0', 10) || 0;
+            const input = document.getElementById('recharge-amount-input-' + cardId);
+            if (input) {
+                input.value = String(v);
+                onRechargeAmountBlur(input, cardId);
+            } else {
+                item.rechargeAmount = v;
+                updateOrderSummary();
+            }
+        }
+
+        function clearRechargeBeautician(cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item) return;
+            item.beauticianIds = [];
+            item.beautician = '';
+            const module = document.getElementById('recharge-module-' + cardId);
+            const btn = module?.querySelector('.row-beautician-btn');
+            if (btn) {
+                btn.textContent = '选择美容师';
+                btn.setAttribute('data-value', '');
+                btn.setAttribute('data-ids', '');
+            }
+        }
+
+        function openRechargeGiftBenefitModal(cardId, type) {
+            rechargeGiftTargetCardId = String(cardId || '');
+            rechargeGiftBenefitModalType = type;
+            bypassCardOpGuardOnce = type === 'care' || type === 'home';
+            openCustomCourseBenefitModal(type);
+        }
+
+        function resetRechargeGiftContext() {
+            rechargeGiftBenefitModalType = null;
+            rechargeGiftTargetCardId = '';
+        }
+
+        function addSelectedItemsToRechargeGift(type, items) {
+            const item = getRechargeItem(rechargeGiftTargetCardId);
+            if (!item) return;
+            const benefits = item.giftBenefits || (item.giftBenefits = { care: [], home: [], card: [] });
+            const list = Array.isArray(benefits[type]) ? benefits[type] : (benefits[type] = []);
+            const existing = new Set(list.map(x => type === 'home' ? `${x.name}__${x.spec || ''}` : String(x.name || '')));
+            let skipped = 0;
+            let added = 0;
+
+            items.forEach(it => {
+                const name = String(it.name || '').trim();
+                if (!name) return;
+                const key = type === 'home' ? `${name}__${String(it.spec || '')}` : name;
+                if (existing.has(key)) {
+                    skipped += 1;
+                    return;
+                }
+                existing.add(key);
+                if (type === 'care') {
+                    list.push({
+                        name,
+                        spec: String(it.spec || ''),
+                        duration: String(it.duration || guessServiceDuration(it) || ''),
+                        price: Number(it.price || 0),
+                        giftQty: 1
+                    });
+                } else if (type === 'home') {
+                    list.push({
+                        name,
+                        spec: String(it.spec || ''),
+                        price: Number(it.price || 0),
+                        giftQty: 1
+                    });
+                } else {
+                    list.push({
+                        name,
+                        cardType: String(it.cardType || '有限次卡'),
+                        price: Number(it.price || 0),
+                        giftQty: 1
+                    });
+                }
+                added += 1;
+            });
+
+            if (skipped > 0) showToast(`已跳过重复项 ${skipped} 个`);
+            else if (added > 0) showToast(`已添加 ${added} 条权益`);
+            renderRechargeGiftTables(item.cardId);
+        }
+
+        function renderRechargeGiftTables(cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item) return;
+            const benefits = item.giftBenefits || (item.giftBenefits = { care: [], home: [], card: [] });
+
+            const careBody = document.getElementById('rechargeGiftCareBody-' + cardId);
+            const homeBody = document.getElementById('rechargeGiftHomeBody-' + cardId);
+            const cardBody = document.getElementById('rechargeGiftCardBody-' + cardId);
+
+            if (careBody) {
+                careBody.innerHTML = (benefits.care || []).map(b => `
+                    <tr class="course-table-row" data-custom-type="care" data-name="${escapeHtmlAttr(b.name || '')}" data-spec="${escapeHtmlAttr(b.spec || '')}" data-duration="${escapeHtmlAttr(b.duration || '')}" data-price="${escapeHtmlAttr(String(Number(b.price || 0)))}">
+                        <td class="col-name">
+                            <span class="readonly-text">${escapeHtmlAttr(b.name || '')}</span>
+                            ${b.spec ? `<span class="sub-text">${escapeHtmlAttr(b.spec)}</span>` : ''}
+                        </td>
+                        <td class="col-duration"><span class="readonly-text">${escapeHtmlAttr(b.duration || '')}</span></td>
+                        <td class="col-price"><span class="readonly-text">¥${Number(b.price || 0).toFixed(2)}</span></td>
+                        <td class="col-qty">
+                            <div class="table-stepper">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                </div>
+                                <input type="number" class="table-stepper-value" value="${parseInt(b.giftQty || 0, 10) || 0}" min="0" max="999" inputmode="numeric"
+                                       oninput="customCourseSanitizeQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" onblur="customCourseClampQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" data-field="gift">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-action"><button class="table-action-btn delete" onclick="removeRechargeGiftRow(this,'${String(cardId)}')">删除</button></td>
+                    </tr>
+                `).join('');
+            }
+
+            if (homeBody) {
+                homeBody.innerHTML = (benefits.home || []).map(b => `
+                    <tr class="course-table-row" data-custom-type="home" data-name="${escapeHtmlAttr(b.name || '')}" data-spec="${escapeHtmlAttr(b.spec || '')}" data-price="${escapeHtmlAttr(String(Number(b.price || 0)))}">
+                        <td class="col-name"><span class="readonly-text">${escapeHtmlAttr(b.name || '')}</span></td>
+                        <td class="col-spec"><span class="readonly-text">${escapeHtmlAttr(b.spec || '')}</span></td>
+                        <td class="col-price"><span class="readonly-text">¥${Number(b.price || 0).toFixed(2)}</span></td>
+                        <td class="col-qty">
+                            <div class="table-stepper">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                </div>
+                                <input type="number" class="table-stepper-value" value="${parseInt(b.giftQty || 0, 10) || 0}" min="0" max="999" inputmode="numeric"
+                                       oninput="customCourseSanitizeQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" onblur="customCourseClampQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" data-field="gift">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-action"><button class="table-action-btn delete" onclick="removeRechargeGiftRow(this,'${String(cardId)}')">删除</button></td>
+                    </tr>
+                `).join('');
+            }
+
+            if (cardBody) {
+                cardBody.innerHTML = (benefits.card || []).map(b => `
+                    <tr class="course-table-row" data-custom-type="card" data-name="${escapeHtmlAttr(b.name || '')}" data-card-type="${escapeHtmlAttr(b.cardType || '有限次卡')}" data-price="${escapeHtmlAttr(String(Number(b.price || 0)))}">
+                        <td class="col-name"><span class="readonly-text">${escapeHtmlAttr(b.name || '')}</span></td>
+                        <td class="col-type"><span class="readonly-text">${escapeHtmlAttr(b.cardType || '有限次卡')}</span></td>
+                        <td class="col-price"><span class="readonly-text">¥${Number(b.price || 0).toFixed(2)}</span></td>
+                        <td class="col-qty">
+                            <div class="table-stepper">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                </div>
+                                <input type="number" class="table-stepper-value" value="${parseInt(b.giftQty || 0, 10) || 0}" min="0" max="999" inputmode="numeric"
+                                       oninput="customCourseSanitizeQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" onblur="customCourseClampQtyInput(this);syncRechargeGiftFromDom('${String(cardId)}')" data-field="gift">
+                                <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                    <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="col-action"><button class="table-action-btn delete" onclick="removeRechargeGiftRow(this,'${String(cardId)}')">删除</button></td>
+                    </tr>
+                `).join('');
+            }
+
+            updateRechargeGiftAllTableHeadVisibility(cardId);
+        }
+
+        function syncRechargeGiftFromDom(cardId) {
+            const item = getRechargeItem(cardId);
+            if (!item) return;
+            const benefits = item.giftBenefits || (item.giftBenefits = { care: [], home: [], card: [] });
+
+            const careBody = document.getElementById('rechargeGiftCareBody-' + cardId);
+            const homeBody = document.getElementById('rechargeGiftHomeBody-' + cardId);
+            const cardBody = document.getElementById('rechargeGiftCardBody-' + cardId);
+
+            if (careBody) {
+                benefits.care = Array.from(careBody.querySelectorAll('tr')).map(tr => ({
+                    name: tr.dataset.name || (tr.querySelector('td.col-name .readonly-text')?.textContent || '').trim(),
+                    spec: tr.dataset.spec || (tr.querySelector('td.col-name .sub-text')?.textContent || '').trim(),
+                    duration: tr.dataset.duration || (tr.querySelector('td.col-duration')?.textContent || '').trim(),
+                    price: Number(tr.dataset.price || 0) || 0,
+                    giftQty: parseInt(tr.querySelector('input[data-field="gift"]')?.value || '0', 10) || 0
+                }));
+            }
+            if (homeBody) {
+                benefits.home = Array.from(homeBody.querySelectorAll('tr')).map(tr => ({
+                    name: tr.dataset.name || (tr.querySelector('td.col-name')?.textContent || '').trim(),
+                    spec: tr.dataset.spec || (tr.querySelector('td.col-spec')?.textContent || '').trim(),
+                    price: Number(tr.dataset.price || 0) || 0,
+                    giftQty: parseInt(tr.querySelector('input[data-field="gift"]')?.value || '0', 10) || 0
+                }));
+            }
+            if (cardBody) {
+                benefits.card = Array.from(cardBody.querySelectorAll('tr')).map(tr => ({
+                    name: tr.dataset.name || (tr.querySelector('td.col-name')?.textContent || '').trim(),
+                    cardType: tr.dataset.cardType || (tr.querySelector('td.col-type')?.textContent || '').trim(),
+                    price: Number(tr.dataset.price || 0) || 0,
+                    giftQty: parseInt(tr.querySelector('input[data-field="gift"]')?.value || '0', 10) || 0
+                }));
+            }
+
+            updateRechargeGiftAllTableHeadVisibility(cardId);
+        }
+
+        function removeRechargeGiftRow(btn, cardId) {
+            const tr = btn?.closest('tr');
+            if (tr) tr.remove();
+            syncRechargeGiftFromDom(cardId);
+            updateRechargeGiftAllTableHeadVisibility(cardId);
+        }
 
         function ensureSelectedItemsSectionOrder() {
             const container = document.querySelector('.selected-items-area');
@@ -8892,6 +9568,14 @@
             }
         }
 
+        function hasAnySelectedItemsContent() {
+            const selectedItemsArea = document.querySelector('.selected-items-area');
+            if (!selectedItemsArea) return false;
+            return selectedItemsArea.querySelectorAll(
+                '.upgrade-card-module, .course-card-section, .selected-item-card, .promotion-card-section, #service-table-body tr.item-row, #product-table-body tr.item-row, #amount-card-table-body tr.item-row, #course-table-body tr.item-row, #benefit-consume-table-body tr'
+            ).length > 0;
+        }
+
         // 更新订单信息和支付汇总的显示状态（有商品时显示，无商品时隐藏）
         function updateOrderAndPaymentVisibility() {
             ensureSelectedItemsSectionOrder();
@@ -8901,10 +9585,8 @@
 
             if (!selectedItemsArea || !orderFormPanel || !paymentBar) return;
 
-            // 检查是否有任何已选商品（升卡、疗程卡、普通商品、产品等）
-            var hasContent = selectedItemsArea.querySelectorAll(
-                '.upgrade-card-module, .course-card-section, .selected-item-card, .promotion-card-section, #service-table-body tr.item-row, #product-table-body tr.item-row, #amount-card-table-body tr.item-row, #course-table-body tr.item-row, #benefit-consume-table-body tr'
-            ).length > 0;
+            // 检查是否有任何已选商品（升卡、充卡、疗程卡、普通商品、产品等）
+            var hasContent = hasAnySelectedItemsContent();
 
             if (hasContent) {
                 orderFormPanel.classList.remove('hidden');
@@ -9019,15 +9701,50 @@
             var typeText = cardData.type || '';
             var nameText = cardData.name || '';
             var validDate = cardData.validDate || '永久有效';
+            var balanceText = String(cardData.balance || '');
+            var giftBalanceText = String(cardData.giftBalance || '');
 
             var balanceHtml = '';
             if (cardData.type === '金额卡' && cardData.balance) {
-                balanceHtml = '<div class="upgrade-card-info-row">' +
-                    '<span class="upgrade-info-label">当前余额</span>' +
-                    '<span class="upgrade-info-value"><span class="upgrade-balance-highlight">' + cardData.balance + '</span> 元' +
-                    (cardData.giftBalance ? ' <span class="upgrade-balance-gift">(含赠金 ' + cardData.giftBalance.replace('¥', '') + ')</span>' : '') +
-                    '</span></div>';
+                balanceHtml =
+                    '<div class="upgrade-card-info-row">' +
+                    '    <span class="upgrade-info-label">当前剩余余额</span>' +
+                    '    <span class="upgrade-info-value"><span class="upgrade-balance-highlight">' + cardData.balance + '</span></span>' +
+                    '</div>' +
+                    (cardData.giftBalance ? (
+                        '<div class="upgrade-card-info-row">' +
+                        '    <span class="upgrade-info-label">赠金余额</span>' +
+                        '    <span class="upgrade-info-value"><span class="upgrade-balance-highlight">' + cardData.giftBalance + '</span></span>' +
+                        '</div>'
+                    ) : '');
             }
+
+            var existingItem = getRechargeItem(cardData.id);
+            if (!existingItem) {
+                rechargeCardList.push({
+                    cardId: cardData.id,
+                    cardType: cardData.type,
+                    cardName: cardData.name,
+                    validDate: validDate,
+                    balance: balanceText,
+                    giftBalance: giftBalanceText,
+                    rechargeAmount: 0,
+                    giftAmount: 0,
+                    beauticianIds: [],
+                    beautician: '',
+                    giftBenefits: { care: [], home: [], card: [] },
+                    timestamp: Date.now()
+                });
+                existingItem = getRechargeItem(cardData.id);
+            } else {
+                existingItem.cardType = cardData.type;
+                existingItem.cardName = cardData.name;
+                existingItem.validDate = validDate;
+                existingItem.balance = balanceText;
+                existingItem.giftBalance = giftBalanceText;
+            }
+
+            var quickAmounts = [500, 1000, 2000, 3000, 5000];
 
             var moduleDiv = document.createElement('div');
             moduleDiv.className = 'upgrade-card-module';
@@ -9042,7 +9759,7 @@
                 '        删除' +
                 '    </button>' +
                 '</div>' +
-                '<div class="upgrade-card-body">' +
+                '<div class="upgrade-card-body" style="align-items:stretch;">' +
                 '    <div class="upgrade-current-card">' +
                 '        <div class="upgrade-card-name-row">' +
                 '            <span class="upgrade-card-type-tag">' +
@@ -9060,25 +9777,94 @@
                 '' +
                 '    <div class="upgrade-arrow-area">' +
                 '        <span class="upgrade-arrow-text">充值</span>' +
-                '        <svg class="upgrade-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>' +
+                '        <svg class="upgrade-arrow-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="12" width="18" height="9" rx="2"/><path d="M12 3v8"/><path d="M8 8l4 4 4-4"/><path d="M3 16h18"/></svg>' +
                 '    </div>' +
                 '' +
-                '    <div class="upgrade-newcard-hotzone" onclick="showToast(\'选择充值金额\')">' +
-                '        <div class="upgrade-newcard-plus">+</div>' +
-                '        <span class="upgrade-newcard-label">充值</span>' +
+                '    <div class="upgrade-newcard-panel" style="display:flex;flex-direction:column;gap:12px;">' +
+                '        <div class="upgrade-newcard-selected" style="flex:1;display:flex;flex-direction:column;gap:10px;align-items:stretch;">' +
+                '            <div style="display:flex;gap:12px;align-items:flex-start;">' +
+                '                <div style="flex:1;min-width:0;">' +
+                '                    <div style="font-size:13px;color:var(--neutral-600);font-weight:600;margin-bottom:6px;">充值金额</div>' +
+                '                    <div style="display:flex;align-items:center;gap:8px;">' +
+                '                        <input id="recharge-amount-input-' + cardData.id + '" class="upgrade-fee-input" type="text" inputmode="decimal" value="' + String(existingItem.rechargeAmount || 0) + '" placeholder="0"' +
+                '                               oninput="onRechargeAmountInput(this,\'' + cardData.id + '\')" onblur="onRechargeAmountBlur(this,\'' + cardData.id + '\')">' +
+                '                    </div>' +
+                '                </div>' +
+                '                <div style="flex:1;min-width:0;">' +
+                '                    <div style="font-size:13px;color:var(--neutral-600);font-weight:600;margin-bottom:6px;">赠送金额</div>' +
+                '                    <input id="recharge-gift-amount-input-' + cardData.id + '" class="upgrade-fee-input" type="text" inputmode="decimal" value="' + String(existingItem.giftAmount || 0) + '" placeholder="0"' +
+                '                           oninput="onRechargeGiftAmountInput(this,\'' + cardData.id + '\')" onblur="onRechargeGiftAmountBlur(this,\'' + cardData.id + '\')">' +
+                '                </div>' +
+                '            </div>' +
+                '            <div style="display:flex;flex-wrap:wrap;gap:8px;">' +
+                                quickAmounts.map(function (amt) {
+                                    return '<button type="button" class="benefit-recent-tag" data-amt="' + amt + '" onclick="applyRechargeQuickAmount(this,\'' + cardData.id + '\')">¥' + amt + '</button>';
+                                }).join('') +
+                '            </div>' +
+                '        </div>' +
+                '    </div>' +
+                '</div>' +
+                '<div class="upgrade-bottom-section" style="flex-wrap:wrap;gap:10px;margin-top:12px;">' +
+                '    <div class="upgrade-bottom-left" style="flex:1;min-width:0;">' +
+                '        <span class="upgrade-bottom-label">美容师</span>' +
+                '        <button type="button" class="row-beautician-btn" data-item-name="充卡 - ' + escapeHtmlAttr(nameText) + '" data-ids="' + (existingItem.beauticianIds || []).join(',') + '" data-value="' + escapeHtmlAttr(existingItem.beautician || '') + '" onclick="openRowBeauticianModal(this)">' + (existingItem.beautician ? escapeHtmlAttr(existingItem.beautician) : '选择美容师') + '</button>' +
+                '    </div>' +
+                '</div>' +
+                '<div class="course-detail-tables" style="margin-top:12px;padding: 12px 12px;">' +
+                '    <div class="course-table-section">' +
+                '        <div class="course-table-title-row">' +
+                '            <div class="course-table-title">赠送权益 - 单次护理</div>' +
+                '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'care\')">+ 添加权益</button>' +
+                '        </div>' +
+                '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="care">' +
+                '            <thead><tr>' +
+                '                <th class="col-name">商品名称</th>' +
+                '                <th class="col-duration">服务时长</th>' +
+                '                <th class="col-price">服务价格</th>' +
+                '                <th class="col-qty">赠送数量</th>' +
+                '                <th class="col-action">操作</th>' +
+                '            </tr></thead>' +
+                '            <tbody id="rechargeGiftCareBody-' + cardData.id + '"></tbody>' +
+                '        </table>' +
+                '    </div>' +
+                '    <div class="course-table-section">' +
+                '        <div class="course-table-title-row">' +
+                '            <div class="course-table-title">赠送权益 - 居家产品</div>' +
+                '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'home\')">+ 添加权益</button>' +
+                '        </div>' +
+                '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="home">' +
+                '            <thead><tr>' +
+                '                <th class="col-name">商品名称</th>' +
+                '                <th class="col-spec">规格</th>' +
+                '                <th class="col-price">售卖价格</th>' +
+                '                <th class="col-qty">赠送数量</th>' +
+                '                <th class="col-action">操作</th>' +
+                '            </tr></thead>' +
+                '            <tbody id="rechargeGiftHomeBody-' + cardData.id + '"></tbody>' +
+                '        </table>' +
+                '    </div>' +
+                '    <div class="course-table-section">' +
+                '        <div class="course-table-title-row">' +
+                '            <div class="course-table-title">赠送权益 - 卡项</div>' +
+                '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'card\')">+ 添加权益</button>' +
+                '        </div>' +
+                '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="card">' +
+                '            <thead><tr>' +
+                '                <th class="col-name">卡项名称</th>' +
+                '                <th class="col-type">卡项类型</th>' +
+                '                <th class="col-price">卡项价格</th>' +
+                '                <th class="col-qty">赠送数量</th>' +
+                '                <th class="col-action">操作</th>' +
+                '            </tr></thead>' +
+                '            <tbody id="rechargeGiftCardBody-' + cardData.id + '"></tbody>' +
+                '        </table>' +
                 '    </div>' +
                 '</div>';
 
             selectedItemsArea.insertBefore(moduleDiv, emptyState);
 
-            rechargeCardList.push({
-                cardId: cardData.id,
-                cardType: cardData.type,
-                cardName: cardData.name,
-                timestamp: Date.now()
-            });
-
             showToast('已添加充卡：' + nameText);
+            renderRechargeGiftTables(cardData.id);
             updateOrderAndPaymentVisibility();
         }
 
@@ -9092,11 +9878,11 @@
             var selectedItemsArea = document.querySelector('.selected-items-area');
             var emptyState = document.getElementById('main-empty-state');
             if (selectedItemsArea && emptyState) {
-                var hasContent = selectedItemsArea.querySelectorAll('.upgrade-card-module, .course-card-section, .selected-item-card').length > 0;
-                emptyState.style.display = hasContent ? 'none' : 'flex';
+                emptyState.style.display = hasAnySelectedItemsContent() ? 'none' : 'flex';
             }
 
             updateOrderAndPaymentVisibility();
+            updateOrderSummary();
             benefitModalRechargeIntent = false;
             if (benefitModalOverlay && benefitModalOverlay.classList.contains('show')) {
                 var keyword = benefitSearchInput ? (benefitSearchInput.value || '') : '';
@@ -9118,8 +9904,7 @@
             var selectedItemsArea = document.querySelector('.selected-items-area');
             var emptyState = document.getElementById('main-empty-state');
             if (selectedItemsArea && emptyState) {
-                var hasContent = selectedItemsArea.querySelectorAll('.upgrade-card-module, .course-card-section, .selected-item-card').length > 0;
-                emptyState.style.display = hasContent ? 'none' : 'flex';
+                emptyState.style.display = hasAnySelectedItemsContent() ? 'none' : 'flex';
             }
 
             // 更新订单信息和支付汇总的显示状态
@@ -9390,6 +10175,98 @@
             updateOrderSummary();
         }
 
+        function normalizeItemType(v) {
+            if (v === null || v === undefined) return '';
+            if (typeof v !== 'string') {
+                try {
+                    v = String(v);
+                } catch (e) {
+                    return '';
+                }
+            }
+            return v.replace(/\s+/g, '').trim();
+        }
+
+        function isSingleCareType(v) {
+            const t = normalizeItemType(v);
+            if (!t) return false;
+            return t === '单次护理' || t.includes('单次护理');
+        }
+
+        function inferBenefitTypeFromCardId(cardId) {
+            const id = String(cardId || '').trim();
+            if (!id) return '';
+            const cards = (typeof mockBenefitData !== 'undefined' && mockBenefitData && Array.isArray(mockBenefitData.cards))
+                ? mockBenefitData.cards
+                : [];
+            const card = cards.find(c => String(c?.id || '') === id);
+            if (!card) return '';
+            const cardType = normalizeItemType(card.type);
+            if (cardType === '有限次卡') return '单次护理';
+            return '';
+        }
+
+        function updateIngredientButtonVisibility() {
+            const btn = document.getElementById('ingredientBtn');
+            if (!btn) return;
+
+            const serviceRows = document.querySelectorAll('#service-table-body tr.item-row');
+            let hasSingleCareService = false;
+            for (let i = 0; i < serviceRows.length; i++) {
+                const tr = serviceRows[i];
+                if (!tr) continue;
+                const itemType = normalizeItemType(tr.getAttribute('data-item-type') || tr.dataset?.itemType || '');
+                if (itemType && itemType !== 'service') continue;
+                const serviceType = tr.getAttribute('data-service-type') || tr.dataset?.serviceType || '';
+                if (!serviceType) {
+                    hasSingleCareService = true;
+                    break;
+                }
+                if (isSingleCareType(serviceType)) {
+                    hasSingleCareService = true;
+                    break;
+                }
+            }
+
+            const benefitRows = document.querySelectorAll('#benefit-consume-table-body tr.item-row');
+            let hasSingleCareBenefit = false;
+            for (let i = 0; i < benefitRows.length; i++) {
+                const tr = benefitRows[i];
+                if (!tr) continue;
+                const benefitType = tr.getAttribute('data-benefit-type') || tr.dataset?.benefitType || '';
+                if (isSingleCareType(benefitType)) {
+                    hasSingleCareBenefit = true;
+                    break;
+                }
+                if (!benefitType) {
+                    const inferred = inferBenefitTypeFromCardId(tr.getAttribute('data-card-id') || tr.dataset?.cardId || '');
+                    if (isSingleCareType(inferred)) {
+                        hasSingleCareBenefit = true;
+                        break;
+                    }
+                }
+            }
+
+            btn.style.display = (hasSingleCareService || hasSingleCareBenefit) ? '' : 'none';
+        }
+
+        let ingredientButtonObserver = null;
+        function initIngredientButtonVisibilityWatcher() {
+            if (ingredientButtonObserver) return;
+            const serviceBody = document.getElementById('service-table-body');
+            const benefitBody = document.getElementById('benefit-consume-table-body');
+            if (!serviceBody && !benefitBody) return;
+
+            ingredientButtonObserver = new MutationObserver(function () {
+                updateIngredientButtonVisibility();
+            });
+
+            if (serviceBody) ingredientButtonObserver.observe(serviceBody, { childList: true });
+            if (benefitBody) ingredientButtonObserver.observe(benefitBody, { childList: true });
+
+            updateIngredientButtonVisibility();
+        }
+
         // ========== 表格操作功能 ==========
         function updateSelectedItemsEmptyStates() {
             ensureSelectedItemsSectionOrder();
@@ -9419,7 +10296,8 @@
             const benefitConsumeBody = document.getElementById('benefit-consume-table-body');
             const hasBenefitConsumes = !!(benefitConsumeBody && benefitConsumeBody.children.length > 0);
 
-            const hasAnySelected = hasServices || hasProducts || hasAmountCards || hasCourses || hasBenefitConsumes;
+            const hasUpgradeOrRechargeModules = document.querySelectorAll('.upgrade-card-module').length > 0;
+            const hasAnySelected = hasServices || hasProducts || hasAmountCards || hasCourses || hasBenefitConsumes || hasUpgradeOrRechargeModules;
 
             if (serviceSection) serviceSection.style.display = hasServices ? 'block' : 'none';
             if (serviceEmpty) serviceEmpty.style.display = hasServices ? 'none' : 'flex';
@@ -9440,6 +10318,7 @@
             }
 
             updateCategoryBadge('product');
+            updateIngredientButtonVisibility();
         }
 
         function deleteTableRow(btn) {
@@ -9486,10 +10365,27 @@
         }
 
         // 更新订单汇总（待收款、共减）
+        let orderSummaryCache = {
+            baseOriginal: 0,
+            baseFinal: 0,
+            baseDiscount: 0,
+            displayFinal: 0,
+            displayDiscount: 0
+        };
+
+        let wholeOrderChangeState = {
+            enabled: false,
+            amount: 0
+        };
+
+        let wholeOrderChangePopoverOpen = false;
+        let wholeOrderChangeRepositionRaf = 0;
+
         function updateOrderSummary() {
             const highlightEl = document.querySelector('#paymentBar .payment-item-value.highlight');
             const discountEl = document.querySelector('#paymentBar .payment-item-value.discount');
             const payableInput = document.getElementById('orderPayableAmountInput');
+            const discountAmountInput = document.getElementById('orderDiscountAmountInput');
 
             let totalOriginal = 0;
             let totalFinal = 0;
@@ -9537,6 +10433,19 @@
                 totalFinal += pay;
             });
 
+            const rechargeModules = document.querySelectorAll('.upgrade-card-module[data-module-type="recharge"]');
+            rechargeModules.forEach(module => {
+                const cardId = (module.id || '').replace('recharge-module-', '');
+                const item = (typeof rechargeCardList !== 'undefined' && Array.isArray(rechargeCardList))
+                    ? rechargeCardList.find(x => String(x.cardId) === String(cardId))
+                    : null;
+                if (!item) return;
+                const amt = Number(item.rechargeAmount || 0);
+                if (!Number.isFinite(amt) || amt <= 0) return;
+                totalOriginal += amt;
+                totalFinal += amt;
+            });
+
             const courseRows = document.querySelectorAll('#course-table-body tr.item-row');
             courseRows.forEach(row => {
                 const originalPriceText = row.querySelector('.col-original')?.textContent || '';
@@ -9547,14 +10456,212 @@
                 totalFinal += finalPrice * buyQty;
             });
 
-            const totalDiscount = Math.max(0, totalOriginal - totalFinal);
+            const baseOriginal = totalOriginal;
+            const baseFinal = totalFinal;
+            const baseDiscount = Math.max(0, baseOriginal - baseFinal);
 
-            if (highlightEl) highlightEl.textContent = `¥${totalFinal.toFixed(2)}`;
-            if (discountEl) discountEl.textContent = `¥${totalDiscount.toFixed(2)}`;
-            if (payableInput) payableInput.value = totalFinal.toFixed(2);
+            let displayFinal = baseFinal;
+            if (wholeOrderChangeState?.enabled) {
+                const adjusted = clampNumber(Number(wholeOrderChangeState.amount || 0), 0, baseOriginal);
+                wholeOrderChangeState.amount = adjusted;
+                displayFinal = adjusted;
+            }
+
+            const displayDiscount = Math.max(0, baseOriginal - displayFinal);
+
+            orderSummaryCache = {
+                baseOriginal,
+                baseFinal,
+                baseDiscount,
+                displayFinal,
+                displayDiscount
+            };
+
+            if (highlightEl) highlightEl.textContent = `¥${displayFinal.toFixed(2)}`;
+            if (discountEl) discountEl.textContent = `¥${displayDiscount.toFixed(2)}`;
+            if (payableInput) payableInput.value = displayFinal.toFixed(2);
+            if (discountAmountInput && wholeOrderChangeState?.enabled) discountAmountInput.value = displayDiscount.toFixed(2);
 
             updateCategoryBadge('product');
         }
+
+        function sanitizeWholeOrderChangeAmountStr(v) {
+            const sanitized = sanitizePriceString(v, 2);
+            const n = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
+            return { sanitized, n };
+        }
+
+        function sanitizeWholeOrderChangeDiscountStr(v) {
+            const sanitized = sanitizePriceString(v, 2);
+            const n = clampNumber(parseFloat(sanitized || '0') || 0, 0, 10);
+            return { sanitized, n };
+        }
+
+        function getWholeOrderChangeBaseOriginal() {
+            const v = Number(orderSummaryCache?.baseOriginal || 0);
+            return Number.isFinite(v) ? v : 0;
+        }
+
+        function positionWholeOrderChangePopover() {
+            if (!wholeOrderChangePopoverOpen) return;
+            const pop = document.getElementById('wholeOrderChangePopover');
+            if (!pop) return;
+            const btn = document.getElementById('wholeOrderChangeBtn');
+            const rect = btn?.getBoundingClientRect?.();
+            const vw = Math.max(0, window.innerWidth || 0);
+            const vh = Math.max(0, window.innerHeight || 0);
+            const popRect = pop.getBoundingClientRect();
+
+            let left = Math.max(12, Math.min(vw - popRect.width - 12, vw - popRect.width - 12));
+            let top = 12;
+
+            if (rect) {
+                left = Math.min(Math.max(12, rect.right - popRect.width), vw - popRect.width - 12);
+                const aboveTop = rect.top - 10 - popRect.height;
+                const belowTop = rect.bottom + 10;
+                if (aboveTop >= 12) {
+                    top = aboveTop;
+                } else if (belowTop + popRect.height <= vh - 12) {
+                    top = belowTop;
+                } else {
+                    top = Math.min(Math.max(12, aboveTop), Math.max(12, vh - popRect.height - 12));
+                }
+            } else {
+                left = Math.max(12, vw - popRect.width - 12);
+                top = 12;
+            }
+
+            pop.style.top = `${top}px`;
+            pop.style.left = `${left}px`;
+        }
+
+        function scheduleWholeOrderChangePopoverReposition() {
+            if (!wholeOrderChangePopoverOpen) return;
+            if (wholeOrderChangeRepositionRaf) return;
+            wholeOrderChangeRepositionRaf = window.requestAnimationFrame(function () {
+                wholeOrderChangeRepositionRaf = 0;
+                positionWholeOrderChangePopover();
+            });
+        }
+
+        function closeWholeOrderChangePopover() {
+            const pop = document.getElementById('wholeOrderChangePopover');
+            if (pop) pop.style.display = 'none';
+            wholeOrderChangePopoverOpen = false;
+            window.removeEventListener('scroll', scheduleWholeOrderChangePopoverReposition, true);
+            window.removeEventListener('resize', scheduleWholeOrderChangePopoverReposition, true);
+        }
+
+        function openWholeOrderChangePopover() {
+            updateOrderSummary();
+            const pop = document.getElementById('wholeOrderChangePopover');
+            const amountInput = document.getElementById('wocAmountInput');
+            const discountInput = document.getElementById('wocDiscountInput');
+            if (!pop || !amountInput || !discountInput) return;
+
+            const baseOriginal = getWholeOrderChangeBaseOriginal();
+            const initAmount = wholeOrderChangeState?.enabled ? Number(wholeOrderChangeState.amount || 0) : Number(orderSummaryCache?.displayFinal || 0);
+            const safeAmount = clampNumber(initAmount, 0, Math.max(0, baseOriginal));
+            amountInput.value = safeAmount.toFixed(2);
+
+            const initDiscount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
+            discountInput.value = initDiscount.toFixed(2);
+
+            pop.style.display = 'block';
+            wholeOrderChangePopoverOpen = true;
+            positionWholeOrderChangePopover();
+
+            window.addEventListener('scroll', scheduleWholeOrderChangePopoverReposition, true);
+            window.addEventListener('resize', scheduleWholeOrderChangePopoverReposition, true);
+        }
+
+        function applyWholeOrderChangeFromPopover() {
+            const amountInput = document.getElementById('wocAmountInput');
+            const discountInput = document.getElementById('wocDiscountInput');
+            if (!amountInput || !discountInput) return;
+
+            updateOrderSummary();
+            const baseOriginal = getWholeOrderChangeBaseOriginal();
+
+            const amountRes = sanitizeWholeOrderChangeAmountStr(amountInput.value);
+            const safeAmount = clampNumber(amountRes.n, 0, Math.max(0, baseOriginal));
+
+            closeWholeOrderChangePopover();
+
+            wholeOrderChangeState.enabled = true;
+            wholeOrderChangeState.amount = safeAmount;
+
+            updateOrderSummary();
+
+            const discountAmountInput = document.getElementById('orderDiscountAmountInput');
+            const baseDiscount = Number(orderSummaryCache?.baseDiscount || 0);
+            const baseFinal = Number(orderSummaryCache?.baseFinal || 0);
+            const changeDiscount = clampNumber(baseFinal - safeAmount, -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
+            const latestDiscount = clampNumber(baseDiscount + changeDiscount, 0, Number.MAX_SAFE_INTEGER);
+            if (discountAmountInput) discountAmountInput.value = latestDiscount.toFixed(2);
+
+            const newDiscount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
+            discountInput.value = newDiscount.toFixed(2);
+            amountInput.value = safeAmount.toFixed(2);
+        }
+
+        document.addEventListener('input', function (e) {
+            const el = e.target;
+            if (!(el instanceof HTMLInputElement)) return;
+            if (el.id === 'wocAmountInput') {
+                el.value = sanitizePriceString(el.value, 2);
+                scheduleWholeOrderChangePopoverReposition();
+                return;
+            }
+            if (el.id === 'wocDiscountInput') {
+                el.value = sanitizePriceString(el.value, 2);
+                scheduleWholeOrderChangePopoverReposition();
+                return;
+            }
+        });
+
+        document.addEventListener('blur', function (e) {
+            const el = e.target;
+            if (!(el instanceof HTMLInputElement)) return;
+            if (el.id !== 'wocAmountInput' && el.id !== 'wocDiscountInput') return;
+
+            updateOrderSummary();
+            const baseOriginal = getWholeOrderChangeBaseOriginal();
+
+            if (el.id === 'wocAmountInput') {
+                const amountInput = el;
+                const discountInput = document.getElementById('wocDiscountInput');
+                if (!discountInput) return;
+
+                const amountRes = sanitizeWholeOrderChangeAmountStr(amountInput.value);
+                const safeAmount = clampNumber(amountRes.n, 0, Math.max(0, baseOriginal));
+                amountInput.value = safeAmount.toFixed(2);
+
+                const discount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
+                discountInput.value = discount.toFixed(2);
+                scheduleWholeOrderChangePopoverReposition();
+                return;
+            }
+
+            if (el.id === 'wocDiscountInput') {
+                const discountInput = el;
+                const amountInput = document.getElementById('wocAmountInput');
+                if (!amountInput) return;
+
+                const discountRes = sanitizeWholeOrderChangeDiscountStr(discountInput.value);
+                const safeDiscount = clampNumber(discountRes.n, 0, 10);
+                discountInput.value = safeDiscount.toFixed(2);
+
+                const safeAmount = baseOriginal * (safeDiscount / 10);
+                amountInput.value = clampNumber(safeAmount, 0, Math.max(0, baseOriginal)).toFixed(2);
+                scheduleWholeOrderChangePopoverReposition();
+                return;
+            }
+        }, true);
+
+        document.getElementById('wholeOrderChangeBtn')?.addEventListener('click', openWholeOrderChangePopover);
+        document.getElementById('wocCancelBtn')?.addEventListener('click', closeWholeOrderChangePopover);
+        document.getElementById('wocConfirmBtn')?.addEventListener('click', applyWholeOrderChangeFromPopover);
 
         // 添加商品到指定分类的表格
         function addItemToCategory(type, itemData) {
@@ -9614,8 +10721,52 @@
         const TAKE_DEBOUNCE_DELAY = 1000; // 防抖延迟1秒
 
         function takeAllProduct(btn) {
-            // 在促销方案页面，不需要全部拿走功能
-            showToast('当前页面不支持此操作');
+            if (takeAllTimer) return;
+            takeAllTimer = setTimeout(() => {
+                takeAllTimer = null;
+            }, TAKE_DEBOUNCE_DELAY);
+
+            if (btn) btn.disabled = true;
+            const originText = btn ? btn.textContent : '';
+            if (btn) btn.textContent = '处理中...';
+
+            const runForRow = (row) => {
+                const buy = parseInt(row.querySelector('input[data-field="buy"]')?.value || '0', 10) || 0;
+                const gift = parseInt(row.querySelector('input[data-field="gift"]')?.value || '0', 10) || 0;
+                const total = Math.max(0, buy + gift);
+                const consumeInput = row.querySelector('input[data-field="consume"]');
+                if (!consumeInput) return false;
+                const min = parseInt(consumeInput.min || '0', 10);
+                const max = parseInt(consumeInput.max || '999', 10);
+                consumeInput.value = String(Math.max(min, Math.min(max, total)));
+                consumeInput.dispatchEvent(new Event('input', { bubbles: true }));
+
+                const consumeCell = row.querySelector('.col-consume');
+                consumeCell?.classList.add('consume-highlight');
+                setTimeout(() => consumeCell?.classList.remove('consume-highlight'), 600);
+                return true;
+            };
+
+            let updatedCount = 0;
+            const singleRow = btn?.closest?.('tr.item-row');
+            if (singleRow && (singleRow.getAttribute('data-item-type') || '') === 'product') {
+                if (runForRow(singleRow)) updatedCount += 1;
+            } else {
+                const rows = document.querySelectorAll('#product-table-body tr.item-row');
+                rows.forEach(row => {
+                    if ((row.getAttribute('data-item-type') || '') !== 'product') return;
+                    if (runForRow(row)) updatedCount += 1;
+                });
+            }
+
+            setTimeout(() => {
+                if (btn) {
+                    btn.disabled = false;
+                    btn.textContent = originText;
+                }
+            }, TAKE_DEBOUNCE_DELAY);
+
+            showToast('已更新 ' + updatedCount + ' 项产品的拿走数量');
         }
 
         function openTableRemarkModal(btn) {
@@ -11390,21 +12541,17 @@
                         </div>
                     </td>
                     <td class="col-card">
-                        <select class="table-select" data-field="card" onchange="onCourseLineFieldChange(this)">
-                            <option value="">不使用卡项</option>
-                            <option value="产品兑换卡" ${course.card === '产品兑换卡' ? 'selected' : ''}>产品兑换卡</option>
-                            <option value="护理次卡" ${course.card === '护理次卡' ? 'selected' : ''}>护理次卡</option>
-                        </select>
+                        <button type="button" class="use-card-btn" data-action="open-moneycard-modal">${course.moneyCardName ? course.moneyCardName : '选择金额卡'}</button>
                     </td>
                     <td class="col-discount">
                         <div class="discount-wrapper">
-                            <input type="number" class="table-input discount-input" value="${discount}" step="1" min="0" max="100"
+                            <input type="number" class="table-input discount-input" value="${discount}" step="1" min="0" max="100" inputmode="decimal"
                                    data-field="discount" oninput="onCourseDiscountInput(this)">
                             <span class="discount-suffix">%</span>
                         </div>
                     </td>
                     <td class="col-final">
-                        <input type="number" class="table-input final-price" value="${Number(finalPrice).toFixed(2)}" step="0.01" min="0"
+                        <input type="number" class="table-input final-price" value="${Number(finalPrice).toFixed(2)}" step="0.01" min="0" inputmode="decimal"
                                data-field="finalPrice" oninput="onCourseFinalPriceInput(this)">
                     </td>
                     <td class="col-beautician">
@@ -11492,13 +12639,13 @@
                     </td>
                     <td class="col-discount">
                         <div class="discount-wrapper">
-                            <input type="number" class="table-input discount-input" value="${Number(discount).toFixed(2)}" step="0.01" min="0.01" max="100"
+                            <input type="number" class="table-input discount-input" value="${Number(discount).toFixed(2)}" step="0.01" min="0.01" max="100" inputmode="decimal"
                                    data-field="discount" oninput="onAmountCardDiscountInput(this)">
                             <span class="discount-suffix">%</span>
                         </div>
                     </td>
                     <td class="col-final">
-                        <input type="number" class="table-input final-price" value="${Number(finalPrice).toFixed(2)}" step="0.01" min="0"
+                        <input type="number" class="table-input final-price" value="${Number(finalPrice).toFixed(2)}" step="0.01" min="0" inputmode="decimal"
                                data-field="finalPrice" oninput="onAmountCardFinalPriceInput(this)">
                     </td>
                     <td class="col-beautician">
@@ -11995,12 +13142,11 @@
             const emptyState = document.getElementById('main-empty-state');
 
             if (selectedCourseCards.length === 0) {
-                // 显示空状态
-                if (emptyState) {
-                    emptyState.style.display = 'flex';
-                }
                 // 移除所有疗程卡元素
                 selectedItemsArea.querySelectorAll('.course-card-section').forEach(el => el.remove());
+                if (emptyState) {
+                    emptyState.style.display = hasAnySelectedItemsContent() ? 'none' : 'flex';
+                }
                 // 更新订单信息和支付汇总的显示状态
                 updateOrderAndPaymentVisibility();
                 return;
@@ -12223,6 +13369,9 @@
             if (customCourseBenefitModalType === 'care') {
                 customCourseBenefitModalType = null;
             }
+            if (rechargeGiftBenefitModalType === 'care') {
+                resetRechargeGiftContext();
+            }
         }
 
         // 渲染最近搜索
@@ -12369,6 +13518,17 @@
                 return;
             }
 
+            if (rechargeGiftBenefitModalType === 'care') {
+                const count = selectedServices.length;
+                addSelectedItemsToRechargeGift('care', selectedServices);
+                selectedServices = [];
+                renderSelectedList();
+                closeAddServiceModal();
+                resetRechargeGiftContext();
+                showToast(`已选择 ${count} 个护理项目`);
+                return;
+            }
+
             if (courseDetailMode === 'custom' && customCourseBenefitModalType === 'care') {
                 const count = selectedServices.length;
                 addSelectedItemsToCustomCourse('care', selectedServices);
@@ -12398,6 +13558,7 @@
                 newRow.className = 'item-row';
                 newRow.setAttribute('data-item-type', 'service');
                 newRow.setAttribute('data-item-id', service.id);
+                newRow.setAttribute('data-service-type', '单次护理');
                 newRow.innerHTML = `
                     <td class="col-name">${service.name}</td>
                     <td class="col-original">¥${service.price}</td>
@@ -12435,20 +13596,16 @@
                         </div>
                     </td>
                     <td class="col-card">
-                        <select class="table-select" data-field="card">
-                            <option value="">不使用卡项</option>
-                            <option value="面部护理卡">面部护理卡</option>
-                            <option value="身体护理卡">身体护理卡</option>
-                        </select>
+                        <button type="button" class="use-card-btn" data-action="open-moneycard-modal">选择金额卡</button>
                     </td>
                     <td class="col-discount">
                         <div class="discount-wrapper">
-                            <input type="number" class="table-input discount-input" value="100" step="1" min="0" max="100" data-field="discount" oninput="updateFinalPrice(this)">
+                            <input type="number" class="table-input discount-input" value="100" step="1" min="0" max="100" inputmode="decimal" data-field="discount" oninput="updateFinalPrice(this)">
                             <span class="discount-suffix">%</span>
                         </div>
                     </td>
                     <td class="col-final">
-                        <input type="number" class="table-input final-price" value="${service.price}" step="0.01" min="0" data-field="finalPrice" oninput="updateDiscount(this)">
+                        <input type="number" class="table-input final-price" value="${service.price}" step="0.01" min="0" inputmode="decimal" data-field="finalPrice" oninput="updateDiscount(this)">
                     </td>
                     <td class="col-beautician">
                         <button type="button" class="row-beautician-btn" data-field="beautician" data-value="" onclick="openRowBeauticianModal(this)">选择美容师</button>
@@ -12558,6 +13715,9 @@
                 customCourseBenefitModalType = null;
             }
             addProductModalSource = null;
+            if (rechargeGiftBenefitModalType === 'home') {
+                resetRechargeGiftContext();
+            }
         }
 
         // 渲染最近搜索
@@ -12752,6 +13912,16 @@
 
                 const count = selectedProducts.length;
 
+                if (rechargeGiftBenefitModalType === 'home') {
+                    addSelectedItemsToRechargeGift('home', selectedProducts);
+                    selectedProducts = [];
+                    renderProductSelectedList();
+                    closeAddProductModal();
+                    resetRechargeGiftContext();
+                    showToast(`已选择 ${count} 个产品`);
+                    return;
+                }
+
                 if (addProductModalSource === 'customCourseHome') {
                     addSelectedItemsToCustomCourse('home', selectedProducts);
                     selectedProducts = [];
@@ -12825,19 +13995,16 @@
                         </div>
                     </td>
                     <td class="col-card">
-                        <select class="table-select" data-field="card">
-                            <option value="">不使用卡项</option>
-                            <option value="产品兑换卡">产品兑换卡</option>
-                        </select>
+                        <button type="button" class="use-card-btn" data-action="open-moneycard-modal">选择金额卡</button>
                     </td>
                     <td class="col-discount">
                         <div class="discount-wrapper">
-                            <input type="number" class="table-input discount-input" value="100" step="1" min="0" max="100" data-field="discount" oninput="updateFinalPrice(this)">
+                            <input type="number" class="table-input discount-input" value="100" step="1" min="0" max="100" inputmode="decimal" data-field="discount" oninput="updateFinalPrice(this)">
                             <span class="discount-suffix">%</span>
                         </div>
                     </td>
                     <td class="col-final">
-                        <input type="number" class="table-input final-price" value="${product.price}" step="0.01" min="0" data-field="finalPrice" oninput="updateDiscount(this)">
+                        <input type="number" class="table-input final-price" value="${product.price}" step="0.01" min="0" inputmode="decimal" data-field="finalPrice" oninput="updateDiscount(this)">
                     </td>
                     <td class="col-beautician">
                         <button type="button" class="row-beautician-btn" data-field="beautician" data-value="" onclick="openRowBeauticianModal(this)">选择美容师</button>
@@ -13009,6 +14176,9 @@
             if (customCourseBenefitModalType === 'card') {
                 customCourseBenefitModalType = null;
             }
+            if (rechargeGiftBenefitModalType === 'card') {
+                resetRechargeGiftContext();
+            }
         }
 
         function renderCardItemSelectedList() {
@@ -13157,6 +14327,17 @@
                 return;
             }
 
+            if (rechargeGiftBenefitModalType === 'card') {
+                const count = selectedCardItemProducts.length;
+                addSelectedItemsToRechargeGift('card', selectedCardItemProducts);
+                selectedCardItemProducts = [];
+                renderCardItemSelectedList();
+                closeAddCardItemModal();
+                resetRechargeGiftContext();
+                showToast(`已选择 ${count} 个卡项`);
+                return;
+            }
+
             if (courseDetailMode === 'custom' && customCourseBenefitModalType === 'card') {
                 const count = selectedCardItemProducts.length;
                 addSelectedItemsToCustomCourse('card', selectedCardItemProducts);
@@ -13171,9 +14352,168 @@
             closeAddCardItemModal();
         });
 
+        const MONEY_CARD_OPTIONS = [
+            { id: 'mc_001', name: '樱粉金额卡（1000）', balance: 1280.00, discounts: { care: 8, home: 9, item: 8.5 } },
+            { id: 'mc_002', name: '玫瑰臻享卡（3000）', balance: 3560.50, discounts: { care: 7.5, home: 8.8, item: 8 } },
+            { id: 'mc_003', name: '铂金尊享卡（5000）', balance: 8920.00, discounts: { care: 6.8, home: 8, item: 7 } }
+        ];
+
+        const moneyCardModalOverlay = document.getElementById('moneyCardModalOverlay');
+        const moneyCardList = document.getElementById('moneyCardList');
+        const moneyCardCancelBtn = document.getElementById('moneyCardCancelBtn');
+        const moneyCardConfirmBtn = document.getElementById('moneyCardConfirmBtn');
+
+        const moneyCardModalState = {
+            row: null,
+            originalId: '',
+            pendingId: ''
+        };
+
+        function formatDiscountValue(v) {
+            const n = Number(v);
+            if (!Number.isFinite(n)) return '';
+            const s = n.toFixed(1).replace(/\.0$/, '');
+            return s;
+        }
+
+        function buildMoneyCardDiscountText(card) {
+            return `单次护理${formatDiscountValue(card.discounts?.care)}折 | 居家产品${formatDiscountValue(card.discounts?.home)}折 | 卡项${formatDiscountValue(card.discounts?.item)}折`;
+        }
+
+        function renderMoneyCardList() {
+            if (!moneyCardList) return;
+            const pendingId = moneyCardModalState.pendingId || '';
+            const noneSelected = pendingId === '';
+            const parts = [];
+            parts.push(`
+                <div class="moneycard-item ${noneSelected ? 'selected' : ''}" data-moneycard-id="">
+                    <div class="moneycard-name">不使用金额卡</div>
+                </div>
+            `);
+            MONEY_CARD_OPTIONS.forEach(card => {
+                const selected = pendingId === card.id ? 'selected' : '';
+                parts.push(`
+                    <div class="moneycard-item ${selected}" data-moneycard-id="${card.id}">
+                        <div class="moneycard-name">${card.name}</div>
+                        <div class="moneycard-balance">可用余额：¥${Number(card.balance || 0).toFixed(2)}</div>
+                        <div class="moneycard-discount">${buildMoneyCardDiscountText(card)}</div>
+                    </div>
+                `);
+            });
+            moneyCardList.innerHTML = parts.join('');
+        }
+
+        function openMoneyCardModalForRow(row) {
+            if (!moneyCardModalOverlay || !row) return;
+            const current = row.getAttribute('data-money-card-id') || '';
+            moneyCardModalState.row = row;
+            moneyCardModalState.originalId = current;
+            moneyCardModalState.pendingId = current;
+            renderMoneyCardList();
+            moneyCardModalOverlay.classList.add('show');
+        }
+
+        function closeMoneyCardModal() {
+            if (!moneyCardModalOverlay) return;
+            moneyCardModalOverlay.classList.remove('show');
+            moneyCardModalState.row = null;
+            moneyCardModalState.originalId = '';
+            moneyCardModalState.pendingId = '';
+        }
+
+        function applyMoneyCardSelection() {
+            const row = moneyCardModalState.row;
+            if (!row) return;
+            const selectedId = moneyCardModalState.pendingId || '';
+            const selectedCard = MONEY_CARD_OPTIONS.find(x => x.id === selectedId) || null;
+
+            if (selectedCard) {
+                row.setAttribute('data-money-card-id', selectedCard.id);
+                row.setAttribute('data-money-card-name', selectedCard.name);
+                row.setAttribute('data-money-card-discount', buildMoneyCardDiscountText(selectedCard));
+            } else {
+                row.removeAttribute('data-money-card-id');
+                row.removeAttribute('data-money-card-name');
+                row.removeAttribute('data-money-card-discount');
+            }
+
+            const btn = row.querySelector('[data-action="open-moneycard-modal"]');
+            if (btn) btn.textContent = selectedCard ? selectedCard.name : '选择金额卡';
+
+            const itemType = row.getAttribute('data-item-type') || '';
+            if (itemType === 'course') {
+                const itemId = row.getAttribute('data-item-id') || '';
+                const course = selectedCourseCards.find(x => String(x.id) === String(itemId));
+                if (course) {
+                    course.moneyCardId = selectedCard ? selectedCard.id : '';
+                    course.moneyCardName = selectedCard ? selectedCard.name : '';
+                }
+                renderSelectedCourseTable();
+            }
+
+            updateOrderSummary();
+            closeMoneyCardModal();
+        }
+
+        document.addEventListener('click', function (e) {
+            const el = e.target;
+            if (!(el instanceof Element)) return;
+
+            const trigger = el.closest('[data-action="open-moneycard-modal"]');
+            if (trigger) {
+                const row = trigger.closest('tr.item-row');
+                if (row) openMoneyCardModalForRow(row);
+                return;
+            }
+
+            const option = el.closest('[data-moneycard-id]');
+            if (option && moneyCardModalOverlay?.classList.contains('show')) {
+                const id = option.getAttribute('data-moneycard-id') || '';
+                moneyCardModalState.pendingId = id;
+                renderMoneyCardList();
+                return;
+            }
+        });
+
+        moneyCardCancelBtn?.addEventListener('click', () => {
+            closeMoneyCardModal();
+        });
+
+        moneyCardConfirmBtn?.addEventListener('click', () => {
+            applyMoneyCardSelection();
+        });
+
+        moneyCardModalOverlay?.addEventListener('click', (e) => {
+            if (e.target === moneyCardModalOverlay) closeMoneyCardModal();
+        });
+
+        function shouldEnableDecimalKeyboard(el) {
+            if (!(el instanceof HTMLInputElement)) return false;
+            if (el.matches('.table-input.discount-input, .table-input.final-price')) return true;
+            if (el.matches('.upgrade-fee-input, .course-card-price-input, .woc-input')) return true;
+            if (el.id === 'orderDiscountAmountInput' || el.id === 'orderPayableAmountInput') return true;
+            return false;
+        }
+
+        function enableDecimalKeyboardFor(el) {
+            if (!shouldEnableDecimalKeyboard(el)) return;
+            el.setAttribute('inputmode', 'decimal');
+        }
+
+        document.addEventListener('focusin', (e) => {
+            const el = e.target;
+            if (el instanceof HTMLInputElement) enableDecimalKeyboardFor(el);
+        }, true);
+
+        document.addEventListener('click', (e) => {
+            const el = e.target;
+            if (el instanceof HTMLInputElement) enableDecimalKeyboardFor(el);
+        }, true);
+
         // 页面加载完成后自动弹出会员选择弹窗
         document.addEventListener('DOMContentLoaded', function () {
             // 初始状态下不显示会员信息区域，等待用户关闭弹窗后再显示散客收银
+            initIngredientButtonVisibilityWatcher();
             const memberInfoPanel = document.getElementById('memberInfoPanel');
             const guestCashierStatus = document.getElementById('guestCashierStatus');
             const memberDetails = document.getElementById('memberDetails');
