@@ -1256,6 +1256,20 @@
                 </button>
             </div>
 
+            <!-- 资料类型筛选 -->
+            <div class="type-selector">
+                <div class="type-selector-label">快速筛选</div>
+                <div class="type-options" id="filterTypeOptions">
+                    <div class="type-option selected" data-type="all" onclick="filterRecords(this)">全部</div>
+                    <div class="type-option" data-type="customer" onclick="filterRecords(this)">客户资料</div>
+                    <div class="type-option" data-type="care" onclick="filterRecords(this)">护理记录</div>
+                    <div class="type-option" data-type="skin" onclick="filterRecords(this)">皮肤检测</div>
+                    <div class="type-option" data-type="consume" onclick="filterRecords(this)">消费记录</div>
+                    <div class="type-option" data-type="visit" onclick="filterRecords(this)">回访记录</div>
+                    <div class="type-option" data-type="other" onclick="filterRecords(this)">其他</div>
+                </div>
+            </div>
+
             <!-- 资料列表 -->
             <div class="record-list" id="recordList"></div>
 
@@ -1554,6 +1568,7 @@
         const pageSize = 10;
         let uploadedFiles = [];
         let selectedType = 'customer';
+        let currentFilterType = 'all';
 
         function selectType(el) {
             document.querySelectorAll('#typeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
@@ -1600,10 +1615,15 @@
 
         // 渲染记录列表
         function renderRecords() {
-            const totalPages = Math.ceil(mockRecords.length / pageSize) || 1;
+            let filteredRecords = mockRecords;
+            if (currentFilterType !== 'all') {
+                filteredRecords = mockRecords.filter(record => record.type === currentFilterType);
+            }
+            
+            const totalPages = Math.ceil(filteredRecords.length / pageSize) || 1;
             const start = (currentPage - 1) * pageSize;
             const end = start + pageSize;
-            const pageData = mockRecords.slice(start, end);
+            const pageData = filteredRecords.slice(start, end);
 
             const listEl = document.getElementById('recordList');
             const emptyEl = document.getElementById('emptyState');
@@ -1657,6 +1677,15 @@
             renderPagination(totalPages);
         }
 
+        // 筛选记录
+        function filterRecords(el) {
+            document.querySelectorAll('#filterTypeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            currentFilterType = el.dataset.type;
+            currentPage = 1;
+            renderRecords();
+        }
+
         // 渲染分页
         function renderPagination(totalPages) {
             const paginationEl = document.getElementById('pagination');
@@ -1683,7 +1712,11 @@
 
         // 翻页
         function goToPage(page) {
-            const totalPages = Math.ceil(mockRecords.length / pageSize) || 1;
+            let filteredRecords = mockRecords;
+            if (currentFilterType !== 'all') {
+                filteredRecords = mockRecords.filter(record => record.type === currentFilterType);
+            }
+            const totalPages = Math.ceil(filteredRecords.length / pageSize) || 1;
             if (page >= 1 && page <= totalPages) {
                 currentPage = page;
                 renderRecords();

@@ -30,6 +30,10 @@
             box-sizing: border-box;
         }
 
+        [hidden] {
+            display: none !important;
+        }
+
         body {
             font-family: PingFang SC, -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-page);
@@ -45,7 +49,7 @@
 
         .main-content {
             flex: 1;
-            padding: 24px 32px;
+            padding: 12px 32px;
         }
 
         .page-header {
@@ -354,6 +358,174 @@
             color: var(--info);
         }
 
+        .search-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        }
+
+        .search-section {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .search-section:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .search-label {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .type-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .type-option {
+            padding: 8px 16px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary);
+        }
+
+        .type-option.selected {
+            color: #fff;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .search-row {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .search-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-group .search-label {
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+
+        .search-input-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .search-input {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            background: #fff;
+            min-width: 130px;
+        }
+
+        .search-select {
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #e9ecef;
+            border-radius: 6px;
+            background: #fff;
+            min-width: 120px;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 8px center;
+            background-size: 16px;
+            padding-right: 32px;
+        }
+
+        .search-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 10px;
+        }
+
+        .action-bar {
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .action-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .sort-controls {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .sort-select {
+            height: 36px;
+            padding: 0 32px 0 12px;
+            font-size: 14px;
+            color: var(--text-primary);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            outline: none;
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L2 4h8z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            cursor: pointer;
+        }
+
+        .sort-btn {
+            height: 36px;
+            padding: 0 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        .sort-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+        }
+
+        .form-label .required {
+            color: var(--error);
+            margin-left: 2px;
+        }
+
         .action-btns {
             display: flex;
             gap: 12px;
@@ -362,21 +534,21 @@
         .action-btn {
             width: 60px;
             height: 32px;
-            padding: 0 16px;
+            padding: 0 8px;
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            background: var(--info-light);
-            border: none;
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
             border-radius: 6px;
             cursor: pointer;
             transition: all 0.2s;
             font-size: 13px;
-            color: var(--info);
+            color: var(--text-secondary);
         }
 
         .action-btn:hover {
-            background: #BAE7FF;
+            background: var(--border-color);
         }
 
         .action-btn.delete {
@@ -390,6 +562,448 @@
 
         .action-btn svg {
             display: none;
+        }
+
+        .gallery-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        .gallery-grid {
+            padding: 16px 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .gallery-item {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .gallery-thumb {
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--bg-page);
+            aspect-ratio: 1;
+            cursor: pointer;
+        }
+
+        .gallery-thumb img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.2s;
+        }
+
+        .gallery-thumb:hover img {
+            transform: scale(1.03);
+        }
+
+        .gallery-name {
+            font-size: 14px;
+            color: var(--text-primary);
+            line-height: 1.3;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            min-height: 14px;
+        }
+
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 5000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .detail-modal.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .detail-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+        }
+
+        .detail-content {
+            position: relative;
+            width: 94%;
+            max-width: 1100px;
+            height: 88vh;
+            background: #FFFFFF;
+            border-radius: 18px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transform: scale(0.96);
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        .detail-modal.show .detail-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .detail-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .detail-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .detail-close svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+        }
+
+        .detail-body {
+            flex: 1;
+            display: grid;
+            grid-template-columns: 1.4fr 1fr;
+            min-height: 0;
+        }
+
+        .detail-left {
+            position: relative;
+            background: #0B0B0B;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            min-width: 0;
+            min-height: 0;
+            overflow: hidden;
+        }
+
+        .detail-left img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            background: #111111;
+            display: block;
+        }
+
+        .detail-nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid var(--primary-dark);
+            background: var(--primary);
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, opacity 0.2s, transform 0.2s;
+            user-select: none;
+        }
+
+        .detail-nav-btn:hover:not(:disabled) {
+            background: var(--primary-dark);
+            transform: translateY(-50%) scale(1.03);
+        }
+
+        .detail-nav-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .detail-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .detail-nav-btn.prev {
+            left: 12px;
+        }
+
+        .detail-nav-btn.next {
+            right: 12px;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .detail-nav-btn {
+                width: 44px;
+                height: 44px;
+            }
+        }
+
+        .detail-right {
+            padding: 16px;
+            overflow: hidden;
+            min-height: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-panel-stack {
+            position: relative;
+            flex: 1;
+            min-height: 0;
+        }
+
+        .detail-view-panel {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            padding-right: 2px;
+            opacity: 1;
+            transform: translateY(0);
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .detail-panel-stack.editing .detail-view-panel {
+            opacity: 0;
+            transform: translateY(-8px);
+            pointer-events: none;
+        }
+
+        .meta-list {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .meta-item {
+            display: grid;
+            grid-template-columns: 96px 1fr;
+            gap: 10px;
+            align-items: start;
+        }
+
+        .meta-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .meta-value {
+            font-size: 14px;
+            color: var(--text-primary);
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+
+        .detail-footer {
+            flex-shrink: 0;
+            padding-top: 12px;
+            border-top: 1px solid var(--border-color);
+            background: #FFFFFF;
+        }
+
+        .detail-footer-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .detail-footer-row .btn {
+            flex: 1;
+        }
+
+        .edit-panel {
+            position: absolute;
+            inset: 0;
+            overflow-y: auto;
+            padding-right: 2px;
+            opacity: 0;
+            transform: translateY(8px);
+            pointer-events: none;
+            transition: opacity 180ms ease, transform 180ms ease;
+        }
+
+        .edit-panel.show {
+            opacity: 1;
+            transform: translateY(0);
+            pointer-events: auto;
+        }
+
+        .edit-panel .edit-group:first-child {
+            padding-top: 0;
+        }
+
+        .edit-group {
+            margin-bottom: 14px;
+        }
+
+        .edit-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .edit-name-wrap {
+            position: relative;
+        }
+
+        .edit-name-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 34px 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 14px;
+            background: #FFFFFF;
+            color: var(--text-primary);
+        }
+
+        .edit-name-input:focus {
+            border-color: var(--primary);
+        }
+
+        .edit-name-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .edit-name-wrap.has-value .edit-name-clear {
+            display: flex;
+        }
+
+        .edit-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .edit-actions .btn {
+            flex: 1;
+        }
+
+        #detailModal .type-custom-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #detailModal .type-custom-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+
+        #detailModal .type-custom-input {
+            width: 100%;
+            height: 38px;
+            padding: 0 34px 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 14px;
+            background: #FFFFFF;
+            color: var(--text-primary);
+        }
+
+        #detailModal .type-custom-input:focus {
+            border-color: var(--primary);
+        }
+
+        #detailModal .type-custom-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #detailModal .type-custom-input-wrap.has-value .type-custom-clear {
+            display: flex;
+        }
+
+        #detailModal .type-custom-add {
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        #detailModal .type-custom-add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        @media screen and (max-width: 1024px) {
+            .detail-body {
+                grid-template-columns: 1fr;
+            }
+
+            .detail-left {
+                min-height: 44vh;
+            }
         }
 
         .table-footer {
@@ -521,7 +1135,7 @@
             color: #FFFFFF;
             font-size: 14px;
             border-radius: 8px;
-            z-index: 2000;
+            z-index: 6000;
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s;
@@ -538,7 +1152,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 3000;
+            z-index: 7000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1179,7 +1793,7 @@
 
         @media screen and (min-width: 768px) and (max-width: 1024px) {
             .main-content {
-                padding: 20px 20px;
+                padding: 12px 20px;
             }
 
             .page-header {
@@ -1313,7 +1927,7 @@
 
         @media screen and (min-width: 1025px) and (max-width: 1366px) {
             .main-content {
-                padding: 20px 24px;
+                padding: 12px 24px;
             }
 
             .filter-card {
@@ -1335,77 +1949,548 @@
                 height: 38px;
             }
         }
+
+        #uploadModal .page-container {
+            width: 100%;
+            max-width: 1075px;
+            height: 90vh;
+            background: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+            border-radius: 18px;
+            overflow: hidden;
+            transform: scale(0.96);
+            opacity: 0;
+            transition: all 0.3s;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        #uploadModal.show .page-container {
+            transform: scale(1);
+            opacity: 1;
+        }
+
+        #uploadModal .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        #uploadModal .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        #uploadModal .header-right {
+            display: flex;
+            align-items: center;
+        }
+
+        #uploadModal .upload-close-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #uploadModal .upload-close-btn:hover {
+            background: rgba(0, 0, 0, 0.06);
+        }
+
+        #uploadModal .upload-close-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+        }
+
+        #uploadModal .back-btn {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        #uploadModal .back-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-primary);
+        }
+
+        #uploadModal .header-title {
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        #uploadModal .type-selector {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: #FFFFFF;
+            padding: 12px 10px;
+        }
+
+        #uploadModal .type-selector-label {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        #uploadModal .type-custom-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        #uploadModal .type-custom-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+
+        #uploadModal .type-custom-input {
+            width: 100%;
+            height: 38px;
+            padding: 0 34px 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 14px;
+            background: #FFFFFF;
+            color: var(--text-primary);
+        }
+
+        #uploadModal .type-custom-input:focus {
+            border-color: var(--primary);
+        }
+
+        #uploadModal .type-custom-clear {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #uploadModal .type-custom-input-wrap.has-value .type-custom-clear {
+            display: flex;
+        }
+
+        #uploadModal .type-custom-add {
+            height: 38px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: none;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+
+        #uploadModal .type-custom-add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        #uploadModal .type-options {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        #uploadModal .type-option {
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 14px;
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+            user-select: none;
+        }
+
+        #uploadModal .type-option.selected {
+            background: var(--primary-bg);
+            color: var(--primary);
+            border-color: var(--primary);
+            font-weight: 500;
+        }
+
+        #uploadModal .main-content {
+            flex: 1;
+            padding: 16px 16px 8px;
+            overflow-y: auto;
+            background: #FFFFFF;
+        }
+
+        #uploadModal .uploaded-section {
+            background: #FFFFFF;
+            border-radius: 12px;
+        }
+
+        #uploadModal .uploaded-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        #uploadModal .uploaded-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        #uploadModal .uploaded-count {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        #uploadModal .uploaded-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        #uploadModal .uploaded-card {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            min-width: 0;
+        }
+
+        #uploadModal .uploaded-item {
+            aspect-ratio: 1;
+            border-radius: 8px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-page);
+        }
+
+        #uploadModal .uploaded-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        #uploadModal .uploaded-item .status {
+            position: absolute;
+            bottom: 6px;
+            left: 6px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 11px;
+            color: #FFFFFF;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #uploadModal .uploaded-item .status.success {
+            background: var(--success);
+        }
+
+        #uploadModal .uploaded-item .status.error {
+            background: var(--error);
+        }
+
+        #uploadModal .uploaded-item .status.uploading {
+            background: var(--primary);
+        }
+
+        #uploadModal .uploaded-item .delete-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            opacity: 1;
+            transition: background 0.2s;
+        }
+
+        #uploadModal .uploaded-item .delete-btn:hover {
+            background: rgba(0, 0, 0, 0.65);
+        }
+
+        #uploadModal .uploaded-item .delete-btn svg {
+            width: 14px;
+            height: 14px;
+            fill: #FFFFFF;
+        }
+
+        #uploadModal .uploaded-name-wrap {
+            position: relative;
+            width: 100%;
+            min-width: 0;
+        }
+
+        #uploadModal .uploaded-name-input {
+            width: 100%;
+            height: 34px;
+            padding: 0 30px 0 10px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            background: #FFFFFF;
+            font-size: 12px;
+            color: var(--text-primary);
+        }
+
+        #uploadModal .uploaded-name-input:focus {
+            border-color: var(--primary);
+        }
+
+        #uploadModal .uploaded-name-clear {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        #uploadModal .uploaded-name-wrap.has-value .uploaded-name-clear {
+            display: flex;
+        }
+
+        #uploadModal .bottom-bar {
+            padding: 16px 20px;
+            background: #FFFFFF;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        #uploadModal .bottom-buttons {
+            display: flex;
+            flex-direction: row;
+            gap: 12px;
+            align-items: stretch;
+            flex-wrap: nowrap;
+        }
+
+        #uploadModal .action-buttons {
+            display: flex;
+            gap: 12px;
+            flex: 2;
+            min-width: 0;
+        }
+
+        #uploadModal .action-btn {
+            flex: 1;
+            min-height: 52px;
+            padding: 14px 20px;
+            border-radius: 12px;
+            border: none;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.2s;
+            background: var(--primary);
+            color: #FFFFFF;
+            white-space: nowrap;
+        }
+
+        #uploadModal .action-btn svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
+
+        #uploadModal .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        #uploadModal .submit-btn {
+            width: auto;
+            flex: 1;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            background: var(--primary);
+            color: #FFFFFF;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+
+        #uploadModal .submit-btn:disabled {
+            background: #E8E8E8;
+            color: #999999;
+            cursor: not-allowed;
+        }
+
+        #uploadModal .submit-btn:not(:disabled):active {
+            background: var(--primary-dark);
+            transform: scale(0.98);
+        }
+
+        #uploadModal #cameraInput,
+        #uploadModal #galleryInput {
+            display: none;
+        }
+
+        @media screen and (max-width: 360px) {
+            #uploadModal .bottom-buttons {
+                flex-direction: column;
+            }
+
+            #uploadModal .action-buttons {
+                flex: initial;
+            }
+
+            #uploadModal .type-option {
+                padding: 7px 12px;
+                font-size: 13px;
+            }
+
+            #uploadModal .type-custom-input {
+                height: 36px;
+                font-size: 13px;
+            }
+
+            #uploadModal .type-custom-add {
+                height: 36px;
+                font-size: 13px;
+            }
+
+            #uploadModal .uploaded-grid {
+                gap: 8px;
+            }
+
+            #uploadModal .uploaded-name-input {
+                height: 32px;
+                font-size: 12px;
+            }
+        }
     </style>
 </head>
 
 <body>
     <div class="layout-container">
         <main class="main-content">
-            <div class="page-header">
-                <div class="page-header-left">
-                    <h2 class="page-title">每日经营数据</h2>
+            <div class="search-card">
+                <div class="search-section">
+                    <div class="search-label">资料类型</div>
+                    <div class="type-options" id="filterTypeOptions">
+                        <div class="type-option selected" data-type="all" onclick="filterRecordsByType(this)">全部</div>
+                        <div class="type-option" data-type="daily" onclick="filterRecordsByType(this)">每日经营</div>
+                        <div class="type-option" data-type="customer" onclick="filterRecordsByType(this)">客户资料</div>
+                        <div class="type-option" data-type="appointment" onclick="filterRecordsByType(this)">预约表</div>
+                        <div class="type-option" data-type="kpi" onclick="filterRecordsByType(this)">员工月度KPI</div>
+                        <div class="type-option" data-type="income" onclick="filterRecordsByType(this)">收入及消费分析</div>
+                        <div class="type-option" data-type="product" onclick="filterRecordsByType(this)">品项经营分析</div>
+                        <div class="type-option" data-type="financial" onclick="filterRecordsByType(this)">财务支出</div>
+                        <div class="type-option" data-type="other" onclick="filterRecordsByType(this)">其他</div>
+                    </div>
                 </div>
-                <div class="tab-nav">
-                    <a href="pad&pc-customer-records.html" class="tab-btn">客户资料</a>
-                    <a href="pad&pc-daily-records.html" class="tab-btn active">每日经营</a>
+
+                <div class="search-section">
+                    <div class="search-row">
+                        <div class="search-group">
+                            <span class="search-label">上传日期</span>
+                            <div class="search-input-wrapper">
+                                <input type="date" class="search-input" id="startDate" value="2024-01-01">
+                                <span>至</span>
+                                <input type="date" class="search-input" id="endDate" value="2024-01-31">
+                            </div>
+                        </div>
+                        <div class="search-group">
+                            <span class="search-label">上传人</span>
+                            <select class="search-select" id="operatorFilter">
+                                <option value="">全部</option>
+                                <option value="王美容师">王美容师</option>
+                                <option value="李美容师">李美容师</option>
+                                <option value="张店总">张店总</option>
+                                <option value="刘店长">刘店长</option>
+                            </select>
+                        </div>
+                        <div class="search-group">
+                            <span class="search-label">图片名称</span>
+                            <input type="text" class="search-input" id="imageNameFilter" placeholder="请输入关键词">
+                        </div>
+                        <div class="search-actions">
+                            <button class="btn btn-secondary" onclick="resetFilter()">重置</button>
+                            <button class="btn btn-primary" onclick="searchRecords()">搜索</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 
-            <div class="filter-card">
-                <div class="filter-row">
-                    <div class="filter-group">
-                        <span class="filter-label">上传时间</span>
-                        <div class="date-range">
-                            <input type="date" class="filter-input" id="startDate" value="2024-01-01">
-                            <span>至</span>
-                            <input type="date" class="filter-input" id="endDate" value="2024-01-31">
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <span class="filter-label">经营日期</span>
-                        <div class="date-range">
-                            <input type="date" class="filter-input" id="businessStartDate" value="">
-                            <span>至</span>
-                            <input type="date" class="filter-input" id="businessEndDate" value="">
-                        </div>
-                    </div>
-                    <div class="filter-group">
-                        <span class="filter-label">操作人</span>
-                        <select class="filter-select" id="operatorFilter">
-                            <option value="">全部</option>
-                            <option value="王美容师">王美容师</option>
-                            <option value="李美容师">李美容师</option>
-                            <option value="张店总">张店总</option>
-                            <option value="刘店长">刘店长</option>
+            <div class="action-bar">
+                <div class="action-bar-left">
+                    <div class="sort-controls">
+                        <select class="sort-select" id="sortFieldSelect">
+                            <option value="uploadTime">按上传时间</option>
+                            <option value="name">按图片名称</option>
+                            <option value="modifiedTime">按修改时间</option>
                         </select>
+                        <button class="sort-btn" id="sortDirBtn" type="button">倒序</button>
                     </div>
-                    <div class="filter-actions">
-                        <button class="btn btn-secondary" onclick="resetFilter()">重置</button>
-                        <button class="btn btn-primary" onclick="searchRecords()">搜索</button>
-                        <button class="upload-btn" onclick="openUploadModal()">
-                            <svg viewBox="0 0 24 24">
-                                <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
-                            </svg>
-                            <span>上传</span>
-                        </button>
-                    </div>
+                </div>
+                <div class="action-bar-right">
+                    <button class="upload-btn" onclick="openUploadModal()">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
+                        </svg>
+                        <span>上传</span>
+                    </button>
                 </div>
             </div>
 
-            <div class="data-card">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th style="width: 120px;">经营日期</th>
-                            <th>缩略图</th>
-                            <th style="width: 100px;">操作人</th>
-                            <th style="width: 150px;">上传时间</th>
-                            <th style="width: 100px;">操作</th>
-                        </tr>
-                    </thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
-
+            <div class="gallery-card">
+                <div class="gallery-grid" id="galleryGrid"></div>
                 <div class="table-footer">
                     <span class="page-info">共 <span id="totalCount">0</span> 条</span>
                     <div class="pagination" id="pagination"></div>
@@ -1426,6 +2511,104 @@
         </div>
         <div class="preview-content">
             <img id="previewImage" src="" alt="预览">
+        </div>
+    </div>
+
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-overlay" onclick="closeDetailModal()"></div>
+        <div class="detail-content" onclick="event.stopPropagation()">
+            <div class="detail-header">
+                <div class="detail-title" id="detailTitle">图片查看</div>
+                <button class="detail-close" type="button" onclick="closeDetailModal()" aria-label="关闭">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="detail-body">
+                <div class="detail-left">
+                    <img id="detailImage" src="" alt="预览">
+                    <button class="detail-nav-btn prev" id="detailPrevBtn" type="button" onclick="showPrevDetail()" aria-label="上一张">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"></path>
+                        </svg>
+                    </button>
+                    <button class="detail-nav-btn next" id="detailNextBtn" type="button" onclick="showNextDetail()" aria-label="下一张">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"></path>
+                        </svg>
+                    </button>
+                </div>
+                <div class="detail-right">
+                    <div class="detail-panel-stack" id="detailPanelStack">
+                        <div class="detail-view-panel" id="detailViewPanel">
+                            <div class="meta-list">
+                                <div class="meta-item">
+                                    <div class="meta-label">资料类型</div>
+                                    <div class="meta-value" id="metaType">-</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">自定义命名</div>
+                                    <div class="meta-value" id="metaCustomName">-</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">上传时间</div>
+                                    <div class="meta-value" id="metaUploadTime">-</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">上传人</div>
+                                    <div class="meta-value" id="metaUploader">-</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">修改时间</div>
+                                    <div class="meta-value" id="metaModifiedTime">-</div>
+                                </div>
+                                <div class="meta-item">
+                                    <div class="meta-label">修改人</div>
+                                    <div class="meta-value" id="metaModifier">-</div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="edit-panel" id="detailEditPanel">
+                            <div class="edit-group">
+                                <span class="edit-label">修改资料类型</span>
+                                <div class="type-custom-row">
+                                    <div class="type-custom-input-wrap" id="detailCustomTypeInputWrap">
+                                        <input class="type-custom-input" id="detailCustomTypeInput" type="text" inputmode="text"
+                                            maxlength="20" placeholder="添加自定义标签（选填）">
+                                        <button class="type-custom-clear" id="detailCustomTypeClear" type="button"
+                                            aria-label="清空">×</button>
+                                    </div>
+                                    <button class="type-custom-add" id="detailCustomTypeAddBtn" type="button"
+                                        disabled>添加</button>
+                                </div>
+                                <div class="type-options" id="detailTypeOptions"></div>
+                            </div>
+
+                            <div class="edit-group">
+                                <span class="edit-label">修改图片命名（选填）</span>
+                                <div class="edit-name-wrap" id="detailNameWrap">
+                                    <input class="edit-name-input" id="detailNameInput" type="text" inputmode="text"
+                                        maxlength="50" placeholder="图片命名（选填）">
+                                    <button class="edit-name-clear" id="detailNameClear" type="button" aria-label="清空">×</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="detail-footer">
+                        <div class="detail-footer-row" id="detailFooterView">
+                            <button class="btn btn-secondary" type="button" onclick="toggleDetailEdit(true)">编辑</button>
+                            <button class="btn btn-danger" type="button" onclick="requestDeleteCurrentDetail()">删除</button>
+                        </div>
+                        <div class="detail-footer-row" id="detailFooterEdit" hidden>
+                            <button class="btn btn-secondary" type="button" onclick="toggleDetailEdit(false)">取消</button>
+                            <button class="btn btn-primary" type="button" onclick="saveDetailEdits()">保存</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -1451,86 +2634,69 @@
 
     <div class="upload-modal" id="uploadModal">
         <div class="upload-overlay" onclick="closeUploadModal()"></div>
-        <div class="upload-content">
-            <div class="upload-header">
-                <h3 class="upload-title">上传经营数据</h3>
-                <button class="upload-close" onclick="closeUploadModal()">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="upload-form">
-                <div class="form-group">
-                    <label class="form-label">经营日期</label>
-                    <div class="date-input-wrapper">
-                        <input type="date" class="form-input" id="uploadBusinessDate" onclick="openUploadDatePicker()">
-                    </div>
+        <div class="page-container" onclick="event.stopPropagation()">
+            <header class="header">
+                <div class="header-left">
+                    <h1 class="header-title">上传资料</h1>
                 </div>
-                <div class="form-group">
-                    <label class="form-label">备注信息（选填）</label>
-                    <input type="text" class="form-input" id="uploadDescription" placeholder="请输入备注信息">
+                <div class="header-right">
+                    <button class="upload-close-btn" type="button" onclick="closeUploadModal()" aria-label="关闭">
+                        <svg viewBox="0 0 24 24">
+                            <path
+                                d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                        </svg>
+                    </button>
                 </div>
-            </div>
-            <div class="upload-files-section" id="uploadFilesSection">
-                <div class="upload-files-header">
-                    <span class="form-label">已上传文件</span>
-                    <button class="btn-link" onclick="document.getElementById('uploadFileInput').click()">+
-                        添加文件</button>
-                </div>
-                <div class="upload-area" id="uploadArea" onclick="document.getElementById('uploadFileInput').click()">
-                    <p class="upload-text">点击添加文件上传</p>
-                    <p class="upload-hint">支持 jpg、jpeg、png、pdf、word、excel 格式，最多10份文件</p>
-                    <input type="file" id="uploadFileInput" accept="image/jpeg,image/png,image/jpg,application/pdf"
-                        multiple style="display: none;" onchange="handleFileSelect(event)">
-                </div>
-                <div class="uploaded-preview" id="uploadedPreview"></div>
-            </div>
-            <div class="upload-progress" id="uploadProgress" style="display: none;">
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <span class="progress-text" id="progressText">0%</span>
-            </div>
-            <div class="uploaded-preview" id="uploadedPreview"></div>
-            <div class="upload-actions">
-                <button class="btn btn-secondary" onclick="closeUploadModal()">取消</button>
-                <button class="btn btn-primary" id="uploadSubmitBtn" onclick="submitUpload()">确认上传</button>
-            </div>
-        </div>
-    </div>
+            </header>
 
-    <div class="date-picker-modal" id="uploadDatePickerModal" onclick="closeUploadDatePicker()">
-        <div class="date-picker-content" onclick="event.stopPropagation()">
-            <div class="date-picker-header">
-                <span class="date-picker-title">选择经营日期</span>
-                <button class="date-picker-close" onclick="closeUploadDatePicker()">
-                    <svg viewBox="0 0 24 24">
-                        <path
-                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-                    </svg>
-                </button>
+            <div class="type-selector">
+                <div class="type-selector-label">资料类型</div>
+                <div class="type-custom-row">
+                    <div class="type-custom-input-wrap" id="customTypeInputWrap">
+                        <input class="type-custom-input" id="customTypeInput" type="text" inputmode="text" maxlength="20"
+                            placeholder="添加自定义标签（选填）">
+                        <button class="type-custom-clear" id="customTypeClear" type="button" aria-label="清空">×</button>
+                    </div>
+                    <button class="type-custom-add" id="customTypeAddBtn" type="button" disabled>添加</button>
+                </div>
+                <div class="type-options" id="typeOptions"></div>
             </div>
-            <div class="date-picker-nav">
-                <button onclick="changeUploadMonth(-1)">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z" />
-                    </svg>
-                </button>
-                <span class="date-picker-month" id="uploadDatePickerMonth"></span>
-                <button onclick="changeUploadMonth(1)">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z" />
-                    </svg>
-                </button>
-            </div>
-            <div class="date-picker-calendar" id="uploadDatePickerCalendar"></div>
-            <div class="date-picker-actions">
-                <button class="date-picker-btn secondary" onclick="closeUploadDatePicker()">取消</button>
-                <button class="date-picker-btn primary" onclick="confirmUploadDate()">确认</button>
-            </div>
+
+            <main class="main-content" id="uploadModalMain">
+                <div class="uploaded-section" id="uploadedSection" style="display: none;">
+                    <div class="uploaded-header">
+                        <span class="uploaded-title">已上传</span>
+                        <span class="uploaded-count" id="uploadedCount">0/12</span>
+                    </div>
+                    <div class="uploaded-grid" id="uploadedGrid"></div>
+                </div>
+            </main>
+
+            <footer class="bottom-bar">
+                <div class="bottom-buttons">
+                    <div class="action-buttons">
+                        <button class="action-btn primary" type="button" onclick="triggerCamera()">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                            拍照上传
+                        </button>
+                        <button class="action-btn primary" type="button" onclick="triggerGallery()">
+                            <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v3h-2.5V6h-1v3H15V6h-1v3H12.5V6h-1v3H10V6H8zm0 12H4v-1h16v1zm0-3H4v-1h16v1zm0-3H4V9h16v1zm0-3H4V6h16v1z" />
+                            </svg>
+                            相册选择
+                        </button>
+                    </div>
+                    <button class="submit-btn" id="submitBtn" disabled onclick="submitUpload()">确认上传</button>
+                </div>
+            </footer>
         </div>
+
+        <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple>
+        <input type="file" id="galleryInput" accept="image/jpeg,image/png,image/jpg" multiple>
     </div>
 
     <div class="upload-modal" id="editModal">
@@ -1546,6 +2712,21 @@
                 </button>
             </div>
             <div class="upload-form">
+                <div class="form-group">
+                    <label class="form-label">资料类型<span class="required">*</span></label>
+                    <div class="type-select-wrapper">
+                        <select class="form-input" id="editRecordType">
+                            <option value="daily">每日经营</option>
+                            <option value="customer">客户资料</option>
+                            <option value="appointment">预约表</option>
+                            <option value="kpi">员工月度KPI考核表</option>
+                            <option value="income">收入及顾客消费分析报表</option>
+                            <option value="product">品项经营分析报表</option>
+                            <option value="financial">财务支出报表</option>
+                            <option value="other">其他</option>
+                        </select>
+                    </div>
+                </div>
                 <div class="form-group">
                     <label class="form-label">经营日期</label>
                     <div class="date-input-wrapper">
@@ -1607,133 +2788,258 @@
     </div>
 
     <script>
-        let uploadFiles = [];
-        let uploadSelectedDate = null;
-        let uploadCurrentDate = new Date();
+        const recordTypeMap = {
+            'daily': '每日经营',
+            'customer': '客户资料',
+            'appointment': '预约表',
+            'kpi': '员工月度KPI',
+            'income': '收入及消费分析',
+            'product': '品项经营分析',
+            'financial': '财务支出',
+            'other': '其他'
+        };
+
+        const CUSTOM_TYPES_STORAGE_KEY = 'daily_upload_custom_types_v2';
+        const maxFiles = 12;
+        const imageExtensions = ['jpg', 'jpeg', 'png'];
+
+        let uploadedFiles = [];
+        let selectedRecordType = 'daily';
+        let selectedRecordTypeLabel = recordTypeMap['daily'];
+        let customTypes = [];
+
+        let currentFilterType = 'all';
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeHtmlAttr(str) {
+            return escapeHtml(str).replace(/\n/g, ' ');
+        }
+
+        function sanitizeCustomTypeLabel(v) {
+            let s = String(v || '');
+            s = s.replace(/[\u0000-\u001f]/g, '');
+            s = s.replace(/[\\\/:*?"<>|]/g, '');
+            s = s.replace(/\s+/g, ' ').trim();
+            if (s.length > 20) s = s.slice(0, 20);
+            return s;
+        }
+
+        function normalizeTypeKeyForCompare(v) {
+            return String(v || '').trim().toLowerCase();
+        }
+
+        function loadCustomTypes() {
+            try {
+                const raw = localStorage.getItem(CUSTOM_TYPES_STORAGE_KEY) || '[]';
+                const arr = JSON.parse(raw);
+                if (!Array.isArray(arr)) return [];
+                return arr.map(x => sanitizeCustomTypeLabel(x)).filter(Boolean);
+            } catch {
+                return [];
+            }
+        }
+
+        function saveCustomTypes() {
+            localStorage.setItem(CUSTOM_TYPES_STORAGE_KEY, JSON.stringify(customTypes.slice()));
+        }
+
+        function selectRecordType(el) {
+            document.querySelectorAll('#typeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRecordType = el.dataset.type;
+            selectedRecordTypeLabel = el.getAttribute('data-label') || el.textContent.trim() || (recordTypeMap[selectedRecordType] || '');
+            updateSubmitBtn();
+        }
+
+        function renderTypeOptions() {
+            const wrap = document.getElementById('typeOptions');
+            if (!wrap) return;
+
+            const currentKey = String(selectedRecordType || 'daily');
+            const pieces = [];
+
+            Object.keys(recordTypeMap).forEach(key => {
+                const label = recordTypeMap[key];
+                const selected = currentKey === key ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(key)}" data-label="${escapeHtmlAttr(label)}" onclick="selectRecordType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            customTypes.forEach(label => {
+                const typeKey = `custom:${label}`;
+                const selected = currentKey === typeKey ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(typeKey)}" data-label="${escapeHtmlAttr(label)}" onclick="selectRecordType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            wrap.innerHTML = pieces.join('');
+
+            const match = Array.from(wrap.querySelectorAll('.type-option')).find(x => String(x.getAttribute('data-type') || '') === currentKey) || null;
+            if (match) {
+                selectedRecordTypeLabel = match.getAttribute('data-label') || match.textContent.trim() || selectedRecordTypeLabel;
+            } else {
+                const fallback = wrap.querySelector('.type-option[data-type="daily"]');
+                if (fallback) {
+                    fallback.classList.add('selected');
+                    selectedRecordType = 'daily';
+                    selectedRecordTypeLabel = fallback.getAttribute('data-label') || fallback.textContent.trim() || '每日经营';
+                }
+            }
+        }
 
         function openUploadModal() {
-            uploadFiles = [];
-            uploadSelectedDate = new Date();
-            document.getElementById('uploadBusinessDate').value = formatDate(uploadSelectedDate);
-            document.getElementById('uploadDescription').value = '';
-            document.getElementById('uploadedPreview').innerHTML = '';
-            document.getElementById('uploadProgress').style.display = 'none';
+            uploadedFiles.forEach(item => {
+                if (item?.thumb && String(item.thumb).startsWith('blob:')) {
+                    try { URL.revokeObjectURL(item.thumb); } catch { }
+                }
+            });
+            uploadedFiles = [];
+
+            customTypes = loadCustomTypes();
+            renderTypeOptions();
+            renderUploadedList();
+            updateSubmitBtn();
+
             document.getElementById('uploadModal').classList.add('show');
         }
 
-        function closeUploadModal() {
+        function closeUploadModal(preserveThumbUrls) {
             document.getElementById('uploadModal').classList.remove('show');
-            uploadFiles = [];
+            const preserve = preserveThumbUrls === true;
+            if (!preserve) {
+                uploadedFiles.forEach(item => {
+                    if (item?.thumb && String(item.thumb).startsWith('blob:')) {
+                        try { URL.revokeObjectURL(item.thumb); } catch { }
+                    }
+                });
+            }
+            uploadedFiles = [];
         }
 
-        function handleFileSelect(event) {
-            const files = Array.from(event.target.files);
-            const maxFiles = 10;
-            const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
+        function triggerCamera() {
+            document.getElementById('cameraInput')?.click();
+        }
 
-            if (uploadFiles.length + files.length > maxFiles) {
-                showToast(`最多只能上传${maxFiles}个文件`);
-                return;
-            }
+        function triggerGallery() {
+            document.getElementById('galleryInput')?.click();
+        }
 
-            files.forEach(file => {
-                if (!allowedTypes.includes(file.type)) {
-                    showToast(`不支持的文件格式: ${file.name}`);
-                    return;
+        function updateSubmitBtn() {
+            const btn = document.getElementById('submitBtn');
+            if (!btn) return;
+            btn.disabled = !(uploadedFiles.length > 0 && String(selectedRecordType || '').trim());
+        }
+
+        function sanitizeCustomName(v) {
+            let s = String(v || '');
+            s = s.replace(/[\u0000-\u001f]/g, '');
+            s = s.replace(/[\\\/:*?"<>|]/g, '');
+            if (s.length > 50) s = s.slice(0, 50);
+            return s;
+        }
+
+        function addFiles(fileList) {
+            const files = Array.from(fileList || []);
+            if (files.length === 0) return;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                if (uploadedFiles.length >= maxFiles) {
+                    showToast(`最多上传${maxFiles}个文件`);
+                    break;
                 }
 
-                const reader = new FileReader();
-                reader.onload = function (e) {
-                    uploadFiles.push({
-                        id: Date.now() + Math.random(),
-                        name: file.name,
-                        size: file.size,
-                        type: file.type,
-                        thumb: file.type.startsWith('image/') ? e.target.result : null
-                    });
-                    renderUploadPreview();
-                };
-                reader.readAsDataURL(file);
-            });
-
-            event.target.value = '';
-        }
-
-        function renderUploadPreview() {
-            const container = document.getElementById('uploadedPreview');
-            const uploadArea = document.getElementById('uploadArea');
-
-            container.innerHTML = uploadFiles.map(file => `
-                <div class="preview-item" data-id="${file.id}">
-                    ${file.thumb ? `<img src="${file.thumb}" alt="${file.name}">` : '<div style="display:flex;align-items:center;justify-content:center;height:100%;font-size:12px;color:var(--text-muted);">PDF</div>'}
-                    <button class="remove-btn" onclick="removeUploadFile(${file.id})">
-                        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
-                    </button>
-                </div>
-            `).join('');
-
-            if (uploadFiles.length > 0) {
-                uploadArea.style.display = 'none';
-            } else {
-                uploadArea.style.display = 'block';
-            }
-        }
-
-        function removeUploadFile(id) {
-            uploadFiles = uploadFiles.filter(f => f.id !== id);
-            renderUploadPreview();
-        }
-
-        function submitUpload() {
-            if (!uploadSelectedDate) {
-                showToast('请选择经营日期');
-                return;
-            }
-
-            if (uploadFiles.length === 0) {
-                showToast('请选择要上传的文件');
-                return;
-            }
-
-            const progressEl = document.getElementById('uploadProgress');
-            const fillEl = document.getElementById('progressFill');
-            const textEl = document.getElementById('progressText');
-            const submitBtn = document.getElementById('uploadSubmitBtn');
-
-            progressEl.style.display = 'flex';
-            submitBtn.disabled = true;
-
-            let progress = 0;
-            const interval = setInterval(() => {
-                progress += Math.random() * 15;
-                if (progress >= 100) {
-                    progress = 100;
-                    clearInterval(interval);
-                    setTimeout(() => {
-                        const newRecord = {
-                            id: Date.now(),
-                            type: 'daily',
-                            typeName: '每日经营',
-                            businessDate: formatDate(uploadSelectedDate),
-                            uploader: '当前用户',
-                            time: formatDateTime(new Date()),
-                            description: document.getElementById('uploadDescription').value,
-                            files: uploadFiles.map(f => ({
-                                filename: f.name,
-                                size: formatFileSize(f.size),
-                                thumb: f.thumb
-                            }))
-                        };
-                        mockData.unshift(newRecord);
-                        renderTable();
-                        closeUploadModal();
-                        showToast('上传成功');
-                        submitBtn.disabled = false;
-                    }, 300);
+                const extension = String(file.name || '').split('.').pop().toLowerCase();
+                if (!imageExtensions.includes(extension)) {
+                    showToast(`${file.name} 格式不支持`);
+                    continue;
                 }
-                fillEl.style.width = progress + '%';
-                textEl.textContent = Math.round(progress) + '%';
-            }, 200);
+
+                const isDuplicate = uploadedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (isDuplicate) continue;
+
+                uploadedFiles.push({
+                    id: Date.now() + i,
+                    name: file.name,
+                    customName: '',
+                    file: file,
+                    thumb: URL.createObjectURL(file),
+                    status: 'success',
+                    size: file.size
+                });
+            }
+
+            renderUploadedList();
+            updateSubmitBtn();
+        }
+
+        function handleFiles(e) {
+            const files = e?.target?.files;
+            addFiles(files);
+            if (e && e.target) e.target.value = '';
+        }
+
+        function getStatusText(status) {
+            if (status === 'success') return '已上传';
+            if (status === 'uploading') return '上传中';
+            if (status === 'error') return '失败';
+            return '';
+        }
+
+        function renderUploadedList() {
+            const section = document.getElementById('uploadedSection');
+            const grid = document.getElementById('uploadedGrid');
+            const count = document.getElementById('uploadedCount');
+
+            if (!section || !grid || !count) return;
+
+            if (uploadedFiles.length === 0) {
+                section.style.display = 'none';
+                count.textContent = `0/${maxFiles}`;
+                grid.innerHTML = '';
+                return;
+            }
+
+            section.style.display = 'block';
+            count.textContent = `${uploadedFiles.length}/${maxFiles}`;
+
+            grid.innerHTML = uploadedFiles.map(item => {
+                const safeName = escapeHtml(String(item.name || ''));
+                const val = String(item.customName || '');
+                const has = !!val.trim();
+                return `
+                    <div class="uploaded-card">
+                        <div class="uploaded-item">
+                            <img src="${item.thumb}" alt="${safeName}">
+                            <span class="status ${item.status}">${getStatusText(item.status)}</span>
+                            <div class="delete-btn" onclick="deleteFile(${item.id})">
+                                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                            </div>
+                        </div>
+                        <div class="uploaded-name-wrap ${has ? 'has-value' : ''}">
+                            <input class="uploaded-name-input" data-id="${item.id}" type="text" inputmode="text" maxlength="50" placeholder="图片命名（选填）" value="${escapeHtmlAttr(val)}">
+                            <button class="uploaded-name-clear" type="button" data-action="clear-name" data-id="${item.id}" aria-label="清空">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function deleteFile(id) {
+            if (window.event && typeof window.event.stopPropagation === 'function') window.event.stopPropagation();
+            const item = uploadedFiles.find(x => x.id === id);
+            if (item?.thumb && String(item.thumb).startsWith('blob:')) {
+                try { URL.revokeObjectURL(item.thumb); } catch { }
+            }
+            uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+            renderUploadedList();
+            updateSubmitBtn();
         }
 
         function formatFileSize(bytes) {
@@ -1758,70 +3064,190 @@
             return `${year}-${month}-${day} ${hour}:${minute}`;
         }
 
-        function openUploadDatePicker() {
-            renderUploadCalendar(uploadSelectedDate || uploadCurrentDate);
-            document.getElementById('uploadDatePickerModal').classList.add('show');
-        }
-
-        function closeUploadDatePicker() {
-            document.getElementById('uploadDatePickerModal').classList.remove('show');
-        }
-
-        function renderUploadCalendar(date) {
-            const year = date.getFullYear();
-            const month = date.getMonth();
-
-            document.getElementById('uploadDatePickerMonth').textContent = `${year}年${month + 1}月`;
-
-            const firstDay = new Date(year, month, 1);
-            const lastDay = new Date(year, month + 1, 0);
-            const today = new Date();
-            today.setHours(0, 0, 0, 0);
-
-            const dayHeaders = ['日', '一', '二', '三', '四', '五', '六'];
-            let html = dayHeaders.map(d => `<div class="calendar-day-header">${d}</div>`).join('');
-
-            for (let i = 0; i < firstDay.getDay(); i++) {
-                html += '<div class="calendar-day disabled"></div>';
+        function submitUpload() {
+            if (!String(selectedRecordType || '').trim()) {
+                showToast('请选择资料类型');
+                return;
+            }
+            if (uploadedFiles.length === 0) {
+                showToast('请先选择图片');
+                return;
             }
 
-            for (let day = 1; day <= lastDay.getDate(); day++) {
-                const currentDate = new Date(year, month, day);
-                currentDate.setHours(0, 0, 0, 0);
-                const isDisabled = currentDate > today;
-                const isToday = currentDate.getTime() === today.getTime();
-                const isSelected = uploadSelectedDate && currentDate.getTime() === new Date(uploadSelectedDate.getFullYear(), uploadSelectedDate.getMonth(), uploadSelectedDate.getDate()).getTime();
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            const oldText = submitBtn.textContent;
 
-                let classes = 'calendar-day';
-                if (isDisabled) classes += ' disabled';
-                if (isToday) classes += ' today';
-                if (isSelected) classes += ' selected';
+            uploadedFiles = uploadedFiles.map(x => ({ ...x, status: 'uploading' }));
+            renderUploadedList();
 
-                html += `<div class="${classes}" onclick="${isDisabled ? '' : `selectUploadDate(${year}, ${month}, ${day})`}">${day}</div>`;
-            }
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += Math.random() * 18;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
 
-            document.getElementById('uploadDatePickerCalendar').innerHTML = html;
-        }
+                    const now = formatDateTime(new Date());
+                    const newRecord = {
+                        id: Date.now(),
+                        type: selectedRecordType,
+                        typeName: selectedRecordTypeLabel || recordTypeMap[selectedRecordType] || '其他',
+                        businessDate: formatDate(new Date()),
+                        uploader: '当前用户',
+                        time: now,
+                        description: '',
+                        files: uploadedFiles.map(f => {
+                            const custom = String(f.customName || '').trim();
+                            const uploadName = custom ? custom : String(f.name || '');
+                            return {
+                                filename: uploadName,
+                                customName: custom ? custom : '',
+                                size: formatFileSize(f.size || 0),
+                                thumb: f.thumb,
+                                type: selectedRecordType,
+                                typeName: selectedRecordTypeLabel || recordTypeMap[selectedRecordType] || '其他',
+                                uploadTime: now,
+                                modifiedAt: now,
+                                modifiedBy: '当前用户'
+                            };
+                        })
+                    };
 
-        function selectUploadDate(year, month, day) {
-            uploadSelectedDate = new Date(year, month, day);
-            document.getElementById('uploadBusinessDate').value = formatDate(uploadSelectedDate);
-            renderUploadCalendar(new Date(year, month, day));
-        }
+                    mockData.unshift(newRecord);
+                    renderGallery();
+                    closeUploadModal(true);
+                    showToast('上传成功');
 
-        function changeUploadMonth(delta) {
-            uploadCurrentDate.setMonth(uploadCurrentDate.getMonth() + delta);
-            renderUploadCalendar(uploadCurrentDate);
-        }
+                    submitBtn.textContent = oldText;
+                    submitBtn.disabled = false;
+                    return;
+                }
 
-        function confirmUploadDate() {
-            if (uploadSelectedDate) {
-                document.getElementById('uploadBusinessDate').value = formatDate(uploadSelectedDate);
-            }
-            closeUploadDatePicker();
+                submitBtn.textContent = `上传中 ${Math.round(progress)}%`;
+            }, 180);
         }
 
         const mockData = [
+            {
+                id: 1,
+                type: 'daily',
+                typeName: '每日经营',
+                businessDate: '2024-01-14',
+                uploader: '王美容师',
+                time: '2024-01-15 09:10',
+                description: '上传示例：经营数据截图（用于图片平铺展示）',
+                files: [
+                    {
+                        filename: '经营数据入口-APP',
+                        customName: '经营数据入口-APP',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:10',
+                        modifiedAt: '2024-01-15 09:10',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '经营数据入口-Pad',
+                        customName: '经营数据入口-Pad',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:10',
+                        modifiedAt: '2024-01-15 09:10',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-01',
+                        customName: '示例图-01',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:11',
+                        modifiedAt: '2024-01-15 09:11',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-02',
+                        customName: '示例图-02',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:12',
+                        modifiedAt: '2024-01-15 09:12',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-03',
+                        customName: '示例图-03',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:13',
+                        modifiedAt: '2024-01-15 09:13',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-04',
+                        customName: '示例图-04',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:14',
+                        modifiedAt: '2024-01-15 09:14',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-05',
+                        customName: '示例图-05',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:15',
+                        modifiedAt: '2024-01-15 09:15',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-06',
+                        customName: '示例图-06',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:16',
+                        modifiedAt: '2024-01-15 09:16',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-07',
+                        customName: '示例图-07',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:17',
+                        modifiedAt: '2024-01-15 09:17',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-08',
+                        customName: '示例图-08',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:18',
+                        modifiedAt: '2024-01-15 09:18',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-09',
+                        customName: '示例图-09',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-15 09:19',
+                        modifiedAt: '2024-01-15 09:19',
+                        modifiedBy: '王美容师'
+                    },
+                    {
+                        filename: '示例图-10',
+                        customName: '示例图-10',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-15 09:20',
+                        modifiedAt: '2024-01-15 09:20',
+                        modifiedBy: '王美容师'
+                    }
+                ]
+            },
             {
                 id: 2,
                 type: 'daily',
@@ -1836,8 +3262,8 @@
             },
             {
                 id: 4,
-                type: 'daily',
-                typeName: '每日经营',
+                type: 'appointment',
+                typeName: '预约表',
                 businessDate: '2024-01-07',
                 uploader: '张店总',
                 time: '2024-01-08 11:00',
@@ -1848,8 +3274,8 @@
             },
             {
                 id: 6,
-                type: 'daily',
-                typeName: '每日经营',
+                type: 'kpi',
+                typeName: '员工月度KPI',
                 businessDate: '2024-01-03',
                 uploader: '刘店长',
                 time: '2024-01-04 10:30',
@@ -1860,8 +3286,8 @@
             },
             {
                 id: 8,
-                type: 'daily',
-                typeName: '每日经营',
+                type: 'income',
+                typeName: '收入及消费分析',
                 businessDate: '2024-01-01',
                 uploader: '张店总',
                 time: '2024-01-02 09:00',
@@ -1874,128 +3300,155 @@
         ];
 
         let currentPage = 1;
-        const pageSize = 5;
-        let filteredData = [...mockData];
+        const pageSize = 12;
+        let filteredItems = [];
+        const sortState = { field: 'uploadTime', dir: 'desc' };
 
-        let pendingDeleteId = null;
+        let pendingDeleteTarget = null;
+        let currentDetailTarget = null;
+        let currentDetailIndex = -1;
+        let detailEditTypeKey = null;
+        let detailEditTypeLabel = '';
 
-        function showConfirmModal(id, message) {
-            pendingDeleteId = id;
-            document.getElementById('confirmMessage').textContent = message || '确定要删除这条记录吗？';
-            document.getElementById('confirmModal').classList.add('show');
+        function parseDateTimeToTs(v) {
+            const s = String(v || '').trim();
+            if (!s) return 0;
+            const m = s.match(/^(\d{4})-(\d{2})-(\d{2})(?:\s+(\d{2}):(\d{2}))?/);
+            if (!m) return 0;
+            const year = parseInt(m[1], 10);
+            const month = parseInt(m[2], 10) - 1;
+            const day = parseInt(m[3], 10);
+            const hour = parseInt(m[4] || '0', 10);
+            const minute = parseInt(m[5] || '0', 10);
+            return new Date(year, month, day, hour, minute, 0, 0).getTime();
         }
 
-        function closeConfirmModal() {
-            document.getElementById('confirmModal').classList.remove('show');
-            pendingDeleteId = null;
+        function ensureFileMeta(record, file) {
+            if (!file) return;
+            if (typeof file.customName !== 'string') file.customName = '';
+            if (!file.type) file.type = record?.type || 'other';
+            if (!file.typeName) file.typeName = record?.typeName || recordTypeMap[file.type] || '其他';
+            if (!file.uploadTime) file.uploadTime = record?.time || '';
+            if (!file.modifiedAt) file.modifiedAt = file.uploadTime;
+            if (!file.modifiedBy) file.modifiedBy = record?.uploader || '当前用户';
         }
 
-        function confirmDelete() {
-            if (pendingDeleteId !== null) {
-                const id = pendingDeleteId;
-                closeConfirmModal();
-                deleteRecordConfirmed(id);
-            }
+        function getDisplayName(file) {
+            const custom = String(file?.customName || '').trim();
+            if (custom) return custom;
+            return String(file?.filename || '').trim();
         }
 
-        function deleteRecordConfirmed(id) {
-            const index = mockData.findIndex(r => r.id === id);
-            if (index > -1) {
-                mockData.splice(index, 1);
-                currentPage = 1;
-                renderTable();
-                showToast('删除成功');
-            }
+        function buildImageItems() {
+            const items = [];
+            mockData.forEach(record => {
+                const files = Array.isArray(record.files) ? record.files : [];
+                files.forEach((file, fileIndex) => {
+                    if (!file?.thumb) return;
+                    ensureFileMeta(record, file);
+
+                    const uploadTime = String(file.uploadTime || record.time || '');
+                    const modifiedTime = String(file.modifiedAt || uploadTime);
+                    const displayName = getDisplayName(file);
+                    items.push({
+                        recordId: record.id,
+                        fileIndex,
+                        thumb: file.thumb,
+                        type: file.type,
+                        typeName: file.typeName,
+                        displayName,
+                        customName: String(file.customName || ''),
+                        uploader: String(record.uploader || ''),
+                        uploadTime,
+                        uploadTs: parseDateTimeToTs(uploadTime),
+                        modifiedTime,
+                        modifiedTs: parseDateTimeToTs(modifiedTime),
+                        modifier: String(file.modifiedBy || record.uploader || '')
+                    });
+                });
+            });
+            return items;
+        }
+
+        function applySort(items) {
+            const dirMul = sortState.dir === 'asc' ? 1 : -1;
+            const field = sortState.field;
+            items.sort((a, b) => {
+                if (field === 'name') {
+                    return a.displayName.localeCompare(b.displayName, 'zh-Hans-CN') * dirMul;
+                }
+                if (field === 'modifiedTime') {
+                    return (a.modifiedTs - b.modifiedTs) * dirMul;
+                }
+                return (a.uploadTs - b.uploadTs) * dirMul;
+            });
         }
 
         function filterData() {
             const startDate = document.getElementById('startDate').value;
             const endDate = document.getElementById('endDate').value;
-            const businessStartDate = document.getElementById('businessStartDate').value;
-            const businessEndDate = document.getElementById('businessEndDate').value;
             const operator = document.getElementById('operatorFilter').value;
+            const keyword = String(document.getElementById('imageNameFilter')?.value || '').trim();
+            const keywordLower = keyword.toLowerCase();
 
-            filteredData = mockData.filter(item => {
-                const itemDate = item.time.split(' ')[0];
+            const all = buildImageItems();
+            filteredItems = all.filter(item => {
+                const itemDate = String(item.uploadTime || '').split(' ')[0];
                 const matchUploadDate = (!startDate || itemDate >= startDate) && (!endDate || itemDate <= endDate);
-                const matchBusinessDate = (!businessStartDate || item.businessDate >= businessStartDate) && (!businessEndDate || item.businessDate <= businessEndDate);
                 const matchOperator = !operator || item.uploader === operator;
-                return matchUploadDate && matchBusinessDate && matchOperator;
+                const matchType = currentFilterType === 'all' || item.type === currentFilterType;
+                const displayName = String(item.displayName || '');
+                const matchName = !keyword
+                    || displayName.includes(keyword)
+                    || displayName.toLowerCase().includes(keywordLower);
+                return matchUploadDate && matchOperator && matchType && matchName;
             });
 
-            document.getElementById('totalCount').textContent = filteredData.length;
+            applySort(filteredItems);
+            document.getElementById('totalCount').textContent = filteredItems.length;
         }
 
-        function renderTable() {
+        function renderGallery() {
             filterData();
+
+            const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+            if (currentPage < 1) currentPage = 1;
+            if (currentPage > totalPages) currentPage = 1;
 
             const start = (currentPage - 1) * pageSize;
             const end = start + pageSize;
-            const pageData = filteredData.slice(start, end);
-            const tbody = document.getElementById('tableBody');
+            const pageData = filteredItems.slice(start, end);
+            const grid = document.getElementById('galleryGrid');
 
             if (pageData.length === 0) {
-                tbody.innerHTML = `
-                    <tr>
-                        <td colspan="5">
-                            <div class="empty-state">
-                                <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M14 17H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
-                                <p>暂无每日经营数据记录</p>
-                            </div>
-                        </td>
-                    </tr>
+                grid.innerHTML = `
+                    <div class="empty-state" style="grid-column: 1 / -1;">
+                        <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
+                        <p>暂无上传图片</p>
+                    </div>
                 `;
                 document.getElementById('pagination').innerHTML = '';
                 return;
             }
 
-            tbody.innerHTML = pageData.map(item => {
-                const filesHtml = item.files.map((file, index) => `
-                    <div class="file-thumb" onclick="previewFile('${file.thumb || file.filename}')" title="${file.filename}">
-                        ${file.thumb
-                        ? `<img src="${file.thumb}" alt="${file.filename}">`
-                        : `<svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm-1 7V3.5L18.5 9H13z"/></svg>`
-                    }
-                    </div>
-                `).join('');
-                const noteHtml = item.description ? `<div class="file-note" title="${item.description}">${item.description}</div>` : '';
-
+            grid.innerHTML = pageData.map(item => {
+                const name = escapeHtml(item.displayName || '');
+                const alt = escapeHtmlAttr(item.displayName || '');
                 return `
-                    <tr class="record-row">
-                        <td>${item.businessDate}</td>
-                        <td>
-                            <div class="file-cell">
-                                ${filesHtml}
-                                ${noteHtml}
-                            </div>
-                        </td>
-                        <td>${item.uploader}</td>
-                        <td>${item.time}</td>
-                        <td>
-                            <div class="action-btns">
-                                <button class="action-btn" onclick="openEditModal(${item.id})">编辑</button>
-                                <button class="action-btn" onclick="deleteRecord(${item.id})">删除</button>
-                            </div>
-                        </td>
-                    </tr>
+                    <div class="gallery-item">
+                        <div class="gallery-thumb" onclick="openDetailModal(${item.recordId}, ${item.fileIndex})">
+                            <img src="${item.thumb}" alt="${alt}">
+                        </div>
+                        <div class="gallery-name">${name}</div>
+                    </div>
                 `;
             }).join('');
 
             renderPagination();
         }
 
-        function previewFile(param) {
-            if (param.startsWith('http')) {
-                document.getElementById('previewTitle').textContent = '文件预览';
-                document.getElementById('previewImage').src = param;
-                document.getElementById('previewModal').classList.add('show');
-            } else {
-                showToast('该文件类型暂不支持预览');
-            }
-        }
-
         function renderPagination() {
-            const totalPages = Math.ceil(filteredData.length / pageSize);
+            const totalPages = Math.ceil(filteredItems.length / pageSize);
             const paginationEl = document.getElementById('pagination');
 
             if (totalPages <= 1) {
@@ -2019,11 +3472,239 @@
         }
 
         function goToPage(page) {
-            const totalPages = Math.ceil(filteredData.length / pageSize);
+            const totalPages = Math.ceil(filteredItems.length / pageSize);
             if (page >= 1 && page <= totalPages) {
                 currentPage = page;
-                renderTable();
+                renderGallery();
             }
+        }
+
+        function showConfirmModal(target, message) {
+            pendingDeleteTarget = target;
+            document.getElementById('confirmMessage').textContent = message || '确定要删除吗？';
+            document.getElementById('confirmModal').classList.add('show');
+        }
+
+        function closeConfirmModal() {
+            document.getElementById('confirmModal').classList.remove('show');
+            pendingDeleteTarget = null;
+        }
+
+        function confirmDelete() {
+            if (!pendingDeleteTarget) return;
+            const target = pendingDeleteTarget;
+            closeConfirmModal();
+            if (target.kind === 'image') {
+                deleteImageConfirmed(target.recordId, target.fileIndex);
+            }
+        }
+
+        function deleteImage(recordId, fileIndex) {
+            showConfirmModal({ kind: 'image', recordId, fileIndex }, '确定要删除这张图片吗？');
+        }
+
+        function syncDetailIndexFromTarget() {
+            if (!currentDetailTarget) {
+                currentDetailIndex = -1;
+                return;
+            }
+            filterData();
+            currentDetailIndex = filteredItems.findIndex(x => x.recordId === currentDetailTarget.recordId && x.fileIndex === currentDetailTarget.fileIndex);
+        }
+
+        function updateDetailNavButtons() {
+            const prevBtn = document.getElementById('detailPrevBtn');
+            const nextBtn = document.getElementById('detailNextBtn');
+            if (!prevBtn || !nextBtn) return;
+
+            if (currentDetailIndex < 0 && currentDetailTarget) {
+                syncDetailIndexFromTarget();
+            }
+
+            const total = filteredItems.length;
+            if (currentDetailIndex < 0 || total <= 0) {
+                prevBtn.disabled = true;
+                nextBtn.disabled = true;
+                return;
+            }
+            prevBtn.disabled = currentDetailIndex <= 0;
+            nextBtn.disabled = currentDetailIndex >= total - 1;
+        }
+
+        function setDetailContent(recordId, fileIndex) {
+            const record = mockData.find(r => r.id === recordId);
+            if (!record || !Array.isArray(record.files)) return false;
+            const file = record.files[fileIndex];
+            if (!file || !file.thumb) return false;
+            ensureFileMeta(record, file);
+
+            currentDetailTarget = { recordId, fileIndex };
+            document.getElementById('detailImage').src = file.thumb;
+            document.getElementById('detailTitle').textContent = '图片查看';
+            document.getElementById('metaType').textContent = String(file.typeName || recordTypeMap[file.type] || '其他');
+            document.getElementById('metaCustomName').textContent = String(file.customName || '').trim() || '-';
+            document.getElementById('metaUploadTime').textContent = String(file.uploadTime || record.time || '-') || '-';
+            document.getElementById('metaUploader').textContent = String(record.uploader || '-') || '-';
+            document.getElementById('metaModifiedTime').textContent = String(file.modifiedAt || '-') || '-';
+            document.getElementById('metaModifier').textContent = String(file.modifiedBy || '-') || '-';
+
+            toggleDetailEdit(false);
+            return true;
+        }
+
+        function deleteImageConfirmed(recordId, fileIndex) {
+            const record = mockData.find(r => r.id === recordId);
+            if (!record || !Array.isArray(record.files)) return;
+            const file = record.files[fileIndex];
+            if (file?.thumb && String(file.thumb).startsWith('blob:')) {
+                try { URL.revokeObjectURL(file.thumb); } catch { }
+            }
+            record.files.splice(fileIndex, 1);
+            if (record.files.length === 0) {
+                const idx = mockData.findIndex(r => r.id === recordId);
+                if (idx > -1) mockData.splice(idx, 1);
+            }
+
+            const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
+            if (currentPage > totalPages) currentPage = totalPages;
+            renderGallery();
+            showToast('删除成功');
+        }
+
+        function openDetailModal(recordId, fileIndex) {
+            if (!setDetailContent(recordId, fileIndex)) return;
+            document.getElementById('detailModal').classList.add('show');
+            syncDetailIndexFromTarget();
+            updateDetailNavButtons();
+        }
+
+        function showPrevDetail() {
+            syncDetailIndexFromTarget();
+            if (currentDetailIndex <= 0) {
+                updateDetailNavButtons();
+                return;
+            }
+            const item = filteredItems[currentDetailIndex - 1];
+            if (!item) return;
+            if (!setDetailContent(item.recordId, item.fileIndex)) return;
+            currentDetailIndex = currentDetailIndex - 1;
+            updateDetailNavButtons();
+        }
+
+        function showNextDetail() {
+            syncDetailIndexFromTarget();
+            if (currentDetailIndex < 0 || currentDetailIndex >= filteredItems.length - 1) {
+                updateDetailNavButtons();
+                return;
+            }
+            const item = filteredItems[currentDetailIndex + 1];
+            if (!item) return;
+            if (!setDetailContent(item.recordId, item.fileIndex)) return;
+            currentDetailIndex = currentDetailIndex + 1;
+            updateDetailNavButtons();
+        }
+
+        function closeDetailModal() {
+            document.getElementById('detailModal').classList.remove('show');
+            currentDetailTarget = null;
+            currentDetailIndex = -1;
+            toggleDetailEdit(false);
+        }
+
+        function toggleDetailEdit(show) {
+            const panel = document.getElementById('detailEditPanel');
+            if (!panel) return;
+            panel.classList.toggle('show', !!show);
+
+            const stack = document.getElementById('detailPanelStack');
+            if (stack) stack.classList.toggle('editing', !!show);
+
+            const footerView = document.getElementById('detailFooterView');
+            const footerEdit = document.getElementById('detailFooterEdit');
+            if (footerView) footerView.hidden = !!show;
+            if (footerEdit) footerEdit.hidden = !show;
+
+            if (!show) return;
+            if (!currentDetailTarget) return;
+
+            const record = mockData.find(r => r.id === currentDetailTarget.recordId);
+            const file = record?.files?.[currentDetailTarget.fileIndex];
+            if (!record || !file) return;
+            ensureFileMeta(record, file);
+
+            const nameInput = document.getElementById('detailNameInput');
+            const nameWrap = document.getElementById('detailNameWrap');
+            const currentCustom = String(file.customName || '').trim();
+            nameInput.value = currentCustom;
+            nameWrap.classList.toggle('has-value', !!currentCustom);
+
+            customTypes = loadCustomTypes();
+            detailEditTypeKey = String(file.type || record.type || 'other');
+            detailEditTypeLabel = String(file.typeName || recordTypeMap[detailEditTypeKey] || '其他');
+            renderDetailTypeOptions();
+
+            const editPanel = document.getElementById('detailEditPanel');
+            if (editPanel) editPanel.scrollTop = 0;
+        }
+
+        function renderDetailTypeOptions() {
+            const wrap = document.getElementById('detailTypeOptions');
+            if (!wrap) return;
+            const currentKey = String(detailEditTypeKey || 'daily');
+            const pieces = [];
+
+            Object.keys(recordTypeMap).forEach(key => {
+                const label = recordTypeMap[key];
+                const selected = currentKey === key ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(key)}" data-label="${escapeHtmlAttr(label)}" onclick="selectDetailRecordType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            customTypes.forEach(label => {
+                const typeKey = `custom:${label}`;
+                const selected = currentKey === typeKey ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(typeKey)}" data-label="${escapeHtmlAttr(label)}" onclick="selectDetailRecordType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            wrap.innerHTML = pieces.join('');
+        }
+
+        function selectDetailRecordType(el) {
+            document.querySelectorAll('#detailTypeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            detailEditTypeKey = el.dataset.type;
+            detailEditTypeLabel = el.getAttribute('data-label') || el.textContent.trim() || (recordTypeMap[detailEditTypeKey] || '');
+        }
+
+        function requestDeleteCurrentDetail() {
+            if (!currentDetailTarget) return;
+            deleteImage(currentDetailTarget.recordId, currentDetailTarget.fileIndex);
+        }
+
+        function saveDetailEdits() {
+            if (!currentDetailTarget) return;
+            const record = mockData.find(r => r.id === currentDetailTarget.recordId);
+            const file = record?.files?.[currentDetailTarget.fileIndex];
+            if (!record || !file) return;
+
+            const nameInput = document.getElementById('detailNameInput');
+            const customName = sanitizeCustomName(nameInput.value);
+            nameInput.value = customName;
+
+            file.customName = String(customName || '').trim();
+            file.type = String(detailEditTypeKey || file.type || record.type || 'other');
+            file.typeName = String(detailEditTypeLabel || recordTypeMap[file.type] || '其他');
+            file.filename = file.customName ? file.customName : (file.filename || '');
+            file.modifiedAt = formatDateTime(new Date());
+            file.modifiedBy = '当前用户';
+
+            document.getElementById('metaType').textContent = file.typeName;
+            document.getElementById('metaCustomName').textContent = String(file.customName || '').trim() || '-';
+            document.getElementById('metaModifiedTime').textContent = file.modifiedAt || '-';
+            document.getElementById('metaModifier').textContent = file.modifiedBy || '-';
+
+            toggleDetailEdit(false);
+            renderGallery();
+            showToast('保存成功');
         }
 
         function closePreview() {
@@ -2047,6 +3728,7 @@
                 thumb: f.thumb
             }));
             editSelectedDate = new Date(record.businessDate);
+            document.getElementById('editRecordType').value = record.type || 'daily';
             document.getElementById('editBusinessDate').value = formatDate(editSelectedDate);
             document.getElementById('editDescription').value = record.description || '';
             renderEditFilesPreview();
@@ -2082,7 +3764,7 @@
 
         function handleEditFileSelect(event) {
             const files = Array.from(event.target.files);
-            const maxFiles = 10;
+            const maxFiles = 12;
             const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'application/pdf'];
 
             if (editFiles.length + files.length > maxFiles) {
@@ -2114,6 +3796,12 @@
         }
 
         function submitEdit() {
+            const recordType = document.getElementById('editRecordType').value;
+            if (!recordType) {
+                showToast('请选择资料类型');
+                return;
+            }
+
             if (!editSelectedDate) {
                 showToast('请选择经营日期');
                 return;
@@ -2128,6 +3816,8 @@
             if (index > -1) {
                 mockData[index] = {
                     ...mockData[index],
+                    type: recordType,
+                    typeName: recordTypeMap[recordType],
                     businessDate: formatDate(editSelectedDate),
                     description: document.getElementById('editDescription').value,
                     files: editFiles.map(f => ({
@@ -2136,7 +3826,7 @@
                         thumb: f.thumb
                     }))
                 };
-                renderTable();
+                renderGallery();
                 closeEditModal();
                 showToast('保存成功');
             }
@@ -2206,23 +3896,38 @@
         }
 
         function deleteRecord(id) {
-            showConfirmModal(id, '确定要删除这条记录吗？');
+            showToast('请从图片卡片或查看弹窗中删除');
+        }
+
+        function filterRecordsByType(el) {
+            document.querySelectorAll('#filterTypeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            currentFilterType = el.dataset.type;
+            currentPage = 1;
+            renderGallery();
         }
 
         function searchRecords() {
             currentPage = 1;
-            renderTable();
+            renderGallery();
             showToast('搜索完成');
         }
 
         function resetFilter() {
             document.getElementById('startDate').value = '2024-01-01';
             document.getElementById('endDate').value = '2024-01-31';
-            document.getElementById('businessStartDate').value = '';
-            document.getElementById('businessEndDate').value = '';
             document.getElementById('operatorFilter').value = '';
+            const nameInput = document.getElementById('imageNameFilter');
+            if (nameInput) nameInput.value = '';
+            document.querySelectorAll('#filterTypeOptions .type-option').forEach(opt => {
+                opt.classList.remove('selected');
+                if (opt.dataset.type === 'all') {
+                    opt.classList.add('selected');
+                }
+            });
+            currentFilterType = 'all';
             currentPage = 1;
-            renderTable();
+            renderGallery();
             showToast('已重置筛选条件');
         }
 
@@ -2236,7 +3941,205 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            renderTable();
+            const sortFieldSelect = document.getElementById('sortFieldSelect');
+            const sortDirBtn = document.getElementById('sortDirBtn');
+            if (sortFieldSelect) sortFieldSelect.value = sortState.field;
+            if (sortDirBtn) sortDirBtn.textContent = sortState.dir === 'asc' ? '正序' : '倒序';
+            sortFieldSelect?.addEventListener('change', function () {
+                sortState.field = this.value;
+                currentPage = 1;
+                renderGallery();
+            });
+            sortDirBtn?.addEventListener('click', function () {
+                sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
+                this.textContent = sortState.dir === 'asc' ? '正序' : '倒序';
+                currentPage = 1;
+                renderGallery();
+            });
+
+            renderGallery();
+
+            customTypes = loadCustomTypes();
+            renderTypeOptions();
+            updateSubmitBtn();
+
+            document.getElementById('cameraInput')?.addEventListener('change', handleFiles);
+            document.getElementById('galleryInput')?.addEventListener('change', handleFiles);
+
+            const uploadedGrid = document.getElementById('uploadedGrid');
+            uploadedGrid?.addEventListener('input', function (e) {
+                const el = e.target;
+                if (!(el instanceof HTMLInputElement)) return;
+                if (!el.classList.contains('uploaded-name-input')) return;
+                const id = parseInt(String(el.getAttribute('data-id') || '0'), 10);
+                if (!id) return;
+                const sanitized = sanitizeCustomName(el.value);
+                if (sanitized !== el.value) el.value = sanitized;
+                const item = uploadedFiles.find(x => x.id === id);
+                if (item) item.customName = sanitized;
+                const wrap = el.closest('.uploaded-name-wrap');
+                if (wrap) wrap.classList.toggle('has-value', !!sanitized.trim());
+            });
+
+            uploadedGrid?.addEventListener('click', function (e) {
+                const btn = e.target.closest('[data-action="clear-name"]');
+                if (!(btn instanceof Element)) return;
+                const id = parseInt(String(btn.getAttribute('data-id') || '0'), 10);
+                if (!id) return;
+                const item = uploadedFiles.find(x => x.id === id);
+                if (item) item.customName = '';
+                const wrap = btn.closest('.uploaded-name-wrap');
+                const input = wrap?.querySelector('.uploaded-name-input');
+                if (input instanceof HTMLInputElement) input.value = '';
+                if (wrap) wrap.classList.remove('has-value');
+            });
+
+            const input = document.getElementById('customTypeInput');
+            const addBtn = document.getElementById('customTypeAddBtn');
+            const wrap = document.getElementById('customTypeInputWrap');
+            const clearBtn = document.getElementById('customTypeClear');
+
+            function syncCustomTypeInputUi() {
+                const v = sanitizeCustomTypeLabel(input?.value || '');
+                const has = !!v;
+                if (wrap) wrap.classList.toggle('has-value', has);
+                if (addBtn) addBtn.disabled = !has;
+            }
+
+            function tryAddCustomType() {
+                if (!input) return;
+                const raw = sanitizeCustomTypeLabel(input.value);
+                if (!raw) return;
+                const normalized = normalizeTypeKeyForCompare(raw);
+                const systemDup = Object.values(recordTypeMap).some(t => normalizeTypeKeyForCompare(t) === normalized);
+                const customDup = customTypes.some(t => normalizeTypeKeyForCompare(t) === normalized);
+                if (systemDup || customDup) {
+                    showToast('标签已存在');
+                    return;
+                }
+
+                customTypes.push(raw);
+                saveCustomTypes();
+                input.value = '';
+                syncCustomTypeInputUi();
+
+                selectedRecordType = `custom:${raw}`;
+                selectedRecordTypeLabel = raw;
+                renderTypeOptions();
+                renderDetailTypeOptions();
+                updateSubmitBtn();
+            }
+
+            input?.addEventListener('input', function () {
+                const sanitized = sanitizeCustomTypeLabel(this.value);
+                if (sanitized !== this.value) this.value = sanitized;
+                syncCustomTypeInputUi();
+            });
+            input?.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter') return;
+                e.preventDefault();
+                tryAddCustomType();
+            });
+            addBtn?.addEventListener('click', tryAddCustomType);
+            clearBtn?.addEventListener('click', function () {
+                if (!input) return;
+                input.value = '';
+                syncCustomTypeInputUi();
+                input.focus();
+            });
+
+            syncCustomTypeInputUi();
+
+            const uploadModal = document.getElementById('uploadModal');
+            uploadModal?.addEventListener('dragover', function (e) {
+                e.preventDefault();
+            });
+            uploadModal?.addEventListener('drop', function (e) {
+                e.preventDefault();
+                if (!uploadModal.classList.contains('show')) return;
+                const files = e.dataTransfer?.files;
+                addFiles(files);
+            });
+
+            const detailNameInput = document.getElementById('detailNameInput');
+            const detailNameWrap = document.getElementById('detailNameWrap');
+            const detailNameClear = document.getElementById('detailNameClear');
+            detailNameInput?.addEventListener('input', function () {
+                const sanitized = sanitizeCustomName(this.value);
+                if (sanitized !== this.value) this.value = sanitized;
+                detailNameWrap?.classList.toggle('has-value', !!String(this.value || '').trim());
+            });
+            detailNameClear?.addEventListener('click', function () {
+                if (!detailNameInput) return;
+                detailNameInput.value = '';
+                detailNameWrap?.classList.remove('has-value');
+                detailNameInput.focus();
+            });
+
+            const detailCustomInput = document.getElementById('detailCustomTypeInput');
+            const detailCustomAddBtn = document.getElementById('detailCustomTypeAddBtn');
+            const detailCustomWrap = document.getElementById('detailCustomTypeInputWrap');
+            const detailCustomClear = document.getElementById('detailCustomTypeClear');
+
+            function syncDetailCustomTypeInputUi() {
+                const v = sanitizeCustomTypeLabel(detailCustomInput?.value || '');
+                const has = !!v;
+                if (detailCustomWrap) detailCustomWrap.classList.toggle('has-value', has);
+                if (detailCustomAddBtn) detailCustomAddBtn.disabled = !has;
+            }
+
+            function tryAddDetailCustomType() {
+                if (!detailCustomInput) return;
+                const raw = sanitizeCustomTypeLabel(detailCustomInput.value);
+                if (!raw) return;
+                const normalized = normalizeTypeKeyForCompare(raw);
+                const systemDup = Object.values(recordTypeMap).some(t => normalizeTypeKeyForCompare(t) === normalized);
+                const customDup = customTypes.some(t => normalizeTypeKeyForCompare(t) === normalized);
+                if (systemDup || customDup) {
+                    showToast('标签已存在');
+                    return;
+                }
+
+                customTypes.push(raw);
+                saveCustomTypes();
+                detailCustomInput.value = '';
+                syncDetailCustomTypeInputUi();
+                renderTypeOptions();
+                renderDetailTypeOptions();
+            }
+
+            detailCustomInput?.addEventListener('input', function () {
+                const sanitized = sanitizeCustomTypeLabel(this.value);
+                if (sanitized !== this.value) this.value = sanitized;
+                syncDetailCustomTypeInputUi();
+            });
+            detailCustomInput?.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter') return;
+                e.preventDefault();
+                tryAddDetailCustomType();
+            });
+            detailCustomAddBtn?.addEventListener('click', tryAddDetailCustomType);
+            detailCustomClear?.addEventListener('click', function () {
+                if (!detailCustomInput) return;
+                detailCustomInput.value = '';
+                syncDetailCustomTypeInputUi();
+                detailCustomInput.focus();
+            });
+            syncDetailCustomTypeInputUi();
+
+            document.addEventListener('keydown', function (e) {
+                const modal = document.getElementById('detailModal');
+                if (!modal || !modal.classList.contains('show')) return;
+                const active = document.activeElement;
+                if (active && (active.tagName === 'INPUT' || active.tagName === 'TEXTAREA')) return;
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    showPrevDetail();
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    showNextDetail();
+                }
+            });
         });
     </script>
 </body>

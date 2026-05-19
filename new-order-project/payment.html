@@ -99,7 +99,6 @@
             width: 440px;
             flex: 0 0 440px;
             background: #fff;
-            border: 1px solid var(--neutral-200);
             border-radius: 14px;
             padding: 16px;
             display: flex;
@@ -155,6 +154,9 @@
         .left-scroll {
             overflow: auto;
             padding-right: 8px;
+        }
+        .hide-third-party {
+            display: none !important;
         }
         .pay-group {
             margin-top: 10px;
@@ -301,6 +303,157 @@
             background: transparent;
         }
         .pay-input::placeholder { color: var(--neutral-400); }
+
+        .numkeypad-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2100;
+        }
+
+        .numkeypad-overlay.show {
+            display: flex;
+        }
+
+        .numkeypad-panel {
+            width: 100%;
+            max-width: 560px;
+            background: #FFFFFF;
+            border-radius: 18px;
+            box-shadow: 0 16px 40px rgba(0, 0, 0, 0.22);
+            transform-origin: center;
+        }
+
+        .numkeypad-header {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            padding: 16px 18px 12px 18px;
+        }
+
+        .numkeypad-toprow {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+
+        .numkeypad-title {
+            font-size: 14px;
+            font-weight: 800;
+            color: rgba(0, 0, 0, 0.82);
+            line-height: 1.2;
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .numkeypad-display {
+            min-height: 64px;
+            padding: 10px 12px;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--primary);
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: 0.2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .numkeypad-display.empty {
+            color: rgba(0, 0, 0, 0.35);
+            font-weight: 600;
+        }
+
+        .numkeypad-close-btn {
+            width: 44px;
+            height: 44px;
+            border: none;
+            border-radius: 12px;
+            background: rgba(0, 0, 0, 0.06);
+            color: rgba(0, 0, 0, 0.7);
+            font-size: 26px;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            user-select: none;
+        }
+
+        .numkeypad-close-btn:active {
+            background: rgba(0, 0, 0, 0.10);
+        }
+
+        .keypad-section {
+            flex: 1;
+            padding: 0px 48px 28px 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 86px);
+            gap: 18px 24px;
+        }
+
+        .key-item {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .key-number {
+            background: #F5F5F5;
+            color: #333333;
+            border: none;
+        }
+
+        .key-number:hover {
+            background: #EBEBEB;
+        }
+
+        .key-number:active {
+            background: #E0E0E0;
+        }
+
+        .key-action {
+            background: #333333;
+            color: #FFFFFF;
+            font-size: 26px;
+        }
+
+        .key-action:hover {
+            background: #444444;
+        }
+
+        .key-action:active {
+            background: #555555;
+        }
         .line-remove {
             width: 26px;
             height: 26px;
@@ -602,7 +755,40 @@
 
     <div class="toast" id="toast"></div>
 
-    <div class="modal-overlay" id="thirdPartyModal">
+    <div class="numkeypad-overlay" id="numKeypadOverlay">
+        <div class="numkeypad-panel" id="numKeypadPanel">
+            <div class="numkeypad-header">
+                <div class="numkeypad-toprow">
+                    <div class="numkeypad-title" id="numKeypadTitle">设置收款金额</div>
+                    <button type="button" class="numkeypad-close-btn" id="numKeypadTopClose" aria-label="关闭">×</button>
+                </div>
+                <div class="numkeypad-display empty" id="numKeypadDisplay">0</div>
+            </div>
+            <div class="keypad-section">
+                <div class="keypad-grid" id="numKeypadGrid">
+                    <div class="key-item key-number" data-key="1">1</div>
+                    <div class="key-item key-number" data-key="2">2</div>
+                    <div class="key-item key-number" data-key="3">3</div>
+                    <div class="key-item key-action" data-key="backspace">←</div>
+
+                    <div class="key-item key-number" data-key="4">4</div>
+                    <div class="key-item key-number" data-key="5">5</div>
+                    <div class="key-item key-number" data-key="6">6</div>
+                    <div class="key-item key-action" data-key="close">×</div>
+
+                    <div class="key-item key-number" data-key="7">7</div>
+                    <div class="key-item key-number" data-key="8">8</div>
+                    <div class="key-item key-number" data-key="9">9</div>
+                    <div class="key-item key-action" data-key="confirm">✓</div>
+
+                    <div class="key-item key-number" data-key="0">0</div>
+                    <div class="key-item key-number" data-key=".">.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay hide-third-party" id="thirdPartyModal">
         <div class="modal">
             <div class="modal-header">确认使用第三方渠道收款</div>
             <div class="modal-body" id="thirdPartyModalBody"></div>
@@ -661,6 +847,8 @@
                 ]
             }
         };
+
+        const HIDE_THIRD_PARTY = true;
 
         const state = {
             orderId: '',
@@ -810,6 +998,7 @@
             if (!item) return;
 
             if (item.type === 'thirdParty') {
+                if (HIDE_THIRD_PARTY) return;
                 if (state.comboEnabled) state.comboEnabled = false;
                 state.thirdPartyPending = item;
                 openThirdPartyModal(item);
@@ -898,6 +1087,7 @@
             Object.keys(PAYMENT_METHODS).forEach(key => {
                 const group = PAYMENT_METHODS[key];
                 if (!group || !group.items || group.items.length === 0) return;
+                const hiddenCls = (HIDE_THIRD_PARTY && key === 'thirdParty') ? ' hide-third-party' : '';
                 const cards = group.items.map(item => {
                     const selected = state.selected.some(x => x.id === item.id) ? 'selected' : '';
                     const cls = 'method-card' + (item.single ? ' method-single' : '') + (selected ? ' selected' : '');
@@ -910,7 +1100,7 @@
                     `;
                 }).join('');
                 sections.push(`
-                    <div class="pay-group">
+                    <div class="pay-group${hiddenCls}">
                         <div class="pay-group-title"><span class="pay-group-icon">${getGroupIconSvg(key)}</span>${group.group}</div>
                         <div class="method-grid" data-group="${key}">${cards}</div>
                     </div>
@@ -1011,7 +1201,7 @@
                         <div class="pay-line">
                             <div class="pay-line-label">${escapeHtml(x.label)}</div>
                             <div class="pay-input-wrap">
-                                <input class="pay-input" data-amount-id="${escapeHtmlAttr(x.id)}" inputmode="decimal" value="${formatMoney(x.amount)}">
+                                <input class="pay-input" data-numkeypad="decimal" data-amount-id="${escapeHtmlAttr(x.id)}" inputmode="none" readonly value="${formatMoney(x.amount)}">
                             </div>
                             ${canRemove ? `<button class="line-remove" data-remove="${escapeHtmlAttr(x.id)}">×</button>` : ''}
                         </div>
@@ -1019,7 +1209,7 @@
                 }).join('');
 
             rightContent.innerHTML = `
-                ${showRemaining ? `<div style="color: var(--neutral-500); font-size: 12px; text-align:center;">剩余待分配金额：¥${formatMoney(remaining)}</div>` : ''}
+                ${showRemaining ? `<div style="color: var(--neutral-500); font-size: 16px; text-align:center;">剩余待分配金额：¥${formatMoney(remaining)}</div>` : ''}
                 <div style="margin-top: 12px;">${renderedLines}</div>
             `;
 
@@ -1069,6 +1259,7 @@
         }
 
         function openThirdPartyModal(item) {
+            if (HIDE_THIRD_PARTY) return;
             const discount = clampNumber(state.discountAmount, 0, Number.MAX_SAFE_INTEGER);
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
             const newPayable = payable + discount;
@@ -1085,6 +1276,7 @@
         }
 
         function applyThirdPartySelection() {
+            if (HIDE_THIRD_PARTY) return;
             const item = state.thirdPartyPending;
             state.thirdPartyPending = null;
             if (!item) return;
@@ -1547,10 +1739,175 @@
             }
         });
 
+        const numKeypadOverlay = document.getElementById('numKeypadOverlay');
+        const numKeypadPanel = document.getElementById('numKeypadPanel');
+        const numKeypadGrid = document.getElementById('numKeypadGrid');
+        const numKeypadTitle = document.getElementById('numKeypadTitle');
+        const numKeypadDisplay = document.getElementById('numKeypadDisplay');
+        const numKeypadTopClose = document.getElementById('numKeypadTopClose');
+
+        const numKeypadState = {
+            target: null,
+            origin: '',
+            buffer: '',
+            ignoreCloseUntil: 0
+        };
+
+        function renderNumKeypadDisplay() {
+            if (!numKeypadDisplay) return;
+            const v = String(numKeypadState.buffer || '');
+            if (!v) {
+                numKeypadDisplay.textContent = '0';
+                numKeypadDisplay.classList.add('empty');
+                return;
+            }
+            numKeypadDisplay.textContent = v;
+            numKeypadDisplay.classList.remove('empty');
+        }
+
+        function buildNumKeypadTitle(el) {
+            if (!(el instanceof HTMLInputElement)) return '设置收款金额';
+            const line = el.closest('.pay-line');
+            const label = (line?.querySelector('.pay-line-label')?.textContent || '').trim();
+            return `为【${label || '当前方式'}】设置收款金额`;
+        }
+
+        function renderNumKeypadTitle() {
+            if (!numKeypadTitle) return;
+            const el = numKeypadState.target;
+            numKeypadTitle.textContent = buildNumKeypadTitle(el);
+        }
+
+        function setNumKeypadScale() {
+            if (!numKeypadPanel) return;
+            const vw = Math.max(0, window.innerWidth || 0);
+            const base = 512;
+            const pad = 24;
+            const scale = Math.max(0.6, Math.min(1, (vw - pad) / base));
+            numKeypadPanel.style.transform = `scale(${scale})`;
+        }
+
+        function openNumKeypadFor(el) {
+            if (!numKeypadOverlay || !numKeypadGrid) return;
+            if (!(el instanceof HTMLInputElement)) return;
+            if (!el.matches('.pay-input')) return;
+            if (el.disabled) return;
+            numKeypadState.target = el;
+            numKeypadState.origin = String(el.value || '');
+            numKeypadState.buffer = String(el.value || '');
+            el.readOnly = true;
+            el.setAttribute('inputmode', 'none');
+            el.blur();
+            setNumKeypadScale();
+            renderNumKeypadTitle();
+            numKeypadOverlay.classList.add('show');
+            numKeypadState.ignoreCloseUntil = Date.now() + 350;
+            renderNumKeypadDisplay();
+        }
+
+        function closeNumKeypad() {
+            if (!numKeypadOverlay) return;
+            numKeypadOverlay.classList.remove('show');
+            numKeypadState.target = null;
+            numKeypadState.origin = '';
+            numKeypadState.buffer = '';
+            numKeypadState.ignoreCloseUntil = 0;
+            renderNumKeypadTitle();
+            renderNumKeypadDisplay();
+        }
+
+        function commitNumKeypad() {
+            const el = numKeypadState.target;
+            if (!(el instanceof HTMLInputElement)) {
+                closeNumKeypad();
+                return;
+            }
+            el.value = String(numKeypadState.buffer || '');
+            el.dispatchEvent(new Event('input', { bubbles: true }));
+            el.dispatchEvent(new Event('change', { bubbles: true }));
+            el.dispatchEvent(new Event('blur'));
+            closeNumKeypad();
+        }
+
+        function appendNumKeypadChar(ch) {
+            const v = String(numKeypadState.buffer || '');
+            if (ch === '.') {
+                if (v.includes('.')) return;
+                if (!v) {
+                    numKeypadState.buffer = '0.';
+                    return;
+                }
+                numKeypadState.buffer = v + '.';
+                return;
+            }
+            const digits = v.replace(/[^0-9]/g, '').length;
+            if (digits >= 12) return;
+            numKeypadState.buffer = v + ch;
+        }
+
+        numKeypadGrid?.addEventListener('click', function (e) {
+            const keyItem = e.target.closest('.key-item');
+            if (!keyItem) return;
+            const key = keyItem.dataset.key;
+            if (!key) return;
+            if (key === 'backspace') {
+                numKeypadState.buffer = String(numKeypadState.buffer || '').slice(0, -1);
+                renderNumKeypadDisplay();
+                return;
+            }
+            if (key === 'close') {
+                const cur = String(numKeypadState.buffer || '');
+                if (!cur) return;
+                numKeypadState.buffer = '';
+                const el = numKeypadState.target;
+                if (el instanceof HTMLInputElement) {
+                    el.value = '';
+                    el.dispatchEvent(new Event('input', { bubbles: true }));
+                    el.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+                renderNumKeypadDisplay();
+                return;
+            }
+            if (key === 'confirm') {
+                commitNumKeypad();
+                return;
+            }
+            if (key === '.' || /^[0-9]$/.test(key)) {
+                appendNumKeypadChar(key);
+                renderNumKeypadDisplay();
+            }
+        });
+
+        numKeypadTopClose?.addEventListener('click', () => {
+            closeNumKeypad();
+        });
+
+        numKeypadOverlay?.addEventListener('click', (e) => {
+            if (e.target !== numKeypadOverlay) return;
+            if (Date.now() < (numKeypadState.ignoreCloseUntil || 0)) return;
+            closeNumKeypad();
+        });
+
+        window.addEventListener('resize', () => {
+            if (numKeypadOverlay?.classList.contains('show')) setNumKeypadScale();
+        });
+
+        document.addEventListener('pointerdown', (e) => {
+            const el = e.target;
+            if (!(el instanceof HTMLInputElement)) return;
+            if (!el.matches('.pay-input')) return;
+            if (numKeypadOverlay?.classList.contains('show')) return;
+            e.preventDefault();
+            openNumKeypadFor(el);
+        }, true);
+
         document.addEventListener('focusin', (e) => {
             const el = e.target;
             if (!(el instanceof HTMLInputElement)) return;
-            if (el.matches('.pay-input')) el.setAttribute('inputmode', 'decimal');
+            if (!el.matches('.pay-input')) return;
+            if (numKeypadOverlay?.classList.contains('show')) return;
+            el.blur();
+            openNumKeypadFor(el);
         }, true);
 
         document.getElementById('backBtn')?.addEventListener('click', () => {

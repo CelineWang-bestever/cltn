@@ -170,7 +170,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 8px 10px;
+            padding: 0px 10px;
             background: #FFFFFF;
             border-radius: 6px;
         }
@@ -2290,7 +2290,7 @@
                 '<td>' +
                     '<div class="selected-item-name">' + escapeHtml(item.name) + '</div>' +
                 '</td>' +
-                '<td>' + escapeHtml(item.source) + '</td>' +
+                '<td>' + (item.source === '会员权益' ? '-' : escapeHtml(item.source)) + '</td>' +
                 '<td>' + buildStepperHtml(idx, item.qty, item.maxQty) + '</td>' +
                 '<td>' + buildBeauticianSelectHtml(idx, item.beautician) + '</td>' +
                 '<td class="action-cell">' +
