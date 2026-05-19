@@ -245,6 +245,140 @@
             padding: 18px 18px 0;
             overflow: auto;
         }
+
+        .calc-card {
+            max-width: 520px;
+            margin: 0 auto 14px;
+            padding: 12px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: 14px;
+            background: rgba(var(--primary-rgb), 0.05);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, 0.06);
+        }
+
+        .calc-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            min-width: 0;
+            padding: 10px 4px;
+        }
+
+        .calc-divider {
+            height: 1px;
+            background: var(--neutral-100);
+            margin: 0 4px;
+        }
+
+        .calc-left {
+            min-width: 0;
+            flex: 1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .calc-symbol {
+            width: 22px;
+            height: 22px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 900;
+            color: var(--neutral-700);
+            background: rgba(15, 23, 42, 0.04);
+            flex: 0 0 22px;
+        }
+
+        .calc-symbol.eq {
+            color: var(--primary-700);
+            background: rgba(var(--primary-rgb), 0.12);
+        }
+
+        .calc-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--neutral-700);
+            line-height: 1.1;
+        }
+
+        .calc-desc {
+            font-size: 11px;
+            color: var(--neutral-500);
+            line-height: 1.1;
+            margin-top: 4px;
+        }
+
+        .calc-amount {
+            font-variant-numeric: tabular-nums;
+            font-weight: 900;
+            color: var(--neutral-900);
+            letter-spacing: -0.4px;
+            line-height: 1.1;
+            flex: 0 0 auto;
+        }
+
+        .calc-amount.base {
+            font-size: 28px;
+            color: var(--primary-700);
+        }
+
+        .calc-amount.result {
+            font-size: 34px;
+            color: var(--neutral-900);
+        }
+
+        .calc-moneycard-main {
+            min-width: 0;
+            flex: 1;
+        }
+
+        .moneycard-summary {
+            width: 100%;
+        }
+
+        .moneycard-summary-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--neutral-900);
+        }
+        .moneycard-summary-total {
+            font-variant-numeric: tabular-nums;
+            color: var(--primary-700);
+        }
+        .moneycard-summary-list {
+            margin-top: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .moneycard-summary-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 12px;
+            color: var(--neutral-700);
+        }
+        .moneycard-summary-name {
+            min-width: 0;
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+        .moneycard-summary-amt {
+            flex: 0 0 auto;
+            font-variant-numeric: tabular-nums;
+            font-weight: 800;
+            color: var(--neutral-900);
+        }
         .total-area {
             text-align: center;
             padding-top: 10px;
@@ -572,6 +706,15 @@
             bottom: 0;
         }
 
+        .right-bottom-inner {
+            max-width: 520px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+        }
+
         .confirm-btn {
             width: 260px;
             height: 48px;
@@ -712,7 +855,12 @@
             .method-single { grid-column: auto; }
             .pay-line { flex-direction: column; align-items: stretch; }
             .pay-line-label { flex: none; }
+            .right-bottom-inner { flex-direction: column; align-items: stretch; }
             .confirm-btn { width: 100%; }
+            .calc-row { padding: 10px 0; }
+            .calc-divider { margin: 0; }
+            .calc-amount.base { font-size: 24px; }
+            .calc-amount.result { font-size: 30px; }
         }
     </style>
 </head>
@@ -741,14 +889,43 @@
 
         <main class="pay-right">
             <div class="right-body">
-                <div class="total-area">
-                    <div class="total-label">总计</div>
-                    <div class="total-amount" id="totalAmount">¥0.00</div>
+                <div class="calc-card" id="calcCard">
+                    <div class="calc-row">
+                        <div class="calc-left">
+                            <div>
+                                <div class="calc-label">待收款</div>
+                                <div class="calc-desc">开单页待收款金额</div>
+                            </div>
+                        </div>
+                        <div class="calc-amount base" id="totalAmount">¥0.00</div>
+                    </div>
+                    <div class="calc-divider" id="calcDivider1"></div>
+                    <div class="calc-row" id="calcMoneyCardRow">
+                        <div class="calc-left">
+                            <div class="calc-symbol">-</div>
+                            <div class="calc-moneycard-main">
+                                <div class="moneycard-summary" id="moneyCardSummary"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="calc-divider" id="calcDivider2"></div>
+                    <div class="calc-row" id="calcRemainingRow">
+                        <div class="calc-left">
+                            <div class="calc-symbol eq">=</div>
+                            <div>
+                                <div class="calc-label">剩余应支付</div>
+                                <div class="calc-desc" id="remainingDesc">待收款 - 金额卡抵扣</div>
+                            </div>
+                        </div>
+                        <div class="calc-amount result" id="remainingPayableAmount">¥0.00</div>
+                    </div>
                 </div>
                 <div class="right-content" id="rightContent"></div>
             </div>
             <div class="right-bottom">
-                <button class="confirm-btn" id="confirmBtn">确认收款</button>
+                <div class="right-bottom-inner">
+                    <button class="confirm-btn" id="confirmBtn">确认收款</button>
+                </div>
             </div>
         </main>
     </div>
@@ -852,7 +1029,14 @@
 
         const state = {
             orderId: '',
+            basePayableAmount: 0,
             payableAmount: 0,
+            remainingPayableAmount: 0,
+            moneyCardUsedTotal: 0,
+            moneyCardSummary: null,
+            moneyCardSummaryNormalized: null,
+            hasAvailableMoneyCards: true,
+            hasAppliedMoneyCards: false,
             discountAmount: 0,
             comboEnabled: false,
             selected: [],
@@ -873,6 +1057,13 @@
         const comboSwitch = document.getElementById('comboSwitch');
         const rightContent = document.getElementById('rightContent');
         const totalAmountEl = document.getElementById('totalAmount');
+        const moneyCardSummaryEl = document.getElementById('moneyCardSummary');
+        const remainingPayableAmountEl = document.getElementById('remainingPayableAmount');
+        const calcMoneyCardRowEl = document.getElementById('calcMoneyCardRow');
+        const calcRemainingRowEl = document.getElementById('calcRemainingRow');
+        const calcDivider1El = document.getElementById('calcDivider1');
+        const calcDivider2El = document.getElementById('calcDivider2');
+        const remainingDescEl = document.getElementById('remainingDesc');
         const toastEl = document.getElementById('toast');
         const confirmBtn = document.getElementById('confirmBtn');
 
@@ -892,6 +1083,124 @@
             toastEl.textContent = msg;
             toastEl.classList.add('show');
             setTimeout(() => toastEl.classList.remove('show'), 2200);
+        }
+
+        function safeJsonParse(raw) {
+            if (!raw) return null;
+            try { return JSON.parse(raw); } catch { return null; }
+        }
+
+        function roundMoney2(n) {
+            const x = Number(n);
+            if (!Number.isFinite(x)) return 0;
+            return Number(x.toFixed(2));
+        }
+
+        function readCheckoutMoneyCards(orderId) {
+            const id = String(orderId || '').trim();
+            const byId = safeJsonParse(localStorage.getItem('checkout_moneycards_' + id));
+            if (byId && Array.isArray(byId.cards)) return byId;
+            const latest = safeJsonParse(localStorage.getItem('latest_checkout_moneycards'));
+            if (latest && latest.orderId && String(latest.orderId) === id && Array.isArray(latest.cards)) return latest;
+            if (latest && Array.isArray(latest.cards)) return latest;
+            return null;
+        }
+
+        function normalizeCheckoutMoneyCards(summary) {
+            const rawCards = Array.isArray(summary?.cards) ? summary.cards : [];
+            const cards = rawCards
+                .map(x => ({
+                    cardId: String(x?.cardId || ''),
+                    name: String(x?.name || '').trim(),
+                    amount: roundMoney2(Number(x?.amount || 0))
+                }))
+                .filter(x => x.amount > 0.000001);
+            const total = roundMoney2(cards.reduce((s, x) => s + x.amount, 0));
+            return { total, cards };
+        }
+
+        function applyMoneyCardDomVisibility() {
+            const applied = !!state.hasAppliedMoneyCards;
+
+            if (calcMoneyCardRowEl) calcMoneyCardRowEl.style.display = applied ? '' : 'none';
+            if (calcRemainingRowEl) calcRemainingRowEl.style.display = applied ? '' : 'none';
+            if (calcDivider1El) calcDivider1El.style.display = applied ? '' : 'none';
+            if (calcDivider2El) calcDivider2El.style.display = applied ? '' : 'none';
+
+            if (!applied) {
+                if (moneyCardSummaryEl) moneyCardSummaryEl.innerHTML = '';
+                if (remainingDescEl) remainingDescEl.textContent = '';
+                return;
+            }
+
+            if (remainingDescEl) remainingDescEl.textContent = '待收款 - 金额卡抵扣';
+        }
+
+        function recomputePayableFromMoneyCards() {
+            const base = clampNumber(state.basePayableAmount, 0, Number.MAX_SAFE_INTEGER);
+            if (!state.hasAppliedMoneyCards) {
+                state.moneyCardUsedTotal = 0;
+                state.remainingPayableAmount = roundMoney2(base);
+                state.payableAmount = roundMoney2(base);
+                state.moneyCardSummaryNormalized = null;
+                return;
+            }
+            const summary = normalizeCheckoutMoneyCards(state.moneyCardSummary);
+            let used = clampNumber(summary.total, 0, Number.MAX_SAFE_INTEGER);
+            if (used > base + 0.000001) {
+                used = base;
+                showToast('金额卡划扣金额之和不得超过待收款金额，已自动裁剪');
+            }
+            state.moneyCardUsedTotal = roundMoney2(used);
+            state.remainingPayableAmount = roundMoney2(Math.max(0, base - used));
+            state.payableAmount = state.remainingPayableAmount;
+            if (summary.total > base + 0.000001) {
+                const sorted = summary.cards.slice().sort((a, b) => b.amount - a.amount);
+                let left = roundMoney2(base);
+                const clamped = [];
+                sorted.forEach(x => {
+                    if (!(left > 0.000001)) return;
+                    const amt = roundMoney2(Math.min(left, x.amount));
+                    if (!(amt > 0.000001)) return;
+                    clamped.push({ cardId: x.cardId, name: x.name, amount: amt });
+                    left = roundMoney2(left - amt);
+                });
+                state.moneyCardSummaryNormalized = { total: roundMoney2(base), cards: clamped };
+            } else {
+                state.moneyCardSummaryNormalized = { total: summary.total, cards: summary.cards.slice() };
+            }
+        }
+
+        function renderMoneyCardSummary() {
+            if (!moneyCardSummaryEl) return;
+            if (!state.hasAppliedMoneyCards) {
+                moneyCardSummaryEl.innerHTML = '';
+                return;
+            }
+            const raw = state.moneyCardSummaryNormalized || state.moneyCardSummary;
+            const summary = normalizeCheckoutMoneyCards(raw);
+            const hasCards = summary.total > 0.000001 && summary.cards.length > 0;
+            if (!hasCards) {
+                moneyCardSummaryEl.innerHTML = '';
+                return;
+            }
+            const rows = summary.cards
+                .slice()
+                .sort((a, b) => b.amount - a.amount)
+                .map(x => `
+                    <div class="moneycard-summary-row">
+                        <div class="moneycard-summary-name" title="${escapeHtmlAttr(x.name || x.cardId)}">${escapeHtml(x.name || x.cardId)}</div>
+                        <div class="moneycard-summary-amt">-¥${formatMoney(x.amount)}</div>
+                    </div>
+                `).join('');
+            moneyCardSummaryEl.innerHTML = `
+                <div class="moneycard-summary-title">
+                    <div>金额卡抵扣</div>
+                    <div class="moneycard-summary-total">-¥${formatMoney(summary.total)}</div>
+                </div>
+                <div class="moneycard-summary-list">${rows}</div>
+            `;
+            moneyCardSummaryEl.style.display = 'block';
         }
 
         function clampNumber(n, min, max) {
@@ -917,6 +1226,11 @@
 
         function formatMoney(n) {
             return clampNumber(n, 0, Number.MAX_SAFE_INTEGER).toFixed(2);
+        }
+
+        function renderRemainingPayable() {
+            if (!remainingPayableAmountEl) return;
+            remainingPayableAmountEl.textContent = `¥${formatMoney(clampNumber(state.remainingPayableAmount, 0, Number.MAX_SAFE_INTEGER))}`;
         }
 
         function getQuery() {
@@ -1118,7 +1432,7 @@
         }
 
         function renderRight() {
-            totalAmountEl.textContent = `¥${formatMoney(state.payableAmount)}`;
+            totalAmountEl.textContent = `¥${formatMoney(clampNumber(state.basePayableAmount, 0, Number.MAX_SAFE_INTEGER))}`;
             const lines = state.selected.slice();
 
             if (lines.length === 0) {
@@ -1244,8 +1558,11 @@
         function renderAll() {
             comboSwitch.classList.toggle('on', !!state.comboEnabled);
             comboSwitch.setAttribute('aria-checked', state.comboEnabled ? 'true' : 'false');
+            applyMoneyCardDomVisibility();
+            renderMoneyCardSummary();
             renderLeft();
             renderRight();
+            renderRemainingPayable();
         }
 
         function findMethodById(id) {
@@ -1711,9 +2028,15 @@
         function init() {
             const q = getQuery();
             state.orderId = String(q.orderId || q.id || '').trim() || ('ORDER_' + Date.now());
-            state.payableAmount = clampNumber(parseMoney(q.payable || q.amount || '0'), 0, Number.MAX_SAFE_INTEGER);
+            state.basePayableAmount = clampNumber(parseMoney(q.payable || q.amount || '0'), 0, Number.MAX_SAFE_INTEGER);
             state.discountAmount = clampNumber(parseMoney(q.discount || '0'), 0, Number.MAX_SAFE_INTEGER);
-            if (!Number.isFinite(state.payableAmount) || state.payableAmount <= 0) state.payableAmount = 0;
+            if (!Number.isFinite(state.basePayableAmount) || state.basePayableAmount <= 0) state.basePayableAmount = 0;
+            state.moneyCardSummary = readCheckoutMoneyCards(state.orderId);
+            state.hasAvailableMoneyCards = state.moneyCardSummary && typeof state.moneyCardSummary.hasAvailableMoneyCards === 'boolean'
+                ? !!state.moneyCardSummary.hasAvailableMoneyCards
+                : true;
+            state.hasAppliedMoneyCards = normalizeCheckoutMoneyCards(state.moneyCardSummary).total > 0.000001;
+            recomputePayableFromMoneyCards();
             resetToDefaultCash();
             renderAll();
         }
@@ -1822,7 +2145,9 @@
                 closeNumKeypad();
                 return;
             }
-            el.value = String(numKeypadState.buffer || '');
+            const sanitized = sanitizePriceString(numKeypadState.buffer || '', 2);
+            const amt = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
+            el.value = formatMoney(amt);
             el.dispatchEvent(new Event('input', { bubbles: true }));
             el.dispatchEvent(new Event('change', { bubbles: true }));
             el.dispatchEvent(new Event('blur'));
@@ -1859,12 +2184,6 @@
                 const cur = String(numKeypadState.buffer || '');
                 if (!cur) return;
                 numKeypadState.buffer = '';
-                const el = numKeypadState.target;
-                if (el instanceof HTMLInputElement) {
-                    el.value = '';
-                    el.dispatchEvent(new Event('input', { bubbles: true }));
-                    el.dispatchEvent(new Event('change', { bubbles: true }));
-                }
                 renderNumKeypadDisplay();
                 return;
             }

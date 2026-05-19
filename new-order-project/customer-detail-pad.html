@@ -158,8 +158,7 @@
         /* 左侧关键信息 */
         .sidebar-key-info {
             border-radius: 10px;
-            padding-top: 10px;
-            padding-bottom: 10px;
+            padding: 10px 14px;
             background-color: white;
             display: flex;
             flex-direction: column;
@@ -170,7 +169,6 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0px 10px;
             background: #FFFFFF;
             border-radius: 6px;
         }
@@ -231,10 +229,30 @@
             font-weight: 500;
         }
         .sidebar-balance-value {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 700;
             color: #333;
             line-height: 1.3;
+        }
+
+        .sidebar-portrait-section {
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-portrait-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .portrait-highlight {
+            color: #E87C9A;
+            font-weight: 700;
         }
 
         /* 可点击的余额项 */
@@ -287,7 +305,7 @@
             gap: 2px;
         }
         .sidebar-balance-total-val {
-            font-size: 18px;
+            font-size: 13px;
             font-weight: 700;
             color: #E87C9A;
             line-height: 1.3;
@@ -1059,6 +1077,10 @@
         }
         .modal-overlay.show { display: flex; }
 
+        #price-guard-modal {
+            z-index: 10000;
+        }
+
         .modal-panel {
             background: #FFFFFF;
             border-radius: 14px;
@@ -1086,6 +1108,32 @@
         .modal-close:hover { background: #EEE; }
 
         .modal-body { padding: 20px 22px; }
+
+        .guard-modal-message {
+            font-size: 14px;
+            line-height: 1.6;
+            color: #333;
+            white-space: pre-wrap;
+        }
+        .guard-highlight {
+            color: #E43D3D;
+            font-weight: 800;
+        }
+
+        .woc-min-info {
+            margin-top: 12px;
+            padding: 10px 12px;
+            background: #FFF7FA;
+            border: 1px solid #F3CFD9;
+            border-radius: 10px;
+            display: flex;
+            gap: 18px;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .woc-min-row { display: flex; align-items: center; gap: 8px; }
+        .woc-min-label { font-size: 12px; color: #666; font-weight: 600; }
+        .woc-min-value { font-size: 13px; color: #333; font-weight: 800; }
 
         .datetime-picker-group {
             display: flex;
@@ -1593,13 +1641,6 @@
                     <span class="sidebar-info-label">美容师</span>
                     <span class="sidebar-info-value">周炜</span>
                 </div>
-                <div class="sidebar-info-item">
-                    <span class="sidebar-info-label">上次服务</span>
-                    <div>
-                        <span class="sidebar-info-value">2026-5-11</span>
-                        <span class="info-tag-highlight">21天没来</span>
-                    </div>
-                </div>
             </div>
 
             <!-- 余额信息 -->
@@ -1620,6 +1661,31 @@
                             <span class="sidebar-balance-total-val" id="sidebar-gold-card-total">￥5,500.00</span>
                             <span class="sidebar-balance-total-gift">(含赠金500.00)</span>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sidebar-portrait-section">
+                <div class="sidebar-balance-title">消费画像</div>
+                <div class="sidebar-portrait-list">
+                    <div class="sidebar-info-item">
+                        <span class="sidebar-info-label">累计消费金额（元）</span>
+                        <span class="sidebar-info-value portrait-highlight">¥12,680.00</span>
+                    </div>
+                    <div class="sidebar-info-item">
+                        <span class="sidebar-info-label">总消费次数</span>
+                        <span class="sidebar-info-value">32</span>
+                    </div>
+                    <div class="sidebar-info-item">
+                        <span class="sidebar-info-label">上次服务</span>
+                        <div>
+                            <span class="sidebar-info-value">2026-5-11</span>
+                            <span class="info-tag-highlight">21天没来</span>
+                        </div>
+                    </div>
+                    <div class="sidebar-info-item">
+                        <span class="sidebar-info-label">到店次数</span>
+                        <span class="sidebar-info-value">28</span>
                     </div>
                 </div>
             </div>
@@ -1985,6 +2051,10 @@
                     <span class="summary-label">总使用次数</span>
                     <span class="summary-value" id="bottom-total-qty">0</span>
                 </div>
+                <div class="summary-item">
+                    <span class="summary-label">待收款</span>
+                    <span class="summary-value" id="bottom-receivable-amt">¥0.00</span>
+                </div>
             </div>
             <div class="bottom-supplement">
                 <span class="supplement-time-display" id="supplement-time-display-bottom" style="display:none;"></span>
@@ -2014,6 +2084,20 @@
             <div class="modal-footer">
                 <button class="modal-btn modal-btn-cancel" onclick="closeSupplementModal()">取消</button>
                 <button class="modal-btn modal-btn-confirm" onclick="confirmSupplement()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="price-guard-modal">
+        <div class="modal-panel" style="width:360px;">
+            <div class="modal-header">
+                <span class="modal-title">提示</span>
+            </div>
+            <div class="modal-body">
+                <div class="guard-modal-message" id="price-guard-message"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn modal-btn-confirm" id="price-guard-ok">确认</button>
             </div>
         </div>
     </div>
@@ -2256,6 +2340,11 @@
     var selectedEmptyTip    = document.getElementById('selected-empty-tip');
     var selectedCountBadge  = document.getElementById('selected-count');
     var totalQtyEl          = document.getElementById('bottom-total-qty');
+    var bottomReceivableEl  = document.getElementById('bottom-receivable-amt');
+    var priceGuardModal     = document.getElementById('price-guard-modal');
+    var priceGuardMessage   = document.getElementById('price-guard-message');
+    var priceGuardOkBtn     = document.getElementById('price-guard-ok');
+    var priceGuardOnClose   = null;
 
     // ========== 工具函数 ==========
     function showToast(msg) {
@@ -2263,6 +2352,735 @@
         t.textContent = msg;
         t.classList.add('show');
         setTimeout(function() { t.classList.remove('show'); }, 2200);
+    }
+
+    function openPriceGuardModal(msg, onClose) {
+        if (!priceGuardModal || !priceGuardMessage) return;
+        priceGuardMessage.textContent = String(msg == null ? '' : msg);
+        priceGuardOnClose = typeof onClose === 'function' ? onClose : null;
+        priceGuardModal.classList.add('show');
+    }
+
+    function openPriceGuardModalHtml(html, onClose) {
+        if (!priceGuardModal || !priceGuardMessage) return;
+        priceGuardMessage.innerHTML = String(html == null ? '' : html);
+        priceGuardOnClose = typeof onClose === 'function' ? onClose : null;
+        priceGuardModal.classList.add('show');
+    }
+
+    function closePriceGuardModal() {
+        if (!priceGuardModal) return;
+        priceGuardModal.classList.remove('show');
+        var cb = priceGuardOnClose;
+        priceGuardOnClose = null;
+        if (cb) cb();
+    }
+
+    if (priceGuardOkBtn) {
+        priceGuardOkBtn.addEventListener('click', function() {
+            closePriceGuardModal();
+        });
+    }
+
+    function clampNumber(v, min, max) {
+        if (v < min) return min;
+        if (v > max) return max;
+        return v;
+    }
+
+    function sanitizeIntString(value) {
+        var v = String(value == null ? '' : value).replace(/[^\d]/g, '');
+        if (!v) return '';
+        return String(parseInt(v, 10));
+    }
+
+    function parseQtyValue(v) {
+        var s = sanitizeIntString(v);
+        var n = parseInt(s || '0', 10);
+        return Number.isFinite(n) ? Math.max(0, n) : 0;
+    }
+
+    function getRowBuyGiftTotal(row) {
+        if (!row || !row.querySelector) return null;
+        var buyAttr = row.getAttribute ? row.getAttribute('data-buy-qty') : null;
+        var giftAttr = row.getAttribute ? row.getAttribute('data-gift-qty') : null;
+        if (buyAttr != null || giftAttr != null) {
+            var buyN = parseQtyValue(buyAttr || '0');
+            var giftN = parseQtyValue(giftAttr || '0');
+            return Math.max(0, buyN + giftN);
+        }
+        var buyEl = row.querySelector(
+            'input[data-field="buyQty"], input[data-field="buy"], input[data-field="buyCount"], [data-field="buyQty"], [data-field="buy"], [data-buy-qty], .col-buy, .buy-qty, [class*="buy"][class*="qty"], [class*="buyQty"]'
+        );
+        var giftEl = row.querySelector(
+            'input[data-field="giftQty"], input[data-field="gift"], input[data-field="giftCount"], [data-field="giftQty"], [data-field="gift"], [data-gift-qty], .col-gift, .gift-qty, [class*="gift"][class*="qty"], [class*="giftQty"]'
+        );
+        if (!buyEl && !giftEl) return null;
+        var buy = buyEl
+            ? parseQtyValue(('value' in buyEl ? buyEl.value : buyEl.textContent) || '')
+            : 0;
+        var gift = giftEl
+            ? parseQtyValue(('value' in giftEl ? giftEl.value : giftEl.textContent) || '')
+            : 0;
+        return Math.max(0, buy + gift);
+    }
+
+    function getTakeConsumeKind(el) {
+        if (!(el instanceof HTMLInputElement)) return '';
+        var field = String(el.getAttribute('data-field') || '').trim();
+        if (field === 'take' || field === 'takeQty') return 'take';
+        if (field === 'consume' || field === 'consumeQty') return 'consume';
+        if (field.indexOf('take') > -1) return 'take';
+        if (field.indexOf('consume') > -1) return 'consume';
+
+        var id = String(el.id || '').toLowerCase();
+        var name = String(el.name || '').toLowerCase();
+        var cls = String(el.className || '').toLowerCase();
+        var ph = String(el.placeholder || '').trim();
+        if (id.indexOf('take') > -1 || name.indexOf('take') > -1 || cls.indexOf('take') > -1) return 'take';
+        if (id.indexOf('consume') > -1 || name.indexOf('consume') > -1 || cls.indexOf('consume') > -1) return 'consume';
+        if (ph.indexOf('拿走') > -1) return 'take';
+        if (ph.indexOf('消耗') > -1) return 'consume';
+
+        if (el.closest && el.closest('.col-consume')) return 'consume';
+        if (el.closest && (el.closest('.col-take') || el.closest('.col-takeout') || el.closest('.col-take-qty'))) return 'take';
+
+        var wrap = el.closest('td, .field, .form-row, .table-stepper, .stepper');
+        var txt = wrap ? String(wrap.textContent || '') : '';
+        if (txt.indexOf('拿走') > -1) return 'take';
+        if (txt.indexOf('消耗') > -1) return 'consume';
+        return '';
+    }
+
+    function getMaxForTakeConsumeInput(inputEl) {
+        if (!(inputEl instanceof HTMLInputElement)) return null;
+        var row = inputEl.closest ? inputEl.closest('tr') : null;
+        var max = getRowBuyGiftTotal(row);
+        if (max !== null) return max;
+        var maxAttr = parseQtyValue(inputEl.max || '');
+        if (maxAttr > 0) return maxAttr;
+        return null;
+    }
+
+    function setInteractiveDisabled(el, disabled) {
+        if (!el) return;
+        if ('disabled' in el) {
+            el.disabled = !!disabled;
+        } else {
+            el.setAttribute('aria-disabled', disabled ? 'true' : 'false');
+            el.style.pointerEvents = disabled ? 'none' : '';
+            el.style.opacity = disabled ? '0.45' : '';
+        }
+    }
+
+    function syncTableStepperForInput(inputEl) {
+        if (!(inputEl instanceof HTMLInputElement)) return;
+        var wrap = inputEl.closest ? inputEl.closest('.table-stepper') : null;
+        if (!wrap) return;
+        var kind = getTakeConsumeKind(inputEl);
+        if (!kind) return;
+
+        var max = getMaxForTakeConsumeInput(inputEl);
+        if (max === null) return;
+        var v = parseQtyValue(inputEl.value);
+
+        var btns = Array.from(wrap.querySelectorAll('button, .table-stepper-btn, .stepper-btn, [role="button"]'));
+        var plusBtn = null;
+        var minusBtn = null;
+        btns.forEach(function (b) {
+            if (plusBtn && minusBtn) return;
+            var cls = String(b.className || '').toLowerCase();
+            var t = String(b.textContent || '').trim();
+            if (!plusBtn && (cls.indexOf('plus') > -1 || cls.indexOf('add') > -1 || t === '+' || t === '＋')) plusBtn = b;
+            if (!minusBtn && (cls.indexOf('minus') > -1 || cls.indexOf('sub') > -1 || t === '-' || t === '−' || t === '－')) minusBtn = b;
+        });
+
+        setInteractiveDisabled(minusBtn, !(v > 0));
+        setInteractiveDisabled(plusBtn, !(v < max));
+    }
+
+    function parseMoneyText(text) {
+        var s = String(text == null ? '' : text).replace(/[^\d.]/g, '');
+        var n = parseFloat(s);
+        return Number.isFinite(n) ? n : 0;
+    }
+
+    function roundMoney2(n) {
+        var x = Number(n);
+        if (!Number.isFinite(x)) return 0;
+        return Number(x.toFixed(2));
+    }
+
+    function clampTakeConsumeQty(inputEl, opts) {
+        if (!inputEl) return;
+        var kind = getTakeConsumeKind(inputEl);
+        if (!kind) return;
+        var max = getMaxForTakeConsumeInput(inputEl);
+        if (max === null) return;
+        var raw = String(inputEl.value == null ? '' : inputEl.value);
+        var v = parseQtyValue(raw);
+        if (v > max) {
+            inputEl.value = String(max);
+            if (!opts || opts.silent !== true) {
+                var label = kind === 'consume' ? '消耗数量' : '拿走数量';
+                showToast(label + '不可超过购买数量+赠送数量(' + max + ')');
+            }
+            syncTableStepperForInput(inputEl);
+            return;
+        }
+        if (raw !== String(v)) inputEl.value = String(v);
+        syncTableStepperForInput(inputEl);
+    }
+
+    document.addEventListener('beforeinput', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        var kind = getTakeConsumeKind(el);
+        if (!kind) return;
+        var max = getMaxForTakeConsumeInput(el);
+        if (max === null) return;
+
+        if (e.inputType === 'insertFromPaste' || e.inputType === 'insertText') {
+            var data = String(e.data == null ? '' : e.data);
+            var start = Number.isFinite(el.selectionStart) ? el.selectionStart : el.value.length;
+            var end = Number.isFinite(el.selectionEnd) ? el.selectionEnd : el.value.length;
+            var next = String(el.value || '').slice(0, start) + data + String(el.value || '').slice(end);
+            var nextVal = parseQtyValue(next);
+            if (nextVal > max) {
+                e.preventDefault();
+                el.value = String(max);
+                var label = kind === 'consume' ? '消耗数量' : '拿走数量';
+                showToast(label + '不可超过购买数量+赠送数量(' + max + ')');
+            }
+        }
+    }, true);
+
+    document.addEventListener('input', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        clampTakeConsumeQty(el);
+    }, true);
+
+    document.addEventListener('change', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        clampTakeConsumeQty(el);
+    }, true);
+
+    document.addEventListener('click', function (e) {
+        var el = e.target;
+        if (!(el instanceof Element)) return;
+        var wrap = el.closest('.table-stepper, .stepper');
+        if (!wrap) return;
+        var input = wrap.querySelector('input');
+        if (!(input instanceof HTMLInputElement)) return;
+        window.setTimeout(function () {
+            clampTakeConsumeQty(input, { silent: true });
+        }, 0);
+    }, true);
+
+    document.addEventListener('change', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        if (el.type === 'checkbox' && el.closest && el.closest('tr.item-row')) {
+            scheduleBottomReceivableUpdate();
+        }
+    }, true);
+
+    document.addEventListener('input', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        if (el.matches && el.matches('input[data-field="finalPrice"]')) {
+            scheduleBottomReceivableUpdate();
+        }
+    }, true);
+
+    document.addEventListener('change', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        if (el.matches && el.matches('input[data-field="finalPrice"]')) {
+            scheduleBottomReceivableUpdate();
+        }
+    }, true);
+
+    document.addEventListener('input', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        if (el.matches && el.matches('input[data-field="discount"], .discount-input, input[data-field="buyQty"], input[data-field="buy"]')) {
+            scheduleBottomReceivableUpdate();
+        }
+    }, true);
+
+    document.addEventListener('change', function (e) {
+        var el = e.target;
+        if (!(el instanceof HTMLInputElement)) return;
+        if (el.matches && el.matches('input[data-field="discount"], .discount-input, input[data-field="buyQty"], input[data-field="buy"]')) {
+            scheduleBottomReceivableUpdate();
+        }
+    }, true);
+
+    try {
+        var receivableObserver = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                var m = mutations[i];
+                if (m.type !== 'childList') continue;
+                if ((m.addedNodes && m.addedNodes.length) || (m.removedNodes && m.removedNodes.length)) {
+                    scheduleBottomReceivableUpdate();
+                    break;
+                }
+            }
+        });
+        receivableObserver.observe(document.body, { childList: true, subtree: true });
+    } catch (e) {}
+
+    try {
+        var wocOpenObserver = new MutationObserver(function (mutations) {
+            for (var i = 0; i < mutations.length; i++) {
+                var m = mutations[i];
+                if (m.type !== 'attributes') continue;
+                if (m.attributeName !== 'class') continue;
+                var target = m.target;
+                if (!(target instanceof Element)) continue;
+                if (!target.classList.contains('show')) continue;
+                var hit = findWholeOrderChangeInputs();
+                if ((hit.amount && target.contains(hit.amount)) || (hit.discount && target.contains(hit.discount))) {
+                    refreshWholeOrderChangeMinRules();
+                    break;
+                }
+            }
+        });
+        wocOpenObserver.observe(document.body, { attributes: true, subtree: true, attributeFilter: ['class'] });
+    } catch (e) {}
+
+    function sumCheckedItemFinalPrices() {
+        var rows = Array.from(document.querySelectorAll('tr.item-row'));
+        if (!rows.length) {
+            rows = Array.from(document.querySelectorAll('tr')).filter(function (tr) {
+                if (!(tr instanceof HTMLTableRowElement)) return false;
+                if (tr.closest && tr.closest('#selected-table-wrap')) return false;
+                if (tr.closest && tr.closest('.selected-table-wrapper')) return false;
+                return !!(tr.querySelector && tr.querySelector('input[data-field="finalPrice"], .col-final, [data-field="finalPrice"], [data-field="final"], input[data-field="discount"], .discount-input, [data-moneycards]'));
+            });
+        }
+
+        var sum = 0;
+        rows.forEach(function (row) {
+            if (!row || !row.querySelector) return;
+            if (row.dataset && (row.dataset.deleted === '1' || row.dataset.invalid === '1')) return;
+            if (row.classList && (row.classList.contains('deleted') || row.classList.contains('invalid') || row.classList.contains('disabled'))) return;
+
+            var cb = row.querySelector('input[type="checkbox"]');
+            if (cb && !cb.checked) return;
+
+            var v = 0;
+            var finalInput = row.querySelector('input[data-field="finalPrice"]');
+            if (finalInput && 'value' in finalInput) v = parseMoneyText(finalInput.value);
+
+            if (!(v > 0.000001)) {
+                var finalCell = row.querySelector('.col-final, [data-field="finalPrice"], [data-field="final"]');
+                v = parseMoneyText(finalCell ? finalCell.textContent : '');
+            }
+
+            if (!(v > 0.000001)) {
+                var originalPrice = getRowOriginalPrice(row);
+                var buyQty = getRowBuyQty(row);
+                var discountPct = getRowDiscountPct(row);
+                v = roundMoney2(originalPrice * buyQty * (discountPct / 100));
+            }
+
+            sum += roundMoney2(v);
+        });
+        return roundMoney2(sum);
+    }
+
+    function updateBottomReceivableAmount() {
+        if (!bottomReceivableEl) return;
+        var total = sumCheckedItemFinalPrices();
+        bottomReceivableEl.textContent = '¥' + total.toFixed(2);
+    }
+
+    var receivableRaf = 0;
+    function scheduleBottomReceivableUpdate() {
+        if (receivableRaf) cancelAnimationFrame(receivableRaf);
+        receivableRaf = requestAnimationFrame(function () {
+            receivableRaf = 0;
+            updateBottomReceivableAmount();
+            refreshWholeOrderChangeMinRules();
+        });
+    }
+
+    function findWholeOrderChangeInputs() {
+        var inputs = Array.from(document.querySelectorAll('input'));
+        var amount = null;
+        var discount = null;
+        inputs.forEach(function (el) {
+            if (!(el instanceof HTMLInputElement)) return;
+            var id = String(el.id || '').toLowerCase();
+            var name = String(el.name || '').toLowerCase();
+            var cls = String(el.className || '').toLowerCase();
+            var ph = String(el.placeholder || '');
+            var dataField = String(el.getAttribute('data-field') || '').toLowerCase();
+
+            var wrap = el.closest('.woc-field, .woc-input-wrap, .order-field, .form-row, .modal-body');
+            var labelText = wrap ? String(wrap.textContent || '') : '';
+
+            var isAmount =
+                id.indexOf('wocamount') > -1 ||
+                dataField.indexOf('wocamount') > -1 ||
+                dataField.indexOf('wholeorderamount') > -1 ||
+                dataField.indexOf('orderpayable') > -1 ||
+                name.indexOf('amount') > -1 && labelText.indexOf('整单') > -1 ||
+                cls.indexOf('woc') > -1 && labelText.indexOf('应收') > -1 ||
+                ph.indexOf('整单') > -1 && (ph.indexOf('应收') > -1 || ph.indexOf('应付') > -1) ||
+                labelText.indexOf('整单应收') > -1 ||
+                labelText.indexOf('整单应付') > -1;
+
+            var isDiscount =
+                id.indexOf('wocdiscount') > -1 ||
+                dataField.indexOf('wocdiscount') > -1 ||
+                dataField.indexOf('wholeorderdiscount') > -1 ||
+                name.indexOf('discount') > -1 && labelText.indexOf('整单') > -1 ||
+                cls.indexOf('woc') > -1 && labelText.indexOf('折扣') > -1 ||
+                ph.indexOf('整单') > -1 && ph.indexOf('折扣') > -1 ||
+                labelText.indexOf('整单折扣') > -1;
+
+            if (isAmount) amount = amount || el;
+            if (isDiscount) discount = discount || el;
+        });
+        return { amount: amount, discount: discount };
+    }
+
+    function getWholeOrderChangeAmountInput() {
+        var hit = findWholeOrderChangeInputs();
+        return hit.amount;
+    }
+
+    function isWholeOrderChangeInput(el) {
+        if (!(el instanceof HTMLInputElement)) return false;
+        var hit = findWholeOrderChangeInputs();
+        return el === hit.amount || el === hit.discount;
+    }
+
+    function getWholeOrderChangeDiscountInput() {
+        var hit = findWholeOrderChangeInputs();
+        return hit.discount;
+    }
+
+    function sumCheckedMoneyCardUsed() {
+        var rows = Array.from(document.querySelectorAll('tr.item-row'));
+        if (!rows.length) {
+            rows = Array.from(document.querySelectorAll('tr')).filter(function (tr) {
+                if (!(tr instanceof HTMLTableRowElement)) return false;
+                if (tr.closest && tr.closest('#selected-table-wrap')) return false;
+                if (tr.closest && tr.closest('.selected-table-wrapper')) return false;
+                return !!(tr.querySelector && tr.querySelector('[data-moneycards], [data-money-card-id], [data-money-card-name]'));
+            });
+        }
+
+        var sum = 0;
+        rows.forEach(function (row) {
+            if (!row || !row.querySelector) return;
+            if (row.dataset && (row.dataset.deleted === '1' || row.dataset.invalid === '1')) return;
+            if (row.classList && (row.classList.contains('deleted') || row.classList.contains('invalid') || row.classList.contains('disabled'))) return;
+            var cb = row.querySelector('input[type="checkbox"]');
+            if (cb && !cb.checked) return;
+            if (!hasRowMoneyCards(row)) return;
+            sum += getRowMoneyCardUsed(row);
+        });
+        return roundMoney2(sum);
+    }
+
+    function computeWholeOrderChangeMinRules() {
+        var minAmount = sumCheckedMoneyCardUsed();
+        if (!(minAmount > 0.000001)) {
+            return { minAmount: 0, minDiscountZhe: 0, totalFinal: sumCheckedItemFinalPrices() };
+        }
+        var totalFinal = sumCheckedItemFinalPrices();
+        var ratio = totalFinal > 0.000001 ? (minAmount / totalFinal) : 0;
+        var minDiscountZhe = ratio * 10;
+        return { minAmount: roundMoney2(minAmount), minDiscountZhe: Number(minDiscountZhe.toFixed(2)), totalFinal: roundMoney2(totalFinal) };
+    }
+
+    var lastWocOverlay = null;
+    var lastWocOverlayVisible = false;
+    function refreshWholeOrderChangeMinRules() {
+        var amountInput = getWholeOrderChangeAmountInput();
+        var discountInput = getWholeOrderChangeDiscountInput();
+        if (!amountInput && !discountInput) return;
+        var anchor = amountInput || discountInput;
+        if (!(anchor instanceof HTMLInputElement)) return;
+
+        var panel = anchor.closest ? anchor.closest('.modal-panel, .modal, .dialog, .sheet, .popup') : null;
+        var overlay = panel && panel.closest ? panel.closest('.modal-overlay, .overlay, .dialog-overlay, .popup-overlay') : null;
+        var visible = false;
+        if (overlay && overlay.classList) visible = overlay.classList.contains('show');
+        if (!visible) {
+            try { visible = !!(anchor.getClientRects && anchor.getClientRects().length); } catch (e) { visible = false; }
+        }
+
+        if (visible && overlay && (!lastWocOverlayVisible || overlay !== lastWocOverlay)) {
+            var hit = findWholeOrderChangeInputs();
+            if (hit.amount && hit.amount.dataset) hit.amount.dataset.wocOrigin = String(hit.amount.value || '');
+            if (hit.discount && hit.discount.dataset) hit.discount.dataset.wocOrigin = String(hit.discount.value || '');
+        }
+        lastWocOverlay = overlay || null;
+        lastWocOverlayVisible = !!visible;
+
+        var rules = computeWholeOrderChangeMinRules();
+
+        if (panel) {
+            var body = panel.querySelector('.modal-body') || panel;
+            var minBox = body.querySelector('#wocMinInfo');
+            if (!minBox) {
+                minBox = document.createElement('div');
+                minBox.className = 'woc-min-info';
+                minBox.id = 'wocMinInfo';
+                minBox.innerHTML =
+                    '<div class="woc-min-row"><span class="woc-min-label">最低改价金额</span><span class="woc-min-value" id="wocMinAmountVal">¥0.00</span></div>' +
+                    '<div class="woc-min-row"><span class="woc-min-label">最低折扣</span><span class="woc-min-value" id="wocMinDiscountVal">0折</span></div>';
+                body.appendChild(minBox);
+            }
+            var minAmtEl = minBox.querySelector('#wocMinAmountVal');
+            var minDisEl = minBox.querySelector('#wocMinDiscountVal');
+            if (minAmtEl) minAmtEl.textContent = '¥' + rules.minAmount.toFixed(2);
+            if (minDisEl) minDisEl.textContent = (rules.minDiscountZhe || 0).toFixed(2) + '折';
+        }
+
+        if (overlay) {
+            var confirmBtn = Array.from(overlay.querySelectorAll('button, .modal-btn-confirm')).find(function (b) {
+                if (!(b instanceof Element)) return false;
+                var t = String(b.textContent || '').trim();
+                if (t !== '确定') return false;
+                return !!(panel && b.closest && b.closest('.modal-panel, .modal, .dialog, .sheet, .popup') === panel);
+            });
+            if (confirmBtn && !confirmBtn.dataset.wocBound) {
+                confirmBtn.dataset.wocBound = '1';
+                var old = confirmBtn.onclick;
+                confirmBtn.onclick = function (ev) {
+                    var amtInput = getWholeOrderChangeAmountInput();
+                    var disInput = getWholeOrderChangeDiscountInput();
+                    var originAmt = amtInput && amtInput.dataset ? String(amtInput.dataset.wocOrigin || amtInput.value || '') : '';
+                    var originDis = disInput && disInput.dataset ? String(disInput.dataset.wocOrigin || disInput.value || '') : '';
+
+                    var r = computeWholeOrderChangeMinRules();
+                    var amt = roundMoney2(parseMoneyText(amtInput ? amtInput.value : '0'));
+                    if (amtInput && r.minAmount > 0.000001 && (amt + 0.000001 < r.minAmount)) {
+                        if (ev && ev.preventDefault) ev.preventDefault();
+                        if (ev && ev.stopPropagation) ev.stopPropagation();
+                        var html = '整单应收不允许低于最低改价金额（<span class="guard-highlight">¥' + r.minAmount.toFixed(2) + '</span>）';
+                        openPriceGuardModalHtml(html);
+                        if (amtInput) {
+                            amtInput.value = originAmt;
+                            amtInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            amtInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        if (disInput) {
+                            disInput.value = originDis;
+                            disInput.dispatchEvent(new Event('input', { bubbles: true }));
+                            disInput.dispatchEvent(new Event('change', { bubbles: true }));
+                        }
+                        return false;
+                    }
+                    if (typeof old === 'function') return old.call(this, ev);
+                    return true;
+                };
+            }
+        }
+    }
+
+    var wholeOrderChangeValidateTimer = 0;
+    function scheduleWholeOrderChangeValidation() {
+        if (wholeOrderChangeValidateTimer) window.clearTimeout(wholeOrderChangeValidateTimer);
+        wholeOrderChangeValidateTimer = window.setTimeout(function () {
+            wholeOrderChangeValidateTimer = 0;
+            var amtInput = getWholeOrderChangeAmountInput();
+            if (!amtInput) return;
+            var max = sumCheckedItemFinalPrices();
+            if (!(max > 0.000001)) return;
+            var amt = roundMoney2(parseMoneyText(amtInput.value));
+            if (amt - 0.000001 > max) {
+                amtInput.value = max.toFixed(2);
+                openPriceGuardModal('整单应收不允许超过商品总金额（' + max.toFixed(2) + '）');
+            }
+        }, 50);
+    }
+
+    document.addEventListener('change', function (e) {
+        var el = e.target;
+        if (!isWholeOrderChangeInput(el)) return;
+        scheduleWholeOrderChangeValidation();
+    }, true);
+
+    document.addEventListener('blur', function (e) {
+        var el = e.target;
+        if (!isWholeOrderChangeInput(el)) return;
+        scheduleWholeOrderChangeValidation();
+    }, true);
+
+    document.addEventListener('click', function (e) {
+        var el = e.target;
+        if (!(el instanceof Element)) return;
+        var btn = el.closest('[data-key="confirm"], .key-item[data-key="confirm"], button[data-key="confirm"]');
+        if (!btn) return;
+        scheduleWholeOrderChangeValidation();
+        refreshWholeOrderChangeMinRules();
+    }, true);
+
+    function getRowDiscountPct(row) {
+        if (!row || !row.querySelector) return 100;
+        var input = row.querySelector('input[data-field="discount"], .discount-input');
+        if (!input) return 100;
+        var intStr = sanitizeIntString(input.value);
+        var v = intStr === '' ? 0 : parseInt(intStr, 10);
+        return clampNumber(v, 0, 100);
+    }
+
+    function setRowDiscountPct(row, discountPct) {
+        if (!row || !row.querySelector) return;
+        var input = row.querySelector('input[data-field="discount"], .discount-input');
+        if (!input) return;
+        input.value = String(clampNumber(parseInt(discountPct, 10) || 0, 0, 100));
+    }
+
+    function hasRowMoneyCards(row) {
+        if (!row || !row.getAttribute) return false;
+        var raw = String(row.getAttribute('data-moneycards') || '').trim();
+        if (raw && raw !== '[]') return true;
+        var legacy = String(row.getAttribute('data-money-card-id') || '').trim();
+        return !!legacy;
+    }
+
+    function getRowMoneyCardUsed(row) {
+        if (!row || !row.getAttribute) return 0;
+        var raw = String(row.getAttribute('data-moneycards') || '').trim();
+        if (!raw) return 0;
+        try {
+            var arr = JSON.parse(raw);
+            if (!Array.isArray(arr)) return 0;
+            var sum = 0;
+            arr.forEach(function(x) {
+                var n = roundMoney2(Number(x && x.amount ? x.amount : 0));
+                if (n > 0) sum += n;
+            });
+            return roundMoney2(sum);
+        } catch (e) {
+            return 0;
+        }
+    }
+
+    function updateRowPayable(row) {
+        if (!row) return;
+        var finalPrice = parseMoneyText((row.querySelector && row.querySelector('input[data-field="finalPrice"]')) ? row.querySelector('input[data-field="finalPrice"]').value : '');
+        if (!Number.isFinite(finalPrice)) finalPrice = 0;
+        var used = hasRowMoneyCards(row) ? getRowMoneyCardUsed(row) : 0;
+        var payable = roundMoney2(Math.max(0, finalPrice - used));
+        var el = row.querySelector && row.querySelector('.item-payable-val');
+        if (el) el.textContent = '¥' + payable.toFixed(2);
+    }
+
+    function getRowBuyQty(row) {
+        if (!row || !row.querySelector) return 0;
+        var el = row.querySelector('input[data-field="buyQty"], input[data-field="buy"]');
+        var n = parseInt(String(el && el.value ? el.value : '0'), 10);
+        return Number.isFinite(n) ? Math.max(0, n) : 0;
+    }
+
+    function getRowOriginalPrice(row) {
+        if (!row || !row.querySelector) return 0;
+        var originalCell = row.querySelector('.col-original');
+        if (originalCell) return parseMoneyText(originalCell.textContent);
+        var originalInput = row.querySelector('input[data-field="originalPrice"], input[data-field="price"]');
+        if (originalInput) return parseMoneyText(originalInput.value);
+        return 0;
+    }
+
+    function setRowFinalPrice(row, finalPrice) {
+        if (!row || !row.querySelector) return;
+        var v = Number.isFinite(finalPrice) ? finalPrice : 0;
+        var input = row.querySelector('input[data-field="finalPrice"]');
+        if (input) input.value = v.toFixed(2);
+        var cell = row.querySelector('.col-final');
+        if (cell) cell.textContent = '¥' + v.toFixed(2);
+    }
+
+    function clearRowMoneyCards(row) {
+        if (!row || !row.getAttribute) return;
+        row.removeAttribute('data-moneycards');
+        row.removeAttribute('data-money-card-id');
+        row.removeAttribute('data-money-card-name');
+        row.removeAttribute('data-money-card-discount');
+        var next = row.nextElementSibling;
+        if (next && next.classList && next.classList.contains('moneycard-detail-row')) next.remove();
+        var btn = row.querySelector && row.querySelector('[data-action="open-moneycard-modal"], .use-card-btn');
+        if (btn && 'disabled' in btn) btn.disabled = false;
+        if (btn && 'textContent' in btn) btn.textContent = '选择金额卡';
+    }
+
+    function handleDiscountInputConflict(input) {
+        if (!input) return;
+        var row = input.closest && input.closest('tr');
+        if (!row) return;
+        if (row.dataset && row.dataset.clearingMoneycards === '1') return;
+        var rawApps = row.getAttribute && row.getAttribute('data-moneycards');
+        var hasApps = !!rawApps && rawApps !== '[]';
+        var intStr = sanitizeIntString(input.value);
+        var discount = clampNumber(intStr === '' ? 0 : parseInt(intStr, 10), 0, 100);
+        input.value = String(discount);
+
+        if (hasApps) {
+            if (row.dataset) row.dataset.clearingMoneycards = '1';
+            clearRowMoneyCards(row);
+            if (row.dataset) row.dataset.clearingMoneycards = '';
+        }
+
+        var originalPrice = getRowOriginalPrice(row);
+        var buyQty = getRowBuyQty(row);
+        var finalPrice = originalPrice * buyQty * (discount / 100);
+        setRowFinalPrice(row, finalPrice);
+        updateRowPayable(row);
+    }
+
+    function handleFinalPriceInputConflict(input) {
+        if (!input) return;
+        var row = input.closest && input.closest('tr');
+        if (!row) return;
+        if (!hasRowMoneyCards(row)) return;
+        if (row.dataset && row.dataset.clearingMoneycards === '1') return;
+
+        var originalPrice = getRowOriginalPrice(row);
+        var buyQty = getRowBuyQty(row);
+        var discountPct = getRowDiscountPct(row);
+        var baseAmount = roundMoney2(originalPrice * buyQty * (discountPct / 100));
+        var newFinal = roundMoney2(parseMoneyText(input.value));
+        var lastValid = roundMoney2(parseMoneyText(input.dataset && input.dataset.lastValid ? input.dataset.lastValid : baseAmount));
+
+        if (newFinal > baseAmount + 0.000001) {
+            if (row.dataset) row.dataset.clearingMoneycards = '1';
+            setRowFinalPrice(row, lastValid);
+            if (input.dataset) input.dataset.lastValid = lastValid.toFixed(2);
+            updateRowPayable(row);
+            openPriceGuardModal('修改折后价必须小于等于原折扣价格(' + baseAmount.toFixed(2) + '元)', function() {
+                if (row.dataset) row.dataset.clearingMoneycards = '';
+            });
+            return;
+        }
+
+        if (newFinal + 0.000001 < baseAmount) {
+            if (row.dataset) row.dataset.clearingMoneycards = '1';
+            clearRowMoneyCards(row);
+            if (row.dataset) row.dataset.clearingMoneycards = '';
+            setRowFinalPrice(row, newFinal);
+            var baseTotalNoDiscount = roundMoney2(originalPrice * buyQty);
+            var newDiscountPct = baseTotalNoDiscount > 0 ? (newFinal / baseTotalNoDiscount) * 100 : 0;
+            setRowDiscountPct(row, Math.round(clampNumber(newDiscountPct, 0, 100)));
+            if (input.dataset) input.dataset.lastValid = newFinal.toFixed(2);
+            updateRowPayable(row);
+            return;
+        }
+
+        setRowFinalPrice(row, newFinal);
+        if (input.dataset) input.dataset.lastValid = newFinal.toFixed(2);
+        updateRowPayable(row);
     }
 
     function updateSummary() {
@@ -2279,6 +3097,8 @@
             selectedEmptyTip.style.display = 'none';
             selectedTableWrap.style.display = '';
         }
+
+        scheduleBottomReceivableUpdate();
     }
 
     function renderSelectedTable() {
@@ -2346,34 +3166,56 @@
             var item      = selectedItems[idx];
             if (!item) return;
 
-            minusBtn.addEventListener('click', function() {
-                var v = parseInt(input.value) || 1;
-                if (v > 1) {
-                    input.value = v - 1;
-                    item.qty = v - 1;
-                    updateSummary();
-                }
-            });
+            var maxAttr = parseInt(String(input && input.max ? input.max : ''), 10);
+            var max = Number.isFinite(maxAttr) && maxAttr > 0 ? maxAttr : (parseInt(item.maxQty, 10) || 1);
 
-            plusBtn.addEventListener('click', function() {
-                var v = parseInt(input.value) || 1;
-                if (v < item.maxQty) {
-                    input.value = v + 1;
-                    item.qty = v + 1;
-                    updateSummary();
-                } else {
-                    showToast('已达最大可用数量 (' + item.maxQty + ')');
-                }
-            });
+            function syncStepperState(v) {
+                if (minusBtn && 'disabled' in minusBtn) minusBtn.disabled = !(v > 1);
+                if (plusBtn && 'disabled' in plusBtn) plusBtn.disabled = !(v < max);
+            }
 
-            input.addEventListener('change', function() {
-                var v = parseInt(input.value) || 1;
+            function setValue(next, showTip) {
+                var v = parseInt(String(next || ''), 10);
+                if (!Number.isFinite(v)) v = 1;
                 if (v < 1) v = 1;
-                if (v > item.maxQty) { v = item.maxQty; showToast('已达最大可用数量'); }
-                input.value = v;
+                if (v > max) {
+                    v = max;
+                    if (showTip) showToast('已达最大可用数量 (' + max + ')');
+                }
+                input.value = String(v);
                 item.qty = v;
                 updateSummary();
-            });
+                syncStepperState(v);
+            }
+
+            setValue(input.value, false);
+
+            if (minusBtn) {
+                minusBtn.onclick = function() {
+                    setValue((parseInt(input.value, 10) || 1) - 1, false);
+                };
+            }
+
+            if (plusBtn) {
+                plusBtn.onclick = function() {
+                    var cur = parseInt(input.value, 10) || 1;
+                    if (cur >= max) {
+                        setValue(max, true);
+                        return;
+                    }
+                    setValue(cur + 1, false);
+                };
+            }
+
+            input.oninput = function() {
+                var v = sanitizeIntString(input.value);
+                input.value = v;
+                setValue(parseInt(v || '0', 10) || 0, false);
+            };
+
+            input.onchange = function() {
+                setValue(input.value, true);
+            };
         });
     }
 
@@ -2460,6 +3302,27 @@
         // 同步更新 dataset
         useBtn.dataset.remain = String(newRemain);
     }
+
+    document.addEventListener('input', function(e) {
+        var el = e.target;
+        if (!el || !(el instanceof HTMLInputElement)) return;
+        if (!(el.matches && (el.matches('input[data-field="discount"], .discount-input')))) return;
+        handleDiscountInputConflict(el);
+    });
+
+    document.addEventListener('focusin', function(e) {
+        var el = e.target;
+        if (!el || !(el instanceof HTMLInputElement)) return;
+        if (!(el.matches && (el.matches('input[data-field="finalPrice"], .final-price')))) return;
+        el.dataset.lastValid = roundMoney2(parseMoneyText(el.value)).toFixed(2);
+    }, true);
+
+    document.addEventListener('blur', function(e) {
+        var el = e.target;
+        if (!el || !(el instanceof HTMLInputElement)) return;
+        if (!(el.matches && (el.matches('input[data-field="finalPrice"], .final-price')))) return;
+        handleFinalPriceInputConflict(el);
+    }, true);
 
     // 还原进度条显示
     function increaseProgressByOne(itemId, newRemain) {
@@ -2637,10 +3500,6 @@
         }
 
         var remark = document.getElementById('order-remark').value.trim();
-
-        console.log('=== 确认服务 ===');
-        console.log('已选项目:', JSON.parse(JSON.stringify(selectedItems)));
-        console.log('订单备注:', remark);
 
         showToast('服务确认成功！');
     });
