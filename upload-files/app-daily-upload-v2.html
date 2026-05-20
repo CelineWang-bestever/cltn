@@ -89,9 +89,7 @@
 
         /* 资料类型标签选择器 */
         .type-selector {
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: relative;
             background: #FFFFFF;
             padding: 12px 10px;
         }
@@ -107,6 +105,23 @@
             display: flex;
             gap: 8px;
             align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .type-custom-helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: -2px 0 10px;
+        }
+
+        .type-custom-limit {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-size: 13px;
             margin-bottom: 10px;
         }
 
@@ -214,6 +229,42 @@
             border-color: var(--primary);
         }
 
+        .type-options.is-collapsible {
+            overflow: hidden;
+            transition: max-height 0.28s ease;
+        }
+
+        .type-options-toggle {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 16px;
+            font-size: 14px;
+            color: var(--primary-dark);
+            background: var(--primary-bg);
+            border-color: var(--primary-light);
+            font-weight: 600;
+            user-select: none;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            cursor: pointer;
+            align-items: center;
+            justify-content: center;
+            max-width: 100%;
+            white-space: normal;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+            text-align: center;
+            line-height: 1.2;
+        }
+
+        .type-options-toggle:hover {
+            border-color: var(--primary);
+        }
+
+        .type-options-toggle:active {
+            transform: scale(0.98);
+        }
+
         /* 主内容区 */
         .main-content {
             flex: 1;
@@ -273,7 +324,7 @@
             transform: scale(0.98);
         }
 
-        /* 已上传文件列表 */
+        /* 已选择文件列表 */
         .uploaded-section {
             margin-top: 12px;
             padding-top: 24px;
@@ -300,7 +351,7 @@
         .uploaded-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
+            gap: 16px 10px;
         }
 
         .uploaded-card {
@@ -844,22 +895,25 @@
         <!-- 资料类型选择器 -->
         <div class="type-selector">
             <div class="type-selector-label">资料类型</div>
-            <div class="type-custom-row">
+            <div class="type-custom-row" id="customTypeRow">
                 <div class="type-custom-input-wrap" id="customTypeInputWrap">
                     <input class="type-custom-input" id="customTypeInput" type="text" inputmode="text" maxlength="20" placeholder="添加自定义标签（选填）">
                     <button class="type-custom-clear" id="customTypeClear" type="button" aria-label="清空">×</button>
                 </div>
                 <button class="type-custom-add" id="customTypeAddBtn" type="button" disabled>添加</button>
             </div>
+            <div class="type-custom-helper" id="customTypeHelper">最多可自定义15个标签</div>
+            <div class="type-custom-limit" id="customTypeLimitTip">您已定义15个自定义标签，无法添加新标签</div>
             <div class="type-options" id="typeOptions"></div>
+            <div class="type-options-toggle" id="typeOptionsToggle" role="button" tabindex="0">查看更多</div>
         </div>
 
         <!-- 主内容区 -->
         <main class="main-content">
-            <!-- 已上传文件列表 -->
+            <!-- 已选择文件列表 -->
             <div class="uploaded-section" id="uploadedSection" style="display: none;">
                 <div class="uploaded-header">
-                    <span class="uploaded-title">已上传</span>
+                    <span class="uploaded-title">已选择</span>
                     <span class="uploaded-count" id="uploadedCount">0/12</span>
                 </div>
                 <div class="uploaded-grid" id="uploadedGrid"></div>
@@ -934,7 +988,7 @@
     <input type="file" id="galleryInput" accept="image/jpeg,image/png,image/jpg" multiple>
 
     <script>
-        // 已上传文件列表
+        // 已选择文件列表
         let uploadedFiles = [];
         const maxFiles = 12;
         const imageExtensions = ['jpg', 'jpeg', 'png'];
@@ -942,6 +996,7 @@
         // 当前选中的资料类型
         let selectedRecordType = 'daily';
         let selectedRecordTypeLabel = '每日经营';
+        const CUSTOM_TYPES_MAX = 15;
         const CUSTOM_TYPES_STORAGE_KEY = 'daily_upload_custom_types_v2';
         const recordTypeMap = {
             'daily': '每日经营',
@@ -1006,6 +1061,17 @@
             localStorage.setItem(CUSTOM_TYPES_STORAGE_KEY, JSON.stringify(customTypes.slice()));
         }
 
+        function updateCustomTypeLimitUi() {
+            const row = document.getElementById('customTypeRow');
+            const helper = document.getElementById('customTypeHelper');
+            const limitTip = document.getElementById('customTypeLimitTip');
+            const reached = customTypes.length >= CUSTOM_TYPES_MAX;
+
+            if (row) row.style.display = reached ? 'none' : 'flex';
+            if (helper) helper.style.display = reached ? 'none' : 'block';
+            if (limitTip) limitTip.style.display = reached ? 'block' : 'none';
+        }
+
         function renderTypeOptions() {
             const wrap = document.getElementById('typeOptions');
             if (!wrap) return;
@@ -1037,6 +1103,108 @@
                     selectedRecordTypeLabel = fallback.getAttribute('data-label') || fallback.textContent.trim() || '每日经营';
                 }
             }
+
+            updateCustomTypeLimitUi();
+            scheduleTypeOptionsLayout();
+        }
+
+        const TYPE_OPTIONS_MAX_LINES = 3;
+        let typeOptionsLayoutTimer = null;
+
+        function scheduleTypeOptionsLayout() {
+            if (typeOptionsLayoutTimer) {
+                if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(typeOptionsLayoutTimer);
+                else clearTimeout(typeOptionsLayoutTimer);
+            }
+            if (typeof requestAnimationFrame === 'function') {
+                typeOptionsLayoutTimer = requestAnimationFrame(function () {
+                    requestAnimationFrame(applyTypeOptionsLayout);
+                });
+            } else {
+                typeOptionsLayoutTimer = setTimeout(applyTypeOptionsLayout, 0);
+            }
+        }
+
+        function applyTypeOptionsLayout() {
+            const wrap = document.getElementById('typeOptions');
+            if (!wrap) return;
+            const toggle = document.getElementById('typeOptionsToggle');
+            const prevExpanded = wrap.dataset.collapsed === '0';
+
+            wrap.classList.remove('is-collapsible');
+            wrap.dataset.collapsed = '';
+            wrap.dataset.collapseHeight = '';
+            wrap.style.maxHeight = '';
+
+            if (toggle) {
+                toggle.style.display = 'none';
+                toggle.textContent = '查看更多';
+                toggle.onclick = null;
+                toggle.onkeydown = null;
+            }
+
+            const options = Array.from(wrap.querySelectorAll('.type-option'));
+            if (options.length === 0) return;
+
+            const wrapRect = wrap.getBoundingClientRect();
+            const lineTops = [];
+            options.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const top = Math.round(r.top - wrapRect.top);
+                if (!lineTops.includes(top)) lineTops.push(top);
+            });
+            lineTops.sort((a, b) => a - b);
+
+            const totalLines = lineTops.length;
+            if (totalLines <= TYPE_OPTIONS_MAX_LINES) return;
+
+            const thirdTop = lineTops[TYPE_OPTIONS_MAX_LINES - 1];
+            let collapseHeight = 0;
+            options.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const top = Math.round(r.top - wrapRect.top);
+                if (top <= thirdTop) {
+                    const bottom = r.bottom - wrapRect.top;
+                    if (bottom > collapseHeight) collapseHeight = bottom;
+                }
+            });
+            collapseHeight = Math.max(0, collapseHeight);
+            if (!collapseHeight) return;
+
+            wrap.classList.add('is-collapsible');
+            wrap.dataset.collapsed = '1';
+            wrap.dataset.collapseHeight = String(collapseHeight);
+            wrap.style.maxHeight = `${collapseHeight}px`;
+
+            if (!toggle) return;
+
+            toggle.style.display = 'inline-flex';
+
+            function toggleCollapse(forceExpanded) {
+                const collapsed = wrap.dataset.collapsed === '1';
+                const shouldExpand = forceExpanded === true || (forceExpanded !== false && collapsed);
+                if (shouldExpand) {
+                    wrap.dataset.collapsed = '0';
+                    toggle.textContent = '收起';
+                    wrap.style.maxHeight = `${wrap.scrollHeight}px`;
+                } else {
+                    wrap.dataset.collapsed = '1';
+                    toggle.textContent = '查看更多';
+                    const h = parseFloat(wrap.dataset.collapseHeight || '0') || collapseHeight;
+                    wrap.style.maxHeight = `${h}px`;
+                }
+            }
+
+            toggle.onclick = function () {
+                toggleCollapse();
+            };
+            toggle.onkeydown = function (e) {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                toggleCollapse();
+            };
+
+            if (prevExpanded) toggleCollapse(true);
         }
 
         // 返回
@@ -1107,7 +1275,7 @@
             e.target.value = '';
         }
 
-        // 渲染已上传列表
+        // 渲染已选择列表
         function renderUploadedList() {
             const section = document.getElementById('uploadedSection');
             const grid = document.getElementById('uploadedGrid');
@@ -1145,7 +1313,7 @@
 
         // 获取状态文本
         function getStatusText(status) {
-            return { success: '已上传', error: '失败', uploading: '上传中' }[status] || status;
+            return { success: '已选择', error: '失败', uploading: '上传中' }[status] || status;
         }
 
         // 删除文件
@@ -1256,6 +1424,11 @@
 
             function tryAddCustomType() {
                 if (!input) return;
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    showToast('最多可自定义15个标签');
+                    updateCustomTypeLimitUi();
+                    return;
+                }
                 const raw = sanitizeCustomTypeLabel(input.value);
                 if (!raw) return;
 
@@ -1269,6 +1442,7 @@
 
                 customTypes.push(raw);
                 saveCustomTypes();
+                updateCustomTypeLimitUi();
                 input.value = '';
                 syncCustomTypeInputUi();
 
@@ -1297,6 +1471,10 @@
 
             syncCustomTypeInputUi();
             renderTypeOptions();
+
+            window.addEventListener('resize', function () {
+                scheduleTypeOptionsLayout();
+            });
         });
     </script>
 </body>

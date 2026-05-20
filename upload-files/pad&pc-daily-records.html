@@ -14,7 +14,7 @@
             --text-primary: #333333;
             --text-secondary: #666666;
             --text-muted: #999999;
-            --bg-page: #F5F5F5;
+            --bg-page: #F3F5FA;
             --bg-card: #FFFFFF;
             --border-color: #EEEEEE;
             --success: #52C41A;
@@ -94,6 +94,16 @@
 
         .upload-btn:hover {
             background: var(--primary-dark);
+        }
+
+        .upload-btn.secondary {
+            background: var(--bg-card);
+            color: var(--text-secondary);
+            border: 1px solid var(--border-color);
+        }
+
+        .upload-btn.secondary:hover {
+            background: var(--bg-page);
         }
 
         .upload-btn svg {
@@ -244,6 +254,236 @@
 
         .btn-primary:hover {
             background: var(--primary-dark);
+        }
+
+        .btn.disabled,
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .type-manage-row {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 8px;
+        }
+
+        .type-manage-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+            border-radius: 10px;
+            height: auto;
+        }
+
+        #filterTypeOptions.is-collapsible {
+            overflow: hidden;
+            transition: max-height 0.28s ease;
+        }
+
+        .type-options-toggle {
+            display: none;
+            margin-top: 8px;
+            padding: 8px 14px;
+            border-radius: 999px;
+            font-size: 13px;
+            background: var(--primary-bg);
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid var(--primary);
+            user-select: none;
+            width: fit-content;
+        }
+
+        .type-options-toggle:active {
+            transform: scale(0.98);
+        }
+
+        .type-manager-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .type-manager-modal.show {
+            display: flex;
+        }
+
+        .type-manager-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.45);
+        }
+
+        .type-manager-content {
+            position: relative;
+            width: 100%;
+            max-width: 520px;
+            background: #FFFFFF;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+        }
+
+        .type-manager-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .type-manager-title {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .type-manager-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+        }
+
+        .type-manager-close svg {
+            width: 18px;
+            height: 18px;
+            fill: var(--text-secondary);
+        }
+
+        .type-manager-body {
+            padding: 12px 16px 16px;
+        }
+
+        .type-manager-sub {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
+        }
+
+        .type-manager-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            max-height: 60vh;
+            overflow: auto;
+            padding-right: 4px;
+        }
+
+        .type-manager-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 10px 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: #FFFFFF;
+        }
+
+        .type-manager-left {
+            min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .type-manager-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-primary);
+            word-break: break-word;
+        }
+
+        .type-manager-meta {
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .type-manager-actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+
+        .type-manager-actions .btn {
+            padding: 8px 10px;
+            border-radius: 10px;
+            font-size: 13px;
+            height: auto;
+        }
+
+        .type-rename-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 9500;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+        }
+
+        .type-rename-modal.show {
+            display: flex;
+        }
+
+        .type-rename-content {
+            position: relative;
+            width: 100%;
+            max-width: 420px;
+            background: #FFFFFF;
+            border-radius: 14px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 12px 32px rgba(0, 0, 0, 0.18);
+            overflow: hidden;
+        }
+
+        .type-rename-body {
+            padding: 16px;
+        }
+
+        .type-rename-input {
+            width: 100%;
+            height: 40px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 14px;
+        }
+
+        .type-rename-input:focus {
+            border-color: var(--primary);
+        }
+
+        .type-rename-actions {
+            display: flex;
+            gap: 10px;
+            padding: 0 16px 16px;
+        }
+
+        .type-rename-actions .btn {
+            flex: 1;
         }
 
         .data-card {
@@ -476,6 +716,13 @@
         }
 
         .action-bar-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .action-bar-right {
             display: flex;
             align-items: center;
             gap: 10px;
@@ -933,6 +1180,23 @@
             margin-bottom: 10px;
         }
 
+        #detailModal .type-custom-helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: -2px 0 10px;
+        }
+
+        #detailModal .type-custom-limit {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
         #detailModal .type-custom-input-wrap {
             position: relative;
             flex: 1;
@@ -1152,7 +1416,7 @@
             left: 0;
             right: 0;
             bottom: 0;
-            z-index: 7000;
+            z-index: 12000;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -2060,6 +2324,23 @@
             margin-bottom: 10px;
         }
 
+        #uploadModal .type-custom-helper {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin: -2px 0 10px;
+        }
+
+        #uploadModal .type-custom-limit {
+            display: none;
+            padding: 10px 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-size: 13px;
+            margin-bottom: 10px;
+        }
+
         #uploadModal .type-custom-input-wrap {
             position: relative;
             flex: 1;
@@ -2181,7 +2462,7 @@
         #uploadModal .uploaded-grid {
             display: grid;
             grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
+            gap: 16px 10px;
         }
 
         #uploadModal .uploaded-card {
@@ -2406,7 +2687,7 @@
             }
 
             #uploadModal .uploaded-grid {
-                gap: 8px;
+                gap: 16px 10px;
             }
 
             #uploadModal .uploaded-name-input {
@@ -2434,6 +2715,7 @@
                         <div class="type-option" data-type="financial" onclick="filterRecordsByType(this)">财务支出</div>
                         <div class="type-option" data-type="other" onclick="filterRecordsByType(this)">其他</div>
                     </div>
+                    <div class="type-options-toggle" id="filterTypeOptionsToggle" role="button" tabindex="0">查看更多</div>
                 </div>
 
                 <div class="search-section">
@@ -2480,6 +2762,7 @@
                     </div>
                 </div>
                 <div class="action-bar-right">
+                    <button class="upload-btn secondary" type="button" onclick="openCustomTypeManager()">自定义标签管理 (本期不实现)</button>
                     <button class="upload-btn" onclick="openUploadModal()">
                         <svg viewBox="0 0 24 24">
                             <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
@@ -2574,7 +2857,7 @@
                         <div class="edit-panel" id="detailEditPanel">
                             <div class="edit-group">
                                 <span class="edit-label">修改资料类型</span>
-                                <div class="type-custom-row">
+                                <div class="type-custom-row" id="detailCustomTypeRow">
                                     <div class="type-custom-input-wrap" id="detailCustomTypeInputWrap">
                                         <input class="type-custom-input" id="detailCustomTypeInput" type="text" inputmode="text"
                                             maxlength="20" placeholder="添加自定义标签（选填）">
@@ -2584,6 +2867,8 @@
                                     <button class="type-custom-add" id="detailCustomTypeAddBtn" type="button"
                                         disabled>添加</button>
                                 </div>
+                                <div class="type-custom-helper" id="detailCustomTypeHelper">最多可自定义15个标签</div>
+                                <div class="type-custom-limit" id="detailCustomTypeLimitTip">您已定义15个自定义标签，无法添加新标签</div>
                                 <div class="type-options" id="detailTypeOptions"></div>
                             </div>
 
@@ -2632,6 +2917,48 @@
         </div>
     </div>
 
+    <div class="type-manager-modal" id="customTypeManagerModal">
+        <div class="type-manager-overlay" onclick="closeCustomTypeManager()"></div>
+        <div class="type-manager-content" onclick="event.stopPropagation()">
+            <div class="type-manager-header">
+                <div class="type-manager-title">自定义标签管理</div>
+                <button class="type-manager-close" type="button" onclick="closeCustomTypeManager()" aria-label="关闭">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="type-manager-body">
+                <div class="type-manager-sub" id="customTypeManagerSub">已定义 0/15</div>
+                <div class="type-manager-list" id="customTypeManagerList"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="type-rename-modal" id="customTypeRenameModal">
+        <div class="type-manager-overlay" onclick="closeCustomTypeRenameModal()"></div>
+        <div class="type-rename-content" onclick="event.stopPropagation()">
+            <div class="type-manager-header">
+                <div class="type-manager-title">修改标签名称</div>
+                <button class="type-manager-close" type="button" onclick="closeCustomTypeRenameModal()" aria-label="关闭">
+                    <svg viewBox="0 0 24 24">
+                        <path
+                            d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
+                    </svg>
+                </button>
+            </div>
+            <div class="type-rename-body">
+                <input class="type-rename-input" id="customTypeRenameInput" type="text" inputmode="text" maxlength="20"
+                    placeholder="请输入新名称（最多20字）">
+            </div>
+            <div class="type-rename-actions">
+                <button class="btn btn-secondary" type="button" onclick="closeCustomTypeRenameModal()">取消</button>
+                <button class="btn btn-primary" type="button" onclick="confirmCustomTypeRename()">保存</button>
+            </div>
+        </div>
+    </div>
+
     <div class="upload-modal" id="uploadModal">
         <div class="upload-overlay" onclick="closeUploadModal()"></div>
         <div class="page-container" onclick="event.stopPropagation()">
@@ -2651,7 +2978,7 @@
 
             <div class="type-selector">
                 <div class="type-selector-label">资料类型</div>
-                <div class="type-custom-row">
+                <div class="type-custom-row" id="uploadCustomTypeRow">
                     <div class="type-custom-input-wrap" id="customTypeInputWrap">
                         <input class="type-custom-input" id="customTypeInput" type="text" inputmode="text" maxlength="20"
                             placeholder="添加自定义标签（选填）">
@@ -2659,13 +2986,15 @@
                     </div>
                     <button class="type-custom-add" id="customTypeAddBtn" type="button" disabled>添加</button>
                 </div>
+                <div class="type-custom-helper" id="uploadCustomTypeHelper">最多可自定义15个标签</div>
+                <div class="type-custom-limit" id="uploadCustomTypeLimitTip">您已定义15个自定义标签，无法添加新标签</div>
                 <div class="type-options" id="typeOptions"></div>
             </div>
 
             <main class="main-content" id="uploadModalMain">
                 <div class="uploaded-section" id="uploadedSection" style="display: none;">
                     <div class="uploaded-header">
-                        <span class="uploaded-title">已上传</span>
+                        <span class="uploaded-title">已选择</span>
                         <span class="uploaded-count" id="uploadedCount">0/12</span>
                     </div>
                     <div class="uploaded-grid" id="uploadedGrid"></div>
@@ -2741,7 +3070,7 @@
             </div>
             <div class="edit-files-section" id="editFilesSection">
                 <div class="edit-files-header">
-                    <span class="form-label">已上传文件</span>
+                    <span class="form-label">已选择文件</span>
                     <button class="btn-link" onclick="addMoreFiles()">+ 添加文件</button>
                 </div>
                 <div class="uploaded-preview" id="editFilesPreview"></div>
@@ -2800,6 +3129,7 @@
         };
 
         const CUSTOM_TYPES_STORAGE_KEY = 'daily_upload_custom_types_v2';
+        const CUSTOM_TYPES_MAX = 15;
         const maxFiles = 12;
         const imageExtensions = ['jpg', 'jpeg', 'png'];
 
@@ -2809,6 +3139,126 @@
         let customTypes = [];
 
         let currentFilterType = 'all';
+        const FILTER_TYPE_MAX_LINES = 1;
+        let filterTypeOptionsLayoutTimer = null;
+
+        function scheduleFilterTypeOptionsLayout() {
+            if (filterTypeOptionsLayoutTimer) {
+                if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(filterTypeOptionsLayoutTimer);
+                else clearTimeout(filterTypeOptionsLayoutTimer);
+            }
+            if (typeof requestAnimationFrame === 'function') {
+                filterTypeOptionsLayoutTimer = requestAnimationFrame(function () {
+                    requestAnimationFrame(applyFilterTypeOptionsLayout);
+                });
+            } else {
+                filterTypeOptionsLayoutTimer = setTimeout(applyFilterTypeOptionsLayout, 0);
+            }
+        }
+
+        function applyFilterTypeOptionsLayout() {
+            const wrap = document.getElementById('filterTypeOptions');
+            const toggle = document.getElementById('filterTypeOptionsToggle');
+            if (!wrap || !toggle) return;
+
+            const prevExpanded = wrap.dataset.collapsed === '0';
+
+            wrap.classList.remove('is-collapsible');
+            wrap.dataset.collapsed = '';
+            wrap.dataset.collapseHeight = '';
+            wrap.style.maxHeight = '';
+
+            toggle.style.display = 'none';
+            toggle.textContent = '查看更多';
+            toggle.onclick = null;
+            toggle.onkeydown = null;
+
+            const options = Array.from(wrap.querySelectorAll('.type-option'));
+            if (options.length === 0) return;
+
+            const wrapRect = wrap.getBoundingClientRect();
+            const lineTops = [];
+            options.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const top = Math.round(r.top - wrapRect.top);
+                if (!lineTops.includes(top)) lineTops.push(top);
+            });
+            lineTops.sort((a, b) => a - b);
+
+            const totalLines = lineTops.length;
+            if (totalLines <= FILTER_TYPE_MAX_LINES) return;
+
+            const firstTop = lineTops[0];
+            let collapseHeight = 0;
+            options.forEach(el => {
+                const r = el.getBoundingClientRect();
+                const top = Math.round(r.top - wrapRect.top);
+                if (top <= firstTop) {
+                    const bottom = r.bottom - wrapRect.top;
+                    if (bottom > collapseHeight) collapseHeight = bottom;
+                }
+            });
+
+            collapseHeight = Math.max(0, collapseHeight);
+            if (!collapseHeight) return;
+
+            wrap.classList.add('is-collapsible');
+            wrap.dataset.collapsed = '1';
+            wrap.dataset.collapseHeight = String(collapseHeight);
+            wrap.style.maxHeight = `${collapseHeight}px`;
+
+            toggle.style.display = 'inline-flex';
+
+            function toggleCollapse(forceExpanded) {
+                const collapsed = wrap.dataset.collapsed === '1';
+                const shouldExpand = forceExpanded === true || (forceExpanded !== false && collapsed);
+                if (shouldExpand) {
+                    wrap.dataset.collapsed = '0';
+                    toggle.textContent = '收起';
+                    wrap.style.maxHeight = `${wrap.scrollHeight}px`;
+                } else {
+                    wrap.dataset.collapsed = '1';
+                    toggle.textContent = '查看更多';
+                    const h = parseFloat(wrap.dataset.collapseHeight || '0') || collapseHeight;
+                    wrap.style.maxHeight = `${h}px`;
+                }
+            }
+
+            toggle.onclick = function () {
+                toggleCollapse();
+            };
+            toggle.onkeydown = function (e) {
+                if (e.key !== 'Enter' && e.key !== ' ') return;
+                e.preventDefault();
+                toggleCollapse();
+            };
+
+            if (prevExpanded) toggleCollapse(true);
+        }
+
+        function renderFilterTypeOptions() {
+            const wrap = document.getElementById('filterTypeOptions');
+            if (!wrap) return;
+
+            const pieces = [];
+            const isAll = currentFilterType === 'all';
+            pieces.push(`<div class="type-option ${isAll ? 'selected' : ''}" data-type="all" onclick="filterRecordsByType(this)">全部</div>`);
+
+            Object.keys(recordTypeMap).forEach(key => {
+                const label = recordTypeMap[key];
+                const selected = currentFilterType === key ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(key)}" onclick="filterRecordsByType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            customTypes.forEach(label => {
+                const typeKey = `custom:${label}`;
+                const selected = currentFilterType === typeKey ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(typeKey)}" onclick="filterRecordsByType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            wrap.innerHTML = pieces.join('');
+            scheduleFilterTypeOptionsLayout();
+        }
 
         function escapeHtml(str) {
             return String(str || '')
@@ -2849,6 +3299,235 @@
 
         function saveCustomTypes() {
             localStorage.setItem(CUSTOM_TYPES_STORAGE_KEY, JSON.stringify(customTypes.slice()));
+        }
+
+        function updateUploadCustomTypeLimitUi() {
+            const row = document.getElementById('uploadCustomTypeRow');
+            const helper = document.getElementById('uploadCustomTypeHelper');
+            const limitTip = document.getElementById('uploadCustomTypeLimitTip');
+            const reached = customTypes.length >= CUSTOM_TYPES_MAX;
+
+            if (row) row.style.display = reached ? 'none' : 'flex';
+            if (helper) helper.style.display = reached ? 'none' : 'block';
+            if (limitTip) limitTip.style.display = reached ? 'block' : 'none';
+        }
+
+        function updateDetailCustomTypeLimitUi() {
+            const row = document.getElementById('detailCustomTypeRow');
+            const helper = document.getElementById('detailCustomTypeHelper');
+            const limitTip = document.getElementById('detailCustomTypeLimitTip');
+            const reached = customTypes.length >= CUSTOM_TYPES_MAX;
+
+            if (row) row.style.display = reached ? 'none' : 'flex';
+            if (helper) helper.style.display = reached ? 'none' : 'block';
+            if (limitTip) limitTip.style.display = reached ? 'block' : 'none';
+        }
+
+        function updateAllCustomTypeLimitUi() {
+            updateUploadCustomTypeLimitUi();
+            updateDetailCustomTypeLimitUi();
+        }
+
+        function getCustomTypeUsageCountMap() {
+            const map = {};
+            mockData.forEach(record => {
+                const files = Array.isArray(record.files) ? record.files : [];
+                files.forEach(file => {
+                    if (!file?.thumb) return;
+                    const typeKey = String(file.type || record.type || '');
+                    if (!typeKey.startsWith('custom:')) return;
+                    const label = typeKey.slice('custom:'.length);
+                    map[label] = (map[label] || 0) + 1;
+                });
+            });
+            return map;
+        }
+
+        function renderCustomTypeManager() {
+            const modal = document.getElementById('customTypeManagerModal');
+            const listEl = document.getElementById('customTypeManagerList');
+            const subEl = document.getElementById('customTypeManagerSub');
+            if (!modal || !listEl || !subEl) return;
+
+            customTypes = loadCustomTypes();
+            updateAllCustomTypeLimitUi();
+
+            const usageMap = getCustomTypeUsageCountMap();
+            subEl.textContent = `已定义 ${customTypes.length}/${CUSTOM_TYPES_MAX}`;
+
+            if (customTypes.length === 0) {
+                listEl.innerHTML = `<div class="type-manager-sub">暂无自定义标签</div>`;
+                return;
+            }
+
+            listEl.innerHTML = customTypes.map(label => {
+                const used = usageMap[label] || 0;
+                const safe = escapeHtml(label);
+                const safeAttr = escapeHtmlAttr(label);
+                const delDisabled = used > 0 ? 'disabled' : '';
+                return `
+                    <div class="type-manager-item" data-label="${safeAttr}">
+                        <div class="type-manager-left">
+                            <div class="type-manager-name">${safe}</div>
+                            <div class="type-manager-meta">已关联图片：${used} 张</div>
+                        </div>
+                        <div class="type-manager-actions">
+                            <button class="btn btn-secondary" type="button" onclick="openCustomTypeRenameModal('${safeAttr}')">编辑</button>
+                            <button class="btn btn-danger" type="button" ${delDisabled} onclick="requestDeleteCustomType('${safeAttr}')">删除</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openCustomTypeManager() {
+            const modal = document.getElementById('customTypeManagerModal');
+            if (!modal) return;
+            renderCustomTypeManager();
+            modal.classList.add('show');
+        }
+
+        function closeCustomTypeManager() {
+            const modal = document.getElementById('customTypeManagerModal');
+            if (!modal) return;
+            modal.classList.remove('show');
+        }
+
+        function openCustomTypeRenameModal(label) {
+            const modal = document.getElementById('customTypeRenameModal');
+            const input = document.getElementById('customTypeRenameInput');
+            if (!modal || !(input instanceof HTMLInputElement)) return;
+            pendingRenameLabel = String(label || '');
+            input.value = pendingRenameLabel;
+            modal.classList.add('show');
+            setTimeout(() => input.focus(), 0);
+        }
+
+        function closeCustomTypeRenameModal() {
+            const modal = document.getElementById('customTypeRenameModal');
+            if (!modal) return;
+            modal.classList.remove('show');
+            pendingRenameLabel = null;
+        }
+
+        function confirmCustomTypeRename() {
+            const input = document.getElementById('customTypeRenameInput');
+            if (!(input instanceof HTMLInputElement)) return;
+            const oldLabel = String(pendingRenameLabel || '').trim();
+            if (!oldLabel) return;
+
+            const raw = sanitizeCustomTypeLabel(input.value);
+            input.value = raw;
+            if (!raw) {
+                showToast('请输入标签名称');
+                return;
+            }
+
+            const normalized = normalizeTypeKeyForCompare(raw);
+            const systemDup = Object.values(recordTypeMap).some(t => normalizeTypeKeyForCompare(t) === normalized);
+            const customDup = customTypes.some(t => normalizeTypeKeyForCompare(t) === normalized && t !== oldLabel);
+            if (systemDup || customDup) {
+                showToast('标签已存在');
+                return;
+            }
+
+            if (raw === oldLabel) {
+                closeCustomTypeRenameModal();
+                return;
+            }
+
+            const oldKey = `custom:${oldLabel}`;
+            const newKey = `custom:${raw}`;
+
+            customTypes = customTypes.map(t => (t === oldLabel ? raw : t));
+            saveCustomTypes();
+
+            mockData.forEach(record => {
+                if (String(record.type || '') === oldKey) {
+                    record.type = newKey;
+                    record.typeName = raw;
+                }
+                const files = Array.isArray(record.files) ? record.files : [];
+                files.forEach(file => {
+                    if (String(file.type || '') === oldKey) {
+                        file.type = newKey;
+                        file.typeName = raw;
+                    }
+                });
+            });
+
+            if (selectedRecordType === oldKey) {
+                selectedRecordType = newKey;
+                selectedRecordTypeLabel = raw;
+            }
+            if (detailEditTypeKey === oldKey) {
+                detailEditTypeKey = newKey;
+                detailEditTypeLabel = raw;
+            }
+            if (currentFilterType === oldKey) {
+                currentFilterType = newKey;
+            }
+
+            renderTypeOptions();
+            renderDetailTypeOptions();
+            renderFilterTypeOptions();
+            renderGallery();
+            if (currentDetailTarget) {
+                setDetailContent(currentDetailTarget.recordId, currentDetailTarget.fileIndex);
+                updateDetailNavButtons();
+            }
+            updateAllCustomTypeLimitUi();
+            renderCustomTypeManager();
+            closeCustomTypeRenameModal();
+            showToast('已更新标签名称');
+        }
+
+        function requestDeleteCustomType(label) {
+            const raw = String(label || '').trim();
+            if (!raw) return;
+            const usageMap = getCustomTypeUsageCountMap();
+            const used = usageMap[raw] || 0;
+            if (used > 0) {
+                showToast('该标签已被图片使用，无法删除');
+                return;
+            }
+            showConfirmModal({ kind: 'customType', label: raw }, `确定要删除自定义标签「${raw}」吗？`);
+        }
+
+        function deleteCustomTypeConfirmed(label) {
+            const raw = String(label || '').trim();
+            if (!raw) return;
+
+            const usageMap = getCustomTypeUsageCountMap();
+            const used = usageMap[raw] || 0;
+            if (used > 0) {
+                showToast('该标签已被图片使用，无法删除');
+                return;
+            }
+
+            customTypes = customTypes.filter(t => t !== raw);
+            saveCustomTypes();
+
+            const key = `custom:${raw}`;
+            if (selectedRecordType === key) {
+                selectedRecordType = 'daily';
+                selectedRecordTypeLabel = recordTypeMap['daily'];
+            }
+            if (detailEditTypeKey === key) {
+                detailEditTypeKey = 'daily';
+                detailEditTypeLabel = recordTypeMap['daily'];
+            }
+            if (currentFilterType === key) {
+                currentFilterType = 'all';
+            }
+
+            renderTypeOptions();
+            renderDetailTypeOptions();
+            renderFilterTypeOptions();
+            renderGallery();
+            updateAllCustomTypeLimitUi();
+            renderCustomTypeManager();
+            showToast('已删除标签');
         }
 
         function selectRecordType(el) {
@@ -2902,6 +3581,7 @@
             uploadedFiles = [];
 
             customTypes = loadCustomTypes();
+            updateAllCustomTypeLimitUi();
             renderTypeOptions();
             renderUploadedList();
             updateSubmitBtn();
@@ -2986,7 +3666,7 @@
         }
 
         function getStatusText(status) {
-            if (status === 'success') return '已上传';
+            if (status === 'success') return '已选择';
             if (status === 'uploading') return '上传中';
             if (status === 'error') return '失败';
             return '';
@@ -3309,6 +3989,7 @@
         let currentDetailIndex = -1;
         let detailEditTypeKey = null;
         let detailEditTypeLabel = '';
+        let pendingRenameLabel = null;
 
         function parseDateTimeToTs(v) {
             const s = String(v || '').trim();
@@ -3496,6 +4177,8 @@
             closeConfirmModal();
             if (target.kind === 'image') {
                 deleteImageConfirmed(target.recordId, target.fileIndex);
+            } else if (target.kind === 'customType') {
+                deleteCustomTypeConfirmed(target.label);
             }
         }
 
@@ -3639,6 +4322,7 @@
             nameWrap.classList.toggle('has-value', !!currentCustom);
 
             customTypes = loadCustomTypes();
+            updateAllCustomTypeLimitUi();
             detailEditTypeKey = String(file.type || record.type || 'other');
             detailEditTypeLabel = String(file.typeName || recordTypeMap[detailEditTypeKey] || '其他');
             renderDetailTypeOptions();
@@ -3960,8 +4644,14 @@
             renderGallery();
 
             customTypes = loadCustomTypes();
+            renderFilterTypeOptions();
             renderTypeOptions();
+            updateAllCustomTypeLimitUi();
             updateSubmitBtn();
+
+            window.addEventListener('resize', function () {
+                scheduleFilterTypeOptionsLayout();
+            });
 
             document.getElementById('cameraInput')?.addEventListener('change', handleFiles);
             document.getElementById('galleryInput')?.addEventListener('change', handleFiles);
@@ -4000,6 +4690,12 @@
             const clearBtn = document.getElementById('customTypeClear');
 
             function syncCustomTypeInputUi() {
+                updateUploadCustomTypeLimitUi();
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    if (wrap) wrap.classList.remove('has-value');
+                    if (addBtn) addBtn.disabled = true;
+                    return;
+                }
                 const v = sanitizeCustomTypeLabel(input?.value || '');
                 const has = !!v;
                 if (wrap) wrap.classList.toggle('has-value', has);
@@ -4008,6 +4704,11 @@
 
             function tryAddCustomType() {
                 if (!input) return;
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    showToast('最多可自定义15个标签');
+                    updateAllCustomTypeLimitUi();
+                    return;
+                }
                 const raw = sanitizeCustomTypeLabel(input.value);
                 if (!raw) return;
                 const normalized = normalizeTypeKeyForCompare(raw);
@@ -4027,6 +4728,8 @@
                 selectedRecordTypeLabel = raw;
                 renderTypeOptions();
                 renderDetailTypeOptions();
+                renderFilterTypeOptions();
+                updateAllCustomTypeLimitUi();
                 updateSubmitBtn();
             }
 
@@ -4082,6 +4785,12 @@
             const detailCustomClear = document.getElementById('detailCustomTypeClear');
 
             function syncDetailCustomTypeInputUi() {
+                updateDetailCustomTypeLimitUi();
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    if (detailCustomWrap) detailCustomWrap.classList.remove('has-value');
+                    if (detailCustomAddBtn) detailCustomAddBtn.disabled = true;
+                    return;
+                }
                 const v = sanitizeCustomTypeLabel(detailCustomInput?.value || '');
                 const has = !!v;
                 if (detailCustomWrap) detailCustomWrap.classList.toggle('has-value', has);
@@ -4090,6 +4799,11 @@
 
             function tryAddDetailCustomType() {
                 if (!detailCustomInput) return;
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    showToast('最多可自定义15个标签');
+                    updateAllCustomTypeLimitUi();
+                    return;
+                }
                 const raw = sanitizeCustomTypeLabel(detailCustomInput.value);
                 if (!raw) return;
                 const normalized = normalizeTypeKeyForCompare(raw);
@@ -4106,6 +4820,8 @@
                 syncDetailCustomTypeInputUi();
                 renderTypeOptions();
                 renderDetailTypeOptions();
+                renderFilterTypeOptions();
+                updateAllCustomTypeLimitUi();
             }
 
             detailCustomInput?.addEventListener('input', function () {
@@ -4126,6 +4842,8 @@
                 detailCustomInput.focus();
             });
             syncDetailCustomTypeInputUi();
+
+            updateAllCustomTypeLimitUi();
 
             document.addEventListener('keydown', function (e) {
                 const modal = document.getElementById('detailModal');
