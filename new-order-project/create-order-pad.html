@@ -1825,7 +1825,7 @@
             display: inline-flex;
             align-items: center;
             padding: 2px 8px;
-            background: var(--warning-500);
+            background: var(--primary);
             color: white;
             font-size: 12px;
             font-weight: 600;
@@ -1883,9 +1883,6 @@
             justify-content: center;
             padding: 48px 20px;
             margin-top: 12px;
-            background: var(--bg-primary);
-            border-radius: var(--radius-lg);
-            border: 2px dashed var(--neutral-200);
         }
 
         .empty-state-icon {
@@ -1943,6 +1940,11 @@
 
         .items-table th.col-name {
             min-width: 120px;
+        }
+
+        .items-table th.col-gift-flag {
+            width: 54px;
+            text-align: center;
         }
 
         .items-table th.col-qty {
@@ -2021,6 +2023,10 @@
             color: var(--primary-color);
         }
 
+        .items-table td.col-gift-flag {
+            text-align: center;
+        }
+
         .items-table td.col-qty,
         .items-table td.col-consume {
             text-align: center;
@@ -2048,6 +2054,13 @@
             text-align: center;
         }
 
+        .gift-flag-checkbox {
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+            accent-color: #FF3B30;
+        }
+
         /* 商品操作行样式 */
         .item-action-row {
             background: white;
@@ -2067,24 +2080,6 @@
             gap: 8px;
             flex-wrap: wrap;
             align-items: center;
-        }
-
-        .item-min-discount-hint {
-            font-size: 12px;
-            line-height: 1.2;
-            color: var(--neutral-500);
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            max-width: 240px;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
-        }
-
-        .item-min-discount-hint .hint-value {
-            color: var(--primary);
-            font-weight: 800;
         }
 
         .item-payable {
@@ -2173,6 +2168,13 @@
             text-align: center;
         }
 
+        .moneycard-deduct-input:disabled {
+            background-color: #f3f4f6;
+            color: #6b7280;
+            cursor: not-allowed;
+            opacity: 0.8;
+        }
+
         .moneycard-detail-actions {
             display: inline-flex;
             gap: 8px;
@@ -2231,6 +2233,18 @@
         .table-input.discount-input {
             padding-right: 24px;
             text-align: center;
+        }
+
+        .table-input.is-readonly,
+        .discount-wrapper.is-readonly .table-input {
+            background: var(--neutral-50);
+            color: var(--neutral-400);
+            border-color: var(--neutral-200);
+            pointer-events: none;
+        }
+
+        .discount-wrapper.is-readonly .discount-suffix {
+            color: var(--neutral-300);
         }
 
         .discount-wrapper {
@@ -2355,7 +2369,6 @@
             border-radius: var(--radius-md);
             padding: 12px 12px;
             background: var(--bg-primary);
-            cursor: pointer;
             transition: all 0.2s ease;
         }
 
@@ -2365,8 +2378,7 @@
         }
 
         .moneycard-item.selected {
-            border-color: var(--primary-500);
-            background: var(--primary-100);
+            /* border-color: var(--primary-500); */
         }
 
         .moneycard-item.disabled {
@@ -2377,6 +2389,100 @@
         .moneycard-item.disabled:hover {
             border-color: var(--neutral-200);
             background: var(--bg-primary);
+        }
+
+        .moneycard-split {
+            margin-top: 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .moneycard-split-option {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 10px 10px 10px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            white-space: nowrap;
+        }
+
+        .moneycard-split-option:hover {
+            border-color: var(--primary-300);
+            background: var(--primary-50);
+        }
+
+        .moneycard-split-option.selected {
+            border-color: var(--primary-500);
+            background: var(--primary-100);
+        }
+
+        .moneycard-split-option.disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .moneycard-split-option.disabled:hover {
+            border-color: var(--neutral-200);
+            background: #FFFFFF;
+        }
+
+        .moneycard-split-left {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+            flex: 1 1 auto;
+            min-width: 0;
+        }
+
+        .moneycard-split-label {
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--neutral-700);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .moneycard-split-balance {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            white-space: nowrap;
+            flex-shrink: 0;
+            background: rgba(var(--primary-rgb), 0.12);
+            padding: 6px 12px;
+            border-radius: 6px;
+        }
+
+        .moneycard-split-discount {
+            font-size: 12px;
+            color: var(--neutral-500);
+            line-height: 1.35;
+            flex: 1 1 auto;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .moneycard-split-option .moneycard-tag {
+            position: absolute;
+            left: 32px;top: 16px;
+            transform: translateY(-50%);
+            margin-top: 0;
+        }
+
+        @media (max-width: 1024px) {
+            .moneycard-split-option { gap: 8px; padding: 8px; }
+            .moneycard-split-label,
+            .moneycard-split-balance { font-size: 12px; }
+            .moneycard-split-discount { font-size: 11px; }
         }
 
         .moneycard-tag {
@@ -3137,6 +3243,32 @@
             font-weight: 600;
             color: #1E293B;
             padding-left: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 0;
+            overflow: hidden;
+        }
+
+        .upgrade-newcard-selected-name-text {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .upgrade-custom-tag {
+            display: inline-flex;
+            align-items: center;
+            height: 18px;
+            padding: 0 8px;
+            border-radius: 999px;
+            background: rgba(232, 124, 154, 0.12);
+            border: 1px solid rgba(232, 124, 154, 0.55);
+            color: var(--primary-600);
+            font-size: 11px;
+            font-weight: 700;
+            flex-shrink: 0;
         }
 
         .upgrade-newcard-selected-meta {
@@ -3176,15 +3308,58 @@
         }
 
         .upgrade-fee-grid {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 10px 12px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
         }
 
         @media (max-width: 640px) {
-            .upgrade-fee-grid {
-                grid-template-columns: 1fr;
-            }
+            .upgrade-fee-section { padding: 12px 12px 14px; }
+        }
+
+        .upgrade-fee-table-wrap {
+            min-width: 760px;
+            border: 1px solid var(--neutral-100);
+            border-radius: 10px;
+            overflow: hidden;
+            background: var(--neutral-50);
+        }
+
+        .upgrade-fee-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            table-layout: fixed;
+        }
+
+        .upgrade-fee-table th,
+        .upgrade-fee-table td {
+            padding: 10px 12px;
+            vertical-align: middle;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .upgrade-fee-table thead th {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--neutral-500);
+            background: var(--neutral-50);
+            border-bottom: 1px solid var(--neutral-100);
+            text-align: right;
+        }
+
+        .upgrade-fee-table tbody td {
+            border-right: 1px solid var(--neutral-100);
+            text-align: right;
+        }
+        .upgrade-fee-table tbody td:last-child { border-right: none; }
+
+        .upgrade-fee-cell-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neutral-800);
+            line-height: 1;
         }
 
         .upgrade-fee-row {
@@ -3283,7 +3458,7 @@
             display: none;
             align-items: center;
             justify-content: center;
-            z-index: 9999;
+            z-index: 100;
         }
 
         .upgrade-newcard-modal-overlay.show {
@@ -3309,6 +3484,32 @@
 
         .upgrade-benefit-modal .upgrade-newcard-modal-body {
             overflow: auto;
+        }
+
+        .upgrade-edit-amount-modal {
+            width: 560px;
+            height: auto;
+            max-height: 520px;
+        }
+
+        .upgrade-edit-amount-modal .upgrade-newcard-modal-body {
+            overflow: auto;
+        }
+
+        .upgrade-edit-amount-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 6px 0 2px;
+        }
+
+        .upgrade-edit-amount-modal .course-card-price-group {
+            width: 100%;
+        }
+
+        .upgrade-edit-amount-modal .course-card-price-input {
+            width: 100%;
+            min-width: 0;
         }
 
         .upgrade-newcard-modal-header {
@@ -5875,6 +6076,8 @@
         .course-detail-action {
             display: flex;
             align-items: center;
+            flex-direction: column;
+            gap: 10px;
             flex-shrink: 0;
         }
 
@@ -6039,6 +6242,23 @@
             border-bottom: none;
         }
 
+        .gift-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            height: 18px;
+            padding: 0 6px;
+            background: #FF3B30;
+            color: #FFFFFF;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 700;
+            line-height: 1;
+            margin-right: 8px;
+            vertical-align: middle;
+            flex-shrink: 0;
+        }
+
         .course-table-title-row {
             display: flex;
             align-items: center;
@@ -6064,6 +6284,94 @@
             background: var(--neutral-100);
             border-color: var(--neutral-400);
             color: var(--neutral-800);
+        }
+
+        .benefit-module-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--neutral-800);
+            margin-bottom: 10px;
+        }
+
+        .benefit-subtables {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .benefit-subtable {
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            padding: 10px;
+        }
+
+        .benefit-subtable .course-table-title-row {
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+        }
+
+        .benefit-subtable .course-detail-table {
+            table-layout: fixed;
+        }
+
+        .benefit-subtable .course-detail-table th,
+        .benefit-subtable .course-detail-table td {
+            word-break: break-word;
+            white-space: normal;
+        }
+
+        .benefit-tabs-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .benefit-tabs {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px;
+            background: var(--neutral-50);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+        }
+
+        .benefit-tab {
+            height: 28px;
+            padding: 0 10px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--neutral-600);
+            cursor: pointer;
+            user-select: none;
+            white-space: nowrap;
+        }
+
+        .benefit-tab:hover {
+            color: var(--neutral-800);
+        }
+
+        .benefit-tab.active {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            color: var(--neutral-800);
+        }
+
+        .benefit-pane {
+            display: none;
+        }
+
+        .benefit-pane.active {
+            display: block;
+        }
+
+        .custom-benefit-hidden-store {
+            display: none;
         }
 
         .course-detail-table {
@@ -6317,6 +6625,60 @@
 
         .course-confirm-btn.primary:hover {
             background: var(--primary-dark);
+        }
+
+        .course-confirm-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .course-header-action-btn {
+            padding: 8px 10px;
+            background: transparent;
+            border: none;
+            color: var(--primary);
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background-color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
+            border-radius: 8px;
+            -webkit-tap-highlight-color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            line-height: 1;
+            white-space: nowrap;
+        }
+
+        .course-header-action-btn:hover {
+            background-color: rgba(232, 124, 154, 0.10);
+        }
+
+        .course-header-action-btn:active {
+            background-color: rgba(232, 124, 154, 0.16);
+            transform: translateY(0.5px);
+        }
+
+        .course-header-action-btn:focus-visible {
+            outline: 2px solid rgba(232, 124, 154, 0.28);
+            outline-offset: 2px;
+        }
+
+        .course-header-action-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+
+        .course-header-action-btn svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            display: block;
+        }
+
+        @media (max-width: 1024px) {
+            .course-header-action-btn { padding: 7px 8px; font-size: 12px; }
+            .course-header-action-btn svg { width: 15px; height: 15px; }
         }
 
         .numkeypad-overlay {
@@ -6698,10 +7060,10 @@
                             <table class="items-table" id="service-table">
                                 <thead>
                                     <tr>
+                                        <th class="col-gift-flag">赠</th>
                                         <th class="col-name">商品名称</th>
                                         <th class="col-original">原价</th>
                                         <th class="col-qty">购买</th>
-                                        <th class="col-qty">赠送</th>
                                         <th class="col-consume">本次消耗</th>
                                         <th class="col-card">使用卡项</th>
                                         <th class="col-discount">折扣</th>
@@ -6731,10 +7093,10 @@
                             <table class="items-table" id="product-table">
                                 <thead>
                                     <tr>
+                                        <th class="col-gift-flag">赠</th>
                                         <th class="col-name">商品名称</th>
                                         <th class="col-original">原价</th>
                                         <th class="col-qty">购买</th>
-                                        <th class="col-qty">赠送</th>
                                         <th class="col-consume">拿走数量</th>
                                         <th class="col-card">使用卡项</th>
                                         <th class="col-discount">折扣</th>
@@ -6765,12 +7127,12 @@
                             <table class="items-table" id="amount-card-table">
                                 <thead>
                                     <tr>
+                                        <th class="col-gift-flag">赠</th>
                                         <th class="col-name">卡项名称</th>
                                         <th class="col-original">售卖价格</th>
                                         <th>充值金额</th>
                                         <th>赠送金额</th>
                                         <th class="col-qty">购买数量</th>
-                                        <th class="col-qty">赠送数量</th>
                                         <th class="col-discount">折扣</th>
                                         <th class="col-final">折后价</th>
                                         <th class="col-beautician">美容师</th>
@@ -6797,10 +7159,10 @@
                             <table class="items-table" id="course-table">
                                 <thead>
                                     <tr>
+                                        <th class="col-gift-flag">赠</th>
                                         <th class="col-name">疗程名称</th>
                                         <th class="col-original">售卖价格</th>
                                         <th class="col-qty">购买数量</th>
-                                        <th class="col-qty">赠送数量</th>
                                         <th class="col-card">使用卡项</th>
                                         <th class="col-discount">折扣</th>
                                         <th class="col-final">折后价</th>
@@ -6967,7 +7329,6 @@
 
                 <!-- 客户已有权益列表 -->
                 <div class="benefit-list-section">
-                    <div class="benefit-list-title">客户已有权益</div>
                     <div id="benefitCardsList">
                         <!-- 卡项将通过JS动态渲染 -->
                     </div>
@@ -7218,8 +7579,8 @@
                     <div class="add-course-left-panel">
                         <div class="add-course-tabs">
                             <div class="add-course-tab-item active" data-category="all">全部</div>
-                            <div class="add-course-tab-item" data-category="nail">美甲美睫</div>
-                            <div class="add-course-tab-item" data-category="beauty">美容美体</div>
+                            <div class="add-course-tab-item" data-category="limited">有限卡</div>
+                            <div class="add-course-tab-item" data-category="unlimited">通卡</div>
                         </div>
                         <div class="add-course-card-list" id="addCourseCardList"></div>
                     </div>
@@ -7313,6 +7674,44 @@
             </div>
             <div class="upgrade-newcard-modal-footer">
                 <button type="button" class="upgrade-newcard-btn confirm" id="upgradeNewCardBenefitModalOk">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="upgrade-newcard-modal-overlay" id="upgradeEditAmountModalOverlay">
+        <div class="upgrade-newcard-modal upgrade-edit-amount-modal">
+            <div class="upgrade-newcard-modal-header">
+                <span class="upgrade-newcard-modal-title">修改卡金</span>
+                <div class="upgrade-newcard-modal-close" id="upgradeEditAmountModalClose">×</div>
+            </div>
+            <div class="upgrade-newcard-modal-body">
+                <div class="upgrade-edit-amount-form">
+                    <div class="course-card-field">
+                        <label>售卡金额</label>
+                        <div class="course-card-price-group">
+                            <span class="course-card-price-symbol">¥</span>
+                            <input type="text" class="course-card-price-input" id="upgradeEditSalePriceInput" placeholder="0.00" data-numkeypad-title="售卡金额">
+                        </div>
+                    </div>
+                    <div class="course-card-field">
+                        <label>充值金额</label>
+                        <div class="course-card-price-group">
+                            <span class="course-card-price-symbol">¥</span>
+                            <input type="text" class="course-card-price-input" id="upgradeEditRechargeAmountInput" placeholder="0.00" data-numkeypad-title="充值金额">
+                        </div>
+                    </div>
+                    <div class="course-card-field">
+                        <label>赠送金额</label>
+                        <div class="course-card-price-group">
+                            <span class="course-card-price-symbol">¥</span>
+                            <input type="text" class="course-card-price-input" id="upgradeEditGiftAmountInput" placeholder="0.00" data-numkeypad-title="赠送金额">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="upgrade-newcard-modal-footer">
+                <button type="button" class="upgrade-newcard-btn cancel" id="upgradeEditAmountCancel">取消</button>
+                <button type="button" class="upgrade-newcard-btn confirm" id="upgradeEditAmountConfirm">确认</button>
             </div>
         </div>
     </div>
@@ -9185,6 +9584,7 @@
             if (!state) return;
             state.newCard = JSON.parse(JSON.stringify(newCard));
             state.newCardId = String(newCard.id);
+            state.newCardCustomized = false;
             const newPrice = Number(newCard.price || 0);
             const oldDeduction = Number(calcUpgradeOldDeduction(oldCardId, newPrice).toFixed(2));
             const gap = Number(Math.max(0, newPrice - oldDeduction).toFixed(2));
@@ -9218,18 +9618,118 @@
             const meta = isAmount
                 ? `有效期：${validText}<br>售卡价格：${priceText}<br>充值金额：¥${Number(c.rechargeAmount || 0).toFixed(2)}<br>赠送金额：¥${Number(c.giftAmount || 0).toFixed(2)}`
                 : `有效期：${validText}<br>售卡价格：${priceText}`;
+            const customizeTag = (isAmount && state.newCardCustomized) ? '<span class="upgrade-custom-tag">定制</span>' : '';
+            const modifyBtn = isAmount ? ('<button type="button" class="upgrade-mini-btn" onclick="openUpgradeEditAmountModal(\'' + oldCardId + '\')">修改卡金</button>') : '';
 
             panel.innerHTML =
                 '<div class="upgrade-newcard-selected">' +
                 '   <div>' +
-                '       <div class="upgrade-newcard-selected-name">' + (c.name || '') + '</div>' +
+                '       <div class="upgrade-newcard-selected-name">' + customizeTag + '<span class="upgrade-newcard-selected-name-text">' + (c.name || '') + '</span></div>' +
                 '       <div class="upgrade-newcard-selected-meta">' + meta + '</div>' +
                 '   </div>' +
                 '   <div class="upgrade-newcard-selected-actions">' +
                 '       <button type="button" class="upgrade-mini-btn" onclick="openUpgradeNewCardModal(\'' + oldCardId + '\')">替换</button>' +
                 '       <button type="button" class="upgrade-mini-btn primary" onclick="openUpgradeNewCardBenefitModal(\'' + String(c.id) + '\')">查看卡片权益</button>' +
+                '       ' + modifyBtn +
                 '   </div>' +
                 '</div>';
+        }
+
+        let upgradeEditAmountTargetOldCardId = '';
+        const upgradeEditAmountModalOverlay = document.getElementById('upgradeEditAmountModalOverlay');
+        const upgradeEditAmountModalClose = document.getElementById('upgradeEditAmountModalClose');
+        const upgradeEditAmountCancel = document.getElementById('upgradeEditAmountCancel');
+        const upgradeEditAmountConfirm = document.getElementById('upgradeEditAmountConfirm');
+        const upgradeEditSalePriceInput = document.getElementById('upgradeEditSalePriceInput');
+        const upgradeEditRechargeAmountInput = document.getElementById('upgradeEditRechargeAmountInput');
+        const upgradeEditGiftAmountInput = document.getElementById('upgradeEditGiftAmountInput');
+
+        function resetUpgradeEditAmountForm() {
+            if (upgradeEditSalePriceInput) upgradeEditSalePriceInput.value = '';
+            if (upgradeEditRechargeAmountInput) upgradeEditRechargeAmountInput.value = '';
+            if (upgradeEditGiftAmountInput) upgradeEditGiftAmountInput.value = '';
+        }
+
+        function closeUpgradeEditAmountModal() {
+            upgradeEditAmountModalOverlay?.classList.remove('show');
+            upgradeEditAmountTargetOldCardId = '';
+            resetUpgradeEditAmountForm();
+        }
+
+        function openUpgradeEditAmountModal(oldCardId) {
+            const id = String(oldCardId || '');
+            const state = getUpgradeState(id);
+            if (!state || !state.newCard) return;
+            if (String(state.newCard.type || '') !== '金额卡') return;
+            upgradeEditAmountTargetOldCardId = id;
+            if (upgradeEditSalePriceInput) upgradeEditSalePriceInput.value = Number(state.newCard.price || 0).toFixed(2);
+            if (upgradeEditRechargeAmountInput) upgradeEditRechargeAmountInput.value = Number(state.newCard.rechargeAmount || 0).toFixed(2);
+            if (upgradeEditGiftAmountInput) upgradeEditGiftAmountInput.value = Number(state.newCard.giftAmount || 0).toFixed(2);
+            upgradeEditAmountModalOverlay?.classList.add('show');
+        }
+
+        function parseRequiredMoneyInput(inputEl) {
+            const raw = String((inputEl && 'value' in inputEl) ? inputEl.value : '').trim();
+            const sanitized = sanitizePriceString(raw, 2);
+            if (!sanitized) return null;
+            const n = parseFloat(sanitized);
+            if (!Number.isFinite(n)) return null;
+            return roundMoney2(n);
+        }
+
+        function validateUpgradeEditAmounts(price, recharge, gift) {
+            const MAX = 9999999.99;
+            if (price === null) return { ok: false, msg: '请输入售卡金额' };
+            if (recharge === null) return { ok: false, msg: '请输入充值金额' };
+            if (gift === null) return { ok: false, msg: '请输入赠送金额' };
+            if (price < 0.01) return { ok: false, msg: '售卡金额需大于 0' };
+            if (recharge < 0.01) return { ok: false, msg: '充值金额需大于 0' };
+            if (gift < 0) return { ok: false, msg: '赠送金额不可小于 0' };
+            if (price > MAX || recharge > MAX || gift > MAX) return { ok: false, msg: '金额不可超过 9999999.99' };
+            return { ok: true };
+        }
+
+        function applyUpgradeEditedAmounts() {
+            const oldCardId = String(upgradeEditAmountTargetOldCardId || '');
+            const state = getUpgradeState(oldCardId);
+            if (!state || !state.newCard) return;
+            if (String(state.newCard.type || '') !== '金额卡') return;
+
+            const price = parseRequiredMoneyInput(upgradeEditSalePriceInput);
+            const recharge = parseRequiredMoneyInput(upgradeEditRechargeAmountInput);
+            const gift = parseRequiredMoneyInput(upgradeEditGiftAmountInput);
+            const v = validateUpgradeEditAmounts(price, recharge, gift);
+            if (!v.ok) {
+                showAlertModal(v.msg);
+                return;
+            }
+
+            state.newCard.price = price;
+            state.newCard.rechargeAmount = recharge;
+            state.newCard.giftAmount = gift;
+            state.newCardCustomized = true;
+
+            const newPrice = Number(price || 0);
+            const oldDeduction = Number(calcUpgradeOldDeduction(oldCardId, newPrice).toFixed(2));
+            const gap = Number(Math.max(0, newPrice - oldDeduction).toFixed(2));
+            state.oldDeduction = oldDeduction;
+            state.gapAmount = gap;
+
+            if (gap <= 0) {
+                state.discountPercent = 100;
+                state.finalPrice = 0;
+            } else {
+                const discountPercent = clampNumber(parseFloat(state.discountPercent || 100) || 100, 0.01, 100);
+                const finalPrice = Number((gap * (discountPercent / 100)).toFixed(2));
+                state.discountPercent = Number(discountPercent.toFixed(2));
+                state.finalPrice = clampNumber(finalPrice, 0, gap);
+            }
+
+            renderUpgradeNewCardPanel(oldCardId);
+            renderUpgradeFeePanel(oldCardId);
+            updateOrderSummary();
+            closeUpgradeEditAmountModal();
+            showToast('卡金已更新');
         }
 
         function renderUpgradeFeePanel(oldCardId) {
@@ -9258,12 +9758,30 @@
 
             box.innerHTML =
                 '<div class="upgrade-fee-grid">' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">旧卡抵扣金额</div><div class="upgrade-fee-item-value">¥' + oldDeduction.toFixed(2) + '</div></div>' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">新卡零售价</div><div class="upgrade-fee-item-value">¥' + newPrice.toFixed(2) + '</div></div>' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">应补差价</div><div class="upgrade-fee-item-value upgrade-gap-highlight">¥' + gap.toFixed(2) + '</div></div>' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">折扣</div><input class="upgrade-fee-input" inputmode="decimal" type="text" value="' + discountPercent.toFixed(2) + '" oninput="onUpgradeDiscountPercentInput(this,\'' + oldCardId + '\')" onblur="onUpgradeDiscountPercentBlur(this,\'' + oldCardId + '\')"></div>' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">折后价金额</div><input class="upgrade-fee-input" inputmode="decimal" type="text" value="' + finalPrice.toFixed(2) + '" oninput="onUpgradeFinalPriceInput(this,\'' + oldCardId + '\')" onblur="onUpgradeFinalPriceBlur(this,\'' + oldCardId + '\')"></div>' +
-                '   <div class="upgrade-fee-item"><div class="upgrade-fee-item-label">美容师</div><button type="button" class="row-beautician-btn" data-item-name="' + beauticianItemName + '" data-ids="' + beauticianIds.join(',') + '" onclick="openRowBeauticianModal(this)">' + beauticianBtnText + '</button></div>' +
+                '  <div class="upgrade-fee-table-wrap">' +
+                '    <table class="upgrade-fee-table">' +
+                '      <thead>' +
+                '        <tr>' +
+                '          <th>旧卡抵扣金额</th>' +
+                '          <th>新卡零售价</th>' +
+                '          <th>应补差价</th>' +
+                '          <th>折扣</th>' +
+                '          <th>折后价金额</th>' +
+                '          <th>美容师</th>' +
+                '        </tr>' +
+                '      </thead>' +
+                '      <tbody>' +
+                '        <tr>' +
+                '          <td><div class="upgrade-fee-cell-value">¥' + oldDeduction.toFixed(2) + '</div></td>' +
+                '          <td><div class="upgrade-fee-cell-value">¥' + newPrice.toFixed(2) + '</div></td>' +
+                '          <td><div class="upgrade-fee-cell-value upgrade-gap-highlight">¥' + gap.toFixed(2) + '</div></td>' +
+                '          <td><input class="upgrade-fee-input" inputmode="decimal" type="text" value="' + discountPercent.toFixed(2) + '" oninput="onUpgradeDiscountPercentInput(this,\'' + oldCardId + '\')" onblur="onUpgradeDiscountPercentBlur(this,\'' + oldCardId + '\')"></td>' +
+                '          <td><input class="upgrade-fee-input" inputmode="decimal" type="text" value="' + finalPrice.toFixed(2) + '" oninput="onUpgradeFinalPriceInput(this,\'' + oldCardId + '\')" onblur="onUpgradeFinalPriceBlur(this,\'' + oldCardId + '\')"></td>' +
+                '          <td><button type="button" class="row-beautician-btn" data-item-name="' + beauticianItemName + '" data-ids="' + beauticianIds.join(',') + '" onclick="openRowBeauticianModal(this)">' + beauticianBtnText + '</button></td>' +
+                '        </tr>' +
+                '      </tbody>' +
+                '    </table>' +
+                '  </div>' +
                 '</div>';
         }
 
@@ -9452,6 +9970,13 @@
         upgradeNewCardBenefitModalClose?.addEventListener('click', closeUpgradeNewCardBenefitModal);
         upgradeNewCardBenefitModalOverlay?.addEventListener('click', function (e) {
             if (e.target === this) closeUpgradeNewCardBenefitModal();
+        });
+
+        upgradeEditAmountCancel?.addEventListener('click', closeUpgradeEditAmountModal);
+        upgradeEditAmountModalClose?.addEventListener('click', closeUpgradeEditAmountModal);
+        upgradeEditAmountConfirm?.addEventListener('click', applyUpgradeEditedAmounts);
+        upgradeEditAmountModalOverlay?.addEventListener('click', function (e) {
+            if (e.target === this) closeUpgradeEditAmountModal();
         });
 
         function assertCardOperationAllowed(cardId, action) {
@@ -10211,7 +10736,7 @@
                 '<div class="course-detail-tables" style="margin-top:12px;padding: 12px 12px;">' +
                 '    <div class="course-table-section">' +
                 '        <div class="course-table-title-row">' +
-                '            <div class="course-table-title">赠送权益 - 单次护理</div>' +
+                '            <div class="course-table-title"><span class="gift-badge">赠</span>单次护理</div>' +
                 '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'care\')">+ 添加权益</button>' +
                 '        </div>' +
                 '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="care">' +
@@ -10227,7 +10752,7 @@
                 '    </div>' +
                 '    <div class="course-table-section">' +
                 '        <div class="course-table-title-row">' +
-                '            <div class="course-table-title">赠送权益 - 居家产品</div>' +
+                '            <div class="course-table-title"><span class="gift-badge">赠</span>居家产品</div>' +
                 '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'home\')">+ 添加权益</button>' +
                 '        </div>' +
                 '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="home">' +
@@ -10243,7 +10768,7 @@
                 '    </div>' +
                 '    <div class="course-table-section">' +
                 '        <div class="course-table-title-row">' +
-                '            <div class="course-table-title">赠送权益 - 卡项</div>' +
+                '            <div class="course-table-title"><span class="gift-badge">赠</span>卡项</div>' +
                 '            <button class="course-table-add-btn" onclick="openRechargeGiftBenefitModal(\'' + cardData.id + '\',\'card\')">+ 添加权益</button>' +
                 '        </div>' +
                 '        <table class="course-detail-table custom-course-table recharge-gift-table" data-custom-table="card">' +
@@ -10633,6 +11158,11 @@
             const max = parseInt(String(el.max || '999'), 10) || 999;
             const v = clampNumber(parseInt(String(el.value || '0'), 10) || 0, min, max);
             el.value = String(v);
+            const giftFlag = row.querySelector('.gift-flag-checkbox');
+            const hiddenGift = row.querySelector('input[data-field="gift"]');
+            if (giftFlag instanceof HTMLInputElement && giftFlag.checked && hiddenGift instanceof HTMLInputElement) {
+                hiddenGift.value = String(v);
+            }
             const discountInput = row.querySelector('input[data-field="discount"]');
             if (discountInput) {
                 suppressMoneyCardConflict = true;
@@ -10833,6 +11363,9 @@
             }
             if (!itemRow || !itemRow.classList.contains('item-row')) return;
 
+            const srcGiftFlag = itemRow.querySelector('.gift-flag-checkbox');
+            const isGift = (srcGiftFlag instanceof HTMLInputElement) ? srcGiftFlag.checked : false;
+
             const clonedRow = itemRow.cloneNode(true);
             clonedRow.removeAttribute('data-moneycards');
             clonedRow.removeAttribute('data-money-card-id');
@@ -10843,15 +11376,17 @@
             const clonedActionRow = actionRow.cloneNode(true);
             clonedRow.after(clonedActionRow);
 
+            const dstGiftFlag = clonedRow.querySelector('.gift-flag-checkbox');
+            if (dstGiftFlag instanceof HTMLInputElement) dstGiftFlag.checked = isGift;
+
             const discountInput = clonedRow.querySelector('input[data-field="discount"]');
-            if (discountInput instanceof HTMLInputElement) {
+            if (!isGift && discountInput instanceof HTMLInputElement) {
                 discountInput.value = '100';
                 updateFinalPrice(discountInput);
             }
-            setMinDiscountHint(clonedRow, null);
 
             const chooseBtn = clonedRow.querySelector('[data-action="open-moneycard-modal"]');
-            if (chooseBtn instanceof HTMLButtonElement) {
+            if (!isGift && chooseBtn instanceof HTMLButtonElement) {
                 chooseBtn.textContent = '选择金额卡';
                 chooseBtn.disabled = false;
             }
@@ -10859,10 +11394,98 @@
             const payableEl = clonedActionRow.querySelector('.item-payable-val');
             if (payableEl instanceof Element) payableEl.textContent = '¥0.00';
 
+            if (isGift && dstGiftFlag instanceof HTMLInputElement) {
+                onGiftFlagToggle(dstGiftFlag);
+            }
+
             updateSelectedItemsEmptyStates();
             updateOrderSummary();
             updateOrderAndPaymentVisibility();
             normalizeAndRenderMoneyCards();
+        }
+
+        function onGiftFlagToggle(checkbox) {
+            if (!(checkbox instanceof HTMLInputElement)) return;
+            const row = checkbox.closest('tr.item-row');
+            if (!row) return;
+
+            const isGift = checkbox.checked;
+            if (isGift) row.dataset.isGift = '1';
+            else if (row.dataset.isGift) delete row.dataset.isGift;
+            if (isGift) row.dataset.userDiscountOverride = '1';
+            else if (row.dataset.userDiscountOverride) delete row.dataset.userDiscountOverride;
+
+            const buyQty = getRowBuyQty(row);
+            const hiddenGift = row.querySelector('input[data-field="gift"]') || row.querySelector('input[data-field="giftQty"]');
+            if (hiddenGift instanceof HTMLInputElement) {
+                hiddenGift.value = isGift ? String(buyQty) : '0';
+            }
+
+            const itemType = row.getAttribute('data-item-type') || '';
+            const chooseBtn = row.querySelector('[data-action="open-moneycard-modal"]');
+
+            if (isGift) {
+                if (itemType === 'service' || itemType === 'product' || itemType === 'course') {
+                    clearRowMoneyCards(row, { preserveDiscount: true });
+                }
+                if (chooseBtn instanceof HTMLButtonElement) {
+                    chooseBtn.textContent = '不可使用金额卡';
+                    chooseBtn.disabled = true;
+                }
+            } else {
+                if (chooseBtn instanceof HTMLButtonElement) {
+                    chooseBtn.textContent = '选择金额卡';
+                    chooseBtn.disabled = false;
+                }
+            }
+
+            const discountInput = row.querySelector('input[data-field="discount"]');
+            const finalInput = row.querySelector('input[data-field="finalPrice"]');
+            const discountWrap = row.querySelector('.discount-wrapper');
+            if (discountInput instanceof HTMLInputElement) discountInput.classList.toggle('is-readonly', isGift);
+            if (finalInput instanceof HTMLInputElement) finalInput.classList.toggle('is-readonly', isGift);
+            if (discountWrap instanceof HTMLElement) discountWrap.classList.toggle('is-readonly', isGift);
+            if (discountInput instanceof HTMLInputElement) discountInput.readOnly = isGift;
+            if (finalInput instanceof HTMLInputElement) finalInput.readOnly = isGift;
+
+            if (itemType === 'amountCard') {
+                if (discountInput instanceof HTMLInputElement) discountInput.value = isGift ? '0.00' : '100.00';
+                if (discountInput instanceof HTMLInputElement) onAmountCardDiscountInput(discountInput);
+                syncAmountCardRowToState(row);
+                updateOrderSummary();
+                return;
+            }
+
+            if (discountInput instanceof HTMLInputElement) {
+                discountInput.value = isGift ? '0' : '100';
+                if (itemType === 'course') onCourseDiscountInput(discountInput);
+                else updateFinalPrice(discountInput);
+            } else if (finalInput instanceof HTMLInputElement && !isGift) {
+                finalInput.value = '0.00';
+                updateOrderSummary();
+            }
+
+            if (itemType === 'course') {
+                const id = Number(row.getAttribute('data-item-id'));
+                const idx = selectedCourseCards.findIndex(c => Number(c.id) === id);
+                if (idx > -1) {
+                    selectedCourseCards[idx].isGift = isGift;
+                    selectedCourseCards[idx].giftQty = isGift ? buyQty : 0;
+                    if (isGift) {
+                        selectedCourseCards[idx].moneyCardId = '';
+                        selectedCourseCards[idx].moneyCards = [];
+                    }
+                }
+            }
+
+            if (isGift) {
+                const actionRow = findActionRowForItemRow(row);
+                const payableEl = actionRow?.querySelector?.('.item-payable-val');
+                if (payableEl instanceof Element) payableEl.textContent = '¥0.00';
+            }
+
+            normalizeAndRenderMoneyCards();
+            updateOrderSummary();
         }
 
         function updateCategoryBadge(type) {
@@ -11309,9 +11932,11 @@
             rows.forEach((row, index) => {
                 const buyQty = parseInt(row.querySelector('[data-field="buy"]')?.value || '0', 10) || 0;
                 const giftQty = parseInt(row.querySelector('[data-field="gift"]')?.value || '0', 10) || 0;
+                const giftFlag = row.querySelector('.gift-flag-checkbox');
+                const total = (giftFlag instanceof HTMLInputElement && giftFlag.checked) ? buyQty : (buyQty + giftQty);
                 const consumeInput = row.querySelector('[data-field="consume"]');
                 if (!consumeInput) return;
-                consumeInput.value = String(buyQty + giftQty);
+                consumeInput.value = String(total);
                 consumeInput.dispatchEvent(new Event('input', { bubbles: true }));
 
                 const consumeCell = row.querySelector('.col-consume');
@@ -11346,7 +11971,9 @@
             const runForRow = (row) => {
                 const buy = parseInt(row.querySelector('input[data-field="buy"]')?.value || '0', 10) || 0;
                 const gift = parseInt(row.querySelector('input[data-field="gift"]')?.value || '0', 10) || 0;
-                const total = Math.max(0, buy + gift);
+                const giftFlag = row.querySelector('.gift-flag-checkbox');
+                const rawTotal = (giftFlag instanceof HTMLInputElement && giftFlag.checked) ? buy : (buy + gift);
+                const total = Math.max(0, rawTotal);
                 const consumeInput = row.querySelector('input[data-field="consume"]');
                 if (!consumeInput) return false;
                 const min = parseInt(consumeInput.min || '0', 10);
@@ -11583,14 +12210,14 @@
                 price: 1999,
                 validity: '自首次消费起1年有效',
                 products: [
-                    { type: 'care', name: '基础美甲护理', duration: '30分钟', price: 88, buyQty: 1, giftQty: 0 },
+                    { type: 'care', name: '基础美甲护理', duration: '30分钟', price: 88, buyQty: 1, giftQty: 1 },
                     { type: 'care', name: '手足护理套餐', duration: '60分钟', price: 168, buyQty: 1, giftQty: 1 },
                 ],
                 homeProducts: [
                     { type: 'home', name: '护手霜', spec: '50g', price: 68, buyQty: 2, giftQty: 1 },
                 ],
                 cardItems: [
-                    { type: 'card', name: '美甲无限次卡', cardType: '通卡', price: 3000, giftQty: 0 },
+                    { type: 'card', name: '美甲无限次卡', cardType: '通卡', price: 3000, giftQty: 1 },
                 ]
             },
             {
@@ -11602,8 +12229,8 @@
                 price: 5999,
                 validity: '自首次消费起2年有效',
                 products: [
-                    { type: 'care', name: '全身推拿按摩', duration: '90分钟', price: 398, buyQty: 1, giftQty: 0 },
-                    { type: 'care', name: '背部舒缓护理', duration: '45分钟', price: 268, buyQty: 1, giftQty: 0 },
+                    { type: 'care', name: '全身推拿按摩', duration: '90分钟', price: 398, buyQty: 1, giftQty: 1 },
+                    { type: 'care', name: '背部舒缓护理', duration: '45分钟', price: 268, buyQty: 1, giftQty: 1 },
                     { type: 'care', name: '头部放松护理', duration: '30分钟', price: 188, buyQty: 1, giftQty: 1 },
                 ],
                 homeProducts: [
@@ -11622,7 +12249,7 @@
                 price: 1299,
                 validity: '自首次消费起1年有效',
                 products: [
-                    { type: 'care', name: '日式美睫', duration: '45分钟', price: 168, buyQty: 1, giftQty: 0 },
+                    { type: 'care', name: '日式美睫', duration: '45分钟', price: 168, buyQty: 1, giftQty: 2 },
                     { type: 'care', name: '睫毛加密', duration: '30分钟', price: 128, buyQty: 1, giftQty: 1 },
                 ],
                 homeProducts: [],
@@ -11645,10 +12272,10 @@
                 rules: '可用于全店项目/产品抵扣',
                 limitations: '部分促销不可叠加，不可退款不可转赠',
                 products: [
-                    { type: 'care', name: '基础面部护理', duration: '60分钟', price: 198, buyQty: 0, giftQty: 1 }
+                    { type: 'care', name: '基础面部护理', duration: '60分钟', price: 198, buyQty: 1, giftQty: 1 }
                 ],
                 homeProducts: [
-                    { type: 'home', name: '卸妆湿巾', spec: '20片装', price: 29, buyQty: 0, giftQty: 1 }
+                    { type: 'home', name: '卸妆湿巾', spec: '20片装', price: 29, buyQty: 1, giftQty: 1 }
                 ],
                 cardItems: [
                     { type: 'card', name: '肩颈护理次卡', cardType: '有限次卡', price: 399, giftQty: 1 }
@@ -11710,6 +12337,7 @@
         let customCourseImageObjectUrl = null;
         let customCourseTableObservers = [];
         let customCourseBenefitModalType = null;
+        let customCourseBenefitTargetMode = 'buy';
         let editingCustomCourseId = null;
         let editingCustomAmountCardId = null;
         let addCourseModalKind = 'course';
@@ -11826,8 +12454,10 @@
             let filtered = courseCards;
 
             // 筛选类别
-            if (category !== 'all') {
-                filtered = filtered.filter(c => c.category === category);
+            if (category === 'limited') {
+                filtered = filtered.filter(c => c.cardType === 'limited');
+            } else if (category === 'unlimited') {
+                filtered = filtered.filter(c => c.cardType !== 'limited');
             }
 
             // 筛选关键词
@@ -11904,9 +12534,11 @@
             if (addCourseModalKind === 'amountCard') {
                 if (!selectedAmountCard) {
                     addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧金额卡查看详情</div>';
+                    applyBenefitTableVisibilityForAddCourseModal();
                     return;
                 }
                 const card = selectedAmountCard;
+                const canCustomize = hasPositiveBenefitForCustomize(card, 'amountCard');
                 addCourseRightPanel.innerHTML = `
                     <div class="course-detail-header">
                         <div class="course-detail-image">
@@ -11941,110 +12573,113 @@
                             </div>
                         </div>
                         <div class="course-detail-action">
-                            <button class="course-confirm-btn primary" onclick="confirmAmountCardSelection()">确定金额卡</button>
+                            <button class="course-header-action-btn" onclick="goCustomizeFromCourseDetail()" ${canCustomize ? '' : 'disabled'}>
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M12 20h9"></path>
+                                    <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+                                </svg>
+                                <span>去定制</span>
+                            </button>
+                            <button class="course-confirm-btn primary" onclick="confirmAmountCardSelection()">添加</button>
                         </div>
                     </div>
                     <div class="course-detail-tables">
-                        ${(card.products || []).length > 0 ? `
                         <div class="course-table-section">
-                            <div class="course-table-title-row">
-                                <div class="course-table-title">单次护理</div>
+                            <div class="benefit-module-title">赠送权益</div>
+                            <div class="benefit-subtables">
+                                <div class="benefit-subtable">
+                                    <div class="course-table-title-row">
+                                        <div class="course-table-title">单次护理</div>
+                                    </div>
+                                    <table class="course-detail-table">
+                                        <thead>
+                                            <tr>
+                                                <th>商品名称</th>
+                                                <th>服务时长</th>
+                                                <th>服务价格</th>
+                                                <th>赠送数量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${(card.products || []).length ? (card.products || []).map(p => `
+                                                <tr class="course-table-row" data-item-type="care">
+                                                    <td class="item-name">${p.name}</td>
+                                                    <td>${p.duration}</td>
+                                                    <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                    <td>${Number(p.giftQty || 0)}</td>
+                                                </tr>
+                                            `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="benefit-subtable">
+                                    <div class="course-table-title-row">
+                                        <div class="course-table-title">居家产品</div>
+                                    </div>
+                                    <table class="course-detail-table">
+                                        <thead>
+                                            <tr>
+                                                <th>商品名称</th>
+                                                <th>规格</th>
+                                                <th>售卖价格</th>
+                                                <th>赠送数量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${(card.homeProducts || []).length ? (card.homeProducts || []).map(p => `
+                                                <tr class="course-table-row" data-item-type="home">
+                                                    <td class="item-name">${p.name}</td>
+                                                    <td>${p.spec}</td>
+                                                    <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                    <td>${Number(p.giftQty || 0)}</td>
+                                                </tr>
+                                            `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="benefit-subtable">
+                                    <div class="course-table-title-row">
+                                        <div class="course-table-title">卡项</div>
+                                    </div>
+                                    <table class="course-detail-table">
+                                        <thead>
+                                            <tr>
+                                                <th>卡项名称</th>
+                                                <th>卡项类型</th>
+                                                <th>卡项价格</th>
+                                                <th>赠送数量</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${(card.cardItems || []).length ? (card.cardItems || []).map(p => `
+                                                <tr class="course-table-row" data-item-type="card">
+                                                    <td class="item-name">${p.name}</td>
+                                                    <td>${p.cardType || '-'}</td>
+                                                    <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                    <td>${Number(p.giftQty || 0)}</td>
+                                                </tr>
+                                            `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                            <table class="course-detail-table">
-                                <thead>
-                                    <tr>
-                                        <th>商品名称</th>
-                                        <th>服务时长</th>
-                                        <th>服务价格</th>
-                                        <th>赠送数量</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${(card.products || []).map(p => `
-                                        <tr class="course-table-row" data-item-type="care">
-                                            <td class="item-name">${p.name}</td>
-                                            <td>${p.duration}</td>
-                                            <td>¥${Number(p.price || 0).toFixed(2)}</td>
-                                            <td>${Number(p.giftQty || 0)}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
                         </div>
-                        ` : ''}
-
-                        ${(card.homeProducts || []).length > 0 ? `
-                        <div class="course-table-section">
-                            <div class="course-table-title-row">
-                                <div class="course-table-title">居家产品</div>
-                            </div>
-                            <table class="course-detail-table">
-                                <thead>
-                                    <tr>
-                                        <th>商品名称</th>
-                                        <th>规格</th>
-                                        <th>售卖价格</th>
-                                        <th>赠送数量</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${(card.homeProducts || []).map(p => `
-                                        <tr class="course-table-row" data-item-type="home">
-                                            <td class="item-name">${p.name}</td>
-                                            <td>${p.spec}</td>
-                                            <td>¥${Number(p.price || 0).toFixed(2)}</td>
-                                            <td>${Number(p.giftQty || 0)}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                        ` : ''}
-
-                        ${(card.cardItems || []).length > 0 ? `
-                        <div class="course-table-section">
-                            <div class="course-table-title-row">
-                                <div class="course-table-title">卡项</div>
-                            </div>
-                            <table class="course-detail-table">
-                                <thead>
-                                    <tr>
-                                        <th>卡项名称</th>
-                                        <th>卡项类型</th>
-                                        <th>卡项价格</th>
-                                        <th>赠送数量</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${(card.cardItems || []).map(p => `
-                                        <tr class="course-table-row" data-item-type="card">
-                                            <td class="item-name">${p.name}</td>
-                                            <td>
-                                                <span class="course-card-badge ${p.cardType === '有限次卡' ? 'badge-limited' : 'badge-unlimited'}">
-                                                    ${p.cardType}
-                                                </span>
-                                            </td>
-                                            <td>¥${Number(p.price || 0).toFixed(2)}</td>
-                                            <td>${Number(p.giftQty || 0)}</td>
-                                        </tr>
-                                    `).join('')}
-                                </tbody>
-                            </table>
-                        </div>
-                        ` : ''}
                     </div>
                 `;
+                applyBenefitTableVisibilityForAddCourseModal();
                 return;
             }
 
             if (!selectedCourseCard) {
                 addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>';
+                applyBenefitTableVisibilityForAddCourseModal();
                 return;
             }
 
             const card = selectedCourseCard;
             const cardTypeText = card.cardType === 'limited' ? '有限卡' : '通卡';
             const cardTypeBadgeClass = card.cardType === 'limited' ? 'badge-limited' : 'badge-unlimited';
+            const canCustomize = hasPositiveBenefitForCustomize(card, 'course');
 
             addCourseRightPanel.innerHTML = `
                 <div class="course-detail-header">
@@ -12066,107 +12701,157 @@
                         </div>
                     </div>
                     <div class="course-detail-action">
-                        <button class="course-confirm-btn primary" onclick="confirmCourseSelection()">确定疗程方案</button>
+                        <button class="course-header-action-btn" onclick="goCustomizeFromCourseDetail()" ${canCustomize ? '' : 'disabled'}>
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <path d="M12 20h9"></path>
+                                <path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z"></path>
+                            </svg>
+                            <span>去定制</span>
+                        </button>
+                        <button class="course-confirm-btn primary" onclick="confirmCourseSelection()">添加</button>
                     </div>
                 </div>
                 
                 <div class="course-detail-tables">
-                    ${card.products.length > 0 ? `
-                    <!-- 护理商品表格 -->
                     <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">护理商品</div>
+                        <div class="benefit-module-title">购买权益</div>
+                        <div class="benefit-subtables">
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">单次护理</div>
+                                </div>
+                                <table class="course-detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>服务时长</th>
+                                            <th>服务价格</th>
+                                            <th>购买数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(card.products || []).length ? (card.products || []).map(p => `
+                                            <tr class="course-table-row" data-item-type="care">
+                                                <td class="item-name">${p.name}</td>
+                                                <td>${p.duration}</td>
+                                                <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                <td>${Number(p.buyQty || 0)}</td>
+                                            </tr>
+                                        `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">居家产品</div>
+                                </div>
+                                <table class="course-detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>规格</th>
+                                            <th>售卖价格</th>
+                                            <th>购买数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(card.homeProducts || []).length ? (card.homeProducts || []).map(p => `
+                                            <tr class="course-table-row" data-item-type="home">
+                                                <td class="item-name">${p.name}</td>
+                                                <td>${p.spec}</td>
+                                                <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                <td>${Number(p.buyQty || 0)}</td>
+                                            </tr>
+                                        `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <table class="course-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>商品名称</th>
-                                    <th>服务时长</th>
-                                    <th>服务价格</th>
-                                    <th>购买数量</th>
-                                    <th>赠送数量</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${card.products.map((p, idx) => `
-                                    <tr class="course-table-row" data-item-type="care">
-                                        <td class="item-name">${p.name}</td>
-                                        <td>${p.duration}</td>
-                                        <td>¥${p.price}</td>
-                                        <td>${p.buyQty}</td>
-                                        <td>${p.giftQty}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
                     </div>
-                    ` : ''}
-                    
-                    ${card.homeProducts.length > 0 ? `
-                    <!-- 居家产品表格 -->
+
                     <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">居家产品</div>
+                        <div class="benefit-module-title">赠送权益</div>
+                        <div class="benefit-subtables">
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">单次护理</div>
+                                </div>
+                                <table class="course-detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>服务时长</th>
+                                            <th>服务价格</th>
+                                            <th>赠送数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(card.products || []).length ? (card.products || []).map(p => `
+                                            <tr class="course-table-row" data-item-type="care">
+                                                <td class="item-name">${p.name}</td>
+                                                <td>${p.duration}</td>
+                                                <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                <td>${Number(p.giftQty || 0)}</td>
+                                            </tr>
+                                        `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">居家产品</div>
+                                </div>
+                                <table class="course-detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>商品名称</th>
+                                            <th>规格</th>
+                                            <th>售卖价格</th>
+                                            <th>赠送数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(card.homeProducts || []).length ? (card.homeProducts || []).map(p => `
+                                            <tr class="course-table-row" data-item-type="home">
+                                                <td class="item-name">${p.name}</td>
+                                                <td>${p.spec}</td>
+                                                <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                <td>${Number(p.giftQty || 0)}</td>
+                                            </tr>
+                                        `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">卡项</div>
+                                </div>
+                                <table class="course-detail-table">
+                                    <thead>
+                                        <tr>
+                                            <th>卡项名称</th>
+                                            <th>卡项类型</th>
+                                            <th>卡项价格</th>
+                                            <th>赠送数量</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        ${(card.cardItems || []).length ? (card.cardItems || []).map(p => `
+                                            <tr class="course-table-row" data-item-type="card">
+                                                <td class="item-name">${p.name}</td>
+                                                <td>${p.cardType || '-'}</td>
+                                                <td>¥${Number(p.price || 0).toFixed(2)}</td>
+                                                <td>${Number(p.giftQty || 0)}</td>
+                                            </tr>
+                                        `).join('') : `<tr><td colspan="4" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
-                        <table class="course-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>商品名称</th>
-                                    <th>规格</th>
-                                    <th>售卖价格</th>
-                                    <th>购买数量</th>
-                                    <th>赠送数量</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${card.homeProducts.map(p => `
-                                    <tr class="course-table-row" data-item-type="home">
-                                        <td class="item-name">${p.name}</td>
-                                        <td>${p.spec}</td>
-                                        <td>¥${p.price}</td>
-                                        <td>${p.buyQty}</td>
-                                        <td>${p.giftQty}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
                     </div>
-                    ` : ''}
-                    
-                    ${card.cardItems.length > 0 ? `
-                    <!-- 卡项表格 -->
-                    <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">卡项</div>
-                        </div>
-                        <table class="course-detail-table">
-                            <thead>
-                                <tr>
-                                    <th>卡项名称</th>
-                                    <th>卡项类型</th>
-                                    <th>卡项价格</th>
-                                    <th>赠送数量</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                ${card.cardItems.map(p => `
-                                    <tr class="course-table-row" data-item-type="card">
-                                        <td class="item-name">${p.name}</td>
-                                        <td>
-                                            <span class="course-card-badge ${p.cardType === '有限次卡' ? 'badge-limited' : 'badge-unlimited'}">
-                                                ${p.cardType}
-                                            </span>
-                                        </td>
-                                        <td>¥${p.price}</td>
-                                        <td>${p.giftQty}</td>
-                                    </tr>
-                                `).join('')}
-                            </tbody>
-                        </table>
-                    </div>
-                    ` : ''}
                 </div>
             `;
+            applyBenefitTableVisibilityForAddCourseModal();
         }
 
         function customCourseSanitizePriceInput(input) {
@@ -12185,6 +12870,16 @@
             } else {
                 input.value = '';
             }
+        }
+
+        function ensureCustomCourseDefaultImage() {
+            const img = document.getElementById('customCourseImagePreview');
+            const hint = document.getElementById('customCourseImageHint');
+            if (!(img instanceof HTMLImageElement)) return;
+            if (img.getAttribute('src')) return;
+            img.src = 'default_image.jpg';
+            img.style.display = '';
+            if (hint) hint.style.display = 'none';
         }
 
         function clearCustomCourseDraft() {
@@ -12214,14 +12909,14 @@
             const hint = document.getElementById('customCourseImageHint');
             if (input) input.value = '';
             if (img) {
-                img.src = '';
+                img.removeAttribute('src');
                 img.style.display = 'none';
             }
-            if (hint) hint.style.display = '';
             if (customCourseImageObjectUrl) {
                 URL.revokeObjectURL(customCourseImageObjectUrl);
                 customCourseImageObjectUrl = null;
             }
+            ensureCustomCourseDefaultImage();
 
             updateCustomCourseTableHeaderVisibility();
         }
@@ -12242,6 +12937,419 @@
             });
         }
 
+        let customBenefitViewRenderRaf = 0;
+
+        function scheduleRenderCustomBenefitViews() {
+            if (customBenefitViewRenderRaf) cancelAnimationFrame(customBenefitViewRenderRaf);
+            customBenefitViewRenderRaf = requestAnimationFrame(() => {
+                customBenefitViewRenderRaf = 0;
+                renderCustomBenefitViews();
+            });
+        }
+
+        function getCustomBenefitRowByKey(type, key) {
+            const map = {
+                care: document.getElementById('customCourseCareBody'),
+                home: document.getElementById('customCourseHomeBody'),
+                card: document.getElementById('customCourseCardBody')
+            };
+            const tbody = map[type];
+            if (!tbody) return null;
+            const k = String(key || '');
+            return Array.from(tbody.querySelectorAll('tr')).find(tr => String(tr.dataset.key || '') === k) || null;
+        }
+
+        function customCourseDeleteRowByKey(type, key) {
+            const tr = getCustomBenefitRowByKey(type, key);
+            if (tr) tr.remove();
+            updateCustomCourseTableHeaderVisibility();
+            scheduleRenderCustomBenefitViews();
+        }
+
+        function setCustomBenefitQtyByKey(type, key, field, inputEl) {
+            const tr = getCustomBenefitRowByKey(type, key);
+            if (!tr) return;
+            const raw = inputEl && 'value' in inputEl ? String(inputEl.value || '') : '';
+            const n = Math.max(0, Math.min(999, parseInt(raw || '0', 10) || 0));
+            const canonical = tr.querySelector(`input[data-field="${field}"]`);
+            if (canonical instanceof HTMLInputElement) {
+                canonical.value = String(n);
+                canonical.dispatchEvent(new Event('input', { bubbles: true }));
+                canonical.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        }
+
+        function onCustomBenefitQtyInput(inputEl, type, key, field) {
+            customCourseSanitizeQtyInput(inputEl);
+            setCustomBenefitQtyByKey(type, key, field, inputEl);
+        }
+
+        function onCustomBenefitQtyBlur(inputEl, type, key, field) {
+            customCourseClampQtyInput(inputEl);
+            setCustomBenefitQtyByKey(type, key, field, inputEl);
+            scheduleRenderCustomBenefitViews();
+        }
+
+        function onCustomBenefitAddClick(btn) {
+            const module = String(btn?.dataset?.benefitModule || '');
+            const tabs = btn?.closest?.('.course-table-section')?.querySelectorAll(`.benefit-tab[data-benefit-module="${module}"]`) || [];
+            const active = Array.from(tabs).find(t => t.classList.contains('active'));
+            const type = String(active?.dataset?.benefitType || 'care');
+            openCustomCourseBenefitModal(type);
+        }
+
+        function onCustomBenefitTabClick(tabEl) {
+            const module = String(tabEl?.dataset?.benefitModule || '');
+            const type = String(tabEl?.dataset?.benefitType || '');
+            if (!module || !type) return;
+            const section = tabEl.closest('.course-table-section');
+            if (!section) return;
+            section.querySelectorAll(`.benefit-tab[data-benefit-module="${module}"]`).forEach(t => t.classList.remove('active'));
+            tabEl.classList.add('active');
+            section.querySelectorAll(`.benefit-pane[data-benefit-module="${module}"]`).forEach(p => p.classList.remove('active'));
+            const pane = section.querySelector(`.benefit-pane[data-benefit-module="${module}"][data-benefit-type="${type}"]`);
+            pane?.classList.add('active');
+        }
+
+        function applyBenefitTableVisibilityForAddCourseModal() {
+            const root = addCourseRightPanel;
+            if (!root) return;
+            const tablesRoot = root.querySelector('.course-detail-tables');
+            if (!tablesRoot) return;
+
+            const sections = Array.from(tablesRoot.querySelectorAll('.course-table-section'));
+            sections.forEach(section => {
+                const subtables = Array.from(section.querySelectorAll('.benefit-subtable'));
+                subtables.forEach(subtable => {
+                    const table = subtable.querySelector('table.course-detail-table');
+                    if (!table) return;
+                    const tbody = table.querySelector('tbody');
+                    if (!tbody) return;
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+
+                    let hasDataRow = false;
+                    let hasVisibleDataRow = false;
+                    let anyNonZero = false;
+
+                    rows.forEach(tr => {
+                        const colspanCell = tr.querySelector('td[colspan]');
+                        if (colspanCell) return;
+
+                        hasDataRow = true;
+
+                        let qty = 0;
+                        const input = tr.querySelector('input');
+                        if (input instanceof HTMLInputElement) {
+                            qty = Number(input.value || 0);
+                        } else {
+                            const tds = Array.from(tr.querySelectorAll('td'));
+                            const lastText = (tds[tds.length - 1]?.textContent || '').trim();
+                            qty = Number(lastText);
+                        }
+
+                        if (Number.isFinite(qty) && qty > 0) {
+                            tr.style.display = '';
+                            anyNonZero = true;
+                            hasVisibleDataRow = true;
+                        } else {
+                            tr.style.display = 'none';
+                        }
+                    });
+
+                    if (hasDataRow && !anyNonZero) {
+                        subtable.style.display = 'none';
+                        return;
+                    }
+
+                    subtable.style.display = '';
+                    if (hasVisibleDataRow) return;
+
+                    if (!hasDataRow) {
+                        subtable.style.display = '';
+                        return;
+                    }
+                });
+
+                const anyVisibleSubtable = Array.from(section.querySelectorAll('.benefit-subtable')).some(st => st instanceof HTMLElement && st.style.display !== 'none');
+                section.style.display = anyVisibleSubtable ? '' : 'none';
+            });
+        }
+
+        function hasPositiveBenefitForCustomize(card, kind) {
+            if (!card) return false;
+            const products = Array.isArray(card.products) ? card.products : [];
+            const homeProducts = Array.isArray(card.homeProducts) ? card.homeProducts : [];
+            const cardItems = Array.isArray(card.cardItems) ? card.cardItems : [];
+            if (kind === 'amountCard') {
+                return products.some(p => Number(p?.giftQty || 0) > 0)
+                    || homeProducts.some(p => Number(p?.giftQty || 0) > 0)
+                    || cardItems.some(p => Number(p?.giftQty || 0) > 0);
+            }
+            return products.some(p => Number(p?.buyQty || 0) > 0 || Number(p?.giftQty || 0) > 0)
+                || homeProducts.some(p => Number(p?.buyQty || 0) > 0 || Number(p?.giftQty || 0) > 0)
+                || cardItems.some(p => Number(p?.giftQty || 0) > 0);
+        }
+
+        function goCustomizeFromCourseDetail() {
+            const kind = addCourseModalKind === 'amountCard' ? 'amountCard' : 'course';
+            const source = kind === 'amountCard' ? selectedAmountCard : selectedCourseCard;
+            if (!source) return;
+
+            editingCustomCourseId = null;
+            editingCustomAmountCardId = null;
+
+            setCourseDetailMode('custom');
+
+            let tries = 0;
+            const run = () => {
+                tries += 1;
+                const nameInput = document.getElementById('customCourseName');
+                if (!nameInput) {
+                    if (tries < 10) setTimeout(run, 0);
+                    return;
+                }
+
+                clearCustomCourseDraft();
+
+                const products = (Array.isArray(source.products) ? source.products : []).filter(p => {
+                    const buy = Number(p?.buyQty || 0);
+                    const gift = Number(p?.giftQty || 0);
+                    return kind === 'amountCard' ? gift > 0 : (buy > 0 || gift > 0);
+                });
+                const homeProducts = (Array.isArray(source.homeProducts) ? source.homeProducts : []).filter(p => {
+                    const buy = Number(p?.buyQty || 0);
+                    const gift = Number(p?.giftQty || 0);
+                    return kind === 'amountCard' ? gift > 0 : (buy > 0 || gift > 0);
+                });
+                const cardItems = (Array.isArray(source.cardItems) ? source.cardItems : []).filter(p => Number(p?.giftQty || 0) > 0);
+
+                const validitySelect = document.getElementById('customCourseValidity');
+                const priceInput = document.getElementById('customCoursePrice');
+                const typeSelect = document.getElementById('customCourseType');
+                const rechargeInput = document.getElementById('customAmountRechargeAmount');
+                const giftInput = document.getElementById('customAmountGiftAmount');
+
+                nameInput.value = source.name || '';
+                if (validitySelect) validitySelect.value = source.validityType || 'purchase';
+
+                if (kind === 'amountCard') {
+                    if (priceInput) priceInput.value = Number(source.price || 0).toFixed(2);
+                    if (rechargeInput) rechargeInput.value = Number(source.rechargeAmount || 0).toFixed(2);
+                    if (giftInput) giftInput.value = Number(source.giftAmount || 0).toFixed(2);
+                } else {
+                    if (typeSelect) typeSelect.value = source.cardType || 'limited';
+                    if (priceInput) priceInput.value = Number(source.price || 0).toFixed(2);
+                }
+
+                const img = document.getElementById('customCourseImagePreview');
+                const hint = document.getElementById('customCourseImageHint');
+                if (img && source.imageUrl) {
+                    img.src = source.imageUrl;
+                    img.style.display = '';
+                    if (hint) hint.style.display = 'none';
+                }
+
+                products.forEach(p => {
+                    customCourseAddRow('care', {
+                        name: p.name,
+                        spec: p.spec || '',
+                        duration: p.duration || '',
+                        price: p.price,
+                        buyQty: kind === 'amountCard' ? 0 : (Number(p.buyQty || 0) || 0),
+                        giftQty: Number(p.giftQty || 0) || 0
+                    });
+                });
+
+                homeProducts.forEach(p => {
+                    customCourseAddRow('home', {
+                        name: p.name,
+                        spec: p.spec || '',
+                        price: p.price,
+                        buyQty: kind === 'amountCard' ? 0 : (Number(p.buyQty || 0) || 0),
+                        giftQty: Number(p.giftQty || 0) || 0
+                    });
+                });
+
+                cardItems.forEach(p => {
+                    customCourseAddRow('card', {
+                        name: p.name,
+                        cardType: p.cardType || '有限次卡',
+                        price: p.price,
+                        giftQty: Number(p.giftQty || 0) || 0
+                    });
+                });
+
+                updateCustomCourseTableHeaderVisibility();
+                scheduleRenderCustomBenefitViews();
+            };
+            setTimeout(run, 0);
+        }
+
+        function renderCustomBenefitViews() {
+            const buyCare = document.getElementById('customBuyCareView');
+            const buyHome = document.getElementById('customBuyHomeView');
+            const giftCare = document.getElementById('customGiftCareView');
+            const giftHome = document.getElementById('customGiftHomeView');
+            const giftCard = document.getElementById('customGiftCardView');
+            if (!buyCare && !buyHome && !giftCare && !giftHome && !giftCard) return;
+
+            const careRows = Array.from(document.getElementById('customCourseCareBody')?.querySelectorAll('tr') || []);
+            const homeRows = Array.from(document.getElementById('customCourseHomeBody')?.querySelectorAll('tr') || []);
+            const cardRows = Array.from(document.getElementById('customCourseCardBody')?.querySelectorAll('tr') || []);
+
+            const renderEmptyRow = (colspan) => `<tr><td colspan="${colspan}" style="color:var(--neutral-400);text-align:center;padding:12px;">暂无权益</td></tr>`;
+
+            const renderCareTable = (field, qtyTitle) => {
+                const rowsHtml = careRows.map(tr => {
+                    const key = String(tr.dataset.key || '');
+                    const name = String(tr.dataset.name || '');
+                    const spec = String(tr.dataset.spec || '');
+                    const duration = String(tr.dataset.duration || '');
+                    const price = Number(tr.dataset.price || 0);
+                    const qty = parseInt(tr.querySelector(`input[data-field="${field}"]`)?.value || '0', 10) || 0;
+                    return `
+                        <tr class="course-table-row" data-k="${encodeURIComponent(key)}">
+                            <td class="col-name">
+                                <span class="readonly-text">${name}</span>
+                                ${spec ? `<span class="sub-text">${spec}</span>` : ''}
+                            </td>
+                            <td class="col-duration"><span class="readonly-text">${duration}</span></td>
+                            <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
+                            <td class="col-qty">
+                                <div class="table-stepper">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                    </div>
+                                    <input type="number" class="table-stepper-value" value="${qty}" min="0" max="999" inputmode="numeric"
+                                           oninput="onCustomBenefitQtyInput(this,'care',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')"
+                                           onblur="onCustomBenefitQtyBlur(this,'care',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-action"><button class="table-action-btn delete" onclick="customCourseDeleteRowByKey('care',decodeURIComponent(this.closest('tr').getAttribute('data-k')))">删除</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <table class="course-detail-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name">商品名称</th>
+                                <th class="col-duration">服务时长</th>
+                                <th class="col-price">服务价格</th>
+                                <th class="col-qty">${qtyTitle}</th>
+                                <th class="col-action">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml || renderEmptyRow(5)}</tbody>
+                    </table>
+                `;
+            };
+
+            const renderHomeTable = (field, qtyTitle) => {
+                const rowsHtml = homeRows.map(tr => {
+                    const key = String(tr.dataset.key || '');
+                    const name = String(tr.dataset.name || '');
+                    const spec = String(tr.dataset.spec || '');
+                    const price = Number(tr.dataset.price || 0);
+                    const qty = parseInt(tr.querySelector(`input[data-field="${field}"]`)?.value || '0', 10) || 0;
+                    return `
+                        <tr class="course-table-row" data-k="${encodeURIComponent(key)}">
+                            <td class="col-name"><span class="readonly-text">${name}</span></td>
+                            <td class="col-spec"><span class="readonly-text">${spec}</span></td>
+                            <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
+                            <td class="col-qty">
+                                <div class="table-stepper">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                    </div>
+                                    <input type="number" class="table-stepper-value" value="${qty}" min="0" max="999" inputmode="numeric"
+                                           oninput="onCustomBenefitQtyInput(this,'home',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')"
+                                           onblur="onCustomBenefitQtyBlur(this,'home',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-action"><button class="table-action-btn delete" onclick="customCourseDeleteRowByKey('home',decodeURIComponent(this.closest('tr').getAttribute('data-k')))">删除</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <table class="course-detail-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name">商品名称</th>
+                                <th class="col-spec">规格</th>
+                                <th class="col-price">售卖价格</th>
+                                <th class="col-qty">${qtyTitle}</th>
+                                <th class="col-action">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml || renderEmptyRow(5)}</tbody>
+                    </table>
+                `;
+            };
+
+            const renderCardTable = (field, qtyTitle) => {
+                const rowsHtml = cardRows.map(tr => {
+                    const key = String(tr.dataset.key || '');
+                    const name = String(tr.dataset.name || '');
+                    const cardType = String(tr.dataset.cardType || '');
+                    const price = Number(tr.dataset.price || 0);
+                    const qty = parseInt(tr.querySelector(`input[data-field="${field}"]`)?.value || '0', 10) || 0;
+                    return `
+                        <tr class="course-table-row" data-k="${encodeURIComponent(key)}">
+                            <td class="col-name"><span class="readonly-text">${name}</span></td>
+                            <td class="col-type"><span class="readonly-text">${cardType}</span></td>
+                            <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
+                            <td class="col-qty">
+                                <div class="table-stepper">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
+                                    </div>
+                                    <input type="number" class="table-stepper-value" value="${qty}" min="0" max="999" inputmode="numeric"
+                                           oninput="onCustomBenefitQtyInput(this,'card',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')"
+                                           onblur="onCustomBenefitQtyBlur(this,'card',decodeURIComponent(this.closest('tr').getAttribute('data-k')),'${field}')">
+                                    <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
+                                        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="col-action"><button class="table-action-btn delete" onclick="customCourseDeleteRowByKey('card',decodeURIComponent(this.closest('tr').getAttribute('data-k')))">删除</button></td>
+                        </tr>
+                    `;
+                }).join('');
+
+                return `
+                    <table class="course-detail-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name">卡项名称</th>
+                                <th class="col-type">卡项类型</th>
+                                <th class="col-price">卡项价格</th>
+                                <th class="col-qty">${qtyTitle}</th>
+                                <th class="col-action">操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>${rowsHtml || renderEmptyRow(5)}</tbody>
+                    </table>
+                `;
+            };
+
+            if (buyCare) buyCare.innerHTML = renderCareTable('buy', '购买数量');
+            if (buyHome) buyHome.innerHTML = renderHomeTable('buy', '购买数量');
+            if (giftCare) giftCare.innerHTML = renderCareTable('gift', '赠送数量');
+            if (giftHome) giftHome.innerHTML = renderHomeTable('gift', '赠送数量');
+            if (giftCard) giftCard.innerHTML = renderCardTable('gift', '赠送数量');
+            applyBenefitTableVisibilityForAddCourseModal();
+        }
+
+
         function setupCustomCourseTableObservers() {
             if (customCourseTableObservers.length) {
                 customCourseTableObservers.forEach(o => o.disconnect());
@@ -12252,7 +13360,10 @@
             tables.forEach(table => {
                 const tbody = table.querySelector('tbody');
                 if (!tbody) return;
-                const observer = new MutationObserver(() => updateCustomCourseTableHeaderVisibility());
+                const observer = new MutationObserver(() => {
+                    updateCustomCourseTableHeaderVisibility();
+                    scheduleRenderCustomBenefitViews();
+                });
                 observer.observe(tbody, { childList: true });
                 customCourseTableObservers.push(observer);
             });
@@ -12264,7 +13375,7 @@
                 <div class="course-detail-header custom-course-header">
                     <div class="custom-course-topbar">
                         <button class="course-confirm-btn primary" onclick="confirmCustomCourseSelection()">确定疗程方案</button>
-                        <button class="course-confirm-btn" onclick="clearCustomCourseAndBackToList()">清空并返回列表</button>
+                        <button class="course-confirm-btn" onclick="clearCustomCourseAndBackToList()">取消</button>
                     </div>
                     <div class="custom-course-body">
                         <div class="course-detail-image" id="customCourseImageBox" style="cursor:pointer;">
@@ -12311,10 +13422,52 @@
                 </div>
                 <div class="course-detail-tables">
                     <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">单次护理</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('care')">+ 添加权益</button>
+                        <div class="benefit-module-title">购买权益</div>
+                        <div class="benefit-subtables">
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">单次护理</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('care','buy')">+ 添加权益</button>
+                                </div>
+                                <div id="customBuyCareView"></div>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">居家产品</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('home','buy')">+ 添加权益</button>
+                                </div>
+                                <div id="customBuyHomeView"></div>
+                            </div>
                         </div>
+                    </div>
+                    <div class="course-table-section">
+                        <div class="benefit-module-title">赠送权益</div>
+                        <div class="benefit-subtables">
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">单次护理</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('care','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftCareView"></div>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">居家产品</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('home','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftHomeView"></div>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">卡项</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('card','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftCardView"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="custom-benefit-hidden-store">
                         <table class="course-detail-table custom-course-table" data-custom-table="care">
                             <thead>
                                 <tr>
@@ -12328,12 +13481,6 @@
                             </thead>
                             <tbody id="customCourseCareBody"></tbody>
                         </table>
-                    </div>
-                    <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">居家产品</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('home')">+ 添加权益</button>
-                        </div>
                         <table class="course-detail-table custom-course-table" data-custom-table="home">
                             <thead>
                                 <tr>
@@ -12347,12 +13494,6 @@
                             </thead>
                             <tbody id="customCourseHomeBody"></tbody>
                         </table>
-                    </div>
-                    <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">卡项</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('card')">+ 添加权益</button>
-                        </div>
                         <table class="course-detail-table custom-course-table" data-custom-table="card">
                             <thead>
                                 <tr>
@@ -12395,8 +13536,10 @@
                     });
                 }
 
+                ensureCustomCourseDefaultImage();
                 updateCustomCourseTableHeaderVisibility();
                 setupCustomCourseTableObservers();
+                scheduleRenderCustomBenefitViews();
             }, 0);
         }
 
@@ -12460,27 +13603,7 @@
                 tr.dataset.spec = spec;
                 tr.dataset.duration = duration;
                 tr.dataset.price = String(price);
-                tr.innerHTML = isAmountCardCustom ? `
-                    <td class="col-name">
-                        <span class="readonly-text">${name}</span>
-                        ${spec ? `<span class="sub-text">${spec}</span>` : ''}
-                    </td>
-                    <td class="col-duration"><span class="readonly-text">${duration}</span></td>
-                    <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="${giftQty}" min="0" max="999" inputmode="numeric"
-                                   oninput="customCourseSanitizeQtyInput(this)" onblur="customCourseClampQtyInput(this)" data-field="gift">
-                            <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-action"><button class="table-action-btn delete" onclick="customCourseDeleteRow(this)">删除</button></td>
-                ` : `
+                tr.innerHTML = `
                     <td class="col-name">
                         <span class="readonly-text">${name}</span>
                         ${spec ? `<span class="sub-text">${spec}</span>` : ''}
@@ -12523,24 +13646,7 @@
                 tr.dataset.name = name;
                 tr.dataset.spec = spec;
                 tr.dataset.price = String(price);
-                tr.innerHTML = isAmountCardCustom ? `
-                    <td class="col-name"><span class="readonly-text">${name}</span></td>
-                    <td class="col-spec"><span class="readonly-text">${spec}</span></td>
-                    <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="customCourseQtyStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="${giftQty}" min="0" max="999" inputmode="numeric"
-                                   oninput="customCourseSanitizeQtyInput(this)" onblur="customCourseClampQtyInput(this)" data-field="gift">
-                            <div class="table-stepper-btn" onclick="customCourseQtyStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-action"><button class="table-action-btn delete" onclick="customCourseDeleteRow(this)">删除</button></td>
-                ` : `
+                tr.innerHTML = `
                     <td class="col-name"><span class="readonly-text">${name}</span></td>
                     <td class="col-spec"><span class="readonly-text">${spec}</span></td>
                     <td class="col-price"><span class="readonly-text">¥${Number(price).toFixed(2)}</span></td>
@@ -12636,11 +13742,12 @@
 
         function renderCustomAmountCardDetail() {
             customCourseContextKind = 'amountCard';
+            customCourseBenefitTargetMode = 'gift';
             addCourseRightPanel.innerHTML = `
                 <div class="course-detail-header custom-course-header">
                     <div class="custom-course-topbar">
                         <button class="course-confirm-btn primary" onclick="confirmCustomAmountCardSelection()">确定金额卡</button>
-                        <button class="course-confirm-btn" onclick="clearCustomCourseAndBackToList()">清空并返回列表</button>
+                        <button class="course-confirm-btn" onclick="clearCustomCourseAndBackToList()">取消</button>
                     </div>
                     <div class="custom-course-body">
                         <div class="course-detail-image" id="customCourseImageBox" style="cursor:pointer;">
@@ -12704,46 +13811,59 @@
                 </div>
                 <div class="course-detail-tables">
                     <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">单次护理</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('care')">+ 添加权益</button>
+                        <div class="benefit-module-title">赠送权益</div>
+                        <div class="benefit-subtables">
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">单次护理</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('care','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftCareView"></div>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">居家产品</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('home','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftHomeView"></div>
+                            </div>
+                            <div class="benefit-subtable">
+                                <div class="course-table-title-row">
+                                    <div class="course-table-title">卡项</div>
+                                    <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('card','gift')">+ 添加权益</button>
+                                </div>
+                                <div id="customGiftCardView"></div>
+                            </div>
                         </div>
+                    </div>
+
+                    <div class="custom-benefit-hidden-store">
                         <table class="course-detail-table custom-course-table" data-custom-table="care">
                             <thead>
                                 <tr>
                                     <th class="col-name">商品名称</th>
                                     <th class="col-duration">服务时长</th>
                                     <th class="col-price">服务价格</th>
+                                    <th class="col-qty">购买数量</th>
                                     <th class="col-qty">赠送数量</th>
                                     <th class="col-action">操作</th>
                                 </tr>
                             </thead>
                             <tbody id="customCourseCareBody"></tbody>
                         </table>
-                    </div>
-                    <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">居家产品</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('home')">+ 添加权益</button>
-                        </div>
                         <table class="course-detail-table custom-course-table" data-custom-table="home">
                             <thead>
                                 <tr>
                                     <th class="col-name">商品名称</th>
                                     <th class="col-spec">规格</th>
                                     <th class="col-price">售卖价格</th>
+                                    <th class="col-qty">购买数量</th>
                                     <th class="col-qty">赠送数量</th>
                                     <th class="col-action">操作</th>
                                 </tr>
                             </thead>
                             <tbody id="customCourseHomeBody"></tbody>
                         </table>
-                    </div>
-                    <div class="course-table-section">
-                        <div class="course-table-title-row">
-                            <div class="course-table-title">卡项</div>
-                            <button class="course-table-add-btn" onclick="openCustomCourseBenefitModal('card')">+ 添加权益</button>
-                        </div>
                         <table class="course-detail-table custom-course-table" data-custom-table="card">
                             <thead>
                                 <tr>
@@ -12784,8 +13904,10 @@
                     };
                 }
 
+                ensureCustomCourseDefaultImage();
                 setupCustomCourseTableObservers();
                 updateCustomCourseTableHeaderVisibility();
+                scheduleRenderCustomBenefitViews();
             }, 0);
         }
 
@@ -12963,13 +14085,13 @@
             showToast('已添加金额卡：' + card.name);
         }
 
-        function addSelectedItemsToCustomCourse(type, items) {
+        function addSelectedItemsToCustomCourse(type, items, targetMode = 'buy') {
             const existing = getCustomCourseExistingKeys(type);
             let skipped = 0;
             let added = 0;
-            const isAmountCardCustom = typeof customCourseContextKind !== 'undefined' && customCourseContextKind === 'amountCard';
-            const defaultBuyQty = isAmountCardCustom ? 0 : 1;
-            const defaultGiftQty = isAmountCardCustom ? 1 : 0;
+            const normalizedTargetMode = (customCourseContextKind === 'amountCard') ? 'gift' : (targetMode === 'gift' ? 'gift' : 'buy');
+            const defaultBuyQty = normalizedTargetMode === 'buy' ? 1 : 0;
+            const defaultGiftQty = normalizedTargetMode === 'gift' ? 1 : 0;
 
             items.forEach(item => {
                 if (type === 'home') {
@@ -13013,7 +14135,7 @@
                     name: item.name,
                     cardType: item.cardType || '有限次卡',
                     price: item.price,
-                    giftQty: 0
+                    giftQty: defaultGiftQty
                 });
                 added += 1;
             });
@@ -13023,11 +14145,13 @@
             } else if (added > 0) {
                 showToast(`已添加 ${added} 条权益`);
             }
+            scheduleRenderCustomBenefitViews();
         }
 
-        async function openCustomCourseBenefitModal(type) {
+        async function openCustomCourseBenefitModal(type, targetMode = 'buy') {
             try {
                 customCourseBenefitModalType = type;
+                customCourseBenefitTargetMode = (customCourseContextKind === 'amountCard') ? 'gift' : (targetMode === 'gift' ? 'gift' : 'buy');
                 if (type === 'care') {
                     const title = addServiceModalOverlay?.querySelector('.add-service-modal-title');
                     if (title) title.textContent = '添加单次护理';
@@ -13045,6 +14169,7 @@
                 console.error(e);
                 showToast('加载失败，请稍后重试');
                 customCourseBenefitModalType = null;
+                customCourseBenefitTargetMode = (customCourseContextKind === 'amountCard') ? 'gift' : 'buy';
             }
         }
 
@@ -13066,8 +14191,18 @@
                 const v = Math.max(0, parseInt(el.value || '0', 10) || 0);
                 el.value = String(v);
                 course.buyQty = v;
+                const giftFlag = row.querySelector('.gift-flag-checkbox');
+                if (giftFlag instanceof HTMLInputElement && giftFlag.checked) {
+                    course.isGift = true;
+                    course.giftQty = v;
+                    const hiddenGift = row.querySelector('input[data-field="giftQty"]');
+                    if (hiddenGift instanceof HTMLInputElement) hiddenGift.value = String(v);
+                }
                 const discountInput = row.querySelector('[data-field="discount"]');
                 if (discountInput) {
+                    if (giftFlag instanceof HTMLInputElement && giftFlag.checked && discountInput instanceof HTMLInputElement) {
+                        discountInput.value = '0';
+                    }
                     suppressMoneyCardConflict = true;
                     updateFinalPrice(discountInput);
                     suppressMoneyCardConflict = false;
@@ -13154,8 +14289,12 @@
                 if (moneyCards.length > 0) itemRow.setAttribute('data-moneycards', JSON.stringify(moneyCards));
 
                 itemRow.innerHTML = `
+                    <td class="col-gift-flag">
+                        <input type="checkbox" class="gift-flag-checkbox" ${course.isGift ? 'checked' : ''} onchange="onGiftFlagToggle(this)">
+                        <input type="hidden" data-field="giftQty" value="${giftQty}">
+                    </td>
                     <td class="col-name">
-                        ${isCustom ? '<span class="course-custom-badge">自定义</span>' : ''}
+                        ${isCustom ? '<span class="course-custom-badge">定制</span>' : ''}
                         ${course.name || ''}
                     </td>
                     <td class="col-original">¥${Number(course.price || 0).toFixed(2)}</td>
@@ -13165,17 +14304,6 @@
                                 <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
                             </div>
                             <input type="number" class="table-stepper-value" value="${buyQty}" min="0" max="999" data-field="buyQty" oninput="onCourseLineFieldChange(this)">
-                            <div class="table-stepper-btn" onclick="tableStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="tableStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="${giftQty}" min="0" max="999" data-field="giftQty" oninput="onCourseLineFieldChange(this)">
                             <div class="table-stepper-btn" onclick="tableStepUp(this)">
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                             </div>
@@ -13218,6 +14346,8 @@
                 tbody.appendChild(actionRow);
             });
 
+            tbody.querySelectorAll('tr.item-row .gift-flag-checkbox:checked').forEach(cb => onGiftFlagToggle(cb));
+
             updateSelectedItemsEmptyStates();
             updateOrderSummary();
             updateOrderAndPaymentVisibility();
@@ -13232,7 +14362,7 @@
 
             selectedAmountCards.forEach(card => {
                 const discount = Number.isFinite(Number(card.discount)) ? Number(card.discount) : 100;
-                const clampedDiscount = clampNumber(discount, 0.01, 100);
+                const clampedDiscount = clampNumber(discount, card && card.isGift ? 0 : 0.01, 100);
                 const buyQty = Number.isFinite(Number(card.buyQty)) ? Math.max(0, parseInt(card.buyQty, 10) || 0) : 1;
                 const giftQty = Number.isFinite(Number(card.giftQty)) ? Math.max(0, parseInt(card.giftQty, 10) || 0) : 0;
                 const baseTotal = Number(card.price || 0) * buyQty;
@@ -13249,8 +14379,12 @@
                 const nameText = String(card.name || '').trim();
                 const encId = encodeURIComponent(String(card.id));
                 itemRow.innerHTML = `
+                    <td class="col-gift-flag">
+                        <input type="checkbox" class="gift-flag-checkbox" ${card.isGift ? 'checked' : ''} onchange="onGiftFlagToggle(this)">
+                        <input type="hidden" data-field="giftQty" value="${giftQty}">
+                    </td>
                     <td class="col-name">
-                        ${String(card.cardId || '').startsWith('custom-') ? '<span class="course-custom-badge">自定义</span>' : ''}
+                        ${String(card.cardId || '').startsWith('custom-') ? '<span class="course-custom-badge">定制</span>' : ''}
                         <span class="amount-card-name-link" title="${nameText.replace(/"/g, '&quot;')}" style="cursor:pointer;" onclick="openAmountCardRuleModal('${encId}')">${nameText}</span>
                     </td>
                     <td class="col-original">¥${Number(card.price || 0).toFixed(2)}</td>
@@ -13263,18 +14397,6 @@
                             </div>
                             <input type="number" class="table-stepper-value" value="${buyQty}" min="0" max="999" step="1" inputmode="numeric"
                                    data-field="buyQty" oninput="onAmountCardQtyInput(this)">
-                            <div class="table-stepper-btn" onclick="tableStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="tableStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="${giftQty}" min="0" max="999" step="1" inputmode="numeric"
-                                   data-field="giftQty" oninput="onAmountCardQtyInput(this)">
                             <div class="table-stepper-btn" onclick="tableStepUp(this)">
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                             </div>
@@ -13314,6 +14436,8 @@
                 tbody.appendChild(actionRow);
             });
 
+            tbody.querySelectorAll('tr.item-row .gift-flag-checkbox:checked').forEach(cb => onGiftFlagToggle(cb));
+
             updateSelectedItemsEmptyStates();
             updateOrderSummary();
             updateOrderAndPaymentVisibility();
@@ -13329,9 +14453,16 @@
             const v = Math.max(0, parseInt(qtyInput.value || '0', 10) || 0);
             qtyInput.value = String(v);
 
+            const giftFlag = row.querySelector('.gift-flag-checkbox');
+            const isGift = (giftFlag instanceof HTMLInputElement) ? giftFlag.checked : false;
+            if (isGift && field === 'buyQty') {
+                const hiddenGift = row.querySelector('input[data-field="giftQty"]');
+                if (hiddenGift instanceof HTMLInputElement) hiddenGift.value = String(v);
+            }
+
             const buyQty = Math.max(0, parseInt(row.querySelector('input[data-field="buyQty"]')?.value || '0', 10) || 0);
             const discountInput = row.querySelector('input[data-field="discount"]');
-            const discount = clampNumber(parseFloat(discountInput?.value || '100') || 100, 0.01, 100);
+            const discount = clampNumber(parseFloat(discountInput?.value || (isGift ? '0' : '100')) || (isGift ? 0 : 100), isGift ? 0 : 0.01, 100);
             if (discountInput) discountInput.value = discount.toFixed(2);
 
             const originalPriceText = row.querySelector('.col-original')?.textContent || '¥0';
@@ -13352,9 +14483,11 @@
             if (amountCardDiscountTimer) clearTimeout(amountCardDiscountTimer);
             amountCardDiscountTimer = setTimeout(() => {
                 const v = parseFloat(discountInput.value || '0');
-                if (!Number.isFinite(v) || v < 0.01 || v > 100) {
+                const giftFlag = row.querySelector('.gift-flag-checkbox');
+                const isGift = (giftFlag instanceof HTMLInputElement) ? giftFlag.checked : false;
+                if (!Number.isFinite(v) || v < (isGift ? 0 : 0.01) || v > 100) {
                     discountInput.value = '100.00';
-                    showToast('折扣需在0.01-100之间');
+                    showToast('折扣需在' + (isGift ? '0-100' : '0.01-100') + '之间');
                 }
                 const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
                 const originalPriceText = row.querySelector('.col-original')?.textContent || '¥0';
@@ -13393,7 +14526,9 @@
             const discountInput = row.querySelector('input[data-field="discount"]');
             if (!discountInput) return;
             if (baseTotal > 0) {
-                const discount = clampNumber((finalPrice / baseTotal) * 100, 0.01, 100);
+                const giftFlag = row.querySelector('.gift-flag-checkbox');
+                const isGift = (giftFlag instanceof HTMLInputElement) ? giftFlag.checked : false;
+                const discount = clampNumber((finalPrice / baseTotal) * 100, isGift ? 0 : 0.01, 100);
                 discountInput.value = discount.toFixed(2);
             } else {
                 discountInput.value = '100.00';
@@ -13415,6 +14550,8 @@
             selectedAmountCards[idx].finalPrice = Number(finalPrice.toFixed(2));
             selectedAmountCards[idx].beauticianIds = beauticianIds.slice();
             selectedAmountCards[idx].beautician = formatBeauticianText(beauticianIds);
+            const giftFlag = row.querySelector('.gift-flag-checkbox');
+            selectedAmountCards[idx].isGift = (giftFlag instanceof HTMLInputElement) ? giftFlag.checked : false;
         }
 
         function copyAmountCardRow(btn) {
@@ -13426,6 +14563,13 @@
             const cloned = JSON.parse(JSON.stringify(selectedAmountCards[index]));
             cloned.id = Date.now();
             cloned.remark = '';
+            cloned.isGift = !!cloned.isGift;
+            if (cloned.isGift) {
+                const buyQty = Number.isFinite(Number(cloned.buyQty)) ? Math.max(0, parseInt(cloned.buyQty, 10) || 0) : 0;
+                cloned.giftQty = buyQty;
+                cloned.discount = 0;
+                cloned.finalPrice = 0;
+            }
             selectedAmountCards.splice(index + 1, 0, cloned);
             renderSelectedAmountCardTable();
             showToast('已复制金额卡');
@@ -13523,12 +14667,19 @@
             const cloned = JSON.parse(JSON.stringify(selectedCourseCards[index]));
             cloned.id = Date.now();
             cloned.remark = '';
-            cloned.discount = 100;
+            cloned.isGift = !!cloned.isGift;
             cloned.moneyCardId = '';
             cloned.moneyCards = [];
             const buyQty = Number.isFinite(Number(cloned.buyQty)) ? Math.max(0, parseInt(cloned.buyQty, 10) || 0) : 0;
             const price = Number(cloned.price || 0);
-            cloned.finalPrice = Number((price * buyQty).toFixed(2));
+            if (cloned.isGift) {
+                cloned.giftQty = buyQty;
+                cloned.discount = 0;
+                cloned.finalPrice = 0;
+            } else {
+                cloned.discount = 100;
+                cloned.finalPrice = Number((price * buyQty).toFixed(2));
+            }
             selectedCourseCards.splice(index + 1, 0, cloned);
             renderSelectedCourseTable();
             showToast('已复制疗程');
@@ -14183,11 +15334,12 @@
 
             if (courseDetailMode === 'custom' && customCourseBenefitModalType === 'care') {
                 const count = selectedServices.length;
-                addSelectedItemsToCustomCourse('care', selectedServices);
+                addSelectedItemsToCustomCourse('care', selectedServices, customCourseBenefitTargetMode);
                 selectedServices = [];
                 renderSelectedList();
                 closeAddServiceModal();
                 customCourseBenefitModalType = null;
+                customCourseBenefitTargetMode = 'buy';
                 showToast(`已选择 ${count} 个护理项目`);
                 return;
             }
@@ -14212,6 +15364,10 @@
                 newRow.setAttribute('data-item-id', service.id);
                 newRow.setAttribute('data-service-type', '单次护理');
                 newRow.innerHTML = `
+                    <td class="col-gift-flag">
+                        <input type="checkbox" class="gift-flag-checkbox" onchange="onGiftFlagToggle(this)">
+                        <input type="hidden" data-field="gift" value="0">
+                    </td>
                     <td class="col-name">${service.name}</td>
                     <td class="col-original">¥${service.price}</td>
                     <td class="col-qty">
@@ -14220,17 +15376,6 @@
                                 <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
                             </div>
                             <input type="number" class="table-stepper-value" value="1" min="1" max="999" data-field="buy" oninput="onSimpleLineFieldChange(this)">
-                            <div class="table-stepper-btn" onclick="tableStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="tableStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="0" min="0" max="999" data-field="gift" oninput="updateOrderSummary()">
                             <div class="table-stepper-btn" onclick="tableStepUp(this)">
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                             </div>
@@ -14306,7 +15451,7 @@
         // ========== 添加产品弹窗相关 ==========
         // 模拟产品数据
         const productItems = [
-            { id: 101, name: '皙之密焕活润肤乳', category: 'skincare', spec: '50ml', stock: 25, price: 328, unit: '瓶' },
+            { id: 101, name: '皙之密焕活润肤乳', category: 'skincare', spec: '50ml', stock: 25, price: 200, unit: '瓶' },
             { id: 102, name: '皙之密清透洁面乳', category: 'skincare', spec: '100ml', stock: 18, price: 168, unit: '支' },
             { id: 103, name: '皙之密水润焕肤精华', category: 'skincare', spec: '30ml', stock: 12, price: 458, unit: '瓶' },
             { id: 104, name: '皙之密紧致修护眼霜', category: 'skincare', spec: '15ml', stock: 8, price: 388, unit: '支' },
@@ -14576,10 +15721,11 @@
                 }
 
                 if (addProductModalSource === 'customCourseHome') {
-                    addSelectedItemsToCustomCourse('home', selectedProducts);
+                    addSelectedItemsToCustomCourse('home', selectedProducts, customCourseBenefitTargetMode);
                     selectedProducts = [];
                     renderProductSelectedList();
                     closeAddProductModal();
+                    customCourseBenefitTargetMode = 'buy';
                     showToast(`已选择 ${count} 个产品`);
                     return;
                 }
@@ -14612,6 +15758,10 @@
                 newRow.setAttribute('data-item-id', product.id);
 
                 newRow.innerHTML = `
+                    <td class="col-gift-flag">
+                        <input type="checkbox" class="gift-flag-checkbox" onchange="onGiftFlagToggle(this)">
+                        <input type="hidden" data-field="gift" value="0">
+                    </td>
                     <td class="col-name">${product.name}</td>
                     <td class="col-original">¥${product.price}</td>
                     <td class="col-qty">
@@ -14620,17 +15770,6 @@
                                 <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
                             </div>
                             <input type="number" class="table-stepper-value" value="1" min="1" max="999" data-field="buy" oninput="onSimpleLineFieldChange(this)">
-                            <div class="table-stepper-btn" onclick="tableStepUp(this)">
-                                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
-                            </div>
-                        </div>
-                    </td>
-                    <td class="col-qty">
-                        <div class="table-stepper">
-                            <div class="table-stepper-btn" onclick="tableStepDown(this)">
-                                <svg viewBox="0 0 24 24"><path d="M20 12H4v-2h16v2z"/></svg>
-                            </div>
-                            <input type="number" class="table-stepper-value" value="0" min="0" max="999" data-field="gift" oninput="updateOrderSummary()">
                             <div class="table-stepper-btn" onclick="tableStepUp(this)">
                                 <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
                             </div>
@@ -14995,11 +16134,12 @@
 
             if (courseDetailMode === 'custom' && customCourseBenefitModalType === 'card') {
                 const count = selectedCardItemProducts.length;
-                addSelectedItemsToCustomCourse('card', selectedCardItemProducts);
+                addSelectedItemsToCustomCourse('card', selectedCardItemProducts, customCourseBenefitTargetMode);
                 selectedCardItemProducts = [];
                 renderCardItemSelectedList();
                 closeAddCardItemModal();
                 customCourseBenefitModalType = null;
+                customCourseBenefitTargetMode = 'buy';
                 showToast(`已选择 ${count} 个卡项`);
                 return;
             }
@@ -15008,9 +16148,12 @@
         });
 
         const MONEY_CARD_OPTIONS = [
-            { id: 'mc_001', name: '樱粉金额卡（1000）', balance: 1280.00, discounts: { care: 8, home: 9, item: 8.5 } },
-            { id: 'mc_002', name: '玫瑰臻享卡（3000）', balance: 3560.50, discounts: { care: 7.5, home: 8.8, item: 8 } },
-            { id: 'mc_003', name: '铂金尊享卡（5000）', balance: 8920.00, discounts: { care: 6.8, home: 8, item: 7 } }
+            { id: 'mc_001', baseId: 'mc_001', balanceType: 'cash', name: '樱粉金额卡', balance: 1280.00, discounts: { care: 8, home: 9, item: 8.5 } },
+            { id: 'mc_001__gift', baseId: 'mc_001', balanceType: 'gift', name: '樱粉金额卡', balance: 60.00, discounts: { care: 8, home: 9, item: 8.5 } },
+            { id: 'mc_002', baseId: 'mc_002', balanceType: 'cash', name: '玫瑰臻享卡', balance: 3560.50, discounts: { care: 7.5, home: 8.8, item: 8 } },
+            { id: 'mc_002__gift', baseId: 'mc_002', balanceType: 'gift', name: '玫瑰臻享卡', balance: 520.00, discounts: { care: 7.5, home: 8.8, item: 8 } },
+            { id: 'mc_003', baseId: 'mc_003', balanceType: 'cash', name: '铂金尊享卡', balance: 8920.00, discounts: { care: 6.8, home: 8, item: 7 } },
+            { id: 'mc_003__gift', baseId: 'mc_003', balanceType: 'gift', name: '铂金尊享卡', balance: 980.00, discounts: { care: 6.8, home: 8, item: 7 } }
         ];
 
         const moneyCardModalOverlay = document.getElementById('moneyCardModalOverlay');
@@ -15034,7 +16177,15 @@
         function roundMoney2(n) {
             const x = Number(n);
             if (!Number.isFinite(x)) return 0;
-            return Number(x.toFixed(2));
+            return Math.round(x * 100) / 100;
+        }
+
+        function toFen(yuan) {
+            return Math.round(Number(yuan) * 100);
+        }
+
+        function toYuan(fen) {
+            return Math.round(Number(fen)) / 100;
         }
 
         function getRowMoneyCards(row) {
@@ -15127,58 +16278,11 @@
             return Math.max(0, Math.min(1, d / 10));
         }
 
-        function ensureMinDiscountHintEl(row) {
-            if (!(row instanceof Element)) return null;
-            const actionRow = findActionRowForItemRow(row);
-            if (!(actionRow instanceof Element)) return null;
-            const wrap = actionRow.querySelector('.item-action-btns');
-            if (!(wrap instanceof Element)) return null;
-            let hint = wrap.querySelector('.item-min-discount-hint');
-            if (hint instanceof Element) return hint;
-            hint = document.createElement('div');
-            hint.className = 'item-min-discount-hint';
-            hint.style.display = 'none';
-            const payable = wrap.querySelector('.item-payable');
-            if (payable instanceof Element) {
-                payable.insertAdjacentElement('beforebegin', hint);
-            } else {
-                wrap.prepend(hint);
-            }
-            return hint;
-        }
-
-        function setMinDiscountHint(row, minFold) {
-            const hint = ensureMinDiscountHintEl(row);
-            if (!(hint instanceof HTMLElement)) return;
-            const v = Number(minFold);
-            if (!Number.isFinite(v) || v <= 0) {
-                hint.style.display = 'none';
-                hint.textContent = '';
-                return;
-            }
-            hint.innerHTML = `使用已选金额卡最小折扣 <span class="hint-value">${formatDiscountValue(v)}</span> 折`;
-            hint.style.display = '';
-        }
-
-        function computeMinDiscountFold(row, apps) {
-            const key = getRowDiscountKey(row);
-            let min = Number.POSITIVE_INFINITY;
-            (Array.isArray(apps) ? apps : []).forEach(app => {
-                const card = moneyCardById.get(String(app?.cardId || ''));
-                const v = Number(card?.discounts?.[key]);
-                if (!Number.isFinite(v) || v <= 0) return;
-                min = Math.min(min, v);
-            });
-            return min === Number.POSITIVE_INFINITY ? null : min;
-        }
-
         function syncRowDiscountFromMoneyCards(row, apps, options = {}) {
             if (!(row instanceof Element)) return;
             const discountInput = row.querySelector('input[data-field="discount"]');
             if (!(discountInput instanceof HTMLInputElement)) return;
-            const minFold = computeMinDiscountFold(row, apps);
-            if (!minFold) {
-                setMinDiscountHint(row, null);
+            if (apps.length === 0) {
                 const resetWhenEmpty = options?.resetWhenEmpty === true;
                 const hasOverride = row.dataset?.userDiscountOverride === '1';
                 if (resetWhenEmpty && !hasOverride) {
@@ -15190,12 +16294,6 @@
                 return;
             }
             if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
-            setMinDiscountHint(row, minFold);
-            const pct = Math.round(minFold * 10);
-            suppressMoneyCardConflict = true;
-            discountInput.value = String(clampNumber(pct, 0, 100));
-            updateFinalPrice(discountInput);
-            suppressMoneyCardConflict = false;
         }
 
         function clearRowMoneyCards(row, options = {}) {
@@ -15205,7 +16303,6 @@
             setRowMoneyCards(row, []);
             syncMoneyCardsToCourseData(row);
             removeMoneyCardDetailRow(row);
-            setMinDiscountHint(row, null);
 
             if (!preserveDiscount) {
                 if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
@@ -15243,12 +16340,7 @@
                 block = document.createElement('div');
                 block.className = 'item-payable';
                 block.innerHTML = `应付：<span class="item-payable-val">¥0.00</span>`;
-                const hint = wrap.querySelector('.item-min-discount-hint');
-                if (hint instanceof Element) {
-                    hint.insertAdjacentElement('afterend', block);
-                } else {
-                    wrap.prepend(block);
-                }
+                wrap.appendChild(block);
             }
             return block.querySelector('.item-payable-val');
         }
@@ -15256,6 +16348,11 @@
         function setChooseBtnState(itemRow, remaining) {
             const btn = itemRow?.querySelector?.('[data-action="open-moneycard-modal"]');
             if (!(btn instanceof HTMLButtonElement)) return;
+            if (itemRow?.dataset?.isGift === '1') {
+                btn.textContent = '不可使用金额卡';
+                btn.disabled = true;
+                return;
+            }
             const apps = getRowMoneyCards(itemRow);
             btn.textContent = apps.length > 0 ? `已选${apps.length}张金额卡` : '选择金额卡';
             btn.disabled = !(remaining > 0.000001);
@@ -15288,27 +16385,32 @@
         }
 
         function getMoneyCardApplicableRowsInOrder() {
-            return Array.from(document.querySelectorAll('#service-table-body tr.item-row, #product-table-body tr.item-row, #course-table-body tr.item-row'));
+            return Array.from(document.querySelectorAll('#service-table-body tr.item-row, #product-table-body tr.item-row, #course-table-body tr.item-row'))
+                .filter(row => row instanceof Element && row.dataset?.isGift !== '1');
         }
 
         function normalizeAndRenderMoneyCards() {
             const rows = getMoneyCardApplicableRowsInOrder();
-            const running = new Map(MONEY_CARD_OPTIONS.map(c => [String(c.id), roundMoney2(Number(c.balance || 0))]));
+            const running = new Map(MONEY_CARD_OPTIONS.map(c => [String(c.id), toFen(c.balance || 0)]));
 
             rows.forEach(row => {
                 if (!(row instanceof Element)) return;
-                const touched = row.dataset?.moneycardTouched === '1';
                 const rawApps = getRowMoneyCards(row);
-                const apps = rawApps.filter(x => roundMoney2(Number(x.amount || 0)) > 0.000001);
+                const apps = rawApps.filter(x => toFen(x.amount || 0) > 0);
                 if (apps.length !== rawApps.length) {
                     setRowMoneyCards(row, apps);
                     syncMoneyCardsToCourseData(row);
                 }
 
-                syncRowDiscountFromMoneyCards(row, apps);
+                const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+                const originalPriceFen = toFen(Number(originalPriceText.replace(/[^0-9.]/g, '')) || 0);
 
-                const lineTotal = getRowLineFinalTotal(row);
-                let itemRemaining = lineTotal;
+                const buyInput = row.querySelector('input[data-field="buy"], input[data-field="buyQty"]');
+                const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
+
+                const preDiscountTotalFen = originalPriceFen * quantity;
+
+                let remainingPreDiscountFen = preDiscountTotalFen;
                 const normalized = [];
                 const detailBalances = [];
 
@@ -15316,36 +16418,68 @@
                     const cardId = String(app.cardId || '');
                     const card = moneyCardById.get(cardId);
                     if (!card) return;
-                    const before = running.has(cardId) ? roundMoney2(running.get(cardId)) : roundMoney2(Number(card.balance || 0));
-                    let amt = 0;
-                    if (touched) {
-                        amt = roundMoney2(Number(app.amount || 0));
-                        amt = clampNumber(amt, 0, itemRemaining);
-                        amt = clampNumber(amt, 0, before);
-                        amt = roundMoney2(amt);
-                    } else {
-                        amt = roundMoney2(Math.min(itemRemaining, before));
-                    }
-                    if (!(amt > 0.000001)) return;
-                    itemRemaining = roundMoney2(itemRemaining - amt);
-                    const after = roundMoney2(before - amt);
-                    running.set(cardId, after);
-                    normalized.push({ cardId, amount: amt });
-                    detailBalances.push(after);
+
+                    const beforeFen = running.has(cardId) ? running.get(cardId) : toFen(Number(card.balance || 0));
+                    if (beforeFen <= 0) return;
+
+                    const discountVal = getDiscountRateForRow(card, row);
+                    if (discountVal <= 0) return;
+
+                    const discountRatePerHundred = Math.round(discountVal * 100);
+                    if (discountRatePerHundred <= 0) return;
+
+                    const maxDeductByRemainingFen = Math.round(remainingPreDiscountFen * discountRatePerHundred / 100);
+                    const amtFen = Math.min(maxDeductByRemainingFen, beforeFen);
+
+                    if (amtFen <= 0) return;
+
+                    const originalValueFen = Math.round(amtFen * 100 / discountRatePerHundred);
+                    remainingPreDiscountFen = remainingPreDiscountFen - originalValueFen;
+
+                    const afterFen = beforeFen - amtFen;
+                    running.set(cardId, afterFen);
+                    normalized.push({ cardId, amount: toYuan(amtFen) });
+                    detailBalances.push(afterFen);
                 });
 
                 setRowMoneyCards(row, normalized);
                 syncMoneyCardsToCourseData(row);
-                syncRowDiscountFromMoneyCards(row, normalized, { resetWhenEmpty: true });
+
+                const totalDeductFen = normalized.reduce((s, x) => s + toFen(x.amount || 0), 0);
+                const remainingPayableFen = Math.max(0, remainingPreDiscountFen);
+                const actualPayAmountFen = totalDeductFen + remainingPayableFen;
+                const discountRatio = preDiscountTotalFen > 0
+                    ? Math.round(actualPayAmountFen / preDiscountTotalFen * 100)
+                    : 100;
+
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+
+                if (discountInput instanceof HTMLInputElement && normalized.length > 0) {
+                    suppressMoneyCardConflict = true;
+                    const discountInt = Math.round(clampNumber(discountRatio, 0, 100));
+                    discountInput.value = String(discountInt);
+                    if (finalPriceInput instanceof HTMLInputElement) {
+                        finalPriceInput.value = toYuan(actualPayAmountFen).toFixed(2);
+                    }
+                    updateOrderSummary();
+                    suppressMoneyCardConflict = false;
+                } else if (normalized.length === 0 && !(row.dataset?.userDiscountOverride === '1')) {
+                    suppressMoneyCardConflict = true;
+                    discountInput.value = '100';
+                    if (finalPriceInput instanceof HTMLInputElement) {
+                        finalPriceInput.value = toYuan(preDiscountTotalFen).toFixed(2);
+                    }
+                    updateOrderSummary();
+                    suppressMoneyCardConflict = false;
+                    if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
+                }
 
                 const actionRow = findActionRowForItemRow(row);
-                const lineTotal2 = getRowLineFinalTotal(row);
-                const used2 = normalized.reduce((s, x) => s + roundMoney2(Number(x.amount || 0)), 0);
-                const itemRemaining2 = roundMoney2(Math.max(0, lineTotal2 - used2));
                 const valEl = ensureActionRowPayable(actionRow);
-                if (valEl) valEl.textContent = `¥${itemRemaining2.toFixed(2)}`;
+                if (valEl) valEl.textContent = `¥${toYuan(remainingPayableFen).toFixed(2)}`;
 
-                setChooseBtnState(row, itemRemaining2);
+                setChooseBtnState(row, toYuan(remainingPayableFen));
 
                 if (normalized.length === 0) {
                     removeMoneyCardDetailRow(row);
@@ -15357,17 +16491,18 @@
                 if (!(list instanceof Element)) return;
                 list.innerHTML = normalized.map((app, idx) => {
                     const card = moneyCardById.get(String(app.cardId));
-                    const bal = roundMoney2(detailBalances[idx] || 0);
+                    const bal = toYuan(detailBalances[idx] || 0);
                     const discountText = card ? buildMoneyCardDiscountText(card) : '';
+                    const balanceLabel = card && String(card.balanceType || '') === 'gift' ? '【赠金】余额' : '【本金】余额';
                     return `
                         <div class="moneycard-detail-item" data-card-id="${String(app.cardId)}" data-app-index="${idx}">
                             <div class="moneycard-detail-main">
                                 <div class="moneycard-detail-title" title="${card ? card.name : ''}">${card ? card.name : ''}</div>
                                 <div class="moneycard-detail-meta moneycard-discount" title="${discountText}">${discountText}</div>
-                                <div class="moneycard-detail-meta moneycard-balance">余额：¥${bal.toFixed(2)}</div>
+                                <div class="moneycard-detail-meta moneycard-balance">${balanceLabel}：¥${bal.toFixed(2)}</div>
                             </div>
                             <div class="moneycard-detail-amount">
-                                <input type="text" class="table-input moneycard-deduct-input" inputmode="none" readonly data-numkeypad="decimal" data-card-id="${String(app.cardId)}" data-app-index="${idx}" value="${roundMoney2(app.amount).toFixed(2)}" placeholder="划扣金额">
+                                <input type="text" class="table-input moneycard-deduct-input" disabled inputmode="none" readonly data-card-id="${String(app.cardId)}" data-app-index="${idx}" value="${roundMoney2(app.amount).toFixed(2)}" placeholder="划扣金额">
                             </div>
                             <div class="moneycard-detail-actions">
                                 <button type="button" class="moneycard-mini-btn" data-action="edit-moneycard" data-app-index="${idx}">
@@ -15471,16 +16606,53 @@
                     <div class="moneycard-name">不使用金额卡</div>
                 </div>
             `);
-            MONEY_CARD_OPTIONS.forEach(card => {
-                const selected = pendingId === card.id ? 'selected' : '';
-                const disabled = usedIds.has(String(card.id)) ? 'disabled' : '';
-                const tag = usedIds.has(String(card.id)) ? `<div class="moneycard-tag">已选择</div>` : '';
-                parts.push(`
-                    <div class="moneycard-item ${selected} ${disabled}" data-moneycard-id="${card.id}">
-                        <div class="moneycard-name">${card.name}</div>
-                        <div class="moneycard-balance">可用余额：¥${Number(card.balance || 0).toFixed(2)}</div>
-                        <div class="moneycard-discount">${buildMoneyCardDiscountText(card)}</div>
+            const groups = new Map();
+            const groupOrder = [];
+            MONEY_CARD_OPTIONS.forEach(opt => {
+                const baseId = String(opt?.baseId || opt?.id || '');
+                if (!baseId) return;
+                let g = groups.get(baseId);
+                if (!g) {
+                    g = { baseId, name: String(opt?.name || ''), cash: null, gift: null };
+                    groups.set(baseId, g);
+                    groupOrder.push(baseId);
+                }
+                if (!g.name && opt?.name) g.name = String(opt.name);
+                if (String(opt?.balanceType || '') === 'gift') g.gift = opt;
+                else g.cash = opt;
+            });
+
+            const renderOption = (opt, label) => {
+                if (!opt) return '';
+                const selected = pendingId === opt.id ? 'selected' : '';
+                const disabled = usedIds.has(String(opt.id)) ? 'disabled' : '';
+                const tag = usedIds.has(String(opt.id)) ? `<div class="moneycard-tag">已选择</div>` : '';
+                return `
+                    <div class="moneycard-split-option ${selected} ${disabled}" data-moneycard-id="${opt.id}">
+                        <div class="moneycard-split-left">
+                            <div class="moneycard-split-label">${label}</div>
+                            <div class="moneycard-split-discount">${buildMoneyCardDiscountText(opt)}</div>
+                        </div>
+                        <div class="moneycard-split-balance">¥${Number(opt.balance || 0).toFixed(2)}</div>
                         ${tag}
+                    </div>
+                `;
+            };
+
+            groupOrder.forEach(baseId => {
+                const g = groups.get(baseId);
+                if (!g) return;
+                const cash = g.cash;
+                const gift = g.gift;
+                if (!cash && !gift) return;
+                const anySelected = (cash && pendingId === cash.id) || (gift && pendingId === gift.id);
+                parts.push(`
+                    <div class="moneycard-item ${anySelected ? 'selected' : ''}">
+                        <div class="moneycard-name">${g.name}</div>
+                        <div class="moneycard-split">
+                            ${renderOption(cash, '本金')}
+                            ${renderOption(gift, '赠金')}
+                        </div>
                     </div>
                 `);
             });
@@ -15559,27 +16731,59 @@
             if (exists) return;
 
             const card = moneyCardById.get(String(selectedId));
-            const originalPriceText = row.querySelector('.col-original')?.textContent || '';
-            const originalPrice = parseFloat(String(originalPriceText).replace('¥', '')) || 0;
-            const buyQty = getRowBuyQty(row);
-            const baseTotal = roundMoney2(originalPrice * buyQty);
-            const nextApps = apps.concat([{ cardId: String(selectedId), amount: 0 }]);
-            const minFold = computeMinDiscountFold(row, nextApps);
-            const pct = minFold ? clampNumber(Math.round(minFold * 10), 0, 100) : 100;
-            const newLineTotal = roundMoney2(baseTotal * (pct / 100));
-
-            const used = apps.reduce((s, x) => s + roundMoney2(Number(x.amount || 0)), 0);
-            const remaining = roundMoney2(Math.max(0, newLineTotal - used));
-            const defaultAmt = roundMoney2(clampNumber(remaining, 0, Number(card?.balance || 0)));
-            if (!(defaultAmt > 0.000001)) {
+            if (!card) {
                 closeMoneyCardModal();
                 return;
             }
 
-            nextApps[nextApps.length - 1].amount = defaultAmt;
+            const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+            const originalPriceFen = toFen(Number(originalPriceText.replace(/[^0-9.]/g, '')) || 0);
+            const buyInput = row.querySelector('input[data-field="buy"], input[data-field="buyQty"]');
+            const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
+
+            const preDiscountTotalFen = originalPriceFen * quantity;
+
+            let totalOriginalValueFen = 0;
+            apps.forEach(app => {
+                const appCard = moneyCardById.get(String(app.cardId || ''));
+                if (!appCard) return;
+                const discountVal = getDiscountRateForRow(appCard, row);
+                if (discountVal > 0) {
+                    const discountRatePerHundred = Math.round(discountVal * 100);
+                    if (discountRatePerHundred > 0) {
+                        const originalValueFen = Math.round(toFen(app.amount || 0) * 100 / discountRatePerHundred);
+                        totalOriginalValueFen = totalOriginalValueFen + originalValueFen;
+                    }
+                }
+            });
+
+            const remainingPreDiscountFen = Math.max(0, preDiscountTotalFen - totalOriginalValueFen);
+            const discountVal = getDiscountRateForRow(card, row);
+
+            if (discountVal <= 0) {
+                closeMoneyCardModal();
+                return;
+            }
+
+            const discountRatePerHundred = Math.round(discountVal * 100);
+            if (discountRatePerHundred <= 0) {
+                closeMoneyCardModal();
+                return;
+            }
+
+            const maxDeductByRemainingFen = Math.round(remainingPreDiscountFen * discountRatePerHundred / 100);
+            const cardBalanceFen = toFen(Number(card.balance || 0));
+            const defaultAmtFen = Math.min(maxDeductByRemainingFen, cardBalanceFen);
+
+            if (defaultAmtFen <= 0) {
+                closeMoneyCardModal();
+                return;
+            }
+
+            const defaultAmt = toYuan(defaultAmtFen);
+            const nextApps = apps.concat([{ cardId: String(selectedId), amount: defaultAmt }]);
             setRowMoneyCards(row, nextApps);
             if (row.dataset?.moneycardTouched) delete row.dataset.moneycardTouched;
-            syncRowDiscountFromMoneyCards(row, nextApps, { resetWhenEmpty: true });
             normalizeAndRenderMoneyCards();
             updateOrderSummary();
             closeMoneyCardModal();
@@ -15701,14 +16905,21 @@
 
         function buildNumKeypadTitle(el) {
             if (!(el instanceof HTMLInputElement)) return '设置数值';
+            const direct = String(el.getAttribute('data-numkeypad-title') || '').trim();
+            if (direct) return `当前输入：${direct}`;
 
             let fieldLabel = '数值';
             if (el.matches('.table-input.discount-input')) fieldLabel = '折扣';
             else if (el.matches('.table-input.final-price')) fieldLabel = '折后价金额';
             else if (el.matches('.moneycard-deduct-input')) fieldLabel = '划扣金额';
             else if (el.matches('.upgrade-fee-input')) {
-                const wrap = el.closest('.upgrade-fee-item');
-                const t = (wrap?.querySelector('.upgrade-fee-item-label')?.textContent || '').trim();
+                const td = el.closest('td');
+                const tr = td?.parentElement;
+                const table = el.closest('table');
+                const ths = table ? Array.from(table.querySelectorAll('thead th')) : [];
+                const tds = tr ? Array.from(tr.children) : [];
+                const idx = (td && tds.length) ? tds.indexOf(td) : -1;
+                const t = (idx >= 0 && idx < ths.length) ? String(ths[idx]?.textContent || '').trim() : '';
                 fieldLabel = t || '金额';
             } else if (el.matches('.course-card-price-input')) {
                 const wrap = el.closest('.course-card-field');

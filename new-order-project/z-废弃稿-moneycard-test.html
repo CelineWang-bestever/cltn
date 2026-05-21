@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金额卡计算逻辑测试（整数运算版）</title>
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .test-case { border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px; margin-bottom: 16px; }
+        .test-case.pass { border-color: #10b981; background-color: #f0fdf4; }
+        .test-case.fail { border-color: #ef4444; background-color: #fef2f2; }
+        .test-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+        .test-title { font-weight: 600; font-size: 14px; }
+        .test-status { padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+        .status-pass { background-color: #dcfce7; color: #166534; }
+        .status-fail { background-color: #fee2e2; color: #991b1b; }
+        .input-section, .result-section { margin-bottom: 12px; }
+        .label { font-size: 12px; color: #6b7280; margin-bottom: 4px; }
+        .value { font-family: monospace; font-size: 13px; color: #1f2937; }
+        .diff { color: #dc2626; }
+        .expected { color: #16a34a; }
+        .actual { color: #2563eb; }
+        .summary { margin-top: 16px; padding-top: 16px; border-top: 1px solid #e5e7eb; }
+        .pass-count { color: #10b981; font-weight: 600; }
+        .fail-count { color: #ef4444; font-weight: 600; }
+        button { padding: 8px 16px; background-color: #3b82f6; color: white; border: none; border-radius: 6px; cursor: pointer; margin-right: 8px; }
+        button:hover { background-color: #2563eb; }
+        .formula { background: #f8fafc; padding: 8px; border-radius: 4px; font-size: 12px; margin: 4px 0; }
+        .section-title { font-weight: 600; font-size: 14px; margin: 16px 0 8px 0; color: #374151; }
+    </style>
+</head>
+<body>
+    <h1>金额卡计算逻辑测试（整数运算版）</h1>
+    <p>测试说明：所有金额计算使用分（整数）进行，避免浮点精度问题</p>
+    <button onclick="runAllTests()">运行所有测试</button>
+    <button onclick="runSpecificTest(11)">测试问题场景（场景12）</button>
+    <div id="testResults"></div>
+    <div class="summary">
+        <span class="pass-count" id="passCount">0</span> 通过 |
+        <span class="fail-count" id="failCount">0</span> 失败
+    </div>
+
+    <script>
+        function toFen(yuan) {
+            return Math.round(Number(yuan) * 100);
+        }
+
+        function toYuan(fen) {
+            return Math.round(Number(fen)) / 100;
+        }
+
+        function getDiscountRateForRow(card, rowType) {
+            const key = rowType === 'product' ? 'home' : (rowType === 'service' || rowType === 'course') ? 'care' : 'item';
+            const d = Number(card?.discounts?.[key]);
+            if (!Number.isFinite(d) || d <= 0) return 1;
+            return Math.max(0, Math.min(1, d / 10));
+        }
+
+        function calculateMoneyCardsInteger(originalPrice, quantity, cards, rowType) {
+            const originalPriceFen = toFen(originalPrice);
+            const preDiscountTotalFen = originalPriceFen * quantity;
+
+            let remainingPreDiscountFen = preDiscountTotalFen;
+            const results = [];
+            let totalDeductFen = 0;
+
+            const runningBalances = new Map();
+            cards.forEach(card => {
+                runningBalances.set(card.id, toFen(Number(card.balance || 0)));
+            });
+
+            cards.forEach(card => {
+                const cardId = String(card.id || '');
+                const beforeFen = runningBalances.has(cardId) ? runningBalances.get(cardId) : toFen(Number(card.balance || 0));
+
+                if (beforeFen <= 0) {
+                    results.push({
+                        cardId: card.id,
+                        cardName: card.name,
+                        originalDeduct: 0,
+                        deductAmount: 0,
+                        remainingBalance: toYuan(beforeFen),
+                        reason: '余额为0或负数'
+                    });
+                    return;
+                }
+
+                const discountVal = getDiscountRateForRow(card, rowType);
+                if (discountVal <= 0) {
+                    results.push({
+                        cardId: card.id,
+                        cardName: card.name,
+                        originalDeduct: 0,
+                        deductAmount: 0,
+                        remainingBalance: toYuan(beforeFen),
+                        reason: '折扣率为0或无效'
+                    });
+                    return;
+                }
+
+                const discountRatePerHundred = Math.round(discountVal * 100);
+                if (discountRatePerHundred <= 0) {
+                    results.push({
+                        cardId: card.id,
+                        cardName: card.name,
+                        originalDeduct: 0,
+                        deductAmount: 0,
+                        remainingBalance: toYuan(beforeFen),
+                        reason: '折扣率整数值为0'
+                    });
+                    return;
+                }
+
+                const maxDeductByRemainingFen = Math.round(remainingPreDiscountFen * discountRatePerHundred / 100);
+                const amtFen = Math.min(maxDeductByRemainingFen, beforeFen);
+
+                if (amtFen <= 0) {
+                    results.push({
+                        cardId: card.id,
+                        cardName: card.name,
+                        originalDeduct: 0,
+                        deductAmount: 0,
+                        remainingBalance: toYuan(beforeFen),
+                        reason: '计算划扣金额为0或负数'
+                    });
+                    return;
+                }
+
+                const originalValueFen = Math.round(amtFen * 100 / discountRatePerHundred);
+                remainingPreDiscountFen = remainingPreDiscountFen - originalValueFen;
+                const afterFen = beforeFen - amtFen;
+                runningBalances.set(cardId, afterFen);
+                totalDeductFen = totalDeductFen + amtFen;
+
+                results.push({
+                    cardId: card.id,
+                    cardName: card.name,
+                    originalDeduct: toYuan(originalValueFen),
+                    deductAmount: toYuan(amtFen),
+                    remainingBalance: toYuan(afterFen),
+                    discountRate: discountVal,
+                    discountRatePerHundred: discountRatePerHundred
+                });
+            });
+
+            const remainingPayableFen = Math.max(0, remainingPreDiscountFen);
+            const actualPayAmountFen = totalDeductFen + remainingPayableFen;
+            const discountRatio = preDiscountTotalFen > 0
+                ? Math.round(actualPayAmountFen / preDiscountTotalFen * 100)
+                : 100;
+
+            return {
+                preDiscountTotal: toYuan(preDiscountTotalFen),
+                results,
+                totalDeduct: toYuan(totalDeductFen),
+                remainingPayable: toYuan(remainingPayableFen),
+                actualPayAmount: toYuan(actualPayAmountFen),
+                discountRatio,
+                totalOriginalDeduct: toYuan(preDiscountTotalFen - remainingPreDiscountFen)
+            };
+        }
+
+        const testCases = [
+            {
+                name: '场景1: 单张卡余额为0',
+                description: '验证余额为0时，该卡不参与计算',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 0, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 0,
+                    remainingPayable: 1000,
+                    totalOriginalDeduct: 0,
+                    cardCount: 0
+                }
+            },
+            {
+                name: '场景2: 折扣率为0',
+                description: '验证折扣率为0时，该卡不参与计算',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 1000, discounts: { care: 0 } }]
+                },
+                expected: {
+                    totalDeduct: 0,
+                    remainingPayable: 1000,
+                    totalOriginalDeduct: 0,
+                    cardCount: 0
+                }
+            },
+            {
+                name: '场景3: 单张卡刚好覆盖剩余应付（8折）',
+                description: '验证卡余额刚好覆盖应付金额时，剩余应付=0',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 800, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 800,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 1000,
+                    cardCount: 1
+                }
+            },
+            {
+                name: '场景4: 单张卡余额不足（8折）',
+                description: '验证卡余额不足以覆盖应付金额时，计算剩余应付',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 500, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 500,
+                    remainingPayable: 375,
+                    totalOriginalDeduct: 625,
+                    cardCount: 1
+                }
+            },
+            {
+                name: '场景5: 多张卡叠加刚好覆盖（8折）',
+                description: '验证两张卡叠加刚好覆盖应付金额',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [
+                        { id: 'card1', name: '卡1', balance: 400, discounts: { care: 8 } },
+                        { id: 'card2', name: '卡2', balance: 400, discounts: { care: 8 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 800,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 1000,
+                    cardCount: 2
+                }
+            },
+            {
+                name: '场景6: 多张卡余额均不足',
+                description: '验证两张卡余额均不足以覆盖应付金额',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [
+                        { id: 'card1', name: '卡1', balance: 300, discounts: { care: 8 } },
+                        { id: 'card2', name: '卡2', balance: 300, discounts: { care: 8 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 600,
+                    remainingPayable: 250,
+                    totalOriginalDeduct: 750,
+                    cardCount: 2
+                }
+            },
+            {
+                name: '场景7: 第一张卡覆盖部分，第二张卡覆盖剩余',
+                description: '验证第一张卡余额不足，第二张卡覆盖剩余应付',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [
+                        { id: 'card1', name: '卡1', balance: 300, discounts: { care: 8 } },
+                        { id: 'card2', name: '卡2', balance: 600, discounts: { care: 8 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 800,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 1000,
+                    cardCount: 2
+                }
+            },
+            {
+                name: '场景8: 不同折扣率的多张卡（第一张卡全额覆盖）',
+                description: '验证第一张卡全额覆盖后，第二张卡不参与计算',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [
+                        { id: 'card1', name: '卡1(7折)', balance: 700, discounts: { care: 7 } },
+                        { id: 'card2', name: '卡2(8折)', balance: 800, discounts: { care: 8 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 700,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 1000,
+                    cardCount: 1
+                }
+            },
+            {
+                name: '场景9: 折扣率为1(不打折)',
+                description: '验证折扣率为10折时，划扣金额=余额',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 500, discounts: { care: 10 } }]
+                },
+                expected: {
+                    totalDeduct: 500,
+                    remainingPayable: 500,
+                    totalOriginalDeduct: 500,
+                    cardCount: 1
+                }
+            },
+            {
+                name: '场景10: 数量为0',
+                description: '验证购买数量为0时，折前价值=0',
+                input: {
+                    originalPrice: 1000,
+                    quantity: 0,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 1000, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 0,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 0,
+                    cardCount: 0
+                }
+            },
+            {
+                name: '场景11: 原价为0',
+                description: '验证商品原价为0时，不应用金额卡',
+                input: {
+                    originalPrice: 0,
+                    quantity: 10,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '测试卡', balance: 1000, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 0,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 0,
+                    cardCount: 0
+                }
+            },
+            {
+                name: '场景12: 【问题场景】皙之密焕活润肤乳 + 樱粉金额卡赠金 + 铂金尊享卡',
+                description: '验证整数运算避免0.01元误差问题（home类型，原价200，卡1赠金60元9折，卡2本金8920元8折）',
+                input: {
+                    originalPrice: 200,
+                    quantity: 1,
+                    rowType: 'product',
+                    cards: [
+                        { id: 'mc_001__gift', name: '樱粉金额卡赠金', balance: 60, discounts: { home: 9, care: 8, item: 8.5 } },
+                        { id: 'mc_003', name: '铂金尊享卡', balance: 8920, discounts: { home: 8, care: 6.8, item: 7 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 166.67,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 200,
+                    cardCount: 2
+                }
+            },
+            {
+                name: '场景13: 浮点精度问题验证',
+                description: '验证使用整数运算后，剩余应付不会出现负数',
+                input: {
+                    originalPrice: 200,
+                    quantity: 1,
+                    rowType: 'home',
+                    cards: [
+                        { id: 'card1', name: '卡1', balance: 60, discounts: { home: 9 } },
+                        { id: 'card2', name: '卡2', balance: 1000, discounts: { home: 8 } }
+                    ]
+                },
+                expected: {
+                    totalDeduct: 166.67,
+                    remainingPayable: 0,
+                    totalOriginalDeduct: 200,
+                    cardCount: 2
+                }
+            },
+            {
+                name: '场景14: 跨行余额递减（同一张卡在不同商品行）',
+                description: '验证同一张卡在多个商品行使用时，余额会跨行递减',
+                input: {
+                    originalPrice: 500,
+                    quantity: 1,
+                    rowType: 'service',
+                    cards: [{ id: 'card1', name: '共享卡', balance: 300, discounts: { care: 8 } }]
+                },
+                expected: {
+                    totalDeduct: 300,
+                    remainingPayable: 125,
+                    totalOriginalDeduct: 375,
+                    cardCount: 1
+                }
+            }
+        ];
+
+        function runTest(testCase) {
+            const result = calculateMoneyCardsInteger(
+                testCase.input.originalPrice,
+                testCase.input.quantity,
+                testCase.input.cards,
+                testCase.input.rowType
+            );
+
+            const appliedCards = result.results.filter(r => r.deductAmount > 0);
+
+            const checks = [
+                { name: '划扣总额', actual: result.totalDeduct, expected: testCase.expected.totalDeduct },
+                { name: '剩余应付', actual: result.remainingPayable, expected: testCase.expected.remainingPayable },
+                { name: '总计原价值', actual: result.totalOriginalDeduct, expected: testCase.expected.totalOriginalDeduct },
+                { name: '应用卡数量', actual: appliedCards.length, expected: testCase.expected.cardCount }
+            ];
+
+            const allPass = checks.every(c => Math.abs(roundMoney2(c.actual) - roundMoney2(c.expected)) < 0.001);
+
+            return {
+                name: testCase.name,
+                description: testCase.description,
+                input: testCase.input,
+                result: result,
+                checks: checks,
+                passed: allPass
+            };
+        }
+
+        function roundMoney2(val) {
+            return Math.round(Number(val) * 100) / 100;
+        }
+
+        function runAllTests() {
+            const results = testCases.map(runTest);
+            const passed = results.filter(r => r.passed).length;
+            const failed = results.filter(r => !r.passed).length;
+
+            document.getElementById('passCount').textContent = passed;
+            document.getElementById('failCount').textContent = failed;
+
+            const container = document.getElementById('testResults');
+            container.innerHTML = results.map(r => renderTestResult(r)).join('');
+        }
+
+        function runSpecificTest(index) {
+            const testCase = testCases[index];
+            const result = runTest(testCase);
+
+            document.getElementById('passCount').textContent = result.passed ? 1 : 0;
+            document.getElementById('failCount').textContent = result.passed ? 0 : 1;
+
+            const container = document.getElementById('testResults');
+            container.innerHTML = renderTestResult(result);
+        }
+
+        function renderTestResult(result) {
+            const checksHtml = result.checks.map(c => {
+                const isPass = Math.abs(roundMoney2(c.actual) - roundMoney2(c.expected)) < 0.001;
+                return `
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                        <span style="color: #6b7280;">${c.name}:</span>
+                        <span>${isPass ? '<span class="expected">✓ ' + c.expected.toFixed(2) + '</span>' : '<span class="diff">✗ 期望: ' + c.expected.toFixed(2) + '</span> <span class="actual">实际: ' + c.actual.toFixed(2) + '</span>'}</span>
+                    </div>
+                `;
+            }).join('');
+
+            const calcSteps = result.result.results.map((r, i) => {
+                if (!r || r.deductAmount <= 0) return '';
+                const card = result.input.cards[i];
+                const discountRatePerHundred = r.discountRatePerHundred || Math.round(r.discountRate * 100);
+                return `
+                    <div class="formula">
+                        <strong>${r.cardName}:</strong><br>
+                        &nbsp;&nbsp;折扣率 = ${discountRatePerHundred / 10}折 = ${discountRatePerHundred}%<br>
+                        &nbsp;&nbsp;划扣金额(分) = min(剩余折前价值 × ${discountRatePerHundred} ÷ 100, 卡余额)<br>
+                        &nbsp;&nbsp;划扣金额 = ${(r.deductAmount * 100).toFixed(0)}分 = ¥${r.deductAmount.toFixed(2)}<br>
+                        &nbsp;&nbsp;划扣原价值 = ${(r.deductAmount * 100).toFixed(0)} × 100 ÷ ${discountRatePerHundred} = ${(r.originalDeduct * 100).toFixed(0)}分 = ¥${r.originalDeduct.toFixed(2)}<br>
+                        &nbsp;&nbsp;卡剩余余额 = ¥${r.remainingBalance.toFixed(2)}
+                    </div>
+                `;
+            }).join('');
+
+            const cardResults = result.result.results.map(r => {
+                return `
+                    <div style="font-size: 12px; padding: 4px 8px; background: #f9fafb; margin-bottom: 4px; border-radius: 4px;">
+                        ${r.cardName}: 划扣=${r.deductAmount.toFixed(2)}元, 原价值=${r.originalDeduct.toFixed(2)}元, 剩余余额=${r.remainingBalance.toFixed(2)}元 ${r.reason ? '(' + r.reason + ')' : ''}
+                    </div>
+                `;
+            }).join('');
+
+            return `
+                <div class="test-case ${result.passed ? 'pass' : 'fail'}">
+                    <div class="test-header">
+                        <span class="test-title">${result.name}</span>
+                        <span class="test-status ${result.passed ? 'status-pass' : 'status-fail'}">${result.passed ? '通过' : '失败'}</span>
+                    </div>
+                    <div style="font-size: 12px; color: #6b7280; margin-bottom: 12px;">${result.description}</div>
+                    <div class="input-section">
+                        <div class="label">输入参数</div>
+                        <div class="value">原价=¥${result.input.originalPrice}, 数量=${result.input.quantity}, 类型=${result.input.rowType}</div>
+                    </div>
+                    <div class="input-section">
+                        <div class="label">卡片信息</div>
+                        <div class="value">${result.input.cards.map(c => {
+                            const discountKey = result.input.rowType === 'product' ? 'home' : (result.input.rowType === 'service' || result.input.rowType === 'course') ? 'care' : 'item';
+                            return `${c.name}(余额:¥${c.balance}, 折扣:${c.discounts[discountKey] || c.discounts.home || c.discounts.item}折)`;
+                        }).join(', ')}</div>
+                    </div>
+                    ${result.result.results.some(r => r.deductAmount > 0) ? `
+                    <div class="result-section">
+                        <div class="label">整数运算计算过程（分）</div>
+                        <div style="margin-left: 8px;">${calcSteps}</div>
+                    </div>
+                    ` : ''}
+                    <div class="result-section">
+                        <div class="label">卡片计算结果</div>
+                        <div style="margin-left: 8px;">
+                            ${cardResults || '<div style="color: #6b7280;">无卡片参与计算</div>'}
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <div class="label">最终结果</div>
+                        <div style="margin-left: 8px; font-weight: bold;">
+                            折前价值=¥${result.result.preDiscountTotal.toFixed(2)},
+                            划扣总额=¥${result.result.totalDeduct.toFixed(2)},
+                            剩余应付=¥${result.result.remainingPayable.toFixed(2)},
+                            实际支付=¥${result.result.actualPayAmount.toFixed(2)},
+                            折扣率=${result.result.discountRatio}%
+                        </div>
+                    </div>
+                    <div class="result-section">
+                        <div class="label">验证结果</div>
+                        <div style="margin-left: 8px;">${checksHtml}</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        runAllTests();
+    </script>
+</body>
+</html>

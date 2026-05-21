@@ -220,6 +220,22 @@
             color: var(--neutral-900);
             line-height: 1.25;
             word-break: break-word;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .method-icon {
+            width: 12px;
+            height: 12px;
+            flex-shrink: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .method-icon svg {
+            width: 100%;
+            height: 100%;
+            display: block;
         }
         .method-sub {
             font-size: 11px;
@@ -372,6 +388,10 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+        }
+        .moneycard-summary-name .balance-type {
+            font-weight: 600;
+            color: var(--primary);
         }
         .moneycard-summary-amt {
             flex: 0 0 auto;
@@ -997,14 +1017,14 @@
                 group: '记账收款',
                 items: [
                     { id: 'cash', type: 'normal', title: '现金', subtitle: '', single: true },
-                    { id: 'debt', type: 'normal', title: '欠款', subtitle: '', single: true },
                     { id: 'wechat', type: 'normal', title: '微信', subtitle: '', single: true },
                     { id: 'alipay', type: 'normal', title: '支付宝', subtitle: '', single: true },
                     { id: 'pos', type: 'normal', title: '银行卡POS', subtitle: '', single: true },
                     { id: 'wallet', type: 'normal', title: '钱包', subtitle: '', single: true },
                     { id: 'bankTransfer', type: 'normal', title: '银行卡转账', subtitle: '', single: true },
                     { id: 'dept', type: 'normal', title: '部门结算', subtitle: '', single: true },
-                    { id: 'cloudShop', type: 'normal', title: '云店', subtitle: '', single: true }
+                    { id: 'cloudShop', type: 'normal', title: '云店', subtitle: '', single: true },
+                    { id: 'debt', type: 'normal', title: '欠款', subtitle: '', single: true, icon: 'debt' }
                 ]
             },
             onlinePay: {
@@ -1187,12 +1207,15 @@
             const rows = summary.cards
                 .slice()
                 .sort((a, b) => b.amount - a.amount)
-                .map(x => `
+                .map(x => {
+                    const isGift = String(x.cardId || '').endsWith('__gift');
+                    const balanceLabel = isGift ? '<span class="balance-type">【赠金】</span>' : '<span class="balance-type">【本金】</span>';
+                    return `
                     <div class="moneycard-summary-row">
-                        <div class="moneycard-summary-name" title="${escapeHtmlAttr(x.name || x.cardId)}">${escapeHtml(x.name || x.cardId)}</div>
+                        <div class="moneycard-summary-name" title="${escapeHtmlAttr(x.name || x.cardId)}">${escapeHtml(x.name || x.cardId)} ${balanceLabel}</div>
                         <div class="moneycard-summary-amt">-¥${formatMoney(x.amount)}</div>
                     </div>
-                `).join('');
+                `; }).join('');
             moneyCardSummaryEl.innerHTML = `
                 <div class="moneycard-summary-title">
                     <div>金额卡抵扣</div>
@@ -1231,6 +1254,28 @@
         function renderRemainingPayable() {
             if (!remainingPayableAmountEl) return;
             remainingPayableAmountEl.textContent = `¥${formatMoney(clampNumber(state.remainingPayableAmount, 0, Number.MAX_SAFE_INTEGER))}`;
+        }
+
+        function applyPayMethodsVisibilityAndSelection() {
+            const leftPanel = document.querySelector('.pay-left');
+            const remaining = clampNumber(state.remainingPayableAmount, 0, Number.MAX_SAFE_INTEGER);
+            const isZero = remaining <= 0.000001;
+
+            if (leftPanel instanceof HTMLElement) {
+                leftPanel.style.display = isZero ? 'none' : '';
+            }
+
+            if (isZero) {
+                if (state.selected.length > 0) state.selected = [];
+                state.comboEnabled = false;
+                state.thirdPartyPending = null;
+                state.thirdPartyCoupon = '';
+                return;
+            }
+
+            if (state.selected.length === 0) {
+                resetToDefaultCash();
+            }
         }
 
         function getQuery() {
@@ -1406,9 +1451,10 @@
                     const selected = state.selected.some(x => x.id === item.id) ? 'selected' : '';
                     const cls = 'method-card' + (item.single ? ' method-single' : '') + (selected ? ' selected' : '');
                     const sub = item.balance !== undefined ? `¥ ${formatMoney(item.balance)}` : (item.subtitle || '');
+                    const icon = item.icon ? `<span class="method-icon">${getMethodIconSvg(item.icon)}</span>` : '';
                     return `
                         <div class="${cls}" data-id="${item.id}">
-                            <div class="method-name">${item.title}</div>
+                            <div class="method-name">${icon}${item.title}</div>
                             <div class="method-sub">${sub}</div>
                         </div>
                     `;
@@ -1433,6 +1479,14 @@
 
         function renderRight() {
             totalAmountEl.textContent = `¥${formatMoney(clampNumber(state.basePayableAmount, 0, Number.MAX_SAFE_INTEGER))}`;
+            
+            const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
+            
+            if (payable <= 0) {
+                rightContent.innerHTML = '';
+                return;
+            }
+            
             const lines = state.selected.slice();
 
             if (lines.length === 0) {
@@ -1556,6 +1610,7 @@
         }
 
         function renderAll() {
+            applyPayMethodsVisibilityAndSelection();
             comboSwitch.classList.toggle('on', !!state.comboEnabled);
             comboSwitch.setAttribute('aria-checked', state.comboEnabled ? 'true' : 'false');
             applyMoneyCardDomVisibility();
@@ -1658,6 +1713,21 @@
                     <circle cx="12" cy="12" r="7"></circle>
                 </svg>
             `;
+        }
+
+        function getMethodIconSvg(iconKey) {
+            const stroke = 'var(--primary-700)';
+            const common = `viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"`;
+            if (iconKey === 'debt') {
+                return `
+                    <svg ${common}>
+                        <circle cx="12" cy="12" r="10"></circle>
+                        <path d="M8 15h8"></path>
+                        <path d="M8 11h4"></path>
+                    </svg>
+                `;
+            }
+            return '';
         }
 
         function getScanIconSvg() {
@@ -2037,7 +2107,24 @@
                 : true;
             state.hasAppliedMoneyCards = normalizeCheckoutMoneyCards(state.moneyCardSummary).total > 0.000001;
             recomputePayableFromMoneyCards();
-            resetToDefaultCash();
+            renderAll();
+        }
+
+        let lastObservedPayable = '';
+        function refreshPayableFromExternal() {
+            const snapshot = JSON.stringify({
+                orderId: state.orderId,
+                basePayableAmount: roundMoney2(state.basePayableAmount),
+                moneycards: readCheckoutMoneyCards(state.orderId)
+            });
+            if (snapshot === lastObservedPayable) return;
+            lastObservedPayable = snapshot;
+
+            const parsed = safeJsonParse(snapshot);
+            const mc = parsed?.moneycards || null;
+            state.moneyCardSummary = mc;
+            state.hasAppliedMoneyCards = normalizeCheckoutMoneyCards(state.moneyCardSummary).total > 0.000001;
+            recomputePayableFromMoneyCards();
             renderAll();
         }
 
@@ -2059,6 +2146,14 @@
             if (e.target === thirdPartyModal) {
                 state.thirdPartyPending = null;
                 closeThirdPartyModal();
+            }
+        });
+
+        window.addEventListener('storage', (e) => {
+            const k = String(e?.key || '');
+            if (!k) return;
+            if (k === 'latest_checkout_moneycards' || k === ('checkout_moneycards_' + String(state.orderId || ''))) {
+                refreshPayableFromExternal();
             }
         });
 
