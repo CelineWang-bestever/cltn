@@ -1,0 +1,1195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>克丽缇娜 - 目标管理</title>
+    <style>
+        :root {
+            --primary: #E87C9A;
+            --primary-dark: #D66B85;
+            --primary-50: #FFF1F5;
+            --primary-100: #FFE4EC;
+            --primary-200: #FFC7D9;
+            --primary-300: #FFA0BE;
+            --primary-400: #F1A3B8;
+            --primary-500: #E87C9A;
+            --primary-600: #D66B85;
+            --primary-700: #B75A70;
+            
+            --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
+            --neutral-200: #E5E7EB;
+            --neutral-300: #D1D5DB;
+            --neutral-400: #9CA3AF;
+            --neutral-500: #6B7280;
+            --neutral-600: #4B5563;
+            --neutral-700: #374151;
+            --neutral-800: #1F2937;
+            --neutral-900: #111827;
+            
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: var(--primary-50);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            --transition-fast: all 0.15s ease;
+            --transition-normal: all 0.25s ease;
+            --transition-slow: all 0.35s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--neutral-800);
+            min-height: 100vh;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 16px 24px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 1440px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 2px;
+        }
+
+        .page-main {
+            flex: 1;
+            padding: 24px;
+            max-width: 1440px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 16px 0;
+            border-bottom: 1px solid var(--neutral-200);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--neutral-500);
+        }
+
+        .tab-item:hover {
+            background: var(--primary-50);
+            color: var(--primary-600);
+        }
+
+        .tab-item.active {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            justify-content: flex-end;
+        }
+
+        .year-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            color: var(--neutral-600);
+        }
+
+        .year-btn:hover:not(:disabled) {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .year-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .year-display {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 24px;
+        }
+
+        .year-overview-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 110px;
+        }
+
+        .overview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .circle-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .circle-progress-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 16px;
+        }
+
+        .circle-progress-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-200) 0deg,
+                var(--primary-200) 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+        }
+
+        .circle-progress-fill {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0deg,
+                var(--primary-600) var(--progress-deg, 180deg),
+                transparent var(--progress-deg, 180deg),
+                transparent 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: var(--transition-slow);
+        }
+
+        .circle-progress-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .circle-percentage {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-600);
+        }
+
+        .circle-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .overview-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .stat-value.highlight {
+            color: var(--primary-600);
+        }
+
+        .month-grid-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .month-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .month-grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-batch {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+        }
+
+        .btn-batch:hover:not(:disabled) {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .btn-batch:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .month-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .month-card:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .month-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-50);
+        }
+
+        .month-card.unset {
+            opacity: 0.6;
+        }
+
+        .month-card.unset:hover {
+            opacity: 0.8;
+        }
+
+        .month-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .month-select-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--neutral-300);
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .month-card.selected .month-select-indicator {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .month-select-indicator::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .month-card.selected .month-select-indicator::after {
+            opacity: 1;
+        }
+
+        .month-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 8px;
+        }
+
+        .month-card.unset .month-name {
+            color: var(--neutral-400);
+        }
+
+        .month-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .info-label {
+            color: var(--neutral-500);
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .info-value.goal {
+            color: var(--primary-600);
+        }
+
+        .info-value.completed {
+            color: var(--neutral-600);
+        }
+
+        .month-progress-bar {
+            height: 4px;
+            background: var(--neutral-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .month-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 2px;
+            transition: var(--transition-slow);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 480px;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: var(--transition-normal);
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            padding: 20px 24px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-field {
+            margin-bottom: 20px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 8px;
+        }
+
+        .modal-value {
+            display: block;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+
+        .modal-input-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-200);
+            transition: var(--transition-fast);
+            overflow: hidden;
+        }
+
+        .modal-input-wrap:focus-within {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px var(--primary-50);
+        }
+
+        .modal-input-prefix {
+            padding: 0 12px;
+            color: var(--neutral-500);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .modal-input {
+            flex: 1;
+            padding: 14px 12px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            outline: none;
+        }
+
+        .modal-input::placeholder {
+            color: var(--neutral-400);
+        }
+
+        .modal-tip {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 8px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--neutral-100);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid transparent;
+        }
+
+        .modal-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--neutral-600);
+            border-color: var(--neutral-200);
+        }
+
+        .modal-btn.secondary:hover {
+            background: var(--neutral-100);
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: var(--neutral-900);
+            color: white;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast.success .toast-icon::before {
+            content: '✓';
+            color: #10B981;
+        }
+
+        .toast.error .toast-icon::before {
+            content: '✕';
+            color: #EF4444;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 20px;
+            height: 2px;
+            background: var(--neutral-600);
+            border-radius: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .year-overview-card {
+                position: static;
+            }
+
+            .month-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 12px 16px;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .page-main {
+                padding: 16px;
+            }
+
+            .header-tabs {
+                gap: 6px;
+            }
+
+            .tab-item {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .year-selector {
+                justify-content: flex-start;
+                margin-top: 16px;
+            }
+
+            .month-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .month-card {
+                padding: 12px;
+            }
+
+            .modal-container {
+                width: 95%;
+                margin: 16px;
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .month-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .year-display {
+                min-width: 60px;
+                font-size: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">目标管理</h1>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <div class="header-tabs" id="goalTypeTabs">
+                <button class="tab-item active" data-goal-type="store-performance">门店业绩指标</button>
+                <button class="tab-item" data-goal-type="store-card-consume">门店卡耗目标</button>
+                <button class="tab-item" data-goal-type="customer-flow">客流目标</button>
+                <button class="tab-item" data-goal-type="staff-performance">员工业绩目标</button>
+                <button class="tab-item" data-goal-type="staff-card-consume">员工卡耗目标</button>
+            </div>
+
+            <div class="year-selector">
+                <button class="year-btn" id="prevYearBtn" disabled>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="year-display" id="currentYearDisplay">2024</div>
+                <button class="year-btn" id="nextYearBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+
+            <div class="main-content">
+                <div class="year-overview-card">
+                    <h2 class="overview-title">年度概览</h2>
+                    <div class="circle-progress-container">
+                        <div class="circle-progress-wrapper">
+                            <div class="circle-progress-bg"></div>
+                            <div class="circle-progress-fill" id="yearProgressFill"></div>
+                            <div class="circle-progress-inner">
+                                <div class="circle-percentage" id="yearCompletionRate">78%</div>
+                                <div class="circle-label">完成率</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="overview-stats">
+                        <div class="stat-item">
+                            <span class="stat-label">年度目标</span>
+                            <span class="stat-value">¥1,200,000</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-label">年度完成</span>
+                            <span class="stat-value highlight">¥936,000</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="month-grid-container">
+                    <div class="month-grid-header">
+                        <h2 class="month-grid-title">月度目标</h2>
+                        <div class="batch-actions">
+                            <button class="btn-batch" id="batchClearBtn" disabled>清空选中 (0)</button>
+                        </div>
+                    </div>
+                    <div class="month-grid" id="monthGrid">
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="goalModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">设置目标</h3>
+                <button class="modal-close" id="modalCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-field">
+                    <label class="modal-label">目标所属</label>
+                    <div class="modal-value" id="modalTargetInfo">2024年1月</div>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">目标数值</label>
+                    <div class="modal-input-wrap">
+                        <span class="modal-input-prefix">¥</span>
+                        <input type="text" class="modal-input" id="goalAmountInput" placeholder="请输入目标金额" inputmode="decimal">
+                    </div>
+                    <div class="modal-tip">请输入有效的数字金额</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="modalCancelBtn">取消</button>
+                <button class="modal-btn primary" id="modalConfirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const GOAL_TYPES = [
+            { id: 'store-performance', name: '门店业绩指标', unit: '元' },
+            { id: 'store-card-consume', name: '门店卡耗目标', unit: '元' },
+            { id: 'customer-flow', name: '客流目标', unit: '人' },
+            { id: 'staff-performance', name: '员工业绩目标', unit: '元' },
+            { id: 'staff-card-consume', name: '员工卡耗目标', unit: '元' },
+        ];
+
+        const CURRENT_YEAR = new Date().getFullYear();
+        const MIN_YEAR = CURRENT_YEAR - 5;
+        const MAX_YEAR = CURRENT_YEAR;
+
+        let currentGoalTypeId = 'store-performance';
+        let currentYear = CURRENT_YEAR;
+        let selectedMonths = [];
+        let editingMonth = null;
+        let monthlyGoals = {};
+
+        function generateMockData(year, goalTypeId) {
+            const mockGoals = {};
+            const baseGoal = goalTypeId.includes('performance') ? 100000 : 
+                           goalTypeId.includes('card-consume') ? 80000 : 500;
+            
+            for (let month = 1; month <= 12; month++) {
+                const hasGoal = Math.random() > 0.3;
+                if (hasGoal) {
+                    const goal = baseGoal * (0.8 + Math.random() * 0.4);
+                    const completed = goal * (0.3 + Math.random() * 0.7);
+                    mockGoals[month] = {
+                        month,
+                        goal: Math.round(goal),
+                        completed: Math.round(completed),
+                        completionRate: Math.round((completed / goal) * 100)
+                    };
+                }
+            }
+            return mockGoals;
+        }
+
+        function initMonthlyGoals() {
+            monthlyGoals = generateMockData(currentYear, currentGoalTypeId);
+            renderMonthGrid();
+            updateYearOverview();
+        }
+
+        function formatMoney(value) {
+            if (typeof value !== 'number') return '0.00';
+            return value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        function renderMonthGrid() {
+            const grid = document.getElementById('monthGrid');
+            if (!grid) return;
+
+            let html = '';
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            
+            months.forEach((monthName, index) => {
+                const month = index + 1;
+                const goalData = monthlyGoals[month];
+                const isSelected = selectedMonths.includes(month);
+                const isUnset = !goalData;
+                
+                let cardContent = '';
+                if (goalData) {
+                    cardContent = `
+                        <div class="month-info">
+                            <div class="info-row">
+                                <span class="info-label">目标</span>
+                                <span class="info-value goal">¥${formatMoney(goalData.goal)}</span>
+                            </div>
+                            <div class="info-row">
+                                <span class="info-label">完成</span>
+                                <span class="info-value completed">¥${formatMoney(goalData.completed)}</span>
+                            </div>
+                            <div class="month-progress-bar">
+                                <div class="month-progress-fill" style="width: ${goalData.completionRate}%"></div>
+                            </div>
+                            <div class="info-row" style="margin-top: 4px;">
+                                <span class="info-label">进度</span>
+                                <span class="info-value">${goalData.completionRate}%</span>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    cardContent = `
+                        <div class="month-info">
+                            <div style="text-align: center; padding: 16px 0; color: var(--neutral-400); font-size: 13px;">
+                                未设置目标
+                            </div>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <div class="month-card ${isSelected ? 'selected' : ''} ${isUnset ? 'unset' : ''}" data-month="${month}">
+                        <div class="month-select-indicator"></div>
+                        <div class="month-name">${monthName}</div>
+                        ${cardContent}
+                    </div>
+                `;
+            });
+
+            grid.innerHTML = html;
+            updateBatchButton();
+        }
+
+        function updateYearOverview() {
+            let totalGoal = 0;
+            let totalCompleted = 0;
+            
+            Object.values(monthlyGoals).forEach(data => {
+                totalGoal += data.goal;
+                totalCompleted += data.completed;
+            });
+
+            const completionRate = totalGoal > 0 ? Math.round((totalCompleted / totalGoal) * 100) : 0;
+            const progressDeg = (completionRate / 100) * 360;
+
+            document.getElementById('yearCompletionRate').textContent = `${completionRate}%`;
+            document.getElementById('yearProgressFill').style.setProperty('--progress-deg', `${progressDeg}deg`);
+            
+            const stats = document.querySelectorAll('.overview-stats .stat-value');
+            if (stats[0]) stats[0].textContent = `¥${formatMoney(totalGoal)}`;
+            if (stats[1]) stats[1].textContent = `¥${formatMoney(totalCompleted)}`;
+        }
+
+        function updateBatchButton() {
+            const btn = document.getElementById('batchClearBtn');
+            if (!btn) return;
+            
+            const count = selectedMonths.length;
+            btn.textContent = `清空选中 (${count})`;
+            btn.disabled = count === 0;
+        }
+
+        function toggleMonthSelection(month) {
+            const index = selectedMonths.indexOf(month);
+            if (index > -1) {
+                selectedMonths.splice(index, 1);
+            } else {
+                selectedMonths.push(month);
+            }
+            updateBatchButton();
+        }
+
+        function openGoalModal(month) {
+            editingMonth = month;
+            const goalData = monthlyGoals[month];
+            
+            document.getElementById('modalTitle').textContent = '设置目标';
+            document.getElementById('modalTargetInfo').textContent = `${currentYear}年${month}月`;
+            document.getElementById('goalAmountInput').value = goalData ? goalData.goal.toString() : '';
+            document.getElementById('goalAmountInput').focus();
+            document.getElementById('goalModal').classList.add('show');
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goalModal').classList.remove('show');
+            editingMonth = null;
+            document.getElementById('goalAmountInput').value = '';
+        }
+
+        function submitGoal() {
+            if (editingMonth === null) return;
+            
+            const input = document.getElementById('goalAmountInput');
+            const value = parseFloat(input.value);
+            
+            if (isNaN(value) || value <= 0) {
+                showToast('请输入有效的目标金额', 'error');
+                return;
+            }
+
+            const currentGoalType = GOAL_TYPES.find(t => t.id === currentGoalTypeId);
+            
+            monthlyGoals[editingMonth] = {
+                month: editingMonth,
+                goal: Math.round(value * 100) / 100,
+                completed: monthlyGoals[editingMonth]?.completed || 0,
+                completionRate: monthlyGoals[editingMonth]?.completed ? 
+                    Math.round(((monthlyGoals[editingMonth].completed / value) * 100)) : 0
+            };
+
+            renderMonthGrid();
+            updateYearOverview();
+            closeGoalModal();
+            showToast(`${currentGoalType.name}设置成功`, 'success');
+        }
+
+        function batchClearGoals() {
+            if (selectedMonths.length === 0) return;
+            
+            selectedMonths.forEach(month => {
+                delete monthlyGoals[month];
+            });
+            
+            selectedMonths = [];
+            renderMonthGrid();
+            updateYearOverview();
+            showToast(`已清空${selectedMonths.length}个月份的目标`, 'success');
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} show`;
+            toast.innerHTML = `
+                <div class="toast-icon"></div>
+                <span>${message}</span>
+            `;
+            
+            container.appendChild(toast);
+
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => {
+                    container.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        function changeGoalType(typeId) {
+            currentGoalTypeId = typeId;
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.classList.toggle('active', tab.dataset.goalType === typeId);
+            });
+            initMonthlyGoals();
+        }
+
+        function changeYear(delta) {
+            const newYear = currentYear + delta;
+            if (newYear < MIN_YEAR || newYear > MAX_YEAR) return;
+            
+            currentYear = newYear;
+            document.getElementById('currentYearDisplay').textContent = currentYear;
+            document.getElementById('prevYearBtn').disabled = currentYear <= MIN_YEAR;
+            document.getElementById('nextYearBtn').disabled = currentYear >= MAX_YEAR;
+            
+            initMonthlyGoals();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initMonthlyGoals();
+
+            document.querySelectorAll('.tab-item').forEach(tab => {
+                tab.addEventListener('click', () => {
+                    changeGoalType(tab.dataset.goalType);
+                });
+            });
+
+            document.getElementById('prevYearBtn').addEventListener('click', () => {
+                changeYear(-1);
+            });
+
+            document.getElementById('nextYearBtn').addEventListener('click', () => {
+                changeYear(1);
+            });
+
+            document.getElementById('monthGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.month-card');
+                if (!card || card.classList.contains('disabled')) return;
+                
+                const month = parseInt(card.dataset.month);
+                
+                if (e.target.closest('.month-select-indicator')) {
+                    toggleMonthSelection(month);
+                    card.classList.toggle('selected');
+                } else {
+                    openGoalModal(month);
+                }
+            });
+
+            document.getElementById('modalCloseBtn').addEventListener('click', closeGoalModal);
+            document.getElementById('modalCancelBtn').addEventListener('click', closeGoalModal);
+            document.getElementById('modalConfirmBtn').addEventListener('click', submitGoal);
+            document.getElementById('batchClearBtn').addEventListener('click', batchClearGoals);
+
+            document.getElementById('goalAmountInput').addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    submitGoal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,559 @@
+/* ========================================================
+ * 克丽缇娜品牌样式规范 - CHLITINA Brand Style Guide
+ * Version: 1.0.0
+ * Date: 2024
+ * ======================================================== */
+
+/* ========================================================
+ * 一、品牌主色调 - Brand Primary Colors
+ * 核心品牌色：玫瑰粉色系
+ * 使用场景：主按钮、链接、强调元素、进度条等
+ * ======================================================== */
+
+:root {
+    /* 主色 - 核心品牌色 */
+    --brand-primary: #E87C9A;
+    --brand-primary-rgb: rgb(232, 124, 154);
+    --brand-primary-hsl: hsl(345, 66%, 70%);
+    
+    /* 主色深浅变体 */
+    --brand-primary-50: #FFF1F5;
+    --brand-primary-50-rgb: rgb(255, 241, 245);
+    --brand-primary-50-hsl: hsl(345, 100%, 98%);
+    
+    --brand-primary-100: #FFE4EC;
+    --brand-primary-100-rgb: rgb(255, 228, 236);
+    --brand-primary-100-hsl: hsl(345, 100%, 95%);
+    
+    --brand-primary-200: #FFC7D9;
+    --brand-primary-200-rgb: rgb(255, 199, 217);
+    --brand-primary-200-hsl: hsl(345, 100%, 88%);
+    
+    --brand-primary-300: #FFA0BE;
+    --brand-primary-300-rgb: rgb(255, 160, 190);
+    --brand-primary-300-hsl: hsl(345, 100%, 79%);
+    
+    --brand-primary-400: #F1A3B8;
+    --brand-primary-400-rgb: rgb(241, 163, 184);
+    --brand-primary-400-hsl: hsl(345, 66%, 80%);
+    
+    --brand-primary-500: #E87C9A;
+    --brand-primary-500-rgb: rgb(232, 124, 154);
+    --brand-primary-500-hsl: hsl(345, 66%, 70%);
+    
+    --brand-primary-600: #D66B85;
+    --brand-primary-600-rgb: rgb(214, 107, 133);
+    --brand-primary-600-hsl: hsl(345, 55%, 62%);
+    
+    --brand-primary-700: #B75A70;
+    --brand-primary-700-rgb: rgb(183, 90, 112);
+    --brand-primary-700-hsl: hsl(345, 42%, 54%);
+    
+    --brand-primary-800: #9A4B5D;
+    --brand-primary-800-rgb: rgb(154, 75, 93);
+    --brand-primary-800-hsl: hsl(345, 35%, 45%);
+    
+    --brand-primary-900: #823F4F;
+    --brand-primary-900-rgb: rgb(130, 63, 79);
+    --brand-primary-900-hsl: hsl(345, 30%, 38%);
+}
+
+/* ========================================================
+ * 二、辅助色调 - Secondary Colors
+ * 使用场景：次要按钮、标签、状态指示等
+ * ======================================================== */
+
+:root {
+    /* 金色系 - 高端质感 */
+    --brand-secondary-gold: #D4AF37;
+    --brand-secondary-gold-rgb: rgb(212, 175, 55);
+    --brand-secondary-gold-hsl: hsl(45, 66%, 52%);
+    
+    --brand-secondary-gold-light: #F4E4BC;
+    --brand-secondary-gold-light-rgb: rgb(244, 228, 188);
+    --brand-secondary-gold-light-hsl: hsl(45, 72%, 84%);
+    
+    /* 珊瑚色系 - 温暖活力 */
+    --brand-secondary-coral: #F8B5A7;
+    --brand-secondary-coral-rgb: rgb(248, 181, 167);
+    --brand-secondary-coral-hsl: hsl(10, 78%, 81%);
+    
+    /* 薄荷绿色系 - 清新自然 */
+    --brand-secondary-mint: #98D8C8;
+    --brand-secondary-mint-rgb: rgb(152, 216, 200);
+    --brand-secondary-mint-hsl: hsl(168, 50%, 72%);
+}
+
+/* ========================================================
+ * 三、功能强调色 - Functional Accent Colors
+ * 使用场景：成功、警告、错误、信息等状态提示
+ * ======================================================== */
+
+:root {
+    /* 成功色 */
+    --accent-success: #10B981;
+    --accent-success-rgb: rgb(16, 185, 129);
+    --accent-success-hsl: hsl(152, 71%, 43%);
+    --accent-success-light: #D1FAE5;
+    
+    /* 警告色 */
+    --accent-warning: #F59E0B;
+    --accent-warning-rgb: rgb(245, 158, 11);
+    --accent-warning-hsl: hsl(45, 92%, 51%);
+    --accent-warning-light: #FEF3C7;
+    
+    /* 错误色 */
+    --accent-error: #EF4444;
+    --accent-error-rgb: rgb(239, 68, 68);
+    --accent-error-hsl: hsl(0, 84%, 60%);
+    --accent-error-light: #FEE2E2;
+    
+    /* 信息色 */
+    --accent-info: #3B82F6;
+    --accent-info-rgb: rgb(59, 130, 246);
+    --accent-info-hsl: hsl(217, 91%, 59%);
+    --accent-info-light: #DBEAFE;
+    
+    /* 中性强调色 */
+    --accent-muted: #6B7280;
+    --accent-muted-rgb: rgb(107, 114, 128);
+    --accent-muted-hsl: hsl(210, 9%, 45%);
+}
+
+/* ========================================================
+ * 四、背景色系 - Background Colors
+ * 使用场景：页面背景、卡片背景、模态框背景等
+ * ======================================================== */
+
+:root {
+    /* 主背景 */
+    --bg-primary: #FFFFFF;
+    --bg-primary-rgb: rgb(255, 255, 255);
+    --bg-primary-hsl: hsl(0, 0%, 100%);
+    
+    /* 次背景 */
+    --bg-secondary: #F9FAFB;
+    --bg-secondary-rgb: rgb(249, 250, 251);
+    --bg-secondary-hsl: hsl(210, 17%, 98%);
+    
+    /* 品牌感背景 */
+    --bg-brand: #FFF1F5;
+    --bg-brand-rgb: rgb(255, 241, 245);
+    --bg-brand-hsl: hsl(345, 100%, 98%);
+    
+    /* 卡片背景 */
+    --bg-card: #FFFFFF;
+    --bg-card-hover: #FFF7FA;
+    
+    /* 模态框背景 */
+    --bg-modal: rgba(0, 0, 0, 0.5);
+}
+
+/* ========================================================
+ * 五、文本色系 - Text Colors
+ * 使用场景：标题、正文、提示、链接等文本
+ * ======================================================== */
+
+:root {
+    /* 文本主色 */
+    --text-primary: #111827;
+    --text-primary-rgb: rgb(17, 24, 39);
+    --text-primary-hsl: hsl(220, 29%, 11%);
+    
+    /* 文本次色 */
+    --text-secondary: #374151;
+    --text-secondary-rgb: rgb(55, 65, 81);
+    --text-secondary-hsl: hsl(217, 19%, 29%);
+    
+    /* 文本辅助色 */
+    --text-muted: #6B7280;
+    --text-muted-rgb: rgb(107, 114, 128);
+    --text-muted-hsl: hsl(210, 9%, 45%);
+    
+    /* 文本弱化色 */
+    --text-disabled: #9CA3AF;
+    --text-disabled-rgb: rgb(156, 163, 175);
+    --text-disabled-hsl: hsl(210, 7%, 63%);
+    
+    /* 品牌文本色 */
+    --text-brand: #D66B85;
+    --text-brand-rgb: rgb(214, 107, 133);
+    --text-brand-hsl: hsl(345, 55%, 62%);
+    
+    /* 白色文本（用于深色背景） */
+    --text-white: #FFFFFF;
+    --text-white-rgb: rgb(255, 255, 255);
+    --text-white-hsl: hsl(0, 0%, 100%);
+}
+
+/* ========================================================
+ * 六、边框色系 - Border Colors
+ * 使用场景：卡片边框、分割线、输入框边框等
+ * ======================================================== */
+
+:root {
+    /* 主边框 */
+    --border-primary: #E5E7EB;
+    --border-primary-rgb: rgb(229, 231, 235);
+    --border-primary-hsl: hsl(210, 17%, 93%);
+    
+    /* 品牌边框 */
+    --border-brand: #FFC7D9;
+    --border-brand-rgb: rgb(255, 199, 217);
+    --border-brand-hsl: hsl(345, 100%, 88%);
+    
+    /* 聚焦边框 */
+    --border-focus: #E87C9A;
+    --border-focus-rgb: rgb(232, 124, 154);
+    --border-focus-hsl: hsl(345, 66%, 70%);
+    
+    /* 分割线 */
+    --border-divider: #F3F4F6;
+    --border-divider-rgb: rgb(243, 244, 246);
+    --border-divider-hsl: hsl(210, 16%, 96%);
+}
+
+/* ========================================================
+ * 七、交互状态色 - Interactive State Colors
+ * 使用场景：按钮、链接、输入框等交互元素的状态变化
+ * ======================================================== */
+
+:root {
+    /* 悬停状态 */
+    --state-hover: #F1A3B8;
+    --state-hover-rgb: rgb(241, 163, 184);
+    --state-hover-hsl: hsl(345, 66%, 80%);
+    
+    /* 激活状态 */
+    --state-active: #D66B85;
+    --state-active-rgb: rgb(214, 107, 133);
+    --state-active-hsl: hsl(345, 55%, 62%);
+    
+    /* 禁用状态 */
+    --state-disabled: #F3F4F6;
+    --state-disabled-rgb: rgb(243, 244, 246);
+    --state-disabled-hsl: hsl(210, 16%, 96%);
+    
+    /* 选中状态 */
+    --state-selected: #FFF1F5;
+    --state-selected-rgb: rgb(255, 241, 245);
+    --state-selected-hsl: hsl(345, 100%, 98%);
+}
+
+/* ========================================================
+ * 八、阴影色系 - Shadow Colors
+ * 使用场景：卡片阴影、模态框阴影、悬浮效果等
+ * ======================================================== */
+
+:root {
+    /* 阴影颜色 */
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --shadow-color-light: rgba(0, 0, 0, 0.05);
+    --shadow-color-dark: rgba(0, 0, 0, 0.15);
+    
+    /* 品牌阴影 */
+    --shadow-brand: rgba(232, 124, 154, 0.2);
+}
+
+/* ========================================================
+ * 九、语义化颜色映射 - Semantic Color Mapping
+ * 统一的颜色引用别名，便于维护和替换
+ * ======================================================== */
+
+:root {
+    /* 按钮颜色 */
+    --btn-primary-bg: var(--brand-primary);
+    --btn-primary-text: var(--text-white);
+    --btn-primary-hover: var(--brand-primary-600);
+    
+    --btn-secondary-bg: var(--brand-primary-100);
+    --btn-secondary-text: var(--brand-primary-600);
+    --btn-secondary-hover: var(--brand-primary-200);
+    
+    --btn-outline-bg: transparent;
+    --btn-outline-border: var(--brand-primary);
+    --btn-outline-text: var(--brand-primary);
+    --btn-outline-hover: var(--brand-primary-50);
+    
+    /* 链接颜色 */
+    --link-primary: var(--brand-primary-600);
+    --link-hover: var(--brand-primary-700);
+    --link-active: var(--brand-primary-800);
+    
+    /* 进度条颜色 */
+    --progress-bg: var(--brand-primary-100);
+    --progress-fill: var(--brand-primary);
+    
+    /* 表单颜色 */
+    --input-border: var(--border-primary);
+    --input-focus: var(--border-focus);
+    --input-placeholder: var(--text-disabled);
+    
+    /* 卡片颜色 */
+    --card-bg: var(--bg-card);
+    --card-border: var(--border-primary);
+    --card-hover: var(--bg-card-hover);
+}
+
+/* ========================================================
+ * 十、字体规范 - Typography
+ * ======================================================== */
+
+:root {
+    /* 字体族 */
+    --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    --font-family-secondary: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+    
+    /* 字体大小 */
+    --font-size-xs: 12px;
+    --font-size-sm: 13px;
+    --font-size-base: 14px;
+    --font-size-md: 16px;
+    --font-size-lg: 18px;
+    --font-size-xl: 20px;
+    --font-size-2xl: 24px;
+    --font-size-3xl: 28px;
+    --font-size-4xl: 32px;
+    
+    /* 字体粗细 */
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    
+    /* 行高 */
+    --line-height-tight: 1.25;
+    --line-height-normal: 1.5;
+    --line-height-relaxed: 1.75;
+    
+    /* 字间距 */
+    --letter-spacing-tight: -0.02em;
+    --letter-spacing-normal: 0;
+    --letter-spacing-wide: 0.02em;
+}
+
+/* ========================================================
+ * 十一、间距规范 - Spacing
+ * ======================================================== */
+
+:root {
+    --spacing-xs: 4px;
+    --spacing-sm: 8px;
+    --spacing-md: 12px;
+    --spacing-lg: 16px;
+    --spacing-xl: 20px;
+    --spacing-2xl: 24px;
+    --spacing-3xl: 32px;
+    --spacing-4xl: 40px;
+    --spacing-5xl: 48px;
+}
+
+/* ========================================================
+ * 十二、圆角规范 - Border Radius
+ * ======================================================== */
+
+:root {
+    --radius-none: 0;
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 12px;
+    --radius-xl: 16px;
+    --radius-2xl: 24px;
+    --radius-full: 9999px;
+}
+
+/* ========================================================
+ * 十三、阴影规范 - Shadows
+ * ======================================================== */
+
+:root {
+    --shadow-none: none;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    --shadow-brand: 0 4px 20px rgba(232, 124, 154, 0.2);
+}
+
+/* ========================================================
+ * 十四、过渡动画规范 - Transitions
+ * ======================================================== */
+
+:root {
+    --transition-fast: all 0.15s ease;
+    --transition-normal: all 0.25s ease;
+    --transition-slow: all 0.35s ease;
+    --transition-bounce: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* ========================================================
+ * 十五、组件样式基础 - Component Base Styles
+ * ======================================================== */
+
+/* 按钮基础样式 */
+.btn {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    font-weight: var(--font-weight-medium);
+    padding: var(--spacing-md) var(--spacing-xl);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    border: none;
+    transition: var(--transition-normal);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-sm);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--brand-primary-400) 0%, var(--brand-primary-600) 100%);
+    color: var(--btn-primary-text);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-700) 100%);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-md);
+}
+
+.btn-secondary {
+    background: var(--btn-secondary-bg);
+    color: var(--btn-secondary-text);
+    border: 1px solid var(--brand-primary-200);
+}
+
+.btn-secondary:hover {
+    background: var(--btn-secondary-hover);
+}
+
+.btn-outline {
+    background: var(--btn-outline-bg);
+    color: var(--btn-outline-text);
+    border: 1px solid var(--btn-outline-border);
+}
+
+.btn-outline:hover {
+    background: var(--btn-outline-hover);
+}
+
+.btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* 卡片基础样式 */
+.card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-xl);
+    transition: var(--transition-normal);
+}
+
+.card:hover {
+    background: var(--card-hover);
+    box-shadow: var(--shadow-md);
+}
+
+/* 输入框基础样式 */
+.input {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1px solid var(--input-border);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: var(--transition-fast);
+    outline: none;
+    width: 100%;
+}
+
+.input:focus {
+    border-color: var(--input-focus);
+    box-shadow: 0 0 0 3px var(--brand-primary-50);
+}
+
+.input::placeholder {
+    color: var(--input-placeholder);
+}
+
+/* 链接基础样式 */
+a {
+    color: var(--link-primary);
+    text-decoration: none;
+    transition: var(--transition-fast);
+}
+
+a:hover {
+    color: var(--link-hover);
+    text-decoration: underline;
+}
+
+/* 标题样式 */
+h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-family-primary);
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-primary);
+    line-height: var(--line-height-tight);
+}
+
+h1 { font-size: var(--font-size-4xl); }
+h2 { font-size: var(--font-size-3xl); }
+h3 { font-size: var(--font-size-2xl); }
+h4 { font-size: var(--font-size-xl); }
+h5 { font-size: var(--font-size-lg); }
+h6 { font-size: var(--font-size-md); }
+
+/* 正文样式 */
+p {
+    font-family: var(--font-family-secondary);
+    font-size: var(--font-size-base);
+    color: var(--text-secondary);
+    line-height: var(--line-height-relaxed);
+}
+
+/* ========================================================
+ * 十六、响应式断点 - Responsive Breakpoints
+ * ======================================================== */
+
+:root {
+    --breakpoint-xs: 480px;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-xxl: 1400px;
+}
+
+/* ========================================================
+ * 样式规范使用说明
+ * ======================================================== */
+
+/*
+ * 1. 引入方式：
+ *    <link rel="stylesheet" href="path/to/chlitina-brand.css">
+ *
+ * 2. 颜色使用优先级：
+ *    - 优先使用语义化变量（如 --btn-primary-bg）而非直接使用品牌色变量
+ *    - 如需自定义颜色，基于品牌色系进行微调
+ *
+ * 3. 组件开发规范：
+ *    - 按钮：使用 .btn 基础类 + .btn-primary/.btn-secondary/.btn-outline
+ *    - 卡片：使用 .card 类
+ *    - 输入框：使用 .input 类
+ *
+ * 4. 代码审查要点：
+ *    - 禁止使用硬编码颜色值，必须使用CSS变量
+ *    - 颜色搭配需符合品牌调性（粉色系为主）
+ *    - 确保文本对比度符合WCAG标准
+ *
+ * 5. 视觉验收标准：
+ *    - 主按钮颜色：渐变色 #F1A3B8 → #D66B85
+ *    - 强调文本颜色：#D66B85
+ *    - 背景色：#FFFFFF 或 #F9FAFB
+ *    - 边框色：#E5E7EB 或 #FFC7D9
+ */
