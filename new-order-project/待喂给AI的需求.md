@@ -1,8 +1,7 @@
+请基于`new-order-project\create-order-pad.html`最新的代码完整更新`new-order-project\PRD\多张金额卡抵扣需求.md`
 
 
 
-
-new-order-project\customer-detail-pad.html 置换按钮（data-action="exchange"）的图标还是不好看
 
 
 

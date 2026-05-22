@@ -2364,6 +2364,191 @@
             gap: 10px;
         }
 
+        .discount-detail-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1002;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .discount-detail-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .discount-detail-modal {
+            width: 560px;
+            max-width: calc(100vw - 32px);
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.96);
+            transition: transform 0.3s ease;
+            overflow: hidden;
+        }
+
+        .discount-detail-overlay.show .discount-detail-modal {
+            transform: scale(1);
+        }
+
+        .discount-detail-header {
+            padding: 16px 18px;
+            border-bottom: 1px solid var(--neutral-200);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--neutral-800);
+        }
+
+        .discount-detail-body {
+            padding: 18px;
+            max-height: 50vh;
+            overflow: auto;
+        }
+
+        .discount-detail-footer {
+            padding: 12px 18px;
+            border-top: 1px solid var(--neutral-200);
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .discount-item {
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px dashed var(--neutral-200);
+        }
+
+        .discount-item:last-child {
+            margin-bottom: 0;
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+
+        .discount-type {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .discount-type::before {
+            content: '';
+            width: 4px;
+            height: 14px;
+            background: var(--primary);
+            border-radius: 2px;
+        }
+
+        .discount-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 6px 0;
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .discount-row-label {
+            color: var(--neutral-500);
+        }
+
+        .discount-row-value {
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .discount-row-value.discount {
+            color: var(--success);
+        }
+
+        .discount-list {
+            margin-top: 8px;
+            padding-left: 12px;
+        }
+
+        .discount-product-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background: var(--neutral-50);
+            border-radius: var(--radius-sm);
+            margin-bottom: 6px;
+            font-size: 13px;
+        }
+
+        .discount-product-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .discount-product-name {
+            flex: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            color: var(--neutral-700);
+        }
+
+        .discount-product-discount {
+            margin: 0 12px;
+            color: var(--neutral-500);
+            font-size: 12px;
+        }
+
+        .discount-product-amount {
+            color: var(--success);
+            font-weight: 600;
+        }
+
+        .discount-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 12px;
+            border-top: 1px solid var(--neutral-200);
+            margin-top: 12px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .discount-summary-label {
+            color: var(--neutral-600);
+        }
+
+        .discount-summary-value {
+            color: var(--primary);
+            font-size: 18px;
+        }
+
+        .btn-discount-detail {
+            margin-left: 10px;
+            padding: 4px 10px;
+            font-size: 12px;
+            color: var(--primary);
+            background: transparent;
+            border: 1px solid var(--primary);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-discount-detail:hover {
+            background: var(--primary);
+            color: #fff;
+        }
+
         .moneycard-item {
             border: 1px solid var(--neutral-200);
             border-radius: var(--radius-md);
@@ -2378,7 +2563,8 @@
         }
 
         .moneycard-item.selected {
-            /* border-color: var(--primary-500); */
+            border-color: var(--primary-500);
+            background: var(--primary-100);
         }
 
         .moneycard-item.disabled {
@@ -3205,6 +3391,14 @@
             display: flex;
             flex-direction: column;
             align-items: stretch;
+            position: relative;
+        }
+
+        .upgrade-newcard-benefit-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 10;
         }
 
         .upgrade-newcard-panel > .upgrade-newcard-hotzone,
@@ -4103,6 +4297,12 @@
             font-weight: 600;
         }
 
+        .discount-info-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
         .payment-actions {
             display: flex;
             align-items: center;
@@ -4155,7 +4355,7 @@
 
         .whole-order-change-popover {
             position: fixed;
-            z-index: 9999;
+            z-index: 40;
             width: 320px;
             max-width: calc(100vw - 24px);
             background: rgba(255, 255, 255, 0.92);
@@ -4273,6 +4473,40 @@
         .woc-btn.primary {
             background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
             color: #fff;
+        }
+
+        .woc-remove-row {
+            padding: 8px 0 4px 0;
+            border-top: 1px dashed var(--neutral-200);
+            margin-top: 8px;
+        }
+
+        .woc-remove-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--primary);
+            background: transparent;
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .woc-remove-btn:hover {
+            background: var(--primary-50);
+        }
+
+        .woc-remove-btn:active {
+            background: var(--primary-100);
+            transform: scale(0.98);
+        }
+
+        .woc-remove-btn svg {
+            color: var(--primary);
         }
 
         /* ========== 会员选择弹窗 ========== */
@@ -5764,7 +5998,7 @@
             display: none;
             justify-content: center;
             align-items: center;
-            z-index: 1000;
+            z-index: 50;
         }
 
         .add-course-modal-overlay.show {
@@ -7255,7 +7489,10 @@
                     </div>
                     <div class="payment-item">
                         <span class="payment-item-label">共优惠</span>
-                        <span class="payment-item-value discount">¥38.00</span>
+                        <div class="discount-info-row">
+                            <span class="payment-item-value discount">¥38.00</span>
+                            <button class="btn-discount-detail" id="discountDetailBtn">优惠明细</button>
+                        </div>
                     </div>
                 </div>
                 <div class="payment-actions">
@@ -7285,6 +7522,14 @@
                     </div>
                 </div>
                 <div class="woc-tip">最低改价金额为 ¥0.00（0折）</div>
+                <div class="woc-remove-row" id="wocRemoveRow" style="display:none;">
+                    <button type="button" class="woc-remove-btn" id="wocRemoveBtn">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0M9 12h6M12 9v6"/>
+                        </svg>
+                        移除整单改价优惠
+                    </button>
+                </div>
                 <div class="woc-actions">
                     <button type="button" class="woc-btn secondary" id="wocCancelBtn">取消</button>
                     <button type="button" class="woc-btn primary" id="wocConfirmBtn">确定</button>
@@ -7355,6 +7600,16 @@
             <div class="confirm-modal-footer">
                 <button class="btn-modal secondary" id="confirmCancel">取消</button>
                 <button class="btn-modal primary" id="confirmOk">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="discount-detail-overlay" id="discountDetailOverlay">
+        <div class="discount-detail-modal">
+            <div class="discount-detail-header">优惠明细</div>
+            <div class="discount-detail-body" id="discountDetailBody"></div>
+            <div class="discount-detail-footer">
+                <button class="btn-modal primary" id="discountDetailCloseBtn">关闭</button>
             </div>
         </div>
     </div>
@@ -7629,7 +7884,7 @@
     <div class="upgrade-newcard-modal-overlay" id="upgradeNewCardModalOverlay">
         <div class="upgrade-newcard-modal">
             <div class="upgrade-newcard-modal-header">
-                <span class="upgrade-newcard-modal-title">请选择新卡</span>
+                <span class="upgrade-newcard-modal-title" id="upgradeNewCardModalTitle">选择卡项</span>
                 <div class="upgrade-newcard-modal-close" id="upgradeNewCardModalClose">×</div>
             </div>
             <div class="upgrade-newcard-modal-body">
@@ -7642,6 +7897,20 @@
                         <div class="upgrade-newcard-recent-list" id="upgradeNewCardRecentList"></div>
                     </div>
                 </div>
+
+                <div class="add-service-selected-section">
+                    <div class="add-service-selected-header">
+                        <span class="add-service-selected-title">已选卡项</span>
+                        <div class="add-service-selected-actions">
+                            <button class="add-service-btn clear" id="upgradeNewCardClearBtn">清空</button>
+                            <button class="add-service-btn confirm" id="upgradeNewCardConfirmBtn">确定</button>
+                        </div>
+                    </div>
+                    <div class="add-service-selected-list" id="upgradeNewCardSelectedList">
+                        <div class="add-service-empty-hint">点击卡项名称添加卡项</div>
+                    </div>
+                </div>
+
                 <div class="upgrade-newcard-main">
                     <div class="upgrade-newcard-categories" id="upgradeNewCardCategoryList">
                         <div class="upgrade-newcard-category active" data-category="limited">有限次卡</div>
@@ -9544,6 +9813,110 @@
             upgradeNewCardModalOverlay?.classList.remove('show');
         }
 
+        let selectedUpgradeNewCardBenefitCards = [];
+        let upgradeNewCardModalMode = 'upgrade'; // 'upgrade' | 'benefit'
+
+        function openUpgradeNewCardModal(oldCardId) {
+            upgradeNewCardTargetOldCardId = String(oldCardId || '');
+            upgradeNewCardCommittedKeyword = '';
+            upgradeNewCardModalMode = 'upgrade';
+            const existing = Array.isArray(upgradeCardList) ? upgradeCardList.find(x => String(x.cardId) === upgradeNewCardTargetOldCardId) : null;
+            selectedUpgradeNewCardId = existing?.newCardId ? String(existing.newCardId) : '';
+
+            if (upgradeNewCardSearchInput) upgradeNewCardSearchInput.value = '';
+            renderUpgradeNewCardRecentSearches();
+            setUpgradeNewCardCategory(upgradeNewCardCategory || 'limited');
+            toggleUpgradeNewCardSelectedSection(false);
+            toggleUpgradeNewCardModalFooter(true);
+            upgradeNewCardModalOverlay?.classList.add('show');
+            setTimeout(() => upgradeNewCardSearchInput?.focus(), 50);
+        }
+
+        function openUpgradeNewCardModalForBenefit() {
+            selectedUpgradeNewCardBenefitCards = [];
+            upgradeNewCardCommittedKeyword = '';
+            upgradeNewCardModalMode = 'benefit';
+            if (upgradeNewCardSearchInput) upgradeNewCardSearchInput.value = '';
+            renderUpgradeNewCardRecentSearches();
+            setUpgradeNewCardCategory('limited');
+            renderUpgradeNewCardSelectedList();
+            toggleUpgradeNewCardSelectedSection(true);
+            toggleUpgradeNewCardModalFooter(false);
+            upgradeNewCardModalOverlay?.classList.add('show');
+            setTimeout(() => upgradeNewCardSearchInput?.focus(), 50);
+        }
+
+        function toggleUpgradeNewCardSelectedSection(show) {
+            const section = document.querySelector('#upgradeNewCardModalOverlay .add-service-selected-section');
+            if (section) {
+                section.style.display = show ? 'block' : 'none';
+            }
+        }
+
+        function toggleUpgradeNewCardModalFooter(show) {
+            const footer = document.querySelector('#upgradeNewCardModalOverlay .upgrade-newcard-modal-footer');
+            if (footer) {
+                footer.style.display = show ? 'flex' : 'none';
+            }
+        }
+
+        function closeUpgradeNewCardModalForBenefit() {
+            upgradeNewCardModalOverlay?.classList.remove('show');
+        }
+
+        function renderUpgradeNewCardSelectedList() {
+            const listEl = document.getElementById('upgradeNewCardSelectedList');
+            if (!listEl) return;
+            if (selectedUpgradeNewCardBenefitCards.length === 0) {
+                listEl.innerHTML = '<div class="add-service-empty-hint">点击卡项名称添加卡项</div>';
+                return;
+            }
+            listEl.innerHTML = selectedUpgradeNewCardBenefitCards.map((card, idx) => {
+                return `
+                    <div class="add-service-selected-item">
+                        <div class="add-service-selected-info">
+                            <span class="add-service-selected-name">${card.name}</span>
+                            <span class="add-service-selected-extra">¥${Number(card.price || 0).toFixed(2)}</span>
+                        </div>
+                        <span class="remove-btn" onclick="removeUpgradeNewCardFromBenefitList(${idx})">×</span>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function addUpgradeNewCardToBenefitList(card) {
+            const existing = selectedUpgradeNewCardBenefitCards.find(c => String(c.id) === String(card.id));
+            if (existing) {
+                showToast('该卡项已选择');
+                return;
+            }
+            selectedUpgradeNewCardBenefitCards.push(card);
+            renderUpgradeNewCardSelectedList();
+        }
+
+        function removeUpgradeNewCardFromBenefitList(index) {
+            selectedUpgradeNewCardBenefitCards.splice(index, 1);
+            renderUpgradeNewCardSelectedList();
+        }
+
+        function clearUpgradeNewCardBenefitList() {
+            selectedUpgradeNewCardBenefitCards = [];
+            renderUpgradeNewCardSelectedList();
+        }
+
+        function confirmUpgradeNewCardBenefitSelection() {
+            if (selectedUpgradeNewCardBenefitCards.length === 0) {
+                showToast('请选择卡项');
+                return;
+            }
+            addSelectedItemsToCustomCourse('card', selectedUpgradeNewCardBenefitCards, customCourseBenefitTargetMode);
+            clearUpgradeNewCardBenefitList();
+            closeUpgradeNewCardModalForBenefit();
+            customCourseBenefitModalType = null;
+            customCourseBenefitTargetMode = 'buy';
+            showToast(`已选择 ${selectedUpgradeNewCardBenefitCards.length} 个卡项`);
+        }
+
         function applyUpgradeNewCardSelection() {
             if (!upgradeNewCardTargetOldCardId) return;
             const card = getUpgradeNewCardById(selectedUpgradeNewCardId);
@@ -9622,6 +9995,7 @@
             const modifyBtn = isAmount ? ('<button type="button" class="upgrade-mini-btn" onclick="openUpgradeEditAmountModal(\'' + oldCardId + '\')">修改卡金</button>') : '';
 
             panel.innerHTML =
+                '<button type="button" class="upgrade-mini-btn primary upgrade-newcard-benefit-btn" onclick="openUpgradeNewCardBenefitModal(\'' + String(c.id) + '\')">查看卡片权益</button>' +
                 '<div class="upgrade-newcard-selected">' +
                 '   <div>' +
                 '       <div class="upgrade-newcard-selected-name">' + customizeTag + '<span class="upgrade-newcard-selected-name-text">' + (c.name || '') + '</span></div>' +
@@ -9629,7 +10003,6 @@
                 '   </div>' +
                 '   <div class="upgrade-newcard-selected-actions">' +
                 '       <button type="button" class="upgrade-mini-btn" onclick="openUpgradeNewCardModal(\'' + oldCardId + '\')">替换</button>' +
-                '       <button type="button" class="upgrade-mini-btn primary" onclick="openUpgradeNewCardBenefitModal(\'' + String(c.id) + '\')">查看卡片权益</button>' +
                 '       ' + modifyBtn +
                 '   </div>' +
                 '</div>';
@@ -9955,16 +10328,48 @@
             const tr = e.target.closest('tr[data-id]');
             if (!tr) return;
             const id = tr.getAttribute('data-id') || '';
-            selectedUpgradeNewCardId = id;
-            renderUpgradeNewCardTable();
+            if (upgradeNewCardModalMode === 'benefit') {
+                const card = getUpgradeNewCardById(id);
+                if (card) {
+                    addUpgradeNewCardToBenefitList(card);
+                }
+            } else {
+                selectedUpgradeNewCardId = id;
+                renderUpgradeNewCardTable();
+            }
         });
 
         upgradeNewCardConfirm?.addEventListener('click', applyUpgradeNewCardSelection);
-        upgradeNewCardCancel?.addEventListener('click', closeUpgradeNewCardModal);
-        upgradeNewCardModalClose?.addEventListener('click', closeUpgradeNewCardModal);
-        upgradeNewCardModalOverlay?.addEventListener('click', function (e) {
-            if (e.target === this) closeUpgradeNewCardModal();
+        upgradeNewCardCancel?.addEventListener('click', function () {
+            if (upgradeNewCardModalMode === 'benefit') {
+                closeUpgradeNewCardModalForBenefit();
+                customCourseBenefitModalType = null;
+            } else {
+                closeUpgradeNewCardModal();
+            }
         });
+        upgradeNewCardModalClose?.addEventListener('click', function () {
+            if (upgradeNewCardModalMode === 'benefit') {
+                closeUpgradeNewCardModalForBenefit();
+                customCourseBenefitModalType = null;
+            } else {
+                closeUpgradeNewCardModal();
+            }
+        });
+        upgradeNewCardModalOverlay?.addEventListener('click', function (e) {
+            if (e.target !== this) return;
+            if (upgradeNewCardModalMode === 'benefit') {
+                closeUpgradeNewCardModalForBenefit();
+                customCourseBenefitModalType = null;
+            } else {
+                closeUpgradeNewCardModal();
+            }
+        });
+
+        document.getElementById('upgradeNewCardClearBtn')?.addEventListener('click', clearUpgradeNewCardBenefitList);
+        document.getElementById('upgradeNewCardConfirmBtn')?.addEventListener('click', confirmUpgradeNewCardBenefitSelection);
+
+
 
         upgradeNewCardBenefitModalOk?.addEventListener('click', closeUpgradeNewCardBenefitModal);
         upgradeNewCardBenefitModalClose?.addEventListener('click', closeUpgradeNewCardBenefitModal);
@@ -11082,6 +11487,8 @@
 
         function updateFinalPrice(discountInput) {
             const row = discountInput.closest('tr');
+            if (!row) return;
+
             const intStr = sanitizeIntString(discountInput.value);
             const discount = clampNumber(intStr === '' ? 0 : parseInt(intStr, 10), 0, 100);
 
@@ -11093,12 +11500,13 @@
                     const originDiscount = clampNumber(originIntStr === '' ? discount : parseInt(originIntStr, 10), 0, 100);
                     if (originDiscount !== discount) {
                         row.dataset.userDiscountOverride = '1';
-                        clearRowMoneyCards(row, { preserveDiscount: true, keepFinalPrice: true });
                     }
                 }
             }
 
             discountInput.value = String(discount);
+            discountInput.setAttribute('value', String(discount));
+            
             const originalPriceText = row.querySelector('.col-original').textContent;
             const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
             const qtyEl = row.querySelector('input[data-field="buyQty"]') || row.querySelector('input[data-field="buy"]');
@@ -11106,12 +11514,26 @@
             const baseTotal = originalPrice * buyQty;
             const finalPrice = baseTotal * (discount / 100);
             const finalPriceInput = row.querySelector('[data-field="finalPrice"]');
+            
             finalPriceInput.value = finalPrice.toFixed(2);
+            
+            if (!suppressMoneyCardConflict && getRowMoneyCards(row).length > 0) {
+                normalizeAndRenderMoneyCards();
+            } else {
+                const actionRow = findActionRowForItemRow(row);
+                const valEl = ensureActionRowPayable(actionRow);
+                if (valEl) {
+                    valEl.textContent = `¥${finalPrice.toFixed(2)}`;
+                }
+            }
+            
             updateOrderSummary();
         }
 
         function updateDiscount(finalPriceInput) {
             const row = finalPriceInput.closest('tr');
+            if (!row) return;
+            
             const sanitized = sanitizePriceString(finalPriceInput.value, 2);
             finalPriceInput.value = sanitized;
             const finalPrice = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
@@ -11124,7 +11546,6 @@
             if (discountInput instanceof HTMLInputElement) {
                 const curDiscountIntStr = sanitizeIntString(discountInput.value);
                 const curDiscount = clampNumber(curDiscountIntStr === '' ? 0 : parseInt(curDiscountIntStr, 10), 0, 100);
-                const baseAmount = roundMoney2((baseTotal * (curDiscount / 100)));
 
                 if (row && !suppressMoneyCardConflict) {
                     const apps = getRowMoneyCards(row);
@@ -11135,14 +11556,26 @@
                         const newFinal = roundMoney2(finalPrice);
                         if (Math.abs(newFinal - originFinal) > 0.000001) {
                             row.dataset.userDiscountOverride = '1';
-                            clearRowMoneyCards(row, { preserveDiscount: true, keepFinalPrice: true });
                         }
                     }
                 }
 
                 const discount = baseTotal > 0 ? (finalPrice / baseTotal) * 100 : 0;
-                discountInput.value = clampNumber(discount, 0, 100).toFixed(2);
+                const discountValue = clampNumber(discount, 0, 100).toFixed(2);
+                discountInput.value = discountValue;
+                discountInput.setAttribute('value', discountValue);
             }
+            
+            if (!suppressMoneyCardConflict && getRowMoneyCards(row).length > 0) {
+                normalizeAndRenderMoneyCards();
+            } else {
+                const actionRow = findActionRowForItemRow(row);
+                const valEl = ensureActionRowPayable(actionRow);
+                if (valEl) {
+                    valEl.textContent = `¥${finalPrice.toFixed(2)}`;
+                }
+            }
+            
             updateOrderSummary();
         }
 
@@ -11165,9 +11598,7 @@
             }
             const discountInput = row.querySelector('input[data-field="discount"]');
             if (discountInput) {
-                suppressMoneyCardConflict = true;
                 updateFinalPrice(discountInput);
-                suppressMoneyCardConflict = false;
                 return;
             }
             updateOrderSummary();
@@ -11412,8 +11843,7 @@
             const isGift = checkbox.checked;
             if (isGift) row.dataset.isGift = '1';
             else if (row.dataset.isGift) delete row.dataset.isGift;
-            if (isGift) row.dataset.userDiscountOverride = '1';
-            else if (row.dataset.userDiscountOverride) delete row.dataset.userDiscountOverride;
+            if (row.dataset.userDiscountOverride) delete row.dataset.userDiscountOverride;
 
             const buyQty = getRowBuyQty(row);
             const hiddenGift = row.querySelector('input[data-field="gift"]') || row.querySelector('input[data-field="giftQty"]');
@@ -11789,6 +12219,11 @@
             if (amountInput.dataset) amountInput.dataset.wocOrigin = String(amountInput.value || '');
             if (discountInput.dataset) discountInput.dataset.wocOrigin = String(discountInput.value || '');
 
+            const removeRow = document.getElementById('wocRemoveRow');
+            if (removeRow) {
+                removeRow.style.display = wholeOrderChangeState?.enabled ? 'flex' : 'none';
+            }
+
             pop.style.display = 'block';
             wholeOrderChangePopoverOpen = true;
             positionWholeOrderChangePopover();
@@ -11796,6 +12231,21 @@
 
             window.addEventListener('scroll', scheduleWholeOrderChangePopoverReposition, true);
             window.addEventListener('resize', scheduleWholeOrderChangePopoverReposition, true);
+        }
+
+        function removeWholeOrderChange() {
+            wholeOrderChangeState.enabled = false;
+            wholeOrderChangeState.amount = 0;
+
+            const discountAmountInput = document.getElementById('orderDiscountAmountInput');
+            const baseDiscount = Number(orderSummaryCache?.baseDiscount || 0);
+            if (discountAmountInput) discountAmountInput.value = baseDiscount.toFixed(2);
+
+            updateOrderSummary();
+
+            closeWholeOrderChangePopover();
+
+            showToast('已移除整单改价优惠');
         }
 
         function applyWholeOrderChangeFromPopover() {
@@ -11898,6 +12348,7 @@
         document.getElementById('wholeOrderChangeBtn')?.addEventListener('click', openWholeOrderChangePopover);
         document.getElementById('wocCancelBtn')?.addEventListener('click', closeWholeOrderChangePopover);
         document.getElementById('wocConfirmBtn')?.addEventListener('click', applyWholeOrderChangeFromPopover);
+        document.getElementById('wocRemoveBtn')?.addEventListener('click', removeWholeOrderChange);
 
         // 添加商品到指定分类的表格
         function addItemToCategory(type, itemData) {
@@ -14164,6 +14615,12 @@
                     openAddProductModal();
                     return;
                 }
+                if (type === 'card') {
+                    const title = document.getElementById('upgradeNewCardModalTitle');
+                    if (title) title.textContent = '选择卡项';
+                    openUpgradeNewCardModalForBenefit();
+                    return;
+                }
                 openAddCardItemModal();
             } catch (e) {
                 console.error(e);
@@ -16284,16 +16741,15 @@
             if (!(discountInput instanceof HTMLInputElement)) return;
             if (apps.length === 0) {
                 const resetWhenEmpty = options?.resetWhenEmpty === true;
-                const hasOverride = row.dataset?.userDiscountOverride === '1';
-                if (resetWhenEmpty && !hasOverride) {
+                if (resetWhenEmpty) {
                     suppressMoneyCardConflict = true;
                     discountInput.value = '100';
                     updateFinalPrice(discountInput);
                     suppressMoneyCardConflict = false;
+                    if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
                 }
                 return;
             }
-            if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
         }
 
         function clearRowMoneyCards(row, options = {}) {
@@ -16396,8 +16852,10 @@
             rows.forEach(row => {
                 if (!(row instanceof Element)) return;
                 const rawApps = getRowMoneyCards(row);
-                const apps = rawApps.filter(x => toFen(x.amount || 0) > 0);
-                if (apps.length !== rawApps.length) {
+                const hasUserOverride = row.dataset?.userDiscountOverride === '1';
+                const hasCards = rawApps.length > 0;
+                const apps = hasUserOverride ? rawApps : rawApps.filter(x => toFen(x.amount || 0) > 0);
+                if (apps.length !== rawApps.length && !hasUserOverride) {
                     setRowMoneyCards(row, apps);
                     syncMoneyCardsToCourseData(row);
                 }
@@ -16409,6 +16867,87 @@
                 const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
 
                 const preDiscountTotalFen = originalPriceFen * quantity;
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+
+                const currentFinalPrice = parseFloat(finalPriceInput?.value || '0') || 0;
+                const currentFinalPriceFen = toFen(currentFinalPrice);
+
+                if (hasUserOverride && hasCards) {
+                    let remainingPayableFen = currentFinalPriceFen;
+                    const normalized = [];
+                    const detailBalances = [];
+
+                    apps.forEach(app => {
+                        const cardId = String(app.cardId || '');
+                        const card = moneyCardById.get(cardId);
+                        if (!card) return;
+
+                        const beforeFen = running.has(cardId) ? running.get(cardId) : toFen(Number(card.balance || 0));
+                        const amtFen = Math.min(remainingPayableFen, beforeFen);
+                        const afterFen = beforeFen - amtFen;
+
+                        running.set(cardId, afterFen);
+                        normalized.push({ cardId, amount: toYuan(amtFen) });
+                        detailBalances.push(afterFen);
+                        remainingPayableFen = Math.max(0, remainingPayableFen - amtFen);
+                    });
+
+                    setRowMoneyCards(row, normalized);
+                    syncMoneyCardsToCourseData(row);
+
+                    const totalDeductFen = normalized.reduce((s, x) => s + toFen(x.amount || 0), 0);
+                    const actualPayableFen = Math.max(0, currentFinalPriceFen - totalDeductFen);
+
+                    const actionRow = findActionRowForItemRow(row);
+                    const valEl = ensureActionRowPayable(actionRow);
+                    if (valEl) {
+                        valEl.textContent = `¥${toYuan(actualPayableFen).toFixed(2)}`;
+                    }
+                    setChooseBtnState(row, toYuan(actualPayableFen));
+
+                    if (normalized.length === 0) {
+                        removeMoneyCardDetailRow(row);
+                        return;
+                    }
+
+                    const detailRow = ensureMoneyCardDetailRow(row);
+                    const list = detailRow?.querySelector?.('.moneycard-detail-list');
+                    if (!(list instanceof Element)) return;
+                    list.innerHTML = normalized.map((app, idx) => {
+                        const card = moneyCardById.get(String(app.cardId));
+                        const bal = toYuan(detailBalances[idx] || 0);
+                        const discountText = card ? buildMoneyCardDiscountText(card) : '';
+                        const balanceLabel = card && String(card.balanceType || '') === 'gift' ? '【赠金】余额' : '【本金】余额';
+                        return `
+                            <div class="moneycard-detail-item" data-card-id="${String(app.cardId)}" data-app-index="${idx}">
+                                <div class="moneycard-detail-main">
+                                    <div class="moneycard-detail-title" title="${card ? card.name : ''}">${card ? card.name : ''}</div>
+                                    <div class="moneycard-detail-meta moneycard-discount" title="${discountText}">${discountText}</div>
+                                    <div class="moneycard-detail-meta moneycard-balance">${balanceLabel}：¥${bal.toFixed(2)}</div>
+                                </div>
+                                <div class="moneycard-detail-amount">
+                                    <input type="text" class="table-input moneycard-deduct-input" disabled inputmode="none" readonly data-card-id="${String(app.cardId)}" data-app-index="${idx}" value="${roundMoney2(app.amount).toFixed(2)}" placeholder="划扣金额">
+                                </div>
+                                <div class="moneycard-detail-actions">
+                                    <button type="button" class="moneycard-mini-btn" data-action="edit-moneycard" data-app-index="${idx}">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path fill="currentColor" d="M16 7h3l-4-4v3H8a6 6 0 0 0-6 6v2h2v-2a4 4 0 0 1 4-4h8zM8 17H5l4 4v-3h7a6 6 0 0 0 6-6v-2h-2v2a4 4 0 0 1-4 4H8z"/>
+                                        </svg>
+                                        <span>替换</span>
+                                    </button>
+                                    <button type="button" class="moneycard-mini-btn danger" data-action="delete-moneycard" data-app-index="${idx}">
+                                        <svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                                            <path fill="currentColor" d="M9 3h6l1 2h5v2H3V5h5l1-2zm1 6h2v10h-2V9zm4 0h2v10h-2V9zM7 9h2v10H7V9z"/>
+                                        </svg>
+                                        <span>删除</span>
+                                    </button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                    return;
+                }
 
                 let remainingPreDiscountFen = preDiscountTotalFen;
                 const normalized = [];
@@ -16452,9 +16991,6 @@
                     ? Math.round(actualPayAmountFen / preDiscountTotalFen * 100)
                     : 100;
 
-                const discountInput = row.querySelector('input[data-field="discount"]');
-                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
-
                 if (discountInput instanceof HTMLInputElement && normalized.length > 0) {
                     suppressMoneyCardConflict = true;
                     const discountInt = Math.round(clampNumber(discountRatio, 0, 100));
@@ -16477,9 +17013,20 @@
 
                 const actionRow = findActionRowForItemRow(row);
                 const valEl = ensureActionRowPayable(actionRow);
-                if (valEl) valEl.textContent = `¥${toYuan(remainingPayableFen).toFixed(2)}`;
+                if (valEl) {
+                    // 如果有用户折扣覆盖，使用折后价作为应付金额
+                    if (row.dataset?.userDiscountOverride === '1') {
+                        const finalPrice = parseFloat(finalPriceInput?.value || '0') || 0;
+                        valEl.textContent = `¥${finalPrice.toFixed(2)}`;
+                    } else {
+                        valEl.textContent = `¥${toYuan(remainingPayableFen).toFixed(2)}`;
+                    }
+                }
 
-                setChooseBtnState(row, toYuan(remainingPayableFen));
+                const payableAmount = row.dataset?.userDiscountOverride === '1' 
+                    ? (parseFloat(finalPriceInput?.value || '0') || 0)
+                    : toYuan(remainingPayableFen);
+                setChooseBtnState(row, payableAmount);
 
                 if (normalized.length === 0) {
                     removeMoneyCardDetailRow(row);
@@ -16606,6 +17153,17 @@
                     <div class="moneycard-name">不使用金额卡</div>
                 </div>
             `);
+
+            const deductedAmounts = new Map();
+            document.querySelectorAll('tr.item-row').forEach(r => {
+                const rowApps = getRowMoneyCards(r);
+                rowApps.forEach(app => {
+                    const cardId = String(app.cardId || '');
+                    const amt = roundMoney2(Number(app.amount || 0));
+                    deductedAmounts.set(cardId, roundMoney2((deductedAmounts.get(cardId) || 0) + amt));
+                });
+            });
+
             const groups = new Map();
             const groupOrder = [];
             MONEY_CARD_OPTIONS.forEach(opt => {
@@ -16625,16 +17183,23 @@
             const renderOption = (opt, label) => {
                 if (!opt) return '';
                 const selected = pendingId === opt.id ? 'selected' : '';
-                const disabled = usedIds.has(String(opt.id)) ? 'disabled' : '';
-                const tag = usedIds.has(String(opt.id)) ? `<div class="moneycard-tag">已选择</div>` : '';
+                const cardId = String(opt.id || '');
+                const originalBalance = roundMoney2(Number(opt.balance || 0));
+                const deducted = roundMoney2(deductedAmounts.get(cardId) || 0);
+                const remainingBalance = Math.max(0, originalBalance - deducted);
+                const isUsed = usedIds.has(String(opt.id));
+                const isZeroBalance = remainingBalance <= 0.000001;
+                const disabled = (isUsed || isZeroBalance) ? 'disabled' : '';
+                const usedTag = isUsed ? `<div class="moneycard-tag">已选择</div>` : '';
+                const zeroTag = isZeroBalance ? `<div class="moneycard-tag">余额不足</div>` : '';
                 return `
                     <div class="moneycard-split-option ${selected} ${disabled}" data-moneycard-id="${opt.id}">
                         <div class="moneycard-split-left">
                             <div class="moneycard-split-label">${label}</div>
                             <div class="moneycard-split-discount">${buildMoneyCardDiscountText(opt)}</div>
                         </div>
-                        <div class="moneycard-split-balance">¥${Number(opt.balance || 0).toFixed(2)}</div>
-                        ${tag}
+                        <div class="moneycard-split-balance">¥${remainingBalance.toFixed(2)}</div>
+                        ${usedTag}${zeroTag}
                     </div>
                 `;
             };
@@ -16645,9 +17210,8 @@
                 const cash = g.cash;
                 const gift = g.gift;
                 if (!cash && !gift) return;
-                const anySelected = (cash && pendingId === cash.id) || (gift && pendingId === gift.id);
                 parts.push(`
-                    <div class="moneycard-item ${anySelected ? 'selected' : ''}">
+                    <div class="moneycard-item">
                         <div class="moneycard-name">${g.name}</div>
                         <div class="moneycard-split">
                             ${renderOption(cash, '本金')}
@@ -16742,6 +17306,20 @@
             const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
 
             const preDiscountTotalFen = originalPriceFen * quantity;
+
+            if (apps.length === 0) {
+                suppressMoneyCardConflict = true;
+                if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+                if (discountInput instanceof HTMLInputElement) {
+                    discountInput.value = '100';
+                }
+                if (finalPriceInput instanceof HTMLInputElement) {
+                    finalPriceInput.value = toYuan(preDiscountTotalFen).toFixed(2);
+                }
+                suppressMoneyCardConflict = false;
+            }
 
             let totalOriginalValueFen = 0;
             apps.forEach(app => {
@@ -16877,6 +17455,179 @@
             updateOrderSummary();
         }, true);
 
+        const discountDetailOverlay = document.getElementById('discountDetailOverlay');
+        const discountDetailBody = document.getElementById('discountDetailBody');
+        const discountDetailBtn = document.getElementById('discountDetailBtn');
+        const discountDetailCloseBtn = document.getElementById('discountDetailCloseBtn');
+
+        function openDiscountDetailModal() {
+            if (!discountDetailOverlay || !discountDetailBody) return;
+            renderDiscountDetail();
+            discountDetailOverlay.classList.add('show');
+        }
+
+        function closeDiscountDetailModal() {
+            if (!discountDetailOverlay) return;
+            discountDetailOverlay.classList.remove('show');
+        }
+
+        function renderDiscountDetail() {
+            if (!discountDetailBody) return;
+
+            let baseOriginal = 0;
+            let baseFinal = 0;
+            let discountItems = [];
+
+            const tables = ['#service-table-body', '#product-table-body', '#amount-card-table-body', '#course-table-body'];
+            
+            tables.forEach(selector => {
+                const rows = document.querySelectorAll(`${selector} tr.item-row`);
+                rows.forEach(row => {
+                    const name = row.querySelector('.col-name')?.textContent || '';
+                    const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+                    const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
+                    const buyQty = parseInt(row.querySelector('input[data-field="buy"], input[data-field="buyQty"]')?.value || '0', 10) || 0;
+                    const finalPrice = parseFloat(row.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0;
+                    const discount = parseFloat(row.querySelector('input[data-field="discount"]')?.value || '100') || 100;
+                    
+                    const rowOriginal = originalPrice * buyQty;
+                    const rowDiscount = Math.max(0, rowOriginal - finalPrice);
+                    
+                    baseOriginal += rowOriginal;
+                    baseFinal += finalPrice;
+                    
+                    if (rowDiscount > 0.000001) {
+                        discountItems.push({
+                            name: name.trim(),
+                            qty: buyQty,
+                            original: rowOriginal,
+                            final: finalPrice,
+                            discount: discount,
+                            discountAmount: rowDiscount
+                        });
+                    }
+                });
+            });
+
+            const upgradeModules = document.querySelectorAll('.upgrade-card-module[data-module-type="upgrade"]');
+            upgradeModules.forEach(module => {
+                const oldCardId = module.getAttribute('data-old-card-id') || '';
+                const item = (typeof upgradeCardList !== 'undefined' && Array.isArray(upgradeCardList))
+                    ? upgradeCardList.find(x => String(x.cardId) === String(oldCardId))
+                    : null;
+                if (!item || !item.newCard) return;
+                const gap = Number(item.gapAmount || 0);
+                const pay = Number(item.finalPrice || 0);
+                baseOriginal += gap;
+                baseFinal += pay;
+                
+                const rowDiscount = Math.max(0, gap - pay);
+                if (rowDiscount > 0.000001) {
+                    discountItems.push({
+                        name: `升卡差额(${item.newCard?.name || ''})`,
+                        original: gap,
+                        final: pay,
+                        discount: gap > 0 ? (pay / gap * 100) : 100,
+                        discountAmount: rowDiscount
+                    });
+                }
+            });
+
+            const baseDiscount = Math.max(0, baseOriginal - baseFinal);
+            let wholeOrderDiscount = 0;
+            
+            if (wholeOrderChangeState?.enabled) {
+                const adjusted = clampNumber(Number(wholeOrderChangeState.amount || 0), 0, baseOriginal);
+                wholeOrderDiscount = Math.max(0, baseFinal - adjusted);
+            }
+
+            const totalDiscount = baseDiscount + wholeOrderDiscount;
+
+            let html = '';
+
+            if (discountItems.length > 0) {
+                html += `
+                    <div class="discount-item">
+                        <div class="discount-type">折扣优惠</div>
+                        <div class="discount-list">
+                `;
+                
+                discountItems.forEach(item => {
+                    html += `
+                        <div class="discount-product-item">
+                            <span class="discount-product-name">${escapeHtml(item.name)} ×${item.qty}</span>
+                            <span class="discount-product-discount">${item.discount.toFixed(1)}折</span>
+                            <span class="discount-product-amount">-¥${item.discountAmount.toFixed(2)}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                        </div>
+                        <div class="discount-row">
+                            <span class="discount-row-label">折扣优惠合计</span>
+                            <span class="discount-row-value discount">-¥${baseDiscount.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (wholeOrderDiscount > 0.000001) {
+                html += `
+                    <div class="discount-item">
+                        <div class="discount-type">整单改价优惠</div>
+                        <div class="discount-row">
+                            <span class="discount-row-label">改价前金额</span>
+                            <span class="discount-row-value">¥${baseFinal.toFixed(2)}</span>
+                        </div>
+                        <div class="discount-row">
+                            <span class="discount-row-label">改价后金额</span>
+                            <span class="discount-row-value">¥${(baseFinal - wholeOrderDiscount).toFixed(2)}</span>
+                        </div>
+                        <div class="discount-row">
+                            <span class="discount-row-label">整单改价优惠</span>
+                            <span class="discount-row-value discount">-¥${wholeOrderDiscount.toFixed(2)}</span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            if (html === '') {
+                html = `
+                    <div style="text-align: center; padding: 40px 20px; color: var(--neutral-400);">
+                        当前订单暂无优惠
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="discount-summary">
+                        <span class="discount-summary-label">优惠总计</span>
+                        <span class="discount-summary-value">-¥${totalDiscount.toFixed(2)}</span>
+                    </div>
+                `;
+            }
+
+            discountDetailBody.innerHTML = html;
+        }
+
+        function escapeHtml(str) {
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
+
+        discountDetailBtn?.addEventListener('click', () => {
+            openDiscountDetailModal();
+        });
+
+        discountDetailCloseBtn?.addEventListener('click', () => {
+            closeDiscountDetailModal();
+        });
+
+        discountDetailOverlay?.addEventListener('click', (e) => {
+            if (e.target === discountDetailOverlay) closeDiscountDetailModal();
+        });
+
         const numKeypadOverlay = document.getElementById('numKeypadOverlay');
         const numKeypadPanel = document.getElementById('numKeypadPanel');
         const numKeypadGrid = document.getElementById('numKeypadGrid');
@@ -16974,6 +17725,11 @@
             scope.querySelectorAll('input').forEach(el => {
                 if (!(el instanceof HTMLInputElement)) return;
                 if (!isNumKeypadTarget(el)) return;
+                // 跳过当前正在数字键盘编辑的输入框
+                if (numKeypadState && numKeypadState.target === el) {
+                    console.log('[markNumKeypadTargets] 跳过当前编辑的输入框');
+                    return;
+                }
                 el.dataset.numkeypad = 'decimal';
                 el.readOnly = true;
                 el.setAttribute('inputmode', 'none');
@@ -17011,6 +17767,10 @@
         function closeNumKeypad() {
             if (!numKeypadOverlay) return;
             numKeypadOverlay.classList.remove('show');
+            if (numKeypadState.target instanceof HTMLInputElement) {
+                numKeypadState.target.readOnly = false;
+                numKeypadState.target.setAttribute('inputmode', 'decimal');
+            }
             numKeypadState.target = null;
             numKeypadState.origin = '';
             numKeypadState.buffer = '';
@@ -17096,6 +17856,15 @@
             }
 
             const row = el.closest('tr.item-row');
+            suppressMoneyCardConflict = false;
+
+            el.readOnly = false;
+            el.setAttribute('inputmode', 'decimal');
+            
+            const discountWrap = row?.querySelector('.discount-wrapper');
+            el.classList.remove('is-readonly');
+            if (discountWrap) discountWrap.classList.remove('is-readonly');
+
             if (el.matches('.table-input.discount-input')) {
                 const intStr = sanitizeIntString(numKeypadState.buffer || '');
                 const discount = clampNumber(intStr === '' ? 0 : parseInt(intStr, 10), 0, 100);
@@ -17103,18 +17872,44 @@
                     showAlertModal('折扣需在 0-100 范围内');
                     return;
                 }
-                el.value = String(discount);
+                const originDiscount = parseInt(String(el.dataset.editOrigin || ''), 10) || 0;
+                if (originDiscount !== discount) {
+                    const originalPriceText = row?.querySelector?.('.col-original')?.textContent || '';
+                    const originalPrice = parseFloat(String(originalPriceText).replace('¥', '')) || 0;
+                    const buyQty = row instanceof Element ? getRowBuyQty(row) : 0;
+                    const baseTotal = originalPrice * buyQty;
+                    const newFinalPrice = baseTotal * (discount / 100);
+                    const currentFinalPrice = parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0;
+                    if (newFinalPrice - 0.000001 > currentFinalPrice) {
+                        showAlertModal(`修改折后价必须小于等于原折扣价格(¥${currentFinalPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
+                        return;
+                    }
+                }
+                el.value = el.type === 'number' ? discount : String(discount);
+                el.setAttribute('value', String(discount));
+                el.dataset.editOrigin = String(discount);
+                if (row) row.dataset.userDiscountOverride = '1';
             } else if (el.matches('.table-input.final-price')) {
                 const sanitized = sanitizePriceString(numKeypadState.buffer || '', 2);
                 let finalPrice = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
+                if (finalPrice <= 0.000001) {
+                    showAlertModal(`修改折后价必须小于等于原折扣价格(¥${(parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0).toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
+                    return;
+                }
+                const currentFinalPrice = parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0;
+                if (finalPrice - 0.000001 > currentFinalPrice) {
+                    showAlertModal(`修改折后价必须小于等于原折扣价格(¥${currentFinalPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
+                    return;
+                }
                 const originalPriceText = row?.querySelector?.('.col-original')?.textContent || '';
                 const originalPrice = parseFloat(String(originalPriceText).replace('¥', '')) || 0;
                 const buyQty = row instanceof Element ? getRowBuyQty(row) : 0;
                 const maxFinal = roundMoney2(originalPrice * buyQty);
-                if (row instanceof Element && finalPrice - 0.000001 > maxFinal) {
+                if (finalPrice - 0.000001 > maxFinal) {
                     finalPrice = maxFinal;
                 }
-                el.value = finalPrice.toFixed(2);
+                el.value = el.type === 'number' ? finalPrice : finalPrice.toFixed(2);
+                el.setAttribute('value', finalPrice.toFixed(2));
             } else if (el.matches('.woc-input') && el.id === 'wocDiscountInput') {
                 const sanitized = sanitizePriceString(numKeypadState.buffer || '', 2);
                 const n = clampNumber(parseFloat(sanitized || '0') || 0, 0, 10);
@@ -17125,10 +17920,11 @@
                 el.value = n.toFixed(2);
             }
 
+            closeNumKeypad();
+            
             el.dispatchEvent(new Event('input', { bubbles: true }));
             el.dispatchEvent(new Event('change', { bubbles: true }));
             el.dispatchEvent(new Event('blur'));
-            closeNumKeypad();
         }
 
         function appendNumKeypadChar(ch) {
