@@ -357,6 +357,68 @@
             color: var(--neutral-500);
         }
 
+        /* 按钮轮廓样式 - 品牌色边框 */
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary-400);
+            color: var(--primary-600);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255, 241, 245, 0.9);
+            border-color: var(--primary-500);
+            box-shadow: 0 4px 16px rgba(232, 124, 154, 0.15);
+        }
+
+        .btn-outline .customer-btn-icon {
+            color: var(--primary-500);
+        }
+
+        .btn-outline:hover .customer-btn-icon {
+            color: var(--primary-600);
+        }
+
+        .btn-outline .customer-btn-title {
+            color: var(--primary-600);
+        }
+
+        .btn-outline:hover .customer-btn-title {
+            color: var(--primary-700);
+        }
+
+        /* 主色按钮样式 - 品牌色渐变背景 */
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border: 1.5px solid var(--primary-500);
+            color: white;
+            box-shadow: 0 4px 16px rgba(232, 124, 154, 0.25);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, var(--primary-500) 0%, var(--primary-700) 100%);
+            border-color: var(--primary-600);
+            box-shadow: 0 6px 24px rgba(232, 124, 154, 0.35);
+            transform: translateY(-2px);
+        }
+
+        .btn-primary .customer-btn-icon {
+            color: white;
+        }
+
+        .btn-primary:hover .customer-btn-icon {
+            color: white;
+            transform: scale(1.1);
+        }
+
+        .btn-primary .customer-btn-title {
+            color: white;
+            font-weight: 700;
+        }
+
+        .btn-primary:hover .customer-btn-title {
+            color: white;
+        }
+
         /* 分隔线 */
         .section-divider {
             height: 1px;
@@ -2038,10 +2100,16 @@
             color: var(--neutral-600);
         }
 
-        .items-table td.col-discount,
-        .items-table td.col-beautician,
         .items-table td.col-card {
             text-align: left;
+        }
+
+        /* 散客模式下隐藏使用卡项列 */
+        .guest-mode .items-table th.col-card,
+        .guest-mode .items-table td.col-card {
+            display: none !important;
+            width: 0 !important;
+            padding: 0 !important;
         }
 
         .items-table th.col-beautician,
@@ -7083,7 +7151,7 @@
                 <div class="section-label">选择客户</div>
                 <div class="customer-actions">
                     <!-- 选择会员按钮（置顶） -->
-                    <button class="customer-btn member" onclick="openMemberModal()">
+                    <button class="customer-btn member btn-outline" onclick="openMemberModal()">
                         <svg viewBox="0 0 22 22" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
                             <!-- 人物头像 -->
@@ -7098,7 +7166,7 @@
                         </div>
                     </button>
                     <!-- 散客开单按钮 -->
-                    <button class="customer-btn walk-in" onclick="handleWalkInCustomer()">
+                    <button class="customer-btn walk-in btn-outline" onclick="handleWalkInCustomer()">
                         <svg viewBox="0 0 20 20" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <circle cx="10" cy="7" r="3" />
@@ -7119,8 +7187,7 @@
                 <div class="section-label">添加商品</div>
                 <div class="action-grid">
                     <!-- 客户权益 - 票券/权益卡图标 -->
-                    <div class="action-card benefit member-only-btn" style="display: none;"
-                        onclick="openBenefitModal()">
+                    <div class="action-card benefit member-only-btn btn-primary" style="display: none;" onclick="openBenefitModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -7136,7 +7203,7 @@
                     </div>
 
                     <!-- 添加单次护理 - 爱心图标 -->
-                    <div class="action-card service" onclick="openAddServiceModal()">
+                    <div class="action-card service btn-primary" onclick="openAddServiceModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <path
@@ -7148,7 +7215,7 @@
                     </div>
 
                     <!-- 添加产品 - 产品/盒子图标 -->
-                    <div class="action-card product" onclick="openAddProductModal()">
+                    <div class="action-card product btn-primary" onclick="openAddProductModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 8V21H3V8" />
@@ -7163,8 +7230,7 @@
                     </div>
 
                     <!-- 添加疗程 - 方案/文档图标 -->
-                    <div class="action-card package member-only-btn" style="display: none;"
-                        onclick="openAddCourseModal()">
+                    <div class="action-card package member-only-btn btn-primary" style="display: none;" onclick="openAddCourseModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M14 2H6C4.9 2 4 2.9 4 4V20C4 21.1 4.9 22 6 22H18C19.1 22 20 21.1 20 20V8L14 2Z" />
@@ -7179,8 +7245,7 @@
                     </div>
 
                     <!-- 添加金额卡 - 储值卡图标 -->
-                    <div class="action-card card member-only-btn" style="display: none;"
-                        onclick="openAddCourseModal('amountCard')">
+                    <div class="action-card card member-only-btn btn-primary" style="display: none;" onclick="openAddCourseModal('amountCard')">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
                             <rect x="2" y="5" width="20" height="14" rx="2.5" />
@@ -7200,7 +7265,7 @@
         <main class="main-content">
             <!-- 内容区域 -->
             <div class="content-body">
-                <div class="order-main">
+                <div class="order-main" id="orderMain">
                     <!-- 控制栏 -->
                     <div class="control-bar">
                         <!-- 会员信息展示 -->
@@ -7273,7 +7338,7 @@
                                         d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-8H9V7h6v2z" />
                                 </svg>
                             </div>
-                            <p class="empty-state-text">从左侧添加商品</p>
+                            <p class="empty-state-text">请从左侧【添加商品】区域点击菜单开始选购</p>
                         </div>
 
                         <!-- 单次护理区域 -->
@@ -8796,6 +8861,12 @@
                 btn.style.display = '';
             });
 
+            // 切换到会员模式，显示"使用卡项"列
+            const orderMain = document.getElementById('orderMain');
+            if (orderMain) {
+                orderMain.classList.remove('guest-mode');
+            }
+
             // 更新会员详细信息
             const memberName = memberDetails.querySelector('.member-name');
             const memberTag = memberDetails.querySelector('.member-tag');
@@ -8877,6 +8948,12 @@
             document.querySelectorAll('.member-only-btn').forEach(btn => {
                 btn.style.display = 'none';
             });
+
+            // 切换到散客模式，隐藏"使用卡项"列
+            const orderMain = document.getElementById('orderMain');
+            if (orderMain) {
+                orderMain.classList.add('guest-mode');
+            }
         }
 
         // 显示/隐藏会员弹窗
@@ -8906,6 +8983,12 @@
                 document.querySelectorAll('.member-only-btn').forEach(btn => {
                     btn.style.display = 'none';
                 });
+
+                // 切换到散客模式，隐藏"使用卡项"列
+                const orderMain = document.getElementById('orderMain');
+                if (orderMain) {
+                    orderMain.classList.add('guest-mode');
+                }
             }
             selectedMember = null;
         };
@@ -18032,6 +18115,12 @@
 
             // 初始状态：不加载默认会员，保持会员信息区域空白
             selectedMember = null;
+
+            // 初始状态设置为散客模式，隐藏"使用卡项"列
+            const orderMain = document.getElementById('orderMain');
+            if (orderMain) {
+                orderMain.classList.add('guest-mode');
+            }
 
             openMemberModal();
         });
