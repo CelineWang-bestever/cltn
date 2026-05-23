@@ -13,8 +13,8 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #f5f5f5;
-            color: #333;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
         }
 
         .container {
@@ -26,7 +26,7 @@
         .sidebar {
             width: 200px;
             background: #fff;
-            border-right: 1px solid #e0e0e0;
+            border-right: 1px solid var(--border-primary);
             padding: 20px 0;
         }
 
@@ -34,8 +34,8 @@
             padding: 0 20px 20px;
             font-size: 18px;
             font-weight: bold;
-            color: #ff6b81;
-            border-bottom: 1px solid #e0e0e0;
+            color: var(--brand-primary);
+            border-bottom: 1px solid var(--border-primary);
         }
 
         .nav-menu {
@@ -49,20 +49,20 @@
         .nav-link {
             display: block;
             padding: 12px 20px;
-            color: #666;
+            color: var(--text-muted);
             text-decoration: none;
             transition: all 0.3s ease;
         }
 
         .nav-link:hover {
-            background: #f8f9fa;
-            color: #ff6b81;
+            background: var(--bg-secondary);
+            color: var(--brand-primary);
         }
 
         .nav-link.active {
-            background: #fff0f2;
-            color: #ff6b81;
-            border-left: 3px solid #ff6b81;
+            background: var(--brand-primary-50);
+            color: var(--brand-primary);
+            border-left: 3px solid var(--brand-primary);
         }
 
         /* 主内容区 */
@@ -78,13 +78,13 @@
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 15px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-primary);
         }
 
         .page-title {
             font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .user-info {
@@ -97,7 +97,7 @@
             width: 32px;
             height: 32px;
             border-radius: 50%;
-            background: #ff6b81;
+            background: var(--brand-primary);
             color: white;
             display: flex;
             align-items: center;
@@ -107,7 +107,7 @@
 
         /* 结算信息 */
         .detail-info {
-            background: #f8f9fa;
+            background: var(--bg-secondary);
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -124,7 +124,7 @@
 
         .detail-info-label {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             width: 80px;
             text-align: right;
             flex-shrink: 0;
@@ -133,7 +133,7 @@
         .detail-info-value {
             font-size: 14px;
             font-weight: 500;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         /* 搜索区域 */
@@ -162,7 +162,7 @@
 
         .form-group label {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
         }
 
         .form-group input,
@@ -183,7 +183,7 @@
         }
 
         .btn-primary {
-            background: #ff6b81;
+            background: var(--brand-primary);
             color: white;
         }
 
@@ -193,11 +193,11 @@
 
         .btn-secondary {
             background: #f0f0f0;
-            color: #666;
+            color: var(--text-muted);
         }
 
         .btn-secondary:hover {
-            background: #e0e0e0;
+            background: var(--border-primary);
         }
 
         /* 表格 */
@@ -218,23 +218,23 @@
             padding: 15px 20px;
             text-align: left;
             font-weight: 600;
-            color: #333;
-            background: #f8f9fa;
+            color: var(--text-secondary);
+            background: var(--bg-secondary);
             font-size: 14px;
-            border-bottom: 2px solid #e0e0e0;
+            border-bottom: 2px solid var(--border-primary);
             white-space: nowrap;
         }
 
         .data-table tbody td {
             padding: 15px 20px;
             font-size: 14px;
-            color: #666;
-            border-bottom: 1px solid #e0e0e0;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-primary);
             white-space: nowrap;
         }
 
         .data-table tbody tr:hover {
-            background: #f8f9fa;
+            background: var(--bg-secondary);
         }
 
         .data-table tbody tr:last-child td {
@@ -261,7 +261,7 @@
         .btn-link {
             padding: 0;
             background: none;
-            color: #ff6b81;
+            color: var(--brand-primary);
             border: none;
             cursor: pointer;
             font-size: 14px;
@@ -280,12 +280,12 @@
             align-items: center;
             padding: 15px 20px;
             background: #fff;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid var(--border-primary);
         }
 
         .page-info {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
         }
 
         .page-controls {
@@ -300,19 +300,19 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             transition: all 0.3s ease;
         }
 
         .page-btn:hover {
-            border-color: #ff6b81;
-            color: #ff6b81;
+            border-color: var(--brand-primary);
+            color: var(--brand-primary);
         }
 
         .page-btn.active {
-            background: #ff6b81;
+            background: var(--brand-primary);
             color: white;
-            border-color: #ff6b81;
+            border-color: var(--brand-primary);
         }
 
         /* 业务规则 */
@@ -327,7 +327,7 @@
         .rules-title {
             font-size: 16px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
             margin-bottom: 15px;
         }
 
@@ -338,13 +338,13 @@
         .rule-item {
             margin-bottom: 10px;
             padding: 10px;
-            background: #f8f9fa;
+            background: var(--bg-secondary);
             border-radius: 4px;
             font-size: 14px;
         }
 
         .rule-item strong {
-            color: #ff6b81;
+            color: var(--brand-primary);
         }
 
         /* 弹窗样式 */
@@ -378,7 +378,7 @@
 
         .modal-header {
             padding: 20px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-primary);
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -387,7 +387,7 @@
         .modal-title {
             font-size: 18px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .modal-close {
@@ -405,7 +405,7 @@
         }
 
         .modal-close:hover {
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .modal-body {
@@ -422,13 +422,13 @@
         .stock-flow-info h3 {
             font-size: 16px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
             margin-bottom: 15px;
         }
 
         .stock-flow-details,
         .end-stock-details {
-            background: #f8f9fa;
+            background: var(--bg-secondary);
             padding: 15px;
             border-radius: 4px;
             margin-bottom: 20px;
@@ -445,7 +445,7 @@
 
         .detail-item .label {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             width: 120px;
             text-align: right;
             flex-shrink: 0;
@@ -454,12 +454,12 @@
         .detail-item span {
             font-size: 14px;
             font-weight: 500;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .modal-footer {
             padding: 15px 20px;
-            border-top: 1px solid #e0e0e0;
+            border-top: 1px solid var(--border-primary);
             text-align: right;
         }
 
@@ -488,6 +488,8 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="../chlitina-brand.css">
 </head>
 <body>
     <div class="container">

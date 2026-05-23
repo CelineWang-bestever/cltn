@@ -823,7 +823,7 @@
                         <path d="M15 19l-7-7 7-7" />
                     </svg>
                 </button>
-                <div class="year-display" id="currentYearDisplay">2024</div>
+                <div class="year-display" id="currentYearDisplay">2026</div>
                 <button class="year-btn" id="nextYearBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M9 5l7 7-7 7" />
@@ -883,7 +883,7 @@
             <div class="modal-body">
                 <div class="modal-field">
                     <label class="modal-label">目标所属</label>
-                    <div class="modal-value" id="modalTargetInfo">2024年1月</div>
+                    <div class="modal-value" id="modalTargetInfo">2026年1月</div>
                 </div>
                 <div class="modal-field">
                     <label class="modal-label">目标数值</label>
@@ -904,62 +904,99 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        const GOAL_TYPES = [
-            { id: 'store-performance', name: '门店业绩指标', unit: '元' },
-            { id: 'store-card-consume', name: '门店卡耗目标', unit: '元' },
-            { id: 'customer-flow', name: '客流目标', unit: '人' },
-            { id: 'staff-performance', name: '员工业绩目标', unit: '元' },
-            { id: 'staff-card-consume', name: '员工卡耗目标', unit: '元' },
-        ];
+        const API_BASE = 'http://124.222.211.194:5001/api';
 
         const CURRENT_YEAR = new Date().getFullYear();
         const MIN_YEAR = CURRENT_YEAR - 5;
         const MAX_YEAR = CURRENT_YEAR;
 
-        let currentGoalTypeId = 'store-performance';
+        let goalTypes = [];
+        let currentGoalTypeId = null;
+        let currentGoalTypeIndex = 0;
         let currentYear = CURRENT_YEAR;
         let selectedMonths = [];
         let editingMonth = null;
         let monthlyGoals = {};
+        let isLoading = false;
 
-        function generateMockData(year, goalTypeId) {
-            const mockGoals = {};
-            const baseGoal = goalTypeId.includes('performance') ? 100000 : 
-                           goalTypeId.includes('card-consume') ? 80000 : 500;
-            
-            for (let month = 1; month <= 12; month++) {
-                const hasGoal = Math.random() > 0.3;
-                if (hasGoal) {
-                    const goal = baseGoal * (0.8 + Math.random() * 0.4);
-                    const completed = goal * (0.3 + Math.random() * 0.7);
-                    mockGoals[month] = {
-                        month,
-                        goal: Math.round(goal),
-                        completed: Math.round(completed),
-                        completionRate: Math.round((completed / goal) * 100)
-                    };
-                }
+        // ============ API 请求封装（含异常处理） ============
+        async function apiRequest(url, options = {}) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            try {
+                const res = await fetch(url, { ...options, signal: controller.signal });
+                clearTimeout(timeout);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (data.code !== 0) throw new Error(data.message || '服务器错误');
+                return data.data;
+            } catch (err) {
+                clearTimeout(timeout);
+                if (err.name === 'AbortError') throw new Error('请求超时，请检查网络连接');
+                if (err.message === 'Failed to fetch') throw new Error('网络连接失败，请检查服务器状态');
+                throw err;
             }
-            return mockGoals;
         }
 
-        function initMonthlyGoals() {
-            monthlyGoals = generateMockData(currentYear, currentGoalTypeId);
-            renderMonthGrid();
-            updateYearOverview();
+        // ============ 数据加载 ============
+        async function loadGoalTypes() {
+            try {
+                setLoading(true);
+                goalTypes = await apiRequest(`${API_BASE}/goal-types`);
+                setLoading(false);
+                if (goalTypes.length > 0) {
+                    currentGoalTypeId = goalTypes[0].id;
+                    currentGoalTypeIndex = 0;
+                    renderTabs();
+                }
+            } catch (err) {
+                setLoading(false);
+                showToast('加载目标类型失败: ' + err.message, 'error');
+            }
         }
 
-        function formatMoney(value) {
-            if (typeof value !== 'number') return '0.00';
-            return value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        async function fetchGoals() {
+            if (!currentGoalTypeId) return;
+            try {
+                setLoading(true);
+                monthlyGoals = await apiRequest(
+                    `${API_BASE}/goals?type_id=${currentGoalTypeId}&year=${currentYear}`
+                );
+                setLoading(false);
+                renderMonthGrid();
+                updateYearOverview();
+            } catch (err) {
+                setLoading(false);
+                showToast('加载目标数据失败: ' + err.message, 'error');
+                monthlyGoals = {};
+                renderMonthGrid();
+                updateYearOverview();
+            }
+        }
+
+        // ============ 渲染函数 ============
+        function renderTabs() {
+            const container = document.getElementById('goalTypeTabs');
+            container.innerHTML = goalTypes.map((t, i) => 
+                `<button class="tab-item${i === 0 ? ' active' : ''}" data-goal-type="${t.id}" data-type-index="${i}">${t.type_name}</button>`
+            ).join('');
+            container.querySelectorAll('.tab-item').forEach(tab => {
+                tab.addEventListener('click', () => changeGoalType(parseInt(tab.dataset.typeIndex)));
+            });
         }
 
         function renderMonthGrid() {
             const grid = document.getElementById('monthGrid');
             if (!grid) return;
+            if (isLoading) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--neutral-400)">加载中...</div>';
+                return;
+            }
 
             let html = '';
-            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+            const currentType = goalTypes[currentGoalTypeIndex] || {};
+            const unit = currentType.unit === '人' ? '' : '¥';
             
             months.forEach((monthName, index) => {
                 const month = index + 1;
@@ -969,94 +1006,73 @@
                 
                 let cardContent = '';
                 if (goalData) {
+                    const rate = Math.min(goalData.completionRate || 0, 100);
                     cardContent = `
                         <div class="month-info">
-                            <div class="info-row">
-                                <span class="info-label">目标</span>
-                                <span class="info-value goal">¥${formatMoney(goalData.goal)}</span>
-                            </div>
-                            <div class="info-row">
-                                <span class="info-label">完成</span>
-                                <span class="info-value completed">¥${formatMoney(goalData.completed)}</span>
-                            </div>
-                            <div class="month-progress-bar">
-                                <div class="month-progress-fill" style="width: ${goalData.completionRate}%"></div>
-                            </div>
-                            <div class="info-row" style="margin-top: 4px;">
-                                <span class="info-label">进度</span>
-                                <span class="info-value">${goalData.completionRate}%</span>
-                            </div>
-                        </div>
-                    `;
+                            <div class="info-row"><span class="info-label">目标</span><span class="info-value goal">${unit}${formatNum(goalData.goal)}</span></div>
+                            <div class="info-row"><span class="info-label">完成</span><span class="info-value completed">${unit}${formatNum(goalData.completed)}</span></div>
+                            <div class="month-progress-bar"><div class="month-progress-fill" style="width:${rate}%"></div></div>
+                            <div class="info-row" style="margin-top:4px"><span class="info-label">进度</span><span class="info-value">${goalData.completionRate}%</span></div>
+                        </div>`;
                 } else {
-                    cardContent = `
-                        <div class="month-info">
-                            <div style="text-align: center; padding: 16px 0; color: var(--neutral-400); font-size: 13px;">
-                                未设置目标
-                            </div>
-                        </div>
-                    `;
+                    cardContent = '<div class="month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div></div>';
                 }
-
-                html += `
-                    <div class="month-card ${isSelected ? 'selected' : ''} ${isUnset ? 'unset' : ''}" data-month="${month}">
-                        <div class="month-select-indicator"></div>
-                        <div class="month-name">${monthName}</div>
-                        ${cardContent}
-                    </div>
-                `;
+                html += `<div class="month-card ${isSelected?'selected':''} ${isUnset?'unset':''}" data-month="${month}"><div class="month-select-indicator"></div><div class="month-name">${monthName}</div>${cardContent}</div>`;
             });
-
             grid.innerHTML = html;
             updateBatchButton();
         }
 
         function updateYearOverview() {
-            let totalGoal = 0;
-            let totalCompleted = 0;
-            
-            Object.values(monthlyGoals).forEach(data => {
-                totalGoal += data.goal;
-                totalCompleted += data.completed;
-            });
-
+            let totalGoal = 0, totalCompleted = 0;
+            Object.values(monthlyGoals).forEach(d => { totalGoal += d.goal; totalCompleted += d.completed; });
             const completionRate = totalGoal > 0 ? Math.round((totalCompleted / totalGoal) * 100) : 0;
-            const progressDeg = (completionRate / 100) * 360;
-
-            document.getElementById('yearCompletionRate').textContent = `${completionRate}%`;
-            document.getElementById('yearProgressFill').style.setProperty('--progress-deg', `${progressDeg}deg`);
-            
+            const safeRate = Math.min(completionRate, 100);
+            const progressDeg = (safeRate / 100) * 360;
+            const el = document.getElementById('yearCompletionRate');
+            if (el) {
+                el.textContent = `${completionRate}%`;
+                if (completionRate > 100) el.style.color = '#10B981';
+                else el.style.color = '';
+            }
+            const fill = document.getElementById('yearProgressFill');
+            if (fill) fill.style.setProperty('--progress-deg', `${progressDeg}deg`);
             const stats = document.querySelectorAll('.overview-stats .stat-value');
-            if (stats[0]) stats[0].textContent = `¥${formatMoney(totalGoal)}`;
-            if (stats[1]) stats[1].textContent = `¥${formatMoney(totalCompleted)}`;
+            if (stats[0]) stats[0].textContent = `¥${formatNum(totalGoal)}`;
+            if (stats[1]) stats[1].textContent = `¥${formatNum(totalCompleted)}`;
         }
 
+        function setLoading(state) {
+            isLoading = state;
+        }
+
+        // ============ 格式化 ============
+        function formatNum(value) {
+            if (typeof value !== 'number' || isNaN(value)) return '0.00';
+            return value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // ============ 操作函数 ============
         function updateBatchButton() {
             const btn = document.getElementById('batchClearBtn');
             if (!btn) return;
-            
-            const count = selectedMonths.length;
-            btn.textContent = `清空选中 (${count})`;
-            btn.disabled = count === 0;
+            btn.textContent = `清空选中 (${selectedMonths.length})`;
+            btn.disabled = selectedMonths.length === 0;
         }
 
         function toggleMonthSelection(month) {
-            const index = selectedMonths.indexOf(month);
-            if (index > -1) {
-                selectedMonths.splice(index, 1);
-            } else {
-                selectedMonths.push(month);
-            }
+            const idx = selectedMonths.indexOf(month);
+            if (idx > -1) selectedMonths.splice(idx, 1);
+            else selectedMonths.push(month);
             updateBatchButton();
         }
 
         function openGoalModal(month) {
             editingMonth = month;
             const goalData = monthlyGoals[month];
-            
             document.getElementById('modalTitle').textContent = '设置目标';
             document.getElementById('modalTargetInfo').textContent = `${currentYear}年${month}月`;
-            document.getElementById('goalAmountInput').value = goalData ? goalData.goal.toString() : '';
+            document.getElementById('goalAmountInput').value = goalData ? goalData.goal : '';
             document.getElementById('goalAmountInput').focus();
             document.getElementById('goalModal').classList.add('show');
         }
@@ -1067,110 +1083,101 @@
             document.getElementById('goalAmountInput').value = '';
         }
 
-        function submitGoal() {
+        async function submitGoal() {
             if (editingMonth === null) return;
-            
             const input = document.getElementById('goalAmountInput');
             const value = parseFloat(input.value);
-            
             if (isNaN(value) || value <= 0) {
                 showToast('请输入有效的目标金额', 'error');
                 return;
             }
-
-            const currentGoalType = GOAL_TYPES.find(t => t.id === currentGoalTypeId);
-            
-            monthlyGoals[editingMonth] = {
-                month: editingMonth,
-                goal: Math.round(value * 100) / 100,
-                completed: monthlyGoals[editingMonth]?.completed || 0,
-                completionRate: monthlyGoals[editingMonth]?.completed ? 
-                    Math.round(((monthlyGoals[editingMonth].completed / value) * 100)) : 0
-            };
-
-            renderMonthGrid();
-            updateYearOverview();
-            closeGoalModal();
-            showToast(`${currentGoalType.name}设置成功`, 'success');
+            try {
+                await apiRequest(`${API_BASE}/goals`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type_id: currentGoalTypeId,
+                        year: currentYear,
+                        month: editingMonth,
+                        goal: Math.round(value * 100) / 100
+                    })
+                });
+                closeGoalModal();
+                await fetchGoals();
+                showToast('目标设置成功', 'success');
+            } catch (err) {
+                showToast('保存失败: ' + err.message, 'error');
+            }
         }
 
-        function batchClearGoals() {
+        async function batchClearGoals() {
             if (selectedMonths.length === 0) return;
-            
-            selectedMonths.forEach(month => {
-                delete monthlyGoals[month];
-            });
-            
-            selectedMonths = [];
-            renderMonthGrid();
-            updateYearOverview();
-            showToast(`已清空${selectedMonths.length}个月份的目标`, 'success');
+            try {
+                await apiRequest(`${API_BASE}/goals`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type_id: currentGoalTypeId,
+                        year: currentYear,
+                        months: [...selectedMonths]
+                    })
+                });
+                const count = selectedMonths.length;
+                selectedMonths = [];
+                await fetchGoals();
+                showToast(`已清空 ${count} 个月份的目标`, 'success');
+            } catch (err) {
+                showToast('清空失败: ' + err.message, 'error');
+            }
         }
 
         function showToast(message, type = 'success') {
             const container = document.getElementById('toastContainer');
             if (!container) return;
-
             const toast = document.createElement('div');
             toast.className = `toast ${type} show`;
-            toast.innerHTML = `
-                <div class="toast-icon"></div>
-                <span>${message}</span>
-            `;
-            
+            toast.innerHTML = `<div class="toast-icon"></div><span>${message}</span>`;
             container.appendChild(toast);
-
-            setTimeout(() => {
-                toast.classList.remove('show');
-                setTimeout(() => {
-                    container.removeChild(toast);
-                }, 300);
-            }, 3000);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => container.removeChild(toast), 300); }, 3000);
         }
 
-        function changeGoalType(typeId) {
-            currentGoalTypeId = typeId;
-            document.querySelectorAll('.tab-item').forEach(tab => {
-                tab.classList.toggle('active', tab.dataset.goalType === typeId);
-            });
-            initMonthlyGoals();
+        async function changeGoalType(typeIndex) {
+            currentGoalTypeIndex = typeIndex;
+            currentGoalTypeId = goalTypes[typeIndex]?.id;
+            document.querySelectorAll('.tab-item').forEach((tab, i) => tab.classList.toggle('active', i === typeIndex));
+            selectedMonths = [];
+            await fetchGoals();
         }
 
-        function changeYear(delta) {
+        async function changeYear(delta) {
             const newYear = currentYear + delta;
             if (newYear < MIN_YEAR || newYear > MAX_YEAR) return;
-            
             currentYear = newYear;
             document.getElementById('currentYearDisplay').textContent = currentYear;
             document.getElementById('prevYearBtn').disabled = currentYear <= MIN_YEAR;
             document.getElementById('nextYearBtn').disabled = currentYear >= MAX_YEAR;
-            
-            initMonthlyGoals();
+            selectedMonths = [];
+            await fetchGoals();
         }
 
-        document.addEventListener('DOMContentLoaded', () => {
-            initMonthlyGoals();
+        // ============ 初始化 ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            await loadGoalTypes();
 
-            document.querySelectorAll('.tab-item').forEach(tab => {
-                tab.addEventListener('click', () => {
-                    changeGoalType(tab.dataset.goalType);
-                });
-            });
+            // 同步年份显示并初始化按钮状态
+            document.getElementById('currentYearDisplay').textContent = currentYear;
+            document.getElementById('prevYearBtn').disabled = currentYear <= MIN_YEAR;
+            document.getElementById('nextYearBtn').disabled = currentYear >= MAX_YEAR;
 
-            document.getElementById('prevYearBtn').addEventListener('click', () => {
-                changeYear(-1);
-            });
+            if (currentGoalTypeId) await fetchGoals();
 
-            document.getElementById('nextYearBtn').addEventListener('click', () => {
-                changeYear(1);
-            });
+            document.getElementById('prevYearBtn').addEventListener('click', () => changeYear(-1));
+            document.getElementById('nextYearBtn').addEventListener('click', () => changeYear(1));
 
             document.getElementById('monthGrid').addEventListener('click', (e) => {
                 const card = e.target.closest('.month-card');
                 if (!card || card.classList.contains('disabled')) return;
-                
                 const month = parseInt(card.dataset.month);
-                
                 if (e.target.closest('.month-select-indicator')) {
                     toggleMonthSelection(month);
                     card.classList.toggle('selected');
@@ -1183,12 +1190,7 @@
             document.getElementById('modalCancelBtn').addEventListener('click', closeGoalModal);
             document.getElementById('modalConfirmBtn').addEventListener('click', submitGoal);
             document.getElementById('batchClearBtn').addEventListener('click', batchClearGoals);
-
-            document.getElementById('goalAmountInput').addEventListener('keydown', (e) => {
-                if (e.key === 'Enter') {
-                    submitGoal();
-                }
-            });
+            document.getElementById('goalAmountInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitGoal(); });
         });
     </script>
 </body>

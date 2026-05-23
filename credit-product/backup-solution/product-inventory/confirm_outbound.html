@@ -13,8 +13,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary)333;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -24,9 +24,9 @@
             align-items: center;
             justify-content: center;
             padding: 16px 16px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-primary);
             position: relative;
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -64,17 +64,17 @@
         .info-box p {
             font-size: 13px;
             line-height: 1.5;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         /* 商品卡片 */
         .product-card {
             width: 100%;
-            border: 1px solid #ff6b81;
+            border: 1px solid var(--brand-primary);
             border-radius: 8px;
             padding: 16px;
             margin-bottom: 16px;
-            background: linear-gradient(to bottom, #FDF7F9, #ffffff);
+            background: linear-gradient(to bottom, #FDF7F9, var(--bg-primary));
             box-shadow: 0 1px 4px rgba(0,0,0,0.05);
         }
 
@@ -94,7 +94,7 @@
         .product-name {
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
             flex: 1;
             line-height: 1.4;
             text-align: left;
@@ -109,7 +109,7 @@
 
         .product-spec {
             font-size: 13px;
-            color: #666666;
+            color: var(--text-muted)666;
             text-align: left;
         }
 
@@ -117,20 +117,20 @@
             display: flex;
             align-items: center;
             padding: 6px 12px;
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             border-radius: 4px;
             gap: 8px;
         }
 
         .product-total-label {
             font-size: 14px;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         .product-total-value {
             font-size: 18px;
             font-weight: bold;
-            color: #ff6b81;
+            color: var(--brand-primary);
         }
 
         .quantity-row {
@@ -142,7 +142,7 @@
 
         .quantity-label {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
@@ -158,18 +158,18 @@
             align-items: center;
             margin-bottom: 12px;
             padding: 12px 0;
-            border-top: 1px dashed #e0e0e0;
+            border-top: 1px dashed var(--border-primary);
         }
 
         .barcode-summary-label {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
         .barcode-count {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
@@ -182,9 +182,9 @@
             grid-template-columns: 1fr 1.2fr 0.8fr 0.5fr;
             gap: 8px;
             padding: 10px 0;
-            border-bottom: 1px solid #f5f5f5;
+            border-bottom: 1px solid var(--bg-secondary);
             font-size: 12px;
-            color: #333333;
+            color: var(--text-secondary)333;
             align-items: center;
         }
 
@@ -202,25 +202,25 @@
         .qty-btn {
             width: 36px;
             height: 36px;
-            border: 1px solid #e0e0e0;
-            background: #ffffff;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-primary);
             border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
-            color: #333333;
+            color: var(--text-secondary)333;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .qty-btn:active {
-            background: #f5f5f5;
+            background: var(--bg-secondary);
         }
 
         .qty-input {
             width: 60px;
             height: 36px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 4px;
             text-align: center;
             font-size: 14px;
@@ -237,7 +237,7 @@
         }
 
         .delete-btn:active {
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             border-radius: 4px;
         }
 
@@ -252,7 +252,7 @@
         }
 
         .delete-product-btn:active {
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             border-radius: 4px;
         }
 
@@ -274,7 +274,7 @@
         .section-title {
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
             margin-bottom: 10px;
 
         }
@@ -293,7 +293,7 @@
         }
 
         .reason-selector {
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 8px;
             padding: 16px;
             cursor: pointer;
@@ -303,17 +303,17 @@
         }
 
         .reason-selector.selected {
-            border-color: #ff6b81;
+            border-color: var(--brand-primary);
             background-color: #fdf7f9;
         }
 
         .reason-text {
             font-size: 14px;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         .reason-text.selected {
-            color: #ff6b81;
+            color: var(--brand-primary);
             font-weight: 500;
         }
 
@@ -329,8 +329,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-primary);
             padding: 16px;
             display: flex;
             justify-content: space-between;
@@ -344,7 +344,7 @@
 
         .item-count {
             font-size: 14px;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         .btn {
@@ -359,9 +359,9 @@
         }
 
         .btn-primary {
-            background-color: #ff6b81;
-            border: 1px solid #ff6b81;
-            color: #ffffff;
+            background-color: var(--brand-primary);
+            border: 1px solid var(--brand-primary);
+            color: var(--bg-primary);
         }
 
         .btn:active {
@@ -382,7 +382,7 @@
         }
 
         .modal-content {
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             position: absolute;
             bottom: 0;
             left: 0;
@@ -407,7 +407,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
         }
 
         .close-btn {
@@ -436,13 +436,13 @@
         }
 
         .reason-option.selected {
-            color: #ff6b81;
+            color: var(--brand-primary);
         }
 
         .radio-button {
             width: 20px;
             height: 20px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 50%;
             margin-right: 12px;
             display: flex;
@@ -451,8 +451,8 @@
         }
 
         .radio-button.selected {
-            border-color: #ff6b81;
-            background-color: #ff6b81;
+            border-color: var(--brand-primary);
+            background-color: var(--brand-primary);
         }
 
         .radio-button.selected::after {
@@ -489,12 +489,14 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="../chlitina-brand.css">
 </head>
 <body>
     <!-- 顶部导航 -->
     <div class="header">
         <button class="back-button" onclick="goBack()">
-            <svg class="linear-icon" style="width: 20px; height: 20px; color: #333333;" viewBox="0 0 24 24">
+            <svg class="linear-icon" style="width: 20px; height: 20px; color: var(--text-secondary)333;" viewBox="0 0 24 24">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
@@ -627,16 +629,16 @@
                     productDetailsHTML = `
                         <div style="margin-top: 16px; margin-bottom: 12px;">
                             <div style="font-size: 13px; color: #999999; margin-bottom: 8px; padding-left: 10px;">订单商品明细</div>
-                            <div style="border: 1px solid #e0e0e0; border-radius: 6px; overflow: hidden;">
+                            <div style="border: 1px solid var(--border-primary); border-radius: 6px; overflow: hidden;">
                                 ${outboundProducts.map(product => {
                                     const subtotal = product.quantity + product.barcodes.length;
                                     return `
                                         <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; border-bottom: 1px solid #f0f0f0;">
                                             <div style="flex: 1;">
-                                                <div style="font-size: 14px; color: #333333; margin-bottom: 4px;">${product.name}</div>
+                                                <div style="font-size: 14px; color: var(--text-secondary)333; margin-bottom: 4px;">${product.name}</div>
                                                 <div style="font-size: 12px; color: #999999;">${product.specification}</div>
                                             </div>
-                                            <div style="font-size: 14px; font-weight: 500; color: #333333;">${subtotal}件</div>
+                                            <div style="font-size: 14px; font-weight: 500; color: var(--text-secondary)333;">${subtotal}件</div>
                                         </div>
                                     `;
                                 }).join('')}
@@ -646,7 +648,7 @@
                 }
                 
                 const orderInfoHTML = `
-                    <div class="order-info" style="padding: 16px; background-color: #f8f9fa; border-radius: 8px;">    
+                    <div class="order-info" style="padding: 16px; background-color: var(--bg-secondary); border-radius: 8px;">    
                         <div style="font-size: 13px; color: #999999; padding: 10px; margin-bottom: 12px; background-color: #f0f0f0; border-radius: 4px;">已关联订单，本次商品出库不会重复扣减库存</div>
                         <div style="font-size: 13px; color: #999999; margin-bottom: 12px; padding-left: 10px;">订单编号：${selectedOrder}</div>
                         <div style="font-size: 13px; color: #999999; margin-bottom: 12px; padding-left: 10px;">订单日期：${orderDate}</div>
@@ -681,7 +683,7 @@
                         <div class="product-header">
                             <div class="product-header-row">
                                 <div class="product-name">${product.name}</div>
-                                <button class="delete-product-btn" onclick="deleteProduct(${index})"><svg class="linear-icon" style="width: 16px; height: 16px; color: #ff6b81;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                                <button class="delete-product-btn" onclick="deleteProduct(${index})"><svg class="linear-icon" style="width: 16px; height: 16px; color: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                             </div>
                             <div class="product-info-row">
                                 <div class="product-spec">${product.specification}</div>
@@ -709,7 +711,7 @@
                                     <span>${barcode.batchNo}</span>
                                     <span>${barcode.barcode}</span>
                                     <span class="stock-type ${barcode.stockType === '寄售' ? 'credit' : 'distribution'}">${barcode.stockType}</span>
-                                    <button class="delete-btn" onclick="deleteBarcode(${index}, ${barcodeIndex})"><svg class="linear-icon" style="width: 16px; height: 16px; color: #ff6b81;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                                    <button class="delete-btn" onclick="deleteBarcode(${index}, ${barcodeIndex})"><svg class="linear-icon" style="width: 16px; height: 16px; color: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                                 </div>
                             `).join('')}
                         </div>

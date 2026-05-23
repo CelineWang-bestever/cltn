@@ -13,8 +13,8 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #ffffff;
-            color: #333333;
+            background-color: var(--bg-primary);
+            color: var(--text-secondary)333;
             -webkit-tap-highlight-color: transparent;
         }
 
@@ -24,9 +24,9 @@
             align-items: center;
             justify-content: center;
             padding: 16px 16px;
-            border-bottom: 1px solid #e0e0e0;
+            border-bottom: 1px solid var(--border-primary);
             position: relative;
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             position: sticky;
             top: 0;
             z-index: 100;
@@ -66,7 +66,7 @@
         .info-box p {
             font-size: 13px;
             line-height: 1.5;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         /* 添加方式 */
@@ -78,7 +78,7 @@
 
         .add-method {
             flex: 1;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 8px;
             padding: 16px 8px;
             display: flex;
@@ -91,7 +91,7 @@
         }
 
         .add-method:active {
-            background-color: #f5f5f5;
+            background-color: var(--bg-secondary);
             transform: scale(0.98);
         }
 
@@ -132,18 +132,18 @@
 
         .method-desc {
             font-size: 12px;
-            color: #666666;
+            color: var(--text-muted)666;
             text-align: center;
         }
 
         /* 商品卡片 */
         .product-card {
             width: 100%;
-            border: 1px solid #ff6b81;
+            border: 1px solid var(--brand-primary);
             border-radius: 8px;
             padding: 16px;
             margin-bottom: 16px;
-            background: linear-gradient(to bottom, #FDF7F9, #ffffff);
+            background: linear-gradient(to bottom, #FDF7F9, var(--bg-primary));
             box-shadow: 0 1px 4px rgba(0,0,0,0.05);
         }
 
@@ -163,7 +163,7 @@
         .product-name {
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
             flex: 1;
             line-height: 1.4;
             text-align: left;
@@ -178,7 +178,7 @@
 
         .product-spec {
             font-size: 13px;
-            color: #666666;
+            color: var(--text-muted)666;
             text-align: left;
         }
 
@@ -186,20 +186,20 @@
             display: flex;
             align-items: center;
             padding: 6px 12px;
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             border-radius: 4px;
             gap: 8px;
         }
 
         .product-total-label {
             font-size: 14px;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         .product-total-value {
             font-size: 18px;
             font-weight: bold;
-            color: #ff6b81;
+            color: var(--brand-primary);
         }
 
         .quantity-row {
@@ -211,7 +211,7 @@
 
         .quantity-label {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
@@ -227,43 +227,43 @@
             align-items: center;
             margin-bottom: 12px;
             padding: 12px 0;
-            border-top: 1px dashed #e0e0e0;
+            border-top: 1px dashed var(--border-primary);
         }
 
         .barcode-summary-label {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
         .barcode-count {
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
             font-weight: 500;
         }
 
         .qty-btn {
             width: 36px;
             height: 36px;
-            border: 1px solid #e0e0e0;
-            background: #ffffff;
+            border: 1px solid var(--border-primary);
+            background: var(--bg-primary);
             border-radius: 4px;
             cursor: pointer;
             font-size: 18px;
-            color: #333333;
+            color: var(--text-secondary)333;
             display: flex;
             align-items: center;
             justify-content: center;
         }
 
         .qty-btn:active {
-            background: #f5f5f5;
+            background: var(--bg-secondary);
         }
 
         .qty-input {
             width: 60px;
             height: 36px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 4px;
             text-align: center;
             font-size: 14px;
@@ -278,9 +278,9 @@
             grid-template-columns: 1fr 1.2fr 0.8fr 0.5fr;
             gap: 8px;
             padding: 10px 0;
-            border-bottom: 1px solid #f5f5f5;
+            border-bottom: 1px solid var(--bg-secondary);
             font-size: 12px;
-            color: #333333;
+            color: var(--text-secondary)333;
             align-items: center;
         }
 
@@ -316,7 +316,7 @@
         }
 
         .delete-btn:active {
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             border-radius: 4px;
         }
 
@@ -326,7 +326,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 10px 10px;
-            border: 1px dashed #e0e0e0;
+            border: 1px dashed var(--border-primary);
             border-radius: 8px;
             margin-bottom: 16px;
             min-height: 200px;
@@ -365,7 +365,7 @@
         .edit-button {
             background: none;
             border: none;
-            color: #ff6b81;
+            color: var(--brand-primary);
             font-size: 14px;
             cursor: pointer;
             padding: 6px;
@@ -377,8 +377,8 @@
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #ffffff;
-            border-top: 1px solid #e0e0e0;
+            background-color: var(--bg-primary);
+            border-top: 1px solid var(--border-primary);
             padding: 16px;
             display: flex;
             justify-content: space-between;
@@ -388,7 +388,7 @@
 
         .item-count {
             font-size: 14px;
-            color: #666666;
+            color: var(--text-muted)666;
         }
 
         .action-buttons {
@@ -407,15 +407,15 @@
         }
 
         .btn-secondary {
-            background-color: #ffffff;
-            border: 1px solid #ff6b81;
-            color: #ff6b81;
+            background-color: var(--bg-primary);
+            border: 1px solid var(--brand-primary);
+            color: var(--brand-primary);
         }
 
         .btn-primary {
-            background-color: #ff6b81;
-            border: 1px solid #ff6b81;
-            color: #ffffff;
+            background-color: var(--brand-primary);
+            border: 1px solid var(--brand-primary);
+            color: var(--bg-primary);
         }
 
         .btn:active {
@@ -436,7 +436,7 @@
         }
 
         .modal-content {
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             margin: 30% auto;
             padding: 20px;
             border-radius: 8px;
@@ -458,7 +458,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
         }
 
         .close-btn {
@@ -481,7 +481,7 @@
         .barcode-input {
             width: 100%;
             padding: 12px 15px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 4px;
             font-size: 14px;
             box-sizing: border-box;
@@ -489,7 +489,7 @@
 
         .barcode-input:focus {
             outline: none;
-            border-color: #ff6b81;
+            border-color: var(--brand-primary);
         }
 
         .modal-footer {
@@ -506,7 +506,7 @@
             flex-direction: column;
             align-items: flex-start;
             padding: 16px;
-            background-color: #f8f9fa;
+            background-color: var(--bg-secondary);
             border-radius: 8px;
             margin-bottom: 16px;
         }
@@ -522,7 +522,7 @@
         .toggle-label {
             font-size: 14px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
         }
 
         .toggle {
@@ -563,7 +563,7 @@
         }
 
         input:checked + .toggle-slider {
-            background-color: #ff6b81;
+            background-color: var(--brand-primary);
         }
 
         input:checked + .toggle-slider:before {
@@ -573,7 +573,7 @@
         /* 订单选择样式 - 底部弹窗 */
         .order-select-container {
             padding: 16px;
-            background-color: #f8f9fa;
+            background-color: var(--bg-secondary);
             border-radius: 8px;
             margin-bottom: 16px;
             display: none;
@@ -582,13 +582,13 @@
         .order-select-button {
             width: 100%;
             padding: 16px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 12px;
             font-size: 15px;
             box-sizing: border-box;
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             text-align: left;
-            color: #333333;
+            color: var(--text-secondary)333;
             box-shadow: 0 2px 8px rgba(0,0,0,0.08);
             transition: all 0.3s ease;
             cursor: pointer;
@@ -597,13 +597,13 @@
         }
 
         .order-select-button:hover {
-            border-color: #ff6b81;
+            border-color: var(--brand-primary);
             box-shadow: 0 4px 12px rgba(255, 107, 129, 0.1);
         }
 
         .order-select-button:focus {
             outline: none;
-            border-color: #ff6b81;
+            border-color: var(--brand-primary);
             box-shadow: 0 0 0 3px rgba(255, 107, 129, 0.15);
         }
 
@@ -617,7 +617,7 @@
             height: 0;
             border-left: 6px solid transparent;
             border-right: 6px solid transparent;
-            border-top: 6px solid #ff6b81;
+            border-top: 6px solid var(--brand-primary);
         }
 
         /* 弹窗样式 - 与出库原因弹窗一致 */
@@ -633,7 +633,7 @@
         }
 
         .order-modal-content {
-            background-color: #ffffff;
+            background-color: var(--bg-primary);
             position: absolute;
             bottom: 0;
             left: 0;
@@ -658,7 +658,7 @@
             margin: 0;
             font-size: 16px;
             font-weight: 500;
-            color: #333333;
+            color: var(--text-secondary)333;
         }
 
         .order-modal-close {
@@ -687,13 +687,13 @@
         }
 
         .order-option.selected {
-            color: #ff6b81;
+            color: var(--brand-primary);
         }
 
         .radio-button {
             width: 20px;
             height: 20px;
-            border: 1px solid #e0e0e0;
+            border: 1px solid var(--border-primary);
             border-radius: 50%;
             margin-right: 12px;
             display: flex;
@@ -702,8 +702,8 @@
         }
 
         .radio-button.selected {
-            border-color: #ff6b81;
-            background-color: #ff6b81;
+            border-color: var(--brand-primary);
+            background-color: var(--brand-primary);
         }
 
         .radio-button.selected::after {
@@ -717,7 +717,7 @@
         .order-option-label {
             flex: 1;
             font-size: 14px;
-            color: #333333;
+            color: var(--text-secondary)333;
         }
 
         .order-modal-footer {
@@ -730,9 +730,9 @@
         .order-modal-confirm {
             width: 100%;
             padding: 12px 20px;
-            background-color: #ff6b81;
-            border: 1px solid #ff6b81;
-            color: #ffffff;
+            background-color: var(--brand-primary);
+            border: 1px solid var(--brand-primary);
+            color: var(--bg-primary);
             border-radius: 4px;
             font-size: 14px;
             font-weight: 500;
@@ -796,12 +796,14 @@
             }
         }
     </style>
+
+<link rel="stylesheet" href="../chlitina-brand.css">
 </head>
 <body>
     <!-- 顶部导航 -->
     <div class="header">
         <button class="back-button" onclick="goBack()">
-            <svg class="linear-icon" style="width: 20px; height: 20px; color: #333333;" viewBox="0 0 24 24">
+            <svg class="linear-icon" style="width: 20px; height: 20px; color: var(--text-secondary)333;" viewBox="0 0 24 24">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
@@ -865,7 +867,7 @@
         <div class="add-methods">
             <div class="add-method" onclick="scanAdd()">
                 <div class="method-icon manual-icon">
-                    <svg class="linear-icon" style="color: #ff6b81;" viewBox="0 0 24 24">
+                    <svg class="linear-icon" style="color: var(--brand-primary);" viewBox="0 0 24 24">
                         <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                         <circle cx="12" cy="13" r="4"></circle>
                     </svg>
@@ -876,7 +878,7 @@
             </div>
             <div class="add-method" onclick="manualInput()">
                 <div class="method-icon manual-icon">
-                    <svg class="linear-icon" style="color: #ff6b81;" viewBox="0 0 24 24">
+                    <svg class="linear-icon" style="color: var(--brand-primary);" viewBox="0 0 24 24">
                         <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
                         <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
                     </svg>
@@ -887,7 +889,7 @@
             </div>
             <div class="add-method" onclick="manualAdd()">
                 <div class="method-icon scan-icon">
-                    <svg class="linear-icon" style="color: #ff6b81;" viewBox="0 0 24 24">
+                    <svg class="linear-icon" style="color: var(--brand-primary);" viewBox="0 0 24 24">
                         <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                         <line x1="3" y1="9" x2="21" y2="9"></line>
                         <line x1="9" y1="21" x2="9" y2="9"></line>
@@ -906,7 +908,7 @@
                 <button class="edit-button" onclick="editItems()">编辑</button>
             </div>
             <div class="empty-icon">
-                <svg class="linear-icon" style="width: 48px; height: 48px; color: #e0e0e0;" viewBox="0 0 24 24">
+                <svg class="linear-icon" style="width: 48px; height: 48px; color: var(--border-primary);" viewBox="0 0 24 24">
                     <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                     <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                     <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -1077,7 +1079,7 @@
                         <button class="edit-button" onclick="editItems()">编辑</button>
                     </div>
                     <div class="empty-icon">
-                        <svg class="linear-icon" style="width: 48px; height: 48px; color: #e0e0e0;" viewBox="0 0 24 24">
+                        <svg class="linear-icon" style="width: 48px; height: 48px; color: var(--border-primary);" viewBox="0 0 24 24">
                             <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
                             <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
                             <line x1="12" y1="22.08" x2="12" y2="12"></line>
@@ -1130,7 +1132,7 @@
                                     <span>${barcode.batchNo}</span>
                                     <span>${barcode.barcode}</span>
                                     <span class="stock-type ${barcode.stockType === '寄售' ? 'credit' : 'distribution'}">${barcode.stockType}</span>
-                                    <button class="delete-btn" onclick="deleteBarcode(${index}, ${barcodeIndex})"><svg class="linear-icon" style="width: 16px; height: 16px; color: #ff6b81;" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
+                                    <button class="delete-btn" onclick="deleteBarcode(${index}, ${barcodeIndex})"><svg class="linear-icon" style="width: 16px; height: 16px; color: var(--brand-primary);" viewBox="0 0 24 24"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg></button>
                                 </div>
                             `).join('') : `<div style="text-align: center; padding: 12px; color: #999999; font-size: 14px;">未扫描商品</div>`}
                         </div>

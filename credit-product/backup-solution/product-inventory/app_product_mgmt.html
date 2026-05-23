@@ -13,7 +13,7 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            background: #f5f5f5;
+            background: var(--bg-secondary);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -96,7 +96,7 @@
 
         .section-title {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             margin-bottom: 15px;
         }
 
@@ -138,7 +138,7 @@
 
         .menu-item .label {
             font-size: 14px;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .menu-item.pink .icon { background: #fce4ec; }
@@ -155,7 +155,7 @@
             align-items: center;
             gap: 10px;
             font-size: 16px;
-            color: #333;
+            color: var(--text-secondary);
             cursor: pointer;
             flex-shrink: 0;
         }
@@ -169,7 +169,7 @@
 
         .step-desc {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             margin-bottom: 15px;
             text-align: center;
         }
@@ -180,7 +180,7 @@
 
         .form-label {
             font-size: 14px;
-            color: #333;
+            color: var(--text-secondary);
             margin-bottom: 8px;
         }
 
@@ -209,8 +209,8 @@
         }
 
         .btn-secondary {
-            background: #f5f5f5;
-            color: #333;
+            background: var(--bg-secondary);
+            color: var(--text-secondary);
         }
 
         .btn-group {
@@ -299,7 +299,7 @@
 
         .success-message .desc {
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
         }
 
         .home-content {
@@ -324,7 +324,7 @@
         .type-info-box .value {
             font-size: 15px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
         }
 
         .top-bar {
@@ -355,7 +355,7 @@
             cursor: pointer;
             transition: all 0.2s;
             font-size: 14px;
-            color: #666;
+            color: var(--text-muted);
             margin-bottom: 8px;
         }
 
@@ -385,13 +385,13 @@
         .product-card-name {
             font-size: 15px;
             font-weight: bold;
-            color: #333;
+            color: var(--text-secondary);
             margin-bottom: 8px;
         }
 
         .product-card-spec {
             font-size: 13px;
-            color: #666;
+            color: var(--text-muted);
             margin-bottom: 6px;
         }
 
@@ -414,6 +414,8 @@
             transform: scale(1.1);
         }
     </style>
+
+<link rel="stylesheet" href="../chlitina-brand.css">
 </head>
 <body>
     <div class="phone-container">
@@ -426,7 +428,7 @@
             <div class="page-content">
                 <div class="header">
                     <div class="avatar">
-                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="var(--text-muted)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
                             <circle cx="12" cy="7" r="4"></circle>
                         </svg>
@@ -684,10 +686,10 @@
                 <div id="inventory-result" style="display: none;">
                     <div class="section-title" style="margin-bottom: 15px;">查询结果</div>
                     <div class="product-group-card">
-                        <div style="padding: 15px; background: #f5f5f5; border-bottom: 1px solid #e8e8e8;">
+                        <div style="padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid #e8e8e8;">
                             <div style="font-size: 16px; font-weight: bold; margin-bottom: 10px;" id="inventory-product-name">-</div>
-                            <div style="display: flex; gap: 20px; font-size: 13px; color: #666; flex-wrap: wrap;">
-                                <span>商品分类：<span id="inventory-category" style="color: #333;">-</span></span>
+                            <div style="display: flex; gap: 20px; font-size: 13px; color: var(--text-muted); flex-wrap: wrap;">
+                                <span>商品分类：<span id="inventory-category" style="color: var(--text-secondary);">-</span></span>
                                 <span>当前库存：<span id="inventory-stock" style="color: #ec407a; font-weight: bold;">-</span></span>
                             </div>
                         </div>
@@ -737,7 +739,7 @@
                 </div>
 
                 <div style="display: flex; gap: 15px; flex: 1; min-height: 0;">
-                    <div style="width: 120px; flex-shrink: 0; background: #f5f5f5; border-radius: 8px; padding: 15px; overflow-y: auto;">
+                    <div style="width: 120px; flex-shrink: 0; background: var(--bg-secondary); border-radius: 8px; padding: 15px; overflow-y: auto;">
                         <div class="section-title" style="margin-bottom: 15px;">商品分类</div>
                         <div id="category-list">
                             <div class="category-item active" onclick="selectCategory('all')">全部</div>
@@ -755,7 +757,7 @@
 
                 <div style="margin-top: 20px; padding-top: 20px; border-top: 1px solid #e8e8e8;">
                     <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
-                        <div style="font-size: 14px; color: #666;">已选数量：<span id="selected-count" style="font-size: 16px; font-weight: bold; color: #ec407a;">0</span> 件</div>
+                        <div style="font-size: 14px; color: var(--text-muted);">已选数量：<span id="selected-count" style="font-size: 16px; font-weight: bold; color: #ec407a;">0</span> 件</div>
                         <button class="btn btn-secondary" onclick="showSelectedProducts()">查看已选</button>
                     </div>
                     <button class="btn btn-primary" onclick="confirmAddProducts()" style="width: 100%; padding: 15px; font-size: 16px;">确定添加</button>
@@ -1095,17 +1097,17 @@
                 totalCount += product.details.length;
                 html += `
                     <div class="product-group-card">
-                        <div style="padding: 15px; background: #f5f5f5; border-bottom: 1px solid #e8e8e8;">
+                        <div style="padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid #e8e8e8;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <div style="font-size: 16px; font-weight: bold;">${product.name}</div>
-                                <div style="font-size: 13px; color: #666;">${product.details.length}件</div>
+                                <div style="font-size: 13px; color: var(--text-muted);">${product.details.length}件</div>
                             </div>
                         </div>
                         <div style="padding: 10px 15px; background: #fff;">
                             <div style="font-size: 12px; color: #999; margin-bottom: 10px;">明细：</div>
                             ${product.details.map(detail => `
                                 <div style="padding: 8px 0; border-bottom: 1px dashed #e8e8e8;">
-                                    <div style="font-size: 13px; color: #666;">
+                                    <div style="font-size: 13px; color: var(--text-muted);">
                                         <div>${detail.batch ? `批次：${detail.batch} | 唯一号：${detail.uniqueNo}` : '手动选择 | 数量：1件'}</div>
                                     </div>
                                 </div>
@@ -1217,7 +1219,7 @@
                             `;
                             option.innerHTML = `
                                 <div style="font-size: 14px; font-weight: 500;">${product.name}</div>
-                                <div style="font-size: 12px; color: #666; margin-top: 4px;">
+                                <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">
                                     规格：${product.name.match(/\d+[ml|g]/) ? product.name.match(/\d+[ml|g]/)[0] : '无'} | 分类：${product.category}
                                 </div>
                                 <div style="font-size: 12px; color: #ec407a; margin-top: 2px;">
@@ -1230,7 +1232,7 @@
                                 productDropdown.style.display = 'none';
                             };
                             option.onmouseover = function() {
-                                this.style.backgroundColor = '#f5f5f5';
+                                this.style.backgroundColor = 'var(--bg-secondary)';
                             };
                             option.onmouseout = function() {
                                 this.style.backgroundColor = '#fff';
@@ -1294,7 +1296,7 @@
                 
                 html += `
                     <div class="product-group-card" data-index="${pIndex}">
-                        <div style="padding: 15px; background: #f5f5f5; border-bottom: 1px solid #e8e8e8;">
+                        <div style="padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid #e8e8e8;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <div style="font-size: 16px; font-weight: bold;">${product.name}</div>
                                 <button onclick="removeProductGroup(${pIndex}, '${type}')" style="background: #ffebee; border: none; border-radius: 50%; width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; cursor: pointer; color: #e53935;">
@@ -1304,7 +1306,7 @@
                                     </svg>
                                 </button>
                             </div>
-                            <div style="display: flex; gap: 20px; font-size: 13px; color: #666;">
+                            <div style="display: flex; gap: 20px; font-size: 13px; color: var(--text-muted);">
                                 <span>规格：${product.specification || '-'}</span>
                                 <span>当前库存：${product.stock}瓶</span>
                                 <span style="color: #ec407a; font-weight: bold;">已选：${product.details.length}件</span>
@@ -1315,7 +1317,7 @@
                                 <div style="font-size: 12px; color: #999; margin-bottom: 10px;">明细：</div>
                                 ${product.details.map((detail, dIndex) => `
                                     <div style="padding: 10px 0; ${dIndex < product.details.length - 1 ? 'border-bottom: 1px dashed #e8e8e8;' : ''}">
-                                        <div style="font-size: 13px; color: #666;">
+                                        <div style="font-size: 13px; color: var(--text-muted);">
                                             <div>批次：${detail.batch} | 唯一号：${detail.uniqueNo}</div>
                                         </div>
                                     </div>
@@ -1323,16 +1325,16 @@
                             ` : isManualSelected ? `
                                 <div style="font-size: 12px; color: #999; margin-bottom: 10px;">明细：</div>
                                 <div style="padding: 10px 0;">
-                                    <div style="font-size: 13px; color: #666; margin-bottom: 10px;">手动选择</div>
+                                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 10px;">手动选择</div>
                                     <div style="display: flex; align-items: center; gap: 10px;">
-                                        <span style="font-size: 13px; color: #666;">数量：</span>
-                                        <button onclick="decreaseManualQuantity(${pIndex})" style="width: 28px; height: 28px; border: 1px solid #e8e8e8; border-radius: 4px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                        <span style="font-size: 13px; color: var(--text-muted);">数量：</span>
+                                        <button onclick="decreaseManualQuantity(${pIndex})" style="width: 28px; height: 28px; border: 1px solid #e8e8e8; border-radius: 4px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                             </svg>
                                         </button>
                                         <input type="number" value="${product.details.length}" min="1" max="${product.stock}" onchange="updateManualQuantity(${pIndex}, this.value)" style="width: 80px; padding: 5px; border: 1px solid #e8e8e8; border-radius: 4px; text-align: center;">
-                                        <button onclick="increaseManualQuantity(${pIndex})" style="width: 28px; height: 28px; border: 1px solid #e8e8e8; border-radius: 4px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                        <button onclick="increaseManualQuantity(${pIndex})" style="width: 28px; height: 28px; border: 1px solid #e8e8e8; border-radius: 4px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1344,7 +1346,7 @@
                                 <div style="font-size: 12px; color: #999; margin-bottom: 10px;">明细：</div>
                                 ${product.details.map((detail, dIndex) => `
                                     <div style="padding: 10px 0; ${dIndex < product.details.length - 1 ? 'border-bottom: 1px dashed #e8e8e8;' : ''}">
-                                        <div style="font-size: 13px; color: #666;">
+                                        <div style="font-size: 13px; color: var(--text-muted);">
                                             <div>批次：${detail.batch} | 唯一号：${detail.uniqueNo}</div>
                                         </div>
                                     </div>
@@ -1417,11 +1419,11 @@
             data.products.forEach((product, pIndex) => {
                 html += `
                     <div class="product-group-card" data-index="${pIndex}">
-                        <div style="padding: 15px; background: #f5f5f5; border-bottom: 1px solid #e8e8e8;">
+                        <div style="padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid #e8e8e8;">
                             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                                 <div style="font-size: 16px; font-weight: bold;">${product.name}</div>
                             </div>
-                            <div style="display: flex; gap: 20px; font-size: 13px; color: #666;">
+                            <div style="display: flex; gap: 20px; font-size: 13px; color: var(--text-muted);">
                                 <span>当前库存：${product.stock}瓶</span>
                                 <span style="color: #ec407a; font-weight: bold;">${actionText}数量：${product.details.length}件</span>
                             </div>
@@ -1430,7 +1432,7 @@
                             <div style="font-size: 12px; color: #999; margin-bottom: 10px;">${actionText}明细：</div>
                             ${product.details.map((detail, dIndex) => `
                                 <div style="padding: 10px 0; ${dIndex < product.details.length - 1 ? 'border-bottom: 1px dashed #e8e8e8;' : ''}">
-                                    <div style="font-size: 13px; color: #666;">
+                                    <div style="font-size: 13px; color: var(--text-muted);">
                                         <div>批次：${detail.batch} | 唯一号：${detail.uniqueNo}</div>
                                     </div>
                                 </div>
@@ -1554,18 +1556,18 @@
                             <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                                 <div>
                                     <div style="font-size: 15px; font-weight: bold; margin-bottom: 8px;">${productName}</div>
-                                    <div style="font-size: 13px; color: #666; margin-bottom: 6px;">规格：${product.name.match(/\d+[ml|g]/) ? product.name.match(/\d+[ml|g]/)[0] : '无'}</div>
-                                    <div style="font-size: 13px; color: #666;">剩余库存：${product.stock}件</div>
+                                    <div style="font-size: 13px; color: var(--text-muted); margin-bottom: 6px;">规格：${product.name.match(/\d+[ml|g]/) ? product.name.match(/\d+[ml|g]/)[0] : '无'}</div>
+                                    <div style="font-size: 13px; color: var(--text-muted);">剩余库存：${product.stock}件</div>
                                 </div>
                                 <div style="display: flex; flex-direction: column; align-items: center;">
                                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
-                                        <button onclick="decreaseQuantity('${productName}')" style="width: 24px; height: 24px; border: 1px solid #e8e8e8; border-radius: 4px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                        <button onclick="decreaseQuantity('${productName}')" style="width: 24px; height: 24px; border: 1px solid #e8e8e8; border-radius: 4px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
                                             </svg>
                                         </button>
                                         <input type="number" value="${quantity}" min="1" max="${product.stock}" onchange="updateQuantity('${productName}', this.value)" style="width: 60px; padding: 5px; border: 1px solid #e8e8e8; border-radius: 4px; text-align: center;">
-                                        <button onclick="increaseQuantity('${productName}')" style="width: 24px; height: 24px; border: 1px solid #e8e8e8; border-radius: 4px; background: #f5f5f5; display: flex; align-items: center; justify-content: center; cursor: pointer;">
+                                        <button onclick="increaseQuantity('${productName}')" style="width: 24px; height: 24px; border: 1px solid #e8e8e8; border-radius: 4px; background: var(--bg-secondary); display: flex; align-items: center; justify-content: center; cursor: pointer;">
                                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                                                 <line x1="12" y1="5" x2="12" y2="19"></line>
                                                 <line x1="5" y1="12" x2="19" y2="12"></line>
@@ -1728,7 +1730,7 @@
             showAppDialog('扫码撤回', `
                 <div style="text-align: center; padding: 20px;">
                     <div style="font-size: 14px; margin-bottom: 15px;">请扫描要撤回的商品条码</div>
-                    <div style="background: #f5f5f5; border-radius: 8px; padding: 40px; margin-bottom: 15px;">
+                    <div style="background: var(--bg-secondary); border-radius: 8px; padding: 40px; margin-bottom: 15px;">
                         <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="margin-bottom: 10px;">
                             <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"></path>
                             <circle cx="12" cy="13" r="4"></circle>
@@ -1759,8 +1761,8 @@
                     <div style="padding: 20px;">
                         <div style="background: #fff3e0; border-radius: 8px; padding: 15px; border: 1px solid #ffcc80;">
                             <div style="font-weight: bold; margin-bottom: 8px; color: #e65100;">${nonExistentProduct.name}</div>
-                            <div style="font-size: 13px; color: #666;">批次：${nonExistentProduct.batch}</div>
-                            <div style="font-size: 13px; color: #666;">唯一号：${nonExistentProduct.uniqueNo}</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">批次：${nonExistentProduct.batch}</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">唯一号：${nonExistentProduct.uniqueNo}</div>
                         </div>
                         <div style="font-size: 13px; color: #999; margin-top: 12px; text-align: center;">该商品不在当前已选商品列表中</div>
                     </div>
@@ -1776,8 +1778,8 @@
                     <div style="padding: 20px;">
                         <div style="background: #f9f9f9; border-radius: 8px; padding: 15px;">
                             <div style="font-weight: bold; margin-bottom: 8px;">${product.name}</div>
-                            <div style="font-size: 13px; color: #666;">批次：${detail.batch}</div>
-                            <div style="font-size: 13px; color: #666;">唯一号：${detail.uniqueNo}</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">批次：${detail.batch}</div>
+                            <div style="font-size: 13px; color: var(--text-muted);">唯一号：${detail.uniqueNo}</div>
                         </div>
                     </div>
                 `, ['取消', '确定'], function() {
@@ -1797,7 +1799,7 @@
             } else {
                 showAppDialog('未找到商品', `
                     <div style="padding: 20px; text-align: center;">
-                        <div style="font-size: 14px; color: #666;">当前没有可撤回的商品</div>
+                        <div style="font-size: 14px; color: var(--text-muted);">当前没有可撤回的商品</div>
                     </div>
                 `, ['确定']);
             }
@@ -1863,7 +1865,7 @@
                     background: #fff;
                     font-size: 16px;
                     cursor: pointer;
-                    color: ${index === buttons.length - 1 ? '#ec407a' : '#666'};
+                    color: ${index === buttons.length - 1 ? '#ec407a' : 'var(--text-muted)'};
                     font-weight: ${index === buttons.length - 1 ? 'bold' : 'normal'};
                     ${index > 0 ? 'border-left: 1px solid #e8e8e8;' : ''}
                 `;
@@ -2020,12 +2022,12 @@
         filteredHistory.forEach(item => {
             html += `
                 <div class="product-group-card">
-                    <div style="padding: 15px; background: #f5f5f5; border-bottom: 1px solid #e8e8e8;">
+                    <div style="padding: 15px; background: var(--bg-secondary); border-bottom: 1px solid #e8e8e8;">
                         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
                             <div style="font-size: 16px; font-weight: bold;">${item.typeName}</div>
                             <div style="font-size: 13px; color: #999;">${item.date} ${item.time}</div>
                         </div>
-                        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 13px; color: #666;">
+                        <div style="display: flex; flex-wrap: wrap; gap: 15px; font-size: 13px; color: var(--text-muted);">
                             <span>出库单号：OUT${item.id.padStart(8, '0')}</span>
                             <span>操作人：${item.operator}</span>
                             <span style="color: #ec407a; font-weight: bold;">共 ${item.total} 件</span>
@@ -2035,7 +2037,7 @@
                         <div style="font-size: 12px; color: #999; margin-bottom: 10px;">商品明细：</div>
                         ${item.products.map(product => `
                             <div style="padding: 10px 0; border-bottom: 1px dashed #e8e8e8;">
-                                <div style="font-size: 13px; color: #666; display: flex; justify-content: space-between;">
+                                <div style="font-size: 13px; color: var(--text-muted); display: flex; justify-content: space-between;">
                                     <span>${product.name}</span>
                                     <span style="font-weight: bold;">${product.quantity}件</span>
                                 </div>
