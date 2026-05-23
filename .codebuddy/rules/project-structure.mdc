@@ -1,0 +1,39 @@
+---
+alwaysApply: true
+description: 项目结构指南，包含子项目说明、开发服务器和预览方式
+---
+
+# 项目结构指南
+
+这是一个多模块前端项目集合，通过 [test_server.js](mdc:test_server.js) 提供静态文件服务。
+
+## 开发服务器
+
+运行 `node test_server.js` 启动开发服务器，监听端口 **9018**。
+
+- 根路径 `/` 默认指向 `app_product_mgmt.html`
+- 支持 `.html`、`.css`、`.js` 文件的静态服务
+- 启动后通过 `http://localhost:9018/` 预览
+
+## 子项目目录
+
+| 目录 | 说明 |
+|------|------|
+| [credit-product/](mdc:credit-product/) | 信贷产品（28个HTML页面 + 2个Excel） |
+| [order-payment/](mdc:order-payment/) | 订单支付（含JS模块、HTML页面） |
+| [new-order-project/](mdc:new-order-project/) | 新订单项目（8个HTML页面 + 文档） |
+| [order-sales-dashboard/](mdc:order-sales-dashboard/) | 订单销售看板 |
+| [order-select-product-pc/](mdc:order-select-product-pc/) | PC端选品下单 |
+| [order-select-product-mobile/](mdc:order-select-product-mobile/) | 移动端选品下单 |
+| [store_goal_mgmt/](mdc:store_goal_mgmt/) | 门店目标管理（HTML + CSS） |
+| [customer-benefit-switch/](mdc:customer-benefit-switch/) | 客户权益切换 |
+| [customer-payback-debt/](mdc:customer-payback-debt/) | 客户回款欠款 |
+| [admin-signin-event/](mdc:admin-signin-event/) | 管理端签到活动 |
+| [upload-files/](mdc:upload-files/) | 文件上传模块 |
+| [upload-files-old/](mdc:upload-files-old/) | 文件上传模块（旧版） |
+
+## 开发约定
+
+- 各子项目独立，互不依赖
+- 通过路径前缀访问不同模块，如 `http://localhost:9018/order-sales-dashboard/index.html`
+- 编辑 HTML/CSS/JS 文件后刷新浏览器即可看到变化

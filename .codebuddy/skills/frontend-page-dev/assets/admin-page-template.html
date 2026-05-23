@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面标题 - 克丽缇娜</title>
+    <link href="https://static.mastergo.com/static/ai/resource/html/googleapis/css2" rel="stylesheet">
+    <script src="https://static.mastergo.com/static/ai/resource/html/tailwind/tailwind.js"></script>
+    <script>tailwind.config={theme:{extend:{colors:{primary:'#409EFF',secondary:'#6B7280'},borderRadius:{'none':'0px','sm':'2px',DEFAULT:'4px','md':'8px','lg':'12px','xl':'16px','2xl':'20px','3xl':'24px','full':'9999px','button':'4px'}}}}</script>
+    <link rel="stylesheet" href="https://static.mastergo.com/static/ai/resource/html/font-awesome/css/all.min.css">
+    <style>
+        body{min-height:1024px;background-color:#f8fafc}
+        .table-header{background-color:#f1f5f9;font-weight:600}
+        .table-row:nth-child(even){background-color:#f8fafc}.table-row:nth-child(odd){background-color:white}
+        .pagination-btn{width:32px;height:32px;display:flex;align-items:center;justify-content:center}
+        .pagination-btn.active{background-color:#ef4444;color:white}
+        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background-color:rgba(0,0,0,0.5);display:flex;align-items:center;justify-content:center;z-index:1000}
+        .modal{background-color:white;border-radius:8px;padding:24px;width:90%;max-width:500px;box-shadow:0 4px 6px rgba(0,0,0,0.1)}
+        .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;padding-bottom:12px;border-bottom:1px solid #e0e0e0}
+        .modal-title{font-size:18px;font-weight:600;color:#333}
+        .close-btn{background:none;border:none;font-size:24px;cursor:pointer;color:#999}
+        .close-btn:hover{color:#333}
+        .form-group{margin-bottom:16px}
+        .form-label{display:block;margin-bottom:6px;font-weight:500;color:#333}
+        .form-input{width:100%;padding:8px 12px;border:1px solid #d1d5db;border-radius:4px;font-size:14px}
+        .form-input:focus{outline:none;border-color:#409EFF;box-shadow:0 0 0 3px rgba(64,158,255,0.1)}
+        .modal-footer{display:flex;justify-content:flex-end;gap:12px;margin-top:24px;padding-top:16px;border-top:1px solid #e0e0e0}
+        .btn-cancel{padding:8px 16px;border:1px solid #d1d5db;border-radius:4px;background:white;color:#333;cursor:pointer}
+        .btn-cancel:hover{background-color:#f8fafc}
+        .btn-save{padding:8px 16px;border:1px solid #409EFF;border-radius:4px;background:#409EFF;color:white;cursor:pointer}
+        .btn-save:hover{background-color:#66b1ff}
+    </style>
+</head>
+<body class="flex bg-gray-100">
+    <!-- 左侧导航栏 -->
+    <div class="w-64 bg-[#1E2C40] min-h-screen flex flex-col">
+        <div class="h-16 flex items-center px-6 border-b border-gray-700">
+            <i class="fas fa-check-circle text-green-500 mr-3 text-xl"></i>
+            <span class="text-white font-bold text-lg font-['Pacifico']">克丽缇娜</span>
+        </div>
+        <nav class="flex-1 py-4">
+            <!-- TODO: 复制菜单项，标记当前激活页面 -->
+            <div class="mb-1 px-4 py-2 rounded-md hover:bg-gray-700 cursor-pointer flex items-center justify-between">
+                <div class="flex items-center">
+                    <i class="fas fa-home text-gray-300 mr-3"></i>
+                    <span class="text-gray-200">首页</span>
+                </div>
+                <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+            </div>
+        </nav>
+    </div>
+
+    <!-- 主内容区 -->
+    <div class="flex-1 p-6">
+        <!-- 面包屑导航 -->
+        <nav class="flex items-center mb-6">
+            <span class="text-gray-500">首页</span>
+            <i class="fas fa-chevron-right mx-2 text-gray-400 text-sm"></i>
+            <span class="text-gray-800 font-medium">当前页面</span>
+        </nav>
+
+        <!-- 主要内容卡片 -->
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+            <!-- 筛选区域 -->
+            <div class="p-6 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center space-x-4">
+                    <div class="flex items-center space-x-2">
+                        <label class="text-gray-700 font-medium">筛选条件</label>
+                        <input type="text" id="searchInput" class="appearance-none bg-white border border-gray-300 rounded-md py-2 pl-3 pr-8 text-gray-700 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent w-40" placeholder="请输入">
+                    </div>
+                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="filterData()">筛选</button>
+                    <button class="bg-gray-200 text-gray-700 px-4 py-2 rounded-md hover:bg-gray-300 transition-colors !rounded-button whitespace-nowrap" onclick="resetFilter()">重置</button>
+                </div>
+                <div class="mt-4">
+                    <button class="bg-primary text-white px-4 py-2 rounded-md hover:bg-blue-700 transition-colors !rounded-button whitespace-nowrap" onclick="openAddModal()">新增XXX</button>
+                </div>
+            </div>
+
+            <!-- 数据表格 -->
+            <div class="overflow-x-auto">
+                <table class="w-full">
+                    <thead>
+                        <tr class="table-header">
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">编号</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">名称</th>
+                            <th class="py-4 px-6 text-left text-gray-600 font-medium">操作</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- TODO: 添加数据行 -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- 分页 -->
+            <div class="p-6 border-t border-gray-200 flex items-center justify-between">
+                <div class="text-gray-600">共 0 条记录，每页显示 10 条</div>
+                <div class="flex items-center space-x-2">
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100 rounded-md" disabled><i class="fas fa-chevron-left text-sm"></i></button>
+                    <button class="pagination-btn active">1</button>
+                    <button class="pagination-btn text-gray-600 hover:bg-gray-100" disabled><i class="fas fa-chevron-right text-sm"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增弹窗 -->
+    <div id="addModal" class="modal-overlay" style="display:none;">
+        <div class="modal">
+            <div class="modal-header">
+                <h2 class="modal-title">新增XXX</h2>
+                <button class="close-btn" onclick="closeAddModal()">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">名称</label>
+                    <input type="text" class="form-input" id="nameInput" placeholder="请输入名称">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-cancel" onclick="closeAddModal()">取消</button>
+                <button class="btn-save" onclick="saveData()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // TODO: 替换为实际业务逻辑
+        function filterData() {
+            const value = document.getElementById('searchInput').value.trim();
+            console.log('Filter:', value);
+        }
+        function resetFilter() {
+            document.getElementById('searchInput').value = '';
+        }
+        function openAddModal() {
+            document.getElementById('addModal').style.display = 'flex';
+        }
+        function closeAddModal() {
+            document.getElementById('addModal').style.display = 'none';
+            document.getElementById('nameInput').value = '';
+        }
+        function saveData() {
+            const name = document.getElementById('nameInput').value;
+            if (!name) { alert('请输入名称'); return; }
+            alert('保存成功！');
+            closeAddModal();
+        }
+    </script>
+</body>
+</html>
