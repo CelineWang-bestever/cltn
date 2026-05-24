@@ -2585,7 +2585,6 @@
             justify-content: space-between;
             align-items: center;
             padding-top: 12px;
-            border-top: 1px solid var(--neutral-200);
             margin-top: 12px;
             font-size: 14px;
             font-weight: 700;
@@ -4508,6 +4507,14 @@
         .woc-tip-amount.error {
             color: #ef4444;
             font-weight: 700;
+        }
+
+        .woc-tip-orange {
+            margin-top: 6px;
+            font-size: 12px;
+            color: #FFA500;
+            line-height: 1.5;
+            font-weight: 500;
         }
 
         .woc-actions {
@@ -7570,29 +7577,31 @@
 
             <div class="whole-order-change-popover" id="wholeOrderChangePopover" style="display:none;">
                 <div class="woc-title">整单改价</div>
-                <div class="woc-fields">
+                <div class="woc-fields" id="wocFields">
                     <div class="woc-field">
-                        <div class="woc-label">整单应收</div>
+                        <div class="woc-label">整单优惠金额</div>
                         <div class="woc-input-wrap">
                             <span class="woc-prefix">¥</span>
                             <input class="woc-input" id="wocAmountInput" inputmode="decimal" type="text" placeholder="0.00">
                         </div>
                     </div>
-                    <div class="woc-field">
-                        <div class="woc-label">折扣</div>
-                        <div class="woc-input-wrap">
-                            <input class="woc-input" id="wocDiscountInput" inputmode="decimal" type="text" placeholder="0.00">
-                            <span class="woc-suffix">折</span>
-                        </div>
-                    </div>
                 </div>
-                <div class="woc-tip">最低改价金额为 ¥0.00（0折）</div>
+                <div class="woc-tip-orange">若整单改价，则不支持商品改价；反之商品改价后，则不支持整单改价</div>
+                <div class="woc-tip" id="wocMinTip">最低改价金额为 ¥0.00（0折）</div>
                 <div class="woc-remove-row" id="wocRemoveRow" style="display:none;">
                     <button type="button" class="woc-remove-btn" id="wocRemoveBtn">
                         <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M3 12a9 9 0 1 0 18 0 9 9 0 1 0-18 0M9 12h6M12 9v6"/>
                         </svg>
                         移除整单改价优惠
+                    </button>
+                </div>
+                <div class="woc-remove-row" id="wocRemoveProductRow" style="display:none;">
+                    <button type="button" class="woc-remove-btn" id="wocRemoveProductBtn">
+                        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M3 6h18M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2m3 0v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6h14"/>
+                        </svg>
+                        移除商品优惠
                     </button>
                 </div>
                 <div class="woc-actions">
@@ -9013,7 +9022,7 @@
             const modalTitle = confirmModalOverlay.querySelector('.confirm-modal-title');
             const modalDesc = confirmModalOverlay.querySelector('.confirm-modal-desc');
             if (modalTitle) modalTitle.textContent = '提示';
-            if (modalDesc) modalDesc.textContent = desc;
+            if (modalDesc) modalDesc.innerHTML = desc;
             confirmModalOverlay.dataset.hasCallback = '';
             confirmModalOverlay.dataset.alertMode = '1';
             if (confirmCancel) confirmCancel.style.display = 'none';
@@ -11531,6 +11540,19 @@
             return safeIntPart + '.' + decPart;
         }
 
+        // ===== 调试日志：记录商品金额字段每次变更 =====
+        function logProductFieldChange(row, field, oldValue, newValue, caller) {
+            const itemType = row?.getAttribute('data-item-type') || '?';
+            const itemId = row?.getAttribute('data-item-id') || '?';
+            const name = (row?.querySelector('.col-name')?.textContent || '').replace(/\s+/g, ' ').trim();
+            console.log(
+                '%c[' + new Date().toLocaleTimeString() + ']%c ' + caller +
+                ' %c|%c ' + itemType + ' %c|%c ' + name + ' (#' + itemId + ')' +
+                ' %c|%c ' + field + ': ' + oldValue + ' → ' + newValue,
+                'color:#999', 'color:#e67e22;font-weight:bold', 'color:#999', 'color:#3498db', 'color:#999', 'color:#2ecc71', 'color:#999', 'color:#e74c3c;font-weight:bold'
+            );
+        }
+
         function formatFinalPriceInput(input) {
             const sanitized = sanitizePriceString(input.value, 2);
             const v = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
@@ -11572,6 +11594,7 @@
             const row = discountInput.closest('tr');
             if (!row) return;
 
+            const oldDiscount = discountInput.value;
             const intStr = sanitizeIntString(discountInput.value);
             const discount = clampNumber(intStr === '' ? 0 : parseInt(intStr, 10), 0, 100);
 
@@ -11589,7 +11612,8 @@
 
             discountInput.value = String(discount);
             discountInput.setAttribute('value', String(discount));
-            
+            logProductFieldChange(row, 'discount', oldDiscount, String(discount), 'updateFinalPrice');
+
             const originalPriceText = row.querySelector('.col-original').textContent;
             const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
             const qtyEl = row.querySelector('input[data-field="buyQty"]') || row.querySelector('input[data-field="buy"]');
@@ -11597,8 +11621,10 @@
             const baseTotal = originalPrice * buyQty;
             const finalPrice = baseTotal * (discount / 100);
             const finalPriceInput = row.querySelector('[data-field="finalPrice"]');
-            
+
+            const oldFinalPrice = finalPriceInput ? finalPriceInput.value : '?';
             finalPriceInput.value = finalPrice.toFixed(2);
+            logProductFieldChange(row, 'finalPrice', oldFinalPrice, finalPrice.toFixed(2), 'updateFinalPrice');
             
             if (!suppressMoneyCardConflict && getRowMoneyCards(row).length > 0) {
                 normalizeAndRenderMoneyCards();
@@ -11616,9 +11642,11 @@
         function updateDiscount(finalPriceInput) {
             const row = finalPriceInput.closest('tr');
             if (!row) return;
-            
+
+            const oldFinalPrice = finalPriceInput.value;
             const sanitized = sanitizePriceString(finalPriceInput.value, 2);
             finalPriceInput.value = sanitized;
+            logProductFieldChange(row, 'finalPrice', oldFinalPrice, sanitized, 'updateDiscount');
             const finalPrice = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
             const originalPriceText = row.querySelector('.col-original').textContent;
             const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
@@ -11645,8 +11673,10 @@
 
                 const discount = baseTotal > 0 ? (finalPrice / baseTotal) * 100 : 0;
                 const discountValue = clampNumber(discount, 0, 100).toFixed(2);
+                const oldDiscountVal = discountInput.value;
                 discountInput.value = discountValue;
                 discountInput.setAttribute('value', discountValue);
+                logProductFieldChange(row, 'discount', oldDiscountVal, discountValue, 'updateDiscount');
             }
             
             if (!suppressMoneyCardConflict && getRowMoneyCards(row).length > 0) {
@@ -11672,8 +11702,16 @@
             }
             const min = parseInt(String(el.min || '0'), 10) || 0;
             const max = parseInt(String(el.max || '999'), 10) || 999;
+            const oldBuy = el.value;
             const v = clampNumber(parseInt(String(el.value || '0'), 10) || 0, min, max);
             el.value = String(v);
+            logProductFieldChange(row, 'buy', oldBuy, String(v), 'onSimpleLineFieldChange');
+
+            // 修改购买数量后移除整单优惠（PRD规则）
+            if (wholeOrderChangeState?.enabled) {
+                removeWholeOrderChange();
+            }
+
             const giftFlag = row.querySelector('.gift-flag-checkbox');
             const hiddenGift = row.querySelector('input[data-field="gift"]');
             if (giftFlag instanceof HTMLInputElement && giftFlag.checked && hiddenGift instanceof HTMLInputElement) {
@@ -11924,6 +11962,7 @@
             if (!row) return;
 
             const isGift = checkbox.checked;
+            logProductFieldChange(row, 'giftFlag', !isGift, isGift, 'onGiftFlagToggle');
             if (isGift) row.dataset.isGift = '1';
             else if (row.dataset.isGift) delete row.dataset.isGift;
             if (row.dataset.userDiscountOverride) delete row.dataset.userDiscountOverride;
@@ -12027,7 +12066,8 @@
 
         let wholeOrderChangeState = {
             enabled: false,
-            amount: 0
+            amount: 0,
+            discountAmount: 0
         };
 
         let wholeOrderChangePopoverOpen = false;
@@ -12116,9 +12156,9 @@
 
             let displayFinal = baseFinal;
             if (wholeOrderChangeState?.enabled) {
-                const adjusted = clampNumber(Number(wholeOrderChangeState.amount || 0), 0, baseOriginal);
-                wholeOrderChangeState.amount = adjusted;
-                displayFinal = adjusted;
+                const discountAmt = roundMoney2(Number(wholeOrderChangeState.discountAmount || 0));
+                displayFinal = roundMoney2(Math.max(0, baseFinal - discountAmt));
+                wholeOrderChangeState.amount = displayFinal;
             }
 
             let moneyCardTotal = 0;
@@ -12145,8 +12185,18 @@
                 displayPayable
             };
 
+            console.log(
+                '%c[' + new Date().toLocaleTimeString() + ']%c updateOrderSummary %c|%c baseOriginal=¥'+baseOriginal.toFixed(2)
+                + ' baseFinal=¥'+baseFinal.toFixed(2) + ' displayFinal=¥'+displayFinal.toFixed(2)
+                + ' displayPayable=¥'+displayPayable.toFixed(2) + ' moneyCardTotal=¥'+moneyCardTotal.toFixed(2),
+                'color:#999', 'color:#9b59b6;font-weight:bold', 'color:#999', 'color:#1abc9c'
+            );
+
             if (highlightEl) highlightEl.textContent = `¥${displayPayable.toFixed(2)}`;
-            if (discountEl) discountEl.textContent = `¥${displayDiscount.toFixed(2)}`;
+            // 始终取优惠明细弹窗中的优惠总计金额（baseOriginal - baseFinal），不再单独运算
+            if (discountEl) {
+                discountEl.textContent = `¥${baseDiscount.toFixed(2)}`;
+            }
             if (payableInput) payableInput.value = displayPayable.toFixed(2);
             if (discountAmountInput && wholeOrderChangeState?.enabled) discountAmountInput.value = displayDiscount.toFixed(2);
             if (moneyCardValEl) moneyCardValEl.textContent = `¥${moneyCardTotal.toFixed(2)}`;
@@ -12154,6 +12204,17 @@
 
             updateCategoryBadge('product');
             refreshWholeOrderChangeTipIfOpen();
+
+            // 整单优惠分摊到各行（修改数量/折扣等操作后触发重分摊）
+            // 守卫标志防止 redistributeWholeOrderDiscount → normalizeAndRenderMoneyCards → updateOrderSummary 死循环
+            if (!window.__redistributingWholeOrder && wholeOrderChangeState?.enabled && wholeOrderChangeState.discountAmount > 0.000001) {
+                window.__redistributingWholeOrder = true;
+                try {
+                    redistributeWholeOrderDiscount(wholeOrderChangeState.discountAmount);
+                } finally {
+                    window.__redistributingWholeOrder = false;
+                }
+            }
         }
 
         function sanitizeWholeOrderChangeAmountStr(v) {
@@ -12212,21 +12273,44 @@
             return { minAmount: roundMoney2(minAmount), minDiscountZhe: Number(minDiscountZhe.toFixed(2)), totalFinal: roundMoney2(totalFinal) };
         }
 
+        // 汇总所有商品行的 baseFinalWithMoneyCard（整单改价弹窗的最大可优惠金额基准）
+        // 所有商品 baseFinalWithMoneyCard 的累加，排除赠品（应付金额为0）
+        function sumBaseFinalWithMoneyCard() {
+            let sum = 0;
+            const addFromRows = (rows) => {
+                rows.forEach(row => {
+                    // 赠品（应付金额为0）不参与
+                    const finalPriceInput = row.querySelector('[data-field="finalPrice"]');
+                    const finalPrice = parseFloat(finalPriceInput?.value || '0') || 0;
+                    if (!(finalPrice > 0.000001)) return;
+                    const v = parseFloat(row.dataset.baseFinalWithMoneyCard);
+                    if (!isNaN(v) && v > 0) sum += v;
+                });
+            };
+            addFromRows(document.querySelectorAll('#service-table-body tr.item-row'));
+            addFromRows(document.querySelectorAll('#product-table-body tr.item-row'));
+            addFromRows(document.querySelectorAll('#amount-card-table-body tr.item-row'));
+            addFromRows(document.querySelectorAll('#course-table-body tr.item-row'));
+            return roundMoney2(sum);
+        }
+
         function renderWholeOrderChangeTip(opts) {
             const tipEl = document.querySelector('#wholeOrderChangePopover .woc-tip');
             if (!tipEl) return;
             const error = !!(opts && opts.error);
             if (tipEl.classList) tipEl.classList.toggle('error', error);
-            const rules = opts && opts.rules ? opts.rules : computeWholeOrderChangeMinRules();
-            const minAmount = Number(rules.minAmount || 0);
-            const minDiscountZhe = Number(rules.minDiscountZhe || 0);
+
+            const minAmount = sumWholeOrderChangeMoneyCardUsed();
+            // 最大可优惠金额 = (所有商品 baseFinalWithMoneyCard 的累加) - (金额卡划扣金额的累加)
+            const totalBase = sumBaseFinalWithMoneyCard();
+            const maxDiscountAmount = roundMoney2(Math.max(0, totalBase - minAmount));
 
             if (!(minAmount > 0.000001)) {
-                tipEl.textContent = '最低改价金额为 ¥0.00（0折）';
+                tipEl.textContent = '最大可优惠 ¥' + maxDiscountAmount.toFixed(2);
                 return;
             }
-            const amtHtml = '<span class="woc-tip-amount' + (error ? ' error' : '') + '">¥' + minAmount.toFixed(2) + '</span>';
-            tipEl.innerHTML = '最低改价金额为 ' + amtHtml + '（' + minDiscountZhe.toFixed(2) + '折）';
+            const amtHtml = '<span class="woc-tip-amount' + (error ? ' error' : '') + '">¥' + maxDiscountAmount.toFixed(2) + '</span>';
+            tipEl.innerHTML = '最大可优惠 ' + amtHtml + '（受金额卡已划扣¥' + minAmount.toFixed(2) + '限制）';
         }
 
         function refreshWholeOrderChangeTipIfOpen() {
@@ -12285,26 +12369,50 @@
         }
 
         function openWholeOrderChangePopover() {
-            updateOrderSummary();
             const pop = document.getElementById('wholeOrderChangePopover');
             const amountInput = document.getElementById('wocAmountInput');
-            const discountInput = document.getElementById('wocDiscountInput');
-            if (!pop || !amountInput || !discountInput) return;
+            if (!pop || !amountInput) return;
 
-            const baseOriginal = getWholeOrderChangeBaseOriginal();
-            const initAmount = wholeOrderChangeState?.enabled ? Number(wholeOrderChangeState.amount || 0) : Number(orderSummaryCache?.displayFinal || 0);
-            const safeAmount = clampNumber(initAmount, 0, Math.max(0, baseOriginal));
-            amountInput.value = safeAmount.toFixed(2);
-
-            const initDiscount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
-            discountInput.value = initDiscount.toFixed(2);
+            const baseFinal = roundMoney2(Math.max(0, sumBaseFinalWithMoneyCard() - sumWholeOrderChangeMoneyCardUsed()));
+            // 初始优惠金额 = 已有优惠金额或0
+            const initDiscountAmount = wholeOrderChangeState?.enabled
+                ? Number(wholeOrderChangeState.discountAmount || 0)
+                : 0;
+            amountInput.value = roundMoney2(clampNumber(initDiscountAmount, 0, baseFinal)).toFixed(2);
 
             if (amountInput.dataset) amountInput.dataset.wocOrigin = String(amountInput.value || '');
-            if (discountInput.dataset) discountInput.dataset.wocOrigin = String(discountInput.value || '');
 
             const removeRow = document.getElementById('wocRemoveRow');
             if (removeRow) {
                 removeRow.style.display = wholeOrderChangeState?.enabled ? 'flex' : 'none';
+            }
+
+            // 检查是否存在商品改价标记（userDiscountOverride）
+            const hasUserOverride = document.querySelectorAll('.item-row').length > 0 &&
+                Array.from(document.querySelectorAll('.item-row')).some(r => r.dataset?.userDiscountOverride === '1');
+
+            // 移除商品优惠按钮：仅当存在 userDiscountOverride 的商品行时显示
+            const removeProductRow = document.getElementById('wocRemoveProductRow');
+            if (removeProductRow) {
+                removeProductRow.style.display = hasUserOverride ? 'flex' : 'none';
+            }
+
+            // 存在商品改价标记时，隐藏整单优惠金额输入区和最低改价金额提示
+            const wocFields = document.getElementById('wocFields');
+            const wocMinTip = document.getElementById('wocMinTip');
+            if (wocFields) wocFields.style.display = hasUserOverride ? 'none' : '';
+            if (wocMinTip) wocMinTip.style.display = hasUserOverride ? 'none' : '';
+
+            // 整单改价与商品改价互斥：存在商品改价时禁用整单改价输入框和确定按钮
+            const wocConfirmBtn = document.getElementById('wocConfirmBtn');
+            if (hasUserOverride) {
+                amountInput.disabled = true;
+                amountInput.style.opacity = '0.5';
+                if (wocConfirmBtn) wocConfirmBtn.disabled = true;
+            } else {
+                amountInput.disabled = false;
+                amountInput.style.opacity = '';
+                if (wocConfirmBtn) wocConfirmBtn.disabled = false;
             }
 
             pop.style.display = 'block';
@@ -12319,57 +12427,346 @@
         function removeWholeOrderChange() {
             wholeOrderChangeState.enabled = false;
             wholeOrderChangeState.amount = 0;
+            wholeOrderChangeState.discountAmount = 0;
+
+            // 设置转换守卫，抑制中间态触发的弹窗闪现
+            window.__wholeOrderTransitioning = true;
 
             const discountAmountInput = document.getElementById('orderDiscountAmountInput');
             const baseDiscount = Number(orderSummaryCache?.baseDiscount || 0);
             if (discountAmountInput) discountAmountInput.value = baseDiscount.toFixed(2);
+
+            const allRows = Array.from(document.querySelectorAll('.item-row'));
+
+            // 第一遍：清除标记、还原应付金额和折扣值（不修改控件可用性）
+            allRows.forEach(row => {
+                const prevShare = parseFloat(row.dataset.wholeOrderShareDiscount || '0') || 0;
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+                if (prevShare > 0.000001) {
+                    const actionRow = findActionRowForItemRow(row);
+                    const payableEl = actionRow ? actionRow.querySelector('.item-payable-val') : null;
+                    if (payableEl) {
+                        const currentPayable = parseFloat(payableEl.textContent.replace('¥', '') || '0') || 0;
+                        payableEl.textContent = '¥' + roundMoney2(currentPayable + prevShare).toFixed(2);
+                    }
+                    // 还原折后价和折扣值（整单改价分摊时 subtracts shareAmount，此处反向还原）
+                    if (discountInput && finalPriceInput) {
+                        const currentFinalPrice = parseFloat(finalPriceInput.value || '0') || 0;
+                        const restoredFinalPrice = roundMoney2(currentFinalPrice + prevShare);
+                        const oldFinalPriceVal = finalPriceInput.value;
+                        finalPriceInput.value = restoredFinalPrice.toFixed(2);
+                        logProductFieldChange(row, 'finalPrice', oldFinalPriceVal, restoredFinalPrice.toFixed(2), 'removeWholeOrderChange');
+                        const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+                        const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
+                        const buyInput = row.querySelector('input[data-field="buyQty"]') || row.querySelector('input[data-field="buy"]');
+                        const buyQty = Math.max(0, parseInt(String(buyInput?.value || '0'), 10) || 0);
+                        const baseTotal = originalPrice * buyQty;
+                        if (baseTotal > 0) {
+                            const oldDisc = discountInput.value;
+                            discountInput.value = String(Math.min(100, Math.max(0, Math.round(restoredFinalPrice / baseTotal * 100))));
+                            logProductFieldChange(row, 'discount', oldDisc, discountInput.value, 'removeWholeOrderChange');
+                        } else {
+                            const oldDisc = discountInput.value;
+                            discountInput.value = '100';
+                            logProductFieldChange(row, 'discount', oldDisc, '100', 'removeWholeOrderChange');
+                        }
+                    }
+                }
+                row.removeAttribute('data-whole-order-modified');
+                row.dataset.wholeOrderShareDiscount = '0';
+                row.style.removeProperty('--share-discount-amount');
+                const shareAmountSpan = row.querySelector('.share-discount-amount');
+                if (shareAmountSpan) shareAmountSpan.textContent = '';
+            });
+
+            // 第二遍：统一恢复所有输入框可用状态（所有标记已清除，不会触发互斥弹窗）
+            allRows.forEach(row => {
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+                if (discountInput) {
+                    discountInput.disabled = false;
+                    discountInput.readOnly = false;
+                    discountInput.style.opacity = '';
+                }
+                if (finalPriceInput) {
+                    finalPriceInput.disabled = false;
+                    finalPriceInput.readOnly = false;
+                    finalPriceInput.style.opacity = '';
+                }
+                const discountWrap = row.querySelector('.discount-wrapper');
+                if (discountWrap) discountWrap.classList.remove('is-readonly');
+            });
 
             updateOrderSummary();
 
             closeWholeOrderChangePopover();
 
             showToast('已移除整单改价优惠');
+
+            // 延迟清除守卫，确保异步事件（如 focusin）不会在此期间触发弹窗
+            setTimeout(() => { window.__wholeOrderTransitioning = false; }, 100);
+        }
+
+        function removeProductDiscounts() {
+            // 清除所有商品行的 userDiscountOverride 标记
+            // 将所有商品行的折扣和折后价恢复至"原始应用金额卡的折扣和折后价"
+            // 对于无应用金额卡的商品，将其折扣恢复至100%
+            // 重新计算所有金额卡划扣金额（使用PRD规则）
+            const rows = document.querySelectorAll('.item-row');
+            rows.forEach(row => {
+                if (!(row instanceof Element)) return;
+                if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
+
+                const discountInput = row.querySelector('input[data-field="discount"]');
+                const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
+                const originalCardPrice = parseFloat(row.dataset?.originalCardPrice || '0') || 0;
+                const originalCardDiscount = row.dataset?.originalCardDiscount || '';
+
+                if (originalCardPrice > 0.000001 && discountInput instanceof HTMLInputElement && finalPriceInput instanceof HTMLInputElement) {
+                    // 有原始应用金额卡的折后价：恢复至此
+                    suppressMoneyCardConflict = true;
+                    discountInput.value = originalCardDiscount;
+                    finalPriceInput.value = originalCardPrice.toFixed(2);
+                    suppressMoneyCardConflict = false;
+                } else {
+                    // 无应用金额卡：恢复至100%
+                    const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+                    const originalPrice = parseFloat(originalPriceText.replace(/[^0-9.]/g, '')) || 0;
+                    const buyInput = row.querySelector('input[data-field="buy"], input[data-field="buyQty"]');
+                    const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
+                    const preDiscountTotal = originalPrice * quantity;
+                    suppressMoneyCardConflict = true;
+                    if (discountInput instanceof HTMLInputElement) {
+                        discountInput.value = '100';
+                    }
+                    if (finalPriceInput instanceof HTMLInputElement) {
+                        finalPriceInput.value = preDiscountTotal.toFixed(2);
+                    }
+                    suppressMoneyCardConflict = false;
+                }
+            });
+
+            // 重新计算所有金额卡划扣金额
+            normalizeAndRenderMoneyCards();
+            updateOrderSummary();
+            closeWholeOrderChangePopover();
+            showToast('已移除商品优惠，恢复至原始价格');
+        }
+
+        function redistributeWholeOrderDiscount(wholeOrderDiscountAmount) {
+            if (!(wholeOrderDiscountAmount > 0.000001)) return;
+
+            // 设置转换守卫，抑制重分摊中间态触发的弹窗闪现
+            window.__wholeOrderTransitioning = true;
+
+            const rows = document.querySelectorAll('.item-row');
+            const allRows = Array.from(rows);
+
+            // 先还原各行原始应付金额（抵消上一次分摊），再读取 remainingPayable 避免数据累积
+            allRows.forEach(row => {
+                const prevShare = parseFloat(row.dataset.wholeOrderShareDiscount || '0') || 0;
+                if (prevShare > 0.000001) {
+                    const actionRow = findActionRowForItemRow(row);
+                    const payableEl = actionRow ? actionRow.querySelector('.item-payable-val') : null;
+                    if (payableEl) {
+                        const currentPayable = parseFloat(payableEl.textContent.replace('¥', '') || '0') || 0;
+                        payableEl.textContent = '¥' + roundMoney2(currentPayable + prevShare).toFixed(2);
+                    }
+                }
+                row.removeAttribute('data-whole-order-modified');
+                row.dataset.wholeOrderShareDiscount = '0';
+                row.style.removeProperty('--share-discount-amount');
+                const shareAmountSpan = row.querySelector('.share-discount-amount');
+                if (shareAmountSpan) shareAmountSpan.textContent = '';
+            });
+
+            let totalRemainingPayable = 0;
+            const rowDataList = [];
+
+            allRows.forEach(row => {
+                // 赠品（应付金额为0）不参与整单优惠分摊
+                const finalPriceInput = row.querySelector('[data-field="finalPrice"]');
+                const finalPrice = parseFloat(finalPriceInput?.value || '0') || 0;
+                if (!(finalPrice > 0.000001)) return;
+
+                const actionRow = findActionRowForItemRow(row);
+
+                const moneyCardsStr = row.dataset.moneycards || '[]';
+                let moneyCards = [];
+                try { moneyCards = JSON.parse(moneyCardsStr); } catch (e) { moneyCards = []; }
+
+                const originalPriceText = row.querySelector('.col-original')?.textContent || '¥0';
+                const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
+                const qtyEl = row.querySelector('input[data-field="buyQty"]') || row.querySelector('input[data-field="buy"]');
+                const buyQty = Math.max(0, parseInt(String(qtyEl?.value || '0'), 10) || 0);
+                const baseTotal = originalPrice * buyQty;
+
+                const payableEl = actionRow ? actionRow.querySelector('.item-payable-val') : null;
+                const remainingPayable = (moneyCards.length > 0)
+                    ? (payableEl ? parseFloat(payableEl.textContent.replace('¥', '') || '0') || 0 : 0)
+                    : baseTotal;
+
+                rowDataList.push({
+                    row, remainingPayable, moneyCards, baseTotal, buyQty
+                });
+
+                if (remainingPayable > 0.000001) {
+                    totalRemainingPayable += remainingPayable;
+                }
+            });
+
+            const distributable = rowDataList.filter(function(d) {
+                return d.remainingPayable > 0.000001 && totalRemainingPayable > 0.000001;
+            });
+
+            if (distributable.length > 0) {
+                var allocatedSum = 0;
+                distributable.forEach(function(data, idx) {
+                    var shareRatio = data.remainingPayable / totalRemainingPayable;
+                    var shareAmount;
+                    if (idx === distributable.length - 1) {
+                        shareAmount = roundMoney2(wholeOrderDiscountAmount - allocatedSum);
+                    } else {
+                        shareAmount = Math.floor(wholeOrderDiscountAmount * shareRatio * 100) / 100;
+                        allocatedSum = roundMoney2(allocatedSum + shareAmount);
+                    }
+                    shareAmount = Math.max(0, shareAmount);
+                    data._shareAmount = shareAmount;
+                });
+
+                distributable.forEach(function(data) {
+                    var shareAmount = data._shareAmount || 0;
+
+                    data.row.removeAttribute('data-user-discount-override');
+                    data.row.dataset.wholeOrderModified = '1';
+                    data.row.dataset.wholeOrderShareDiscount = shareAmount.toFixed(2);
+                    data.row.style.setProperty('--share-discount-amount', shareAmount.toFixed(2));
+
+                    var newFinalPrice;
+                    var newDiscount;
+
+                    var totalCardDeduct = 0;
+                    data.moneyCards.forEach(function(card) {
+                        totalCardDeduct += parseFloat(card.amount || '0') || 0;
+                    });
+
+                    if (data.moneyCards.length > 0) {
+                        newFinalPrice = data.remainingPayable + totalCardDeduct - shareAmount;
+                        newDiscount = data.baseTotal > 0 ? (newFinalPrice / data.baseTotal) * 100 : 100;
+                    } else {
+                        newFinalPrice = data.baseTotal - shareAmount;
+                        newDiscount = data.baseTotal > 0 ? (newFinalPrice / data.baseTotal) * 100 : 100;
+                    }
+
+                    newFinalPrice = Math.max(0, newFinalPrice);
+                    newDiscount = Math.max(0, Math.min(100, newDiscount));
+
+                    const finalPriceInput = data.row.querySelector('[data-field="finalPrice"]');
+                    if (finalPriceInput) {
+                        const oldFinalPrice = finalPriceInput.value;
+                        finalPriceInput.value = newFinalPrice.toFixed(2);
+                        logProductFieldChange(data.row, 'finalPrice', oldFinalPrice, newFinalPrice.toFixed(2), 'redistributeWholeOrderDiscount');
+                        finalPriceInput.disabled = true;
+                        finalPriceInput.style.opacity = '0.6';
+                        finalPriceInput.readOnly = true;
+                    }
+
+                    const discountInput = data.row.querySelector('[data-field="discount"]');
+                    if (discountInput) {
+                        const oldDiscount = discountInput.value;
+                        discountInput.value = String(Math.round(newDiscount));
+                        discountInput.setAttribute('value', String(Math.round(newDiscount)));
+                        logProductFieldChange(data.row, 'discount', oldDiscount, String(Math.round(newDiscount)), 'redistributeWholeOrderDiscount');
+                        discountInput.disabled = true;
+                        discountInput.style.opacity = '0.6';
+                        discountInput.readOnly = true;
+                    }
+
+                    // 同步置灰折扣包裹层
+                    const discountWrap = data.row.querySelector('.discount-wrapper');
+                    if (discountWrap) discountWrap.classList.add('is-readonly');
+
+                    const actionRow = findActionRowForItemRow(data.row);
+                    const payableEl = actionRow ? actionRow.querySelector('.item-payable-val') : null;
+                    if (payableEl) {
+                        const rowPayable = data.moneyCards.length > 0 ? Math.max(0, newFinalPrice - totalCardDeduct) : newFinalPrice;
+                        payableEl.textContent = '¥' + rowPayable.toFixed(2);
+                    }
+
+                    const shareAmountSpan = data.row.querySelector('.share-discount-amount');
+                    if (shareAmountSpan) shareAmountSpan.textContent = '-¥' + shareAmount.toFixed(2);
+
+                    delete data._shareAmount;
+                });
+            }
+
+            // 未分摊到整单优惠的行（remainingPayable=0）也要置灰，标记为整单改价不可编辑
+            rowDataList.forEach(function(data) {
+                if (data.remainingPayable > 0.000001) return; // 已在 distributable 中处理
+                data.row.dataset.wholeOrderModified = '1';
+                data.row.dataset.wholeOrderShareDiscount = '0';
+                data.row.removeAttribute('data-user-discount-override');
+
+                const finalPriceInput = data.row.querySelector('[data-field="finalPrice"]');
+                if (finalPriceInput instanceof HTMLInputElement) {
+                    finalPriceInput.disabled = true;
+                    finalPriceInput.style.opacity = '0.6';
+                    finalPriceInput.readOnly = true;
+                }
+                const discountInput = data.row.querySelector('[data-field="discount"]');
+                if (discountInput instanceof HTMLInputElement) {
+                    discountInput.disabled = true;
+                    discountInput.style.opacity = '0.6';
+                    discountInput.readOnly = true;
+                }
+                const discountWrap = data.row.querySelector('.discount-wrapper');
+                if (discountWrap) discountWrap.classList.add('is-readonly');
+            });
+
+            normalizeAndRenderMoneyCards();
         }
 
         function applyWholeOrderChangeFromPopover() {
             const amountInput = document.getElementById('wocAmountInput');
-            const discountInput = document.getElementById('wocDiscountInput');
-            if (!amountInput || !discountInput) return;
+            if (!amountInput) return;
 
             updateOrderSummary();
-            const baseOriginal = getWholeOrderChangeBaseOriginal();
+            const maxDiscountAmount = roundMoney2(Math.max(0, sumBaseFinalWithMoneyCard() - sumWholeOrderChangeMoneyCardUsed()));
 
-            const amountRes = sanitizeWholeOrderChangeAmountStr(amountInput.value);
-            const safeAmount = clampNumber(amountRes.n, 0, Math.max(0, baseOriginal));
+            const sanitized = sanitizePriceString(amountInput.value, 2);
+            let discountAmount = clampNumber(parseFloat(sanitized || '0') || 0, 0, maxDiscountAmount);
 
-            const rules = computeWholeOrderChangeMinRules();
-            if (rules.minAmount > 0.000001 && safeAmount + 0.000001 < rules.minAmount) {
-                renderWholeOrderChangeTip({ rules, error: true });
+            // 优惠金额不能超过最大可优惠金额
+            if (discountAmount - 0.000001 > maxDiscountAmount) {
+                renderWholeOrderChangeTip({ error: true });
                 const originAmt = amountInput.dataset ? String(amountInput.dataset.wocOrigin || '') : '';
-                const originDis = discountInput.dataset ? String(discountInput.dataset.wocOrigin || '') : '';
                 if (originAmt !== '') amountInput.value = originAmt;
-                if (originDis !== '') discountInput.value = originDis;
                 scheduleWholeOrderChangePopoverReposition();
                 return;
             }
 
+            discountAmount = roundMoney2(discountAmount);
             closeWholeOrderChangePopover();
 
             wholeOrderChangeState.enabled = true;
-            wholeOrderChangeState.amount = safeAmount;
+            wholeOrderChangeState.discountAmount = discountAmount;
 
             updateOrderSummary();
 
-            const discountAmountInput = document.getElementById('orderDiscountAmountInput');
-            const baseDiscount = Number(orderSummaryCache?.baseDiscount || 0);
+            // 整单应收 = 折后总价 - 优惠金额
             const baseFinal = Number(orderSummaryCache?.baseFinal || 0);
-            const changeDiscount = clampNumber(baseFinal - safeAmount, -Number.MAX_SAFE_INTEGER, Number.MAX_SAFE_INTEGER);
-            const latestDiscount = clampNumber(baseDiscount + changeDiscount, 0, Number.MAX_SAFE_INTEGER);
-            if (discountAmountInput) discountAmountInput.value = latestDiscount.toFixed(2);
+            const displayFinal = roundMoney2(Math.max(0, baseFinal - discountAmount));
+            wholeOrderChangeState.amount = displayFinal;
 
-            const newDiscount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
-            discountInput.value = newDiscount.toFixed(2);
-            amountInput.value = safeAmount.toFixed(2);
+            if (discountAmount > 0.000001) {
+                redistributeWholeOrderDiscount(discountAmount);
+            }
+
+            const discountAmountInput = document.getElementById('orderDiscountAmountInput');
+            if (discountAmountInput) discountAmountInput.value = discountAmount.toFixed(2);
+
+            amountInput.value = discountAmount.toFixed(2);
         }
 
         document.addEventListener('input', function (e) {
@@ -12381,57 +12778,28 @@
                 renderWholeOrderChangeTip({ error: false });
                 return;
             }
-            if (el.id === 'wocDiscountInput') {
-                el.value = sanitizePriceString(el.value, 2);
-                scheduleWholeOrderChangePopoverReposition();
-                renderWholeOrderChangeTip({ error: false });
-                return;
-            }
         });
 
         document.addEventListener('blur', function (e) {
             const el = e.target;
             if (!(el instanceof HTMLInputElement)) return;
-            if (el.id !== 'wocAmountInput' && el.id !== 'wocDiscountInput') return;
+            if (el.id !== 'wocAmountInput') return;
 
             updateOrderSummary();
-            const baseOriginal = getWholeOrderChangeBaseOriginal();
+            const maxDiscountAmount = roundMoney2(Math.max(0, sumBaseFinalWithMoneyCard() - sumWholeOrderChangeMoneyCardUsed()));
 
-            if (el.id === 'wocAmountInput') {
-                const amountInput = el;
-                const discountInput = document.getElementById('wocDiscountInput');
-                if (!discountInput) return;
-
-                const amountRes = sanitizeWholeOrderChangeAmountStr(amountInput.value);
-                const safeAmount = clampNumber(amountRes.n, 0, Math.max(0, baseOriginal));
-                amountInput.value = safeAmount.toFixed(2);
-
-                const discount = baseOriginal > 0 ? clampNumber((safeAmount / baseOriginal) * 10, 0, 10) : 10;
-                discountInput.value = discount.toFixed(2);
-                scheduleWholeOrderChangePopoverReposition();
-                return;
-            }
-
-            if (el.id === 'wocDiscountInput') {
-                const discountInput = el;
-                const amountInput = document.getElementById('wocAmountInput');
-                if (!amountInput) return;
-
-                const discountRes = sanitizeWholeOrderChangeDiscountStr(discountInput.value);
-                const safeDiscount = clampNumber(discountRes.n, 0, 10);
-                discountInput.value = safeDiscount.toFixed(2);
-
-                const safeAmount = baseOriginal * (safeDiscount / 10);
-                amountInput.value = clampNumber(safeAmount, 0, Math.max(0, baseOriginal)).toFixed(2);
-                scheduleWholeOrderChangePopoverReposition();
-                return;
-            }
+            const sanitized = sanitizePriceString(el.value, 2);
+            const discountAmount = clampNumber(parseFloat(sanitized || '0') || 0, 0, maxDiscountAmount);
+            el.value = discountAmount.toFixed(2);
+            scheduleWholeOrderChangePopoverReposition();
+            renderWholeOrderChangeTip({ error: false });
         }, true);
 
         document.getElementById('wholeOrderChangeBtn')?.addEventListener('click', openWholeOrderChangePopover);
         document.getElementById('wocCancelBtn')?.addEventListener('click', closeWholeOrderChangePopover);
         document.getElementById('wocConfirmBtn')?.addEventListener('click', applyWholeOrderChangeFromPopover);
         document.getElementById('wocRemoveBtn')?.addEventListener('click', removeWholeOrderChange);
+        document.getElementById('wocRemoveProductBtn')?.addEventListener('click', removeProductDiscounts);
 
         // 添加商品到指定分类的表格
         function addItemToCategory(type, itemData) {
@@ -14728,8 +15096,10 @@
             if (!field) return;
 
             if (field === 'buyQty') {
+                const oldBuyQty = el.value;
                 const v = Math.max(0, parseInt(el.value || '0', 10) || 0);
                 el.value = String(v);
+                logProductFieldChange(row, 'buyQty', oldBuyQty, String(v), 'onCourseLineFieldChange');
                 course.buyQty = v;
                 const giftFlag = row.querySelector('.gift-flag-checkbox');
                 if (giftFlag instanceof HTMLInputElement && giftFlag.checked) {
@@ -14760,25 +15130,31 @@
             }
 
             if (field === 'giftQty') {
+                const oldGiftQty = el.value;
                 const v = Math.max(0, parseInt(el.value || '0', 10) || 0);
                 el.value = String(v);
+                logProductFieldChange(row, 'giftQty', oldGiftQty, String(v), 'onCourseLineFieldChange');
                 course.giftQty = v;
                 updateOrderSummary();
                 return;
             }
 
             if (field === 'discount') {
+                const oldDiscount = el.value;
                 const intStr = sanitizeIntString(el.value);
                 const v = clampNumber(intStr === '' ? 0 : parseInt(intStr, 10), 0, 100);
                 el.value = String(v);
+                logProductFieldChange(row, 'discount', oldDiscount, String(v), 'onCourseLineFieldChange');
                 course.discount = v;
                 updateOrderSummary();
                 return;
             }
 
             if (field === 'finalPrice') {
+                const oldFinalPrice = el.value;
                 const sanitized = sanitizePriceString(el.value, 2);
                 el.value = sanitized;
+                logProductFieldChange(row, 'finalPrice', oldFinalPrice, sanitized, 'onCourseLineFieldChange');
                 const v = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
                 course.finalPrice = v;
                 updateOrderSummary();
@@ -14990,8 +15366,10 @@
             if (!row) return;
             const field = qtyInput.getAttribute('data-field') || '';
             if (field !== 'buyQty' && field !== 'giftQty') return;
+            const oldBuyQty = qtyInput.value;
             const v = Math.max(0, parseInt(qtyInput.value || '0', 10) || 0);
             qtyInput.value = String(v);
+            logProductFieldChange(row, field, oldBuyQty, String(v), 'onAmountCardQtyInput');
 
             const giftFlag = row.querySelector('.gift-flag-checkbox');
             const isGift = (giftFlag instanceof HTMLInputElement) ? giftFlag.checked : false;
@@ -15003,13 +15381,13 @@
             const buyQty = Math.max(0, parseInt(row.querySelector('input[data-field="buyQty"]')?.value || '0', 10) || 0);
             const discountInput = row.querySelector('input[data-field="discount"]');
             const discount = clampNumber(parseFloat(discountInput?.value || (isGift ? '0' : '100')) || (isGift ? 0 : 100), isGift ? 0 : 0.01, 100);
-            if (discountInput) discountInput.value = discount.toFixed(2);
+            if (discountInput) { const oldDiscount = discountInput.value; discountInput.value = discount.toFixed(2); logProductFieldChange(row, 'discount', oldDiscount, discount.toFixed(2), 'onAmountCardQtyInput'); }
 
             const originalPriceText = row.querySelector('.col-original')?.textContent || '¥0';
             const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
             const baseTotal = originalPrice * buyQty;
             const finalPriceInput = row.querySelector('input[data-field="finalPrice"]');
-            if (finalPriceInput) finalPriceInput.value = Number((baseTotal * (discount / 100)).toFixed(2)).toFixed(2);
+            if (finalPriceInput) { const oldFinalPrice = finalPriceInput.value; finalPriceInput.value = Number((baseTotal * (discount / 100)).toFixed(2)).toFixed(2); logProductFieldChange(row, 'finalPrice', oldFinalPrice, finalPriceInput.value, 'onAmountCardQtyInput'); }
 
             syncAmountCardRowToState(row);
             updateOrderSummary();
@@ -15018,8 +15396,10 @@
         function onAmountCardDiscountInput(discountInput) {
             const row = discountInput.closest('tr');
             if (!row) return;
+            const oldDiscountVal = discountInput.value;
             const sanitized = sanitizePriceString(discountInput.value, 2);
             discountInput.value = sanitized;
+            logProductFieldChange(row, 'discount', oldDiscountVal, sanitized, 'onAmountCardDiscountInput');
             if (amountCardDiscountTimer) clearTimeout(amountCardDiscountTimer);
             amountCardDiscountTimer = setTimeout(() => {
                 const v = parseFloat(discountInput.value || '0');
@@ -15035,7 +15415,7 @@
                 const discount = parseFloat(discountInput.value || '100') || 100;
                 const buyQty = Math.max(0, parseInt(row.querySelector('input[data-field="buyQty"]')?.value || '0', 10) || 0);
                 const baseTotal = originalPrice * buyQty;
-                if (finalPriceInput) finalPriceInput.value = (baseTotal * (discount / 100)).toFixed(2);
+                if (finalPriceInput) { const oldFP = finalPriceInput.value; finalPriceInput.value = (baseTotal * (discount / 100)).toFixed(2); logProductFieldChange(row, 'finalPrice', oldFP, finalPriceInput.value, 'onAmountCardDiscountInput'); }
                 syncAmountCardRowToState(row);
                 updateOrderSummary();
             }, 100);
@@ -15044,8 +15424,10 @@
         function onAmountCardFinalPriceInput(finalPriceInput) {
             const row = finalPriceInput.closest('tr');
             if (!row) return;
+            const oldFinalVal = finalPriceInput.value;
             const sanitized = sanitizePriceString(finalPriceInput.value, 2);
             finalPriceInput.value = sanitized;
+            logProductFieldChange(row, 'finalPrice', oldFinalVal, sanitized, 'onAmountCardFinalPriceInput');
             if (amountCardDiscountTimer) clearTimeout(amountCardDiscountTimer);
             amountCardDiscountTimer = setTimeout(() => {
                 updateAmountCardDiscountFromFinalPrice(finalPriceInput);
@@ -16689,7 +17071,7 @@
 
         const MONEY_CARD_OPTIONS = [
             { id: 'mc_001', baseId: 'mc_001', balanceType: 'cash', name: '樱粉金额卡', balance: 1280.00, discounts: { care: 8, home: 9, item: 8.5 } },
-            { id: 'mc_001__gift', baseId: 'mc_001', balanceType: 'gift', name: '樱粉金额卡', balance: 60.00, discounts: { care: 8, home: 9, item: 8.5 } },
+            { id: 'mc_001__gift', baseId: 'mc_001', balanceType: 'gift', name: '樱粉金额卡', balance: 50.00, discounts: { care: 8, home: 9, item: 8.5 } },
             { id: 'mc_002', baseId: 'mc_002', balanceType: 'cash', name: '玫瑰臻享卡', balance: 3560.50, discounts: { care: 7.5, home: 8.8, item: 8 } },
             { id: 'mc_002__gift', baseId: 'mc_002', balanceType: 'gift', name: '玫瑰臻享卡', balance: 520.00, discounts: { care: 7.5, home: 8.8, item: 8 } },
             { id: 'mc_003', baseId: 'mc_003', balanceType: 'cash', name: '铂金尊享卡', balance: 8920.00, discounts: { care: 6.8, home: 8, item: 7 } },
@@ -16818,6 +17200,50 @@
             return Math.max(0, Math.min(1, d / 10));
         }
 
+        // 计算 baseFinalWithMoneyCard：商品原始总价值 - Σ(划扣金额还原折扣后原价值累加) + Σ(划扣金额累加)
+        function computeBaseFinalWithMoneyCard(row) {
+            if (!(row instanceof Element)) return 0;
+
+            const originalPriceText = row.querySelector('.col-original')?.textContent || '';
+            const originalPrice = parseFloat(originalPriceText.replace('¥', '')) || 0;
+            const buyInput = row.querySelector('input[data-field="buy"]') || row.querySelector('input[data-field="buyQty"]');
+            const buyQty = Math.max(0, parseInt(String(buyInput?.value || '0'), 10) || 0);
+            const baseTotal = originalPrice * buyQty;
+
+            const apps = getRowMoneyCards(row);
+
+            let reversedOriginalSum = 0;
+            let deductedSum = 0;
+
+            apps.forEach(app => {
+                const card = moneyCardById.get(String(app.cardId));
+                if (!card) return;
+                const deductedAmount = roundMoney2(Number(app.amount || 0));
+                if (!(deductedAmount > 0.000001)) return;
+
+                const discountKey = getRowDiscountKey(row);
+                const discountVal = Number(card?.discounts?.[discountKey]);
+                if (Number.isFinite(discountVal) && discountVal > 0) {
+                    // 划扣金额 / (折扣/10) = 划扣金额还原至折扣前的原价值
+                    reversedOriginalSum += roundMoney2(deductedAmount * 10 / discountVal);
+                } else {
+                    reversedOriginalSum += deductedAmount;
+                }
+                deductedSum += deductedAmount;
+            });
+
+            const result = roundMoney2(baseTotal - reversedOriginalSum + deductedSum);
+            row.dataset.baseFinalWithMoneyCard = result.toFixed(2);
+            console.log('[computeBaseFinalWithMoneyCard]', {
+                rowId: row.dataset.rowId || row.dataset.productId || '(unknown)',
+                baseTotal: baseTotal.toFixed(2),
+                reversedOriginalSum: reversedOriginalSum.toFixed(2),
+                deductedSum: deductedSum.toFixed(2),
+                result: result.toFixed(2)
+            });
+            return result;
+        }
+
         function syncRowDiscountFromMoneyCards(row, apps, options = {}) {
             if (!(row instanceof Element)) return;
             const discountInput = row.querySelector('input[data-field="discount"]');
@@ -16830,6 +17256,8 @@
                     updateFinalPrice(discountInput);
                     suppressMoneyCardConflict = false;
                     if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
+                    if (row.dataset?.originalCardDiscount) delete row.dataset.originalCardDiscount;
+                    if (row.dataset?.originalCardPrice) delete row.dataset.originalCardPrice;
                 }
                 return;
             }
@@ -16839,12 +17267,20 @@
             if (!(row instanceof Element)) return;
             const preserveDiscount = options?.preserveDiscount === true;
             if (row.dataset?.moneycardTouched) delete row.dataset.moneycardTouched;
+
+            // 删除金额卡后移除整单优惠（PRD规则，须在恢复折扣前执行，否则折扣输入框可能被禁用）
+            if (wholeOrderChangeState?.enabled) {
+                removeWholeOrderChange();
+            }
+
             setRowMoneyCards(row, []);
             syncMoneyCardsToCourseData(row);
             removeMoneyCardDetailRow(row);
 
             if (!preserveDiscount) {
                 if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
+                if (row.dataset?.originalCardDiscount) delete row.dataset.originalCardDiscount;
+                if (row.dataset?.originalCardPrice) delete row.dataset.originalCardPrice;
                 const discountInput = row.querySelector('input[data-field="discount"]');
                 if (discountInput instanceof HTMLInputElement) {
                     suppressMoneyCardConflict = true;
@@ -16859,6 +17295,7 @@
             const valEl = ensureActionRowPayable(actionRow);
             if (valEl) valEl.textContent = `¥${roundMoney2(lineTotal).toFixed(2)}`;
             setChooseBtnState(row, lineTotal);
+            computeBaseFinalWithMoneyCard(row);
         }
 
         function findActionRowForItemRow(itemRow) {
@@ -16937,10 +17374,24 @@
                 const rawApps = getRowMoneyCards(row);
                 const hasUserOverride = row.dataset?.userDiscountOverride === '1';
                 const hasCards = rawApps.length > 0;
+                const isWholeOrderModified = row.dataset?.wholeOrderModified === '1';
                 const apps = hasUserOverride ? rawApps : rawApps.filter(x => toFen(x.amount || 0) > 0);
                 if (apps.length !== rawApps.length && !hasUserOverride) {
                     setRowMoneyCards(row, apps);
                     syncMoneyCardsToCourseData(row);
+                }
+
+                // 整单改价分摊行：跳过归一化，仅更新运行中余额（PRD规则6.8）
+                if (isWholeOrderModified) {
+                    apps.forEach(app => {
+                        const cid = String(app.cardId || '');
+                        if (running.has(cid)) {
+                            const beforeFen = running.get(cid);
+                            running.set(cid, Math.max(0, beforeFen - toFen(Number(app.amount || 0))));
+                        }
+                    });
+                    computeBaseFinalWithMoneyCard(row);
+                    return;
                 }
 
                 const originalPriceText = row.querySelector('.col-original')?.textContent || '';
@@ -16988,6 +17439,7 @@
                         valEl.textContent = `¥${toYuan(actualPayableFen).toFixed(2)}`;
                     }
                     setChooseBtnState(row, toYuan(actualPayableFen));
+                    computeBaseFinalWithMoneyCard(row);
 
                     if (normalized.length === 0) {
                         removeMoneyCardDetailRow(row);
@@ -17081,6 +17533,11 @@
                     if (finalPriceInput instanceof HTMLInputElement) {
                         finalPriceInput.value = toYuan(actualPayAmountFen).toFixed(2);
                     }
+                    // 更新"原始应用金额卡的折扣和折后价"（仅PRD规则计算时更新，非userDiscountOverride）
+                    if (!hasUserOverride) {
+                        row.dataset.originalCardPrice = toYuan(actualPayAmountFen).toFixed(2);
+                        row.dataset.originalCardDiscount = String(discountInt);
+                    }
                     updateOrderSummary();
                     suppressMoneyCardConflict = false;
                 } else if (normalized.length === 0 && !(row.dataset?.userDiscountOverride === '1')) {
@@ -17089,6 +17546,9 @@
                     if (finalPriceInput instanceof HTMLInputElement) {
                         finalPriceInput.value = toYuan(preDiscountTotalFen).toFixed(2);
                     }
+                    // 无金额卡剩余时清除原始应用金额卡标记
+                    if (row.dataset?.originalCardDiscount) delete row.dataset.originalCardDiscount;
+                    if (row.dataset?.originalCardPrice) delete row.dataset.originalCardPrice;
                     updateOrderSummary();
                     suppressMoneyCardConflict = false;
                     if (row.dataset?.userDiscountOverride) delete row.dataset.userDiscountOverride;
@@ -17110,6 +17570,7 @@
                     ? (parseFloat(finalPriceInput?.value || '0') || 0)
                     : toYuan(remainingPayableFen);
                 setChooseBtnState(row, payableAmount);
+                computeBaseFinalWithMoneyCard(row);
 
                 if (normalized.length === 0) {
                     removeMoneyCardDetailRow(row);
@@ -17161,6 +17622,7 @@
             moneyCardNormalizeRaf = window.requestAnimationFrame(function () {
                 moneyCardNormalizeRaf = 0;
                 normalizeAndRenderMoneyCards();
+                updateOrderSummary();  // 折后价/discount 变更后同步更新底部共优惠金额
             });
         }
 
@@ -17179,6 +17641,9 @@
             if (!el.closest('tr.item-row')) return;
             if (el.matches('input[data-field="buy"], input[data-field="buyQty"]')) {
                 scheduleNormalizeMoneyCardsDebounced();
+                // 立即更新 baseFinalWithMoneyCard（数量变化即时反映）
+                const row = el.closest('tr.item-row');
+                if (row) computeBaseFinalWithMoneyCard(row);
                 return;
             }
             if (el.matches('input[data-field="finalPrice"], input[data-field="discount"]')) {
@@ -17274,7 +17739,8 @@
                 const isZeroBalance = remainingBalance <= 0.000001;
                 const disabled = (isUsed || isZeroBalance) ? 'disabled' : '';
                 const usedTag = isUsed ? `<div class="moneycard-tag">已选择</div>` : '';
-                const zeroTag = isZeroBalance ? `<div class="moneycard-tag">余额不足</div>` : '';
+                // 优先级：已选择 > 余额不足，二者共存时仅展示"已选择"
+                const zeroTag = (!isUsed && isZeroBalance) ? `<div class="moneycard-tag">余额不足</div>` : '';
                 return `
                     <div class="moneycard-split-option ${selected} ${disabled}" data-moneycard-id="${opt.id}">
                         <div class="moneycard-split-left">
@@ -17349,6 +17815,8 @@
                     return;
                 }
                 if (!selectedId) {
+                    // 编辑删除金额卡：先移除整单优惠，再同步折扣（否则折扣输入框可能被禁用）
+                    if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
                     apps.splice(idx, 1);
                     setRowMoneyCards(row, apps);
                     if (row.dataset?.moneycardTouched) delete row.dataset.moneycardTouched;
@@ -17360,6 +17828,8 @@
                 }
                 const dup = apps.some((x, i) => i !== idx && String(x.cardId) === String(selectedId));
                 if (dup) return;
+                // 替换金额卡：先移除整单优惠，再同步折扣
+                if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
                 apps[idx].cardId = String(selectedId);
                 setRowMoneyCards(row, apps);
                 if (row.dataset?.moneycardTouched) delete row.dataset.moneycardTouched;
@@ -17389,6 +17859,9 @@
             const quantity = Math.max(1, Math.round(Number(buyInput?.value || 1)));
 
             const preDiscountTotalFen = originalPriceFen * quantity;
+
+            // 新增金额卡：先移除整单优惠，再恢复折扣和添加卡（否则折扣输入框可能被禁用）
+            if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
 
             if (apps.length === 0) {
                 suppressMoneyCardConflict = true;
@@ -17476,6 +17949,8 @@
                 if (!(itemRow instanceof Element)) return;
                 const apps = getRowMoneyCards(itemRow);
                 if (!(idx >= 0 && idx < apps.length)) return;
+                // 直接删除金额卡：先移除整单优惠，再同步折扣
+                if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
                 apps.splice(idx, 1);
                 setRowMoneyCards(itemRow, apps);
                 if (itemRow.dataset?.moneycardTouched) delete itemRow.dataset.moneycardTouched;
@@ -17526,6 +18001,8 @@
             if (!(idx >= 0 && idx < apps.length)) return;
             const sanitized = sanitizePriceString(el.value, 2);
             const n = roundMoney2(parseFloat(sanitized || '0') || 0);
+            // 修改/删除金额卡划扣金额：先移除整单优惠，再同步折扣
+            if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
             if (n > 0.000001) {
                 apps[idx].amount = n;
             } else {
@@ -17617,14 +18094,7 @@
             });
 
             const baseDiscount = Math.max(0, baseOriginal - baseFinal);
-            let wholeOrderDiscount = 0;
-            
-            if (wholeOrderChangeState?.enabled) {
-                const adjusted = clampNumber(Number(wholeOrderChangeState.amount || 0), 0, baseOriginal);
-                wholeOrderDiscount = Math.max(0, baseFinal - adjusted);
-            }
-
-            const totalDiscount = baseDiscount + wholeOrderDiscount;
+            const totalDiscount = baseDiscount;
 
             let html = '';
 
@@ -17647,30 +18117,7 @@
                 
                 html += `
                         </div>
-                        <div class="discount-row">
-                            <span class="discount-row-label">折扣优惠合计</span>
-                            <span class="discount-row-value discount">-¥${baseDiscount.toFixed(2)}</span>
-                        </div>
-                    </div>
-                `;
-            }
-
-            if (wholeOrderDiscount > 0.000001) {
-                html += `
-                    <div class="discount-item">
-                        <div class="discount-type">整单改价优惠</div>
-                        <div class="discount-row">
-                            <span class="discount-row-label">改价前金额</span>
-                            <span class="discount-row-value">¥${baseFinal.toFixed(2)}</span>
-                        </div>
-                        <div class="discount-row">
-                            <span class="discount-row-label">改价后金额</span>
-                            <span class="discount-row-value">¥${(baseFinal - wholeOrderDiscount).toFixed(2)}</span>
-                        </div>
-                        <div class="discount-row">
-                            <span class="discount-row-label">整单改价优惠</span>
-                            <span class="discount-row-value discount">-¥${wholeOrderDiscount.toFixed(2)}</span>
-                        </div>
+                        
                     </div>
                 `;
             }
@@ -17831,6 +18278,20 @@
         function openNumKeypadFor(el) {
             if (!numKeypadOverlay || !numKeypadGrid) return;
             if (!isNumKeypadTarget(el)) return;
+
+            // 整单改价与商品改价互斥：存在整单改价标记时禁止修改折扣/折后价
+            // 转换守卫：状态转换期间（removeWholeOrderChange/redistributeWholeOrderDiscount）抑制弹窗
+            if (el.matches('.table-input.discount-input, .table-input.final-price')) {
+                if (!window.__wholeOrderTransitioning) {
+                    const hasWholeOrderModified = document.querySelectorAll('.item-row').length > 0 &&
+                        Array.from(document.querySelectorAll('.item-row')).some(r => r.dataset?.wholeOrderModified === '1');
+                    if (hasWholeOrderModified) {
+                        showAlertModal('当前状态不可改价<br>您已整单改价，请先清空整单优惠后再进行改价。');
+                        return;
+                    }
+                }
+            }
+
             numKeypadState.target = el;
             numKeypadState.origin = String(el.value || '');
             numKeypadState.buffer = String(el.value || '');
@@ -17929,6 +18390,8 @@
                 } else {
                     apps.splice(idx, 1);
                 }
+                // 修改/删除金额卡划扣金额：先移除整单优惠，再同步折扣
+                if (wholeOrderChangeState?.enabled) removeWholeOrderChange();
                 setRowMoneyCards(itemRow, apps);
                 itemRow.dataset.moneycardTouched = '1';
                 syncRowDiscountFromMoneyCards(itemRow, apps, { resetWhenEmpty: true });
@@ -17962,9 +18425,12 @@
                     const buyQty = row instanceof Element ? getRowBuyQty(row) : 0;
                     const baseTotal = originalPrice * buyQty;
                     const newFinalPrice = baseTotal * (discount / 100);
+                    // 使用原始应用金额卡的折后价作为校验基准（PRD规则4.4.1）
+                    const originalCardPrice = parseFloat(row?.dataset?.originalCardPrice || '0') || 0;
                     const currentFinalPrice = parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0;
-                    if (newFinalPrice - 0.000001 > currentFinalPrice) {
-                        showAlertModal(`修改折后价必须小于等于原折扣价格(¥${currentFinalPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
+                    const limitPrice = originalCardPrice > 0.000001 ? originalCardPrice : currentFinalPrice;
+                    if (newFinalPrice - 0.000001 > limitPrice) {
+                        showAlertModal(`修改折后价必须小于等于原折扣价格(¥${limitPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
                         return;
                     }
                 }
@@ -17979,9 +18445,12 @@
                     showAlertModal(`修改折后价必须小于等于原折扣价格(¥${(parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0).toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
                     return;
                 }
+                // 使用原始应用金额卡的折后价作为校验基准（PRD规则4.4.2）
+                const originalCardPrice = parseFloat(row?.dataset?.originalCardPrice || '0') || 0;
                 const currentFinalPrice = parseFloat(row?.querySelector('input[data-field="finalPrice"]')?.value || '0') || 0;
-                if (finalPrice - 0.000001 > currentFinalPrice) {
-                    showAlertModal(`修改折后价必须小于等于原折扣价格(¥${currentFinalPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
+                const limitPrice = originalCardPrice > 0.000001 ? originalCardPrice : currentFinalPrice;
+                if (finalPrice - 0.000001 > limitPrice) {
+                    showAlertModal(`修改折后价必须小于等于原折扣价格(¥${limitPrice.toFixed(2)})，如需赠送请勾选【设为赠送权益】`);
                     return;
                 }
                 const originalPriceText = row?.querySelector?.('.col-original')?.textContent || '';
@@ -17993,10 +18462,6 @@
                 }
                 el.value = el.type === 'number' ? finalPrice : finalPrice.toFixed(2);
                 el.setAttribute('value', finalPrice.toFixed(2));
-            } else if (el.matches('.woc-input') && el.id === 'wocDiscountInput') {
-                const sanitized = sanitizePriceString(numKeypadState.buffer || '', 2);
-                const n = clampNumber(parseFloat(sanitized || '0') || 0, 0, 10);
-                el.value = n.toFixed(2);
             } else {
                 const sanitized = sanitizePriceString(numKeypadState.buffer || '', 2);
                 const n = clampNumber(parseFloat(sanitized || '0') || 0, 0, Number.MAX_SAFE_INTEGER);
@@ -18079,6 +18544,20 @@
 
         document.addEventListener('pointerdown', (e) => {
             const el = e.target;
+            if (!(el instanceof Element)) return;
+
+            // 整单改价中点击置灰的折扣/折后价 → 弹出提示弹窗
+            // 转换守卫：状态转换期间抑制弹窗闪现
+            if (wholeOrderChangeState?.enabled && !window.__wholeOrderTransitioning) {
+                const grayedWrap = el.closest('.discount-wrapper.is-readonly');
+                if (grayedWrap) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    showAlertModal('当前状态不可改价<br>您已整单改价，请先清空整单优惠后再进行改价。');
+                    return;
+                }
+            }
+
             if (!(el instanceof HTMLInputElement)) return;
             if (!isNumKeypadTarget(el)) return;
             if (numKeypadOverlay?.classList.contains('show')) return;
@@ -18091,6 +18570,7 @@
             if (!(el instanceof HTMLInputElement)) return;
             if (!isNumKeypadTarget(el)) return;
             if (numKeypadOverlay?.classList.contains('show')) return;
+            if (confirmModalOverlay?.classList.contains('show')) return;
             el.blur();
             openNumKeypadFor(el);
         }, true);
