@@ -1067,6 +1067,7 @@
         }
 
         .meta-value {
+            font-weight: 500;
             font-size: 14px;
             color: var(--text-primary);
             word-break: break-word;
@@ -2762,7 +2763,7 @@
                     </div>
                 </div>
                 <div class="action-bar-right">
-                    <button class="upload-btn secondary" type="button" onclick="openCustomTypeManager()">自定义标签管理 (本期不实现)</button>
+                    <button class="upload-btn secondary" type="button" onclick="openCustomTypeManager()">自定义标签管理</button>
                     <button class="upload-btn" onclick="openUploadModal()">
                         <svg viewBox="0 0 24 24">
                             <path d="M9 16h6v-6h4l-7-7-7 7h4v6zm-4 2h14v2H5v-2z" />
@@ -3372,7 +3373,7 @@
                             <div class="type-manager-meta">已关联图片：${used} 张</div>
                         </div>
                         <div class="type-manager-actions">
-                            <button class="btn btn-secondary" type="button" onclick="openCustomTypeRenameModal('${safeAttr}')">编辑</button>
+                            <button class="btn btn-secondary" type="button" onclick="openCustomTypeRenameModal('${safeAttr}')" style="display: none;">编辑</button>
                             <button class="btn btn-danger" type="button" ${delDisabled} onclick="requestDeleteCustomType('${safeAttr}')">删除</button>
                         </div>
                     </div>

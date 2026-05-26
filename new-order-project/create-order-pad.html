@@ -1777,6 +1777,30 @@
             font-weight: 500;
         }
 
+        .member-detail-btn {
+            padding: 6px 12px;
+            background: transparent;
+            border: 0px solid var(--primary-400);
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            color: var(--primary-600);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            white-space: nowrap;
+        }
+
+        .member-detail-btn:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-500);
+            color: var(--primary-700);
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.15);
+        }
+
+        .member-detail-btn:active {
+            transform: scale(0.98);
+        }
+
         .guest-cashier-status {
             display: flex;
             align-items: center;
@@ -6062,7 +6086,7 @@
             flex-direction: column;
         }
 
-        /* ========== 添加疗程弹窗 ========== */
+        /* ========== 添加疗程卡弹窗 ========== */
         .add-course-modal-overlay {
             position: fixed;
             top: 0;
@@ -7236,7 +7260,7 @@
                         </div>
                     </div>
 
-                    <!-- 添加疗程 - 方案/文档图标 -->
+                    <!-- 添加疗程卡 - 方案/文档图标 -->
                     <div class="action-card package member-only-btn btn-primary" style="display: none;" onclick="openAddCourseModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -7247,7 +7271,7 @@
                             <path d="M9 9H9.01" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加疗程</span>
+                            <span class="customer-btn-title">添加疗程卡</span>
                         </div>
                     </div>
 
@@ -7288,6 +7312,7 @@
                                     <span class="member-name"></span>
                                     <span class="member-tag"></span>
                                     <span class="member-phone"></span>
+                                    <button class="member-detail-btn" onclick="window.location.href='customer-detail-pad.html'">会员详情 > </button>
                                 </div>
                                 <!-- 第二行：钱包余额、金额卡余额 -->
                                 <div class="member-info-row member-row-bottom">
@@ -7361,7 +7386,7 @@
                                     </svg>
                                 </div>
                                 <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程项目</p>
+                                <p class="empty-state-hint">从左侧添加疗程卡</p>
                             </div>
                             <table class="items-table" id="service-table">
                                 <thead>
@@ -7460,7 +7485,7 @@
                                     </svg>
                                 </div>
                                 <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程方案</p>
+                                <p class="empty-state-hint">从左侧添加疗程卡</p>
                             </div>
                             <table class="items-table" id="course-table">
                                 <thead>
@@ -7881,11 +7906,11 @@
         </div>
     </div>
 
-    <!-- 添加疗程弹窗 -->
+    <!-- 添加疗程卡弹窗 -->
     <div class="add-course-modal-overlay" id="addCourseModalOverlay">
         <div class="add-course-modal">
             <div class="add-course-modal-header">
-                <span class="add-course-modal-title">添加疗程</span>
+                <span class="add-course-modal-title">添加疗程卡</span>
                 <div class="add-course-modal-close" id="addCourseModalClose">×</div>
             </div>
             <div class="add-course-modal-body">
@@ -7894,7 +7919,7 @@
                     <div class="add-course-search-left">
                         <input type="text" class="add-course-search-input" id="addCourseSearchInput"
                             placeholder="搜索疗程名称">
-                        <button class="add-course-custom-btn primary">自定义疗程</button>
+                        <button class="add-course-custom-btn primary">自定义疗程卡</button>
                     </div>
                     <div class="add-course-recent-search">
                         <span class="add-course-recent-label">最近搜索</span>
@@ -9142,7 +9167,7 @@
                 if (hasServiceOrProduct()) {
                     window.confirmCallback = function () {
                         clearAllItems();
-                        showToast('已清空已选商品，可以继续添加疗程');
+                        showToast('已清空已选商品，可以继续添加疗程卡');
                     };
                     showConfirmModal(
                         '确认添加促销方案',
@@ -9882,19 +9907,6 @@
                             <td style="width:22%;"><button type="button" class="upgrade-newcard-action-btn" data-action="benefits" data-id="${card.id}">查看权益</button></td>
                         </tr>`;
             }).join('');
-        }
-
-        function openUpgradeNewCardModal(oldCardId) {
-            upgradeNewCardTargetOldCardId = String(oldCardId || '');
-            upgradeNewCardCommittedKeyword = '';
-            const existing = Array.isArray(upgradeCardList) ? upgradeCardList.find(x => String(x.cardId) === upgradeNewCardTargetOldCardId) : null;
-            selectedUpgradeNewCardId = existing?.newCardId ? String(existing.newCardId) : '';
-
-            if (upgradeNewCardSearchInput) upgradeNewCardSearchInput.value = '';
-            renderUpgradeNewCardRecentSearches();
-            setUpgradeNewCardCategory(upgradeNewCardCategory || 'limited');
-            upgradeNewCardModalOverlay?.classList.add('show');
-            setTimeout(() => upgradeNewCardSearchInput?.focus(), 50);
         }
 
         function closeUpgradeNewCardModal() {
@@ -13079,7 +13091,7 @@
         // 最近搜索列表
         let recentSearches = JSON.parse(localStorage.getItem('addServiceRecentSearches') || '[]');
 
-        // ========== 添加疗程弹窗相关 ==========
+        // ========== 添加疗程卡弹窗相关 ==========
         // 模拟疗程卡数据
         const courseCards = [
             {
@@ -13270,9 +13282,9 @@
 
         function setAddCourseModalKind(kind) {
             addCourseModalKind = kind || 'course';
-            if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加疗程';
-            if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索疗程名称';
-            if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义疗程';
+            if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加疗程卡';
+            if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索疗程卡名称';
+            if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义疗程卡';
 
             if (addCourseTabsEl) {
                 if (addCourseModalKind === 'amountCard') {
@@ -13284,7 +13296,7 @@
             }
         }
 
-        // 打开添加疗程弹窗
+        // 打开添加疗程卡弹窗
         function openAddCourseModal(kind = 'course') {
             if (!guardAddEntryForCardOpConflict()) return;
             setAddCourseModalKind(kind);
@@ -13298,7 +13310,7 @@
             renderCourseDetail();
         }
 
-        // 关闭添加疗程弹窗
+        // 关闭添加疗程卡弹窗
         function closeAddCourseModal() {
             addCourseModalOverlay.classList.remove('show');
             editingCustomCourseId = null;
@@ -14276,7 +14288,7 @@
             addCourseRightPanel.innerHTML = `
                 <div class="course-detail-header custom-course-header">
                     <div class="custom-course-topbar">
-                        <button class="course-confirm-btn primary" onclick="confirmCustomCourseSelection()">确定疗程方案</button>
+                        <button class="course-confirm-btn primary" onclick="confirmCustomCourseSelection()">确定疗程卡方案</button>
                         <button class="course-confirm-btn" onclick="clearCustomCourseAndBackToList()">取消</button>
                     </div>
                     <div class="custom-course-body">
@@ -15776,10 +15788,10 @@
             if (existingIndex > -1) {
                 selectedCourseCards[existingIndex] = courseCardData;
                 editingCustomCourseId = null;
-                showToast('已更新疗程方案：' + name);
+                showToast('已更新疗程卡：' + name);
             } else {
                 selectedCourseCards.push(courseCardData);
-                showToast('已添加疗程方案：' + name);
+                showToast('已添加疗程卡：' + name);
             }
             clearCustomCourseDraft();
             closeAddCourseModal();
@@ -15852,7 +15864,7 @@
             };
 
             selectedCourseCards.push(courseCardData);
-            showToast('已添加疗程方案：' + selectedCourseCard.name);
+            showToast('已添加疗程卡：' + selectedCourseCard.name);
 
             // 关闭弹窗
             closeAddCourseModal();
@@ -16274,7 +16286,7 @@
             showToast(`已添加 ${count} 个疗程`);
         });
 
-        // 添加疗程到表格
+        // 添加疗程卡到表格
         function addServicesToTable(services) {
             const tableBody = document.getElementById('service-table-body');
             if (!tableBody) return;
