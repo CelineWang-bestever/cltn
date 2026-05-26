@@ -1848,16 +1848,20 @@
                         <input type="text" id="staffGoalCardConsume" placeholder="请输入卡耗目标" inputmode="decimal">
                         <div class="field-unit">单位：人民币</div>
                     </div>
+                    <!-- 拓客目标暂时隐藏
                     <div class="goal-field">
                         <label>拓客目标（人）</label>
                         <input type="text" id="staffGoalCustomer" placeholder="请输入拓客目标" inputmode="numeric">
                         <div class="field-unit">单位：人数</div>
                     </div>
+                    -->
+                    <!-- 客次目标暂时隐藏
                     <div class="goal-field">
                         <label>客次目标（次）</label>
                         <input type="text" id="staffGoalVisits" placeholder="请输入客次目标" inputmode="numeric">
                         <div class="field-unit">单位：次数</div>
                     </div>
+                    -->
                 </div>
             </div>
             <div class="modal-footer">
@@ -1870,7 +1874,7 @@
     <div class="toast-container" id="toastContainer"></div>
 
     <script>
-        const API_BASE = 'http://124.222.211.194:5001/api';
+        const API_BASE = '/api';
 
         const CURRENT_YEAR = new Date().getFullYear();
         const MIN_YEAR = CURRENT_YEAR - 5;
@@ -2209,8 +2213,7 @@
                     <div class="summary-bar">
                         ${renderSummaryItem('业绩达标率', calculateSummaryRate('performance'))}
                         ${renderSummaryItem('卡耗达标率', calculateSummaryRate('cardConsume'))}
-                        ${renderSummaryItem('拓客达标率', calculateSummaryRate('customer'))}
-                        ${renderSummaryItem('客次达标率', calculateSummaryRate('visits'))}
+
                     </div>
                     <div class="staff-goal-table-wrapper">
                         <table class="staff-goal-table">
@@ -2219,8 +2222,7 @@
                                     <th>员工姓名</th>
                                     <th>现金目标</th>
                                     <th>卡耗目标</th>
-                                    <th>拓客目标</th>
-                                    <th>客次目标</th>
+
                                     ${currentStaffView !== 'year' ? '<th>操作</th>' : ''}
                                 </tr>
                             </thead>
@@ -2245,8 +2247,7 @@
                         <td><span class="staff-name">${staff.name}</span></td>
                         <td class="goal-cell">${renderGoalCell(goalData?.performance)}</td>
                         <td class="goal-cell">${renderGoalCell(goalData?.cardConsume)}</td>
-                        <td class="goal-cell">${renderGoalCell(goalData?.customer, '人')}</td>
-                        <td class="goal-cell">${renderGoalCell(goalData?.visits, '次')}</td>
+
                         ${currentStaffView !== 'year' ? `
                         <td>
                             <button class="edit-btn" onclick="openStaffGoalModal(${staff.id}, ${currentStaffMonth})">
@@ -2356,8 +2357,6 @@
 
             document.getElementById('staffGoalPerformance').value = monthGoals?.performance?.goal || '';
             document.getElementById('staffGoalCardConsume').value = monthGoals?.cardConsume?.goal || '';
-            document.getElementById('staffGoalCustomer').value = monthGoals?.customer?.goal || '';
-            document.getElementById('staffGoalVisits').value = monthGoals?.visits?.goal || '';
 
             document.getElementById('staffGoalModal').classList.add('show');
         }
@@ -2374,8 +2373,6 @@
 
             const performance = parseFloat(document.getElementById('staffGoalPerformance').value);
             const cardConsume = parseFloat(document.getElementById('staffGoalCardConsume').value);
-            const customer = parseInt(document.getElementById('staffGoalCustomer').value);
-            const visits = parseInt(document.getElementById('staffGoalVisits').value);
 
             if (isNaN(performance) || performance <= 0) {
                 showToast('请输入有效的现金目标', 'error');
@@ -2383,14 +2380,6 @@
             }
             if (isNaN(cardConsume) || cardConsume <= 0) {
                 showToast('请输入有效的卡耗目标', 'error');
-                return;
-            }
-            if (isNaN(customer) || customer <= 0) {
-                showToast('请输入有效的拓客目标', 'error');
-                return;
-            }
-            if (isNaN(visits) || visits <= 0) {
-                showToast('请输入有效的客次目标', 'error');
                 return;
             }
 
@@ -2408,8 +2397,6 @@
 
             staffGoals[editingStaffId][currentStaffMonth].performance.goal = performance;
             staffGoals[editingStaffId][currentStaffMonth].cardConsume.goal = cardConsume;
-            staffGoals[editingStaffId][currentStaffMonth].customer.goal = customer;
-            staffGoals[editingStaffId][currentStaffMonth].visits.goal = visits;
 
             closeStaffGoalModal();
             renderStaffGoals();

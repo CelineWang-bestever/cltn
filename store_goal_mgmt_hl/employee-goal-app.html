@@ -656,7 +656,7 @@
                         <span class="info-value completed" id="yearlyCardConsumeCompleted">¥0</span>
                     </div>
                 </div>
-                <div class="ring-chart-item">
+                <!-- <div class="ring-chart-item">
                     <div class="ring-chart" id="yearlyCustomerChart">
                         <span class="ring-chart-value" id="yearlyCustomerRate">0%</span>
                     </div>
@@ -675,7 +675,7 @@
                         <span class="info-value" id="yearlyVisitsGoal">0次</span>
                         <span class="info-value completed" id="yearlyVisitsCompleted">0次</span>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
 
@@ -723,7 +723,7 @@
         </div>
 
         <!-- 拓客目标卡片 -->
-        <div class="goal-card">
+        <!-- <div class="goal-card">
             <h2 class="goal-title">拓客目标</h2>
             <div class="progress-bar">
                 <div class="progress-fill" id="customerProgress"></div>
@@ -740,10 +740,10 @@
                 <span class="info-label">进度</span>
                 <span class="info-value" id="customerRate">64%</span>
             </div>
-        </div>
+        </div> -->
 
         <!-- 客次目标卡片 -->
-        <div class="goal-card">
+        <!-- <div class="goal-card">
             <h2 class="goal-title">客次目标</h2>
             <div class="progress-bar">
                 <div class="progress-fill" id="visitsProgress"></div>
@@ -760,7 +760,7 @@
                 <span class="info-label">进度</span>
                 <span class="info-value" id="visitsRate">88%</span>
             </div>
-        </div>
+        </div> -->
     </main>
 
     <!-- 底部安全区域 -->
@@ -783,7 +783,7 @@
                 </div>
                 
             </div>
-            <div class="form-group">
+            <!-- <div class="form-group">
                 <div class="form-group">
                     <label class="form-label">拓客目标（人）</label>
                     <input type="number" class="form-input" id="editCustomer" placeholder="请输入拓客目标">
@@ -793,7 +793,7 @@
             <div class="form-group">
                 <label class="form-label">客次目标（次）</label>
                 <input type="number" class="form-input" id="editVisits" placeholder="请输入客次目标">
-            </div>
+            </div> -->
             
             <div class="modal-actions">
                 <button class="modal-btn cancel" id="modalCancelBtn">取消</button>
@@ -893,11 +893,7 @@
             // 更新卡耗目标
             updateGoalDisplay('cardConsume', data.cardConsume);
             
-            // 更新拓客目标
-            updateGoalDisplay('customer', data.customer);
-            
-            // 更新客次目标
-            updateGoalDisplay('visits', data.visits);
+
         }
 
         // 更新全年看板
@@ -952,6 +948,7 @@
             
             // 设置进度条
             const progressEl = document.getElementById(`${type}Progress`);
+            if (!progressEl) return;
             progressEl.style.width = `${safeRate}%`;
             
             // 设置进度条颜色
