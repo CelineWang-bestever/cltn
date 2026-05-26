@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的寄售</title>
+    <style>
+        /* ========================================================
+           引入品牌样式规范
+           ======================================================== */
+        :root {
+            --brand-primary: #E87C9A;
+            --brand-primary-100: #FFE4EC;
+            --brand-primary-200: #FFC7D9;
+            --brand-primary-300: #FFA0BE;
+            --brand-primary-400: #F1A3B8;
+            --brand-primary-500: #E87C9A;
+            --brand-primary-600: #D66B85;
+            --brand-primary-700: #B75A70;
+            
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-brand: #FFF1F5;
+            
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6B7280;
+            --text-brand: #D66B85;
+            
+            --border-primary: #E5E7EB;
+            --border-brand: #FFC7D9;
+            --border-divider: #F3F4F6;
+            
+            --accent-success: #10B981;
+            --accent-warning: #F59E0B;
+            --accent-error: #EF4444;
+            --accent-info: #3B82F6;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        /* ========================================================
+           页面容器
+           ======================================================== */
+        .app-container {
+            width: 100%;
+            max-width: 430px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-primary);
+            position: relative;
+        }
+
+        /* ========================================================
+           头部样式
+           ======================================================== */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-divider);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-back {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            margin-right: 12px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .header-back:hover {
+            background: var(--brand-primary-100);
+        }
+
+        .header-back svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        .header-title {
+            flex: 1;
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-align: center;
+        }
+
+        .header-spacer {
+            width: 44px;
+        }
+
+        /* ========================================================
+           页面内容区
+           ======================================================== */
+        .page {
+            display: none;
+            min-height: calc(100vh - 65px);
+            padding-bottom: 24px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* ========================================================
+           我的寄售主页
+           ======================================================== */
+        .menu-section {
+            padding: 24px 20px;
+        }
+
+        .menu-title {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin-bottom: 16px;
+            font-weight: 500;
+        }
+
+        .menu-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover {
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .menu-item:active {
+            transform: translateY(0);
+        }
+
+        .menu-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            flex-shrink: 0;
+        }
+
+        .menu-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: currentColor;
+        }
+
+        .menu-icon.purple {
+            background: linear-gradient(135deg, #8B5CF6, #A78BFA);
+            color: #FFFFFF;
+        }
+
+        .menu-icon.pink {
+            background: linear-gradient(135deg, #EC4899, #F472B6);
+            color: #FFFFFF;
+        }
+
+        .menu-icon.blue {
+            background: linear-gradient(135deg, #3B82F6, #60A5FA);
+            color: #FFFFFF;
+        }
+
+        .menu-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .menu-label {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 4px;
+        }
+
+        .menu-desc {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .menu-arrow {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-muted);
+            flex-shrink: 0;
+        }
+
+        /* ========================================================
+           合同列表页
+           ======================================================== */
+        .contract-list {
+            padding: 16px 20px;
+        }
+
+        .contract-item {
+            background: var(--bg-primary);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .contract-item:hover {
+            box-shadow: 0 2px 8px rgba(232, 124, 154, 0.15);
+        }
+
+        .contract-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .contract-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .contract-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .contract-period,
+        .contract-status {
+            font-size: 13px;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .contract-period svg,
+        .contract-status svg {
+            width: 14px;
+            height: 14px;
+            fill: currentColor;
+            margin-right: 4px;
+        }
+
+        .status-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status-tag.signed {
+            background: var(--accent-success);
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--accent-success);
+        }
+
+        .status-tag.unsigned {
+            background: var(--accent-warning);
+            background: rgba(245, 158, 11, 0.1);
+            color: var(--accent-warning);
+        }
+
+        .status-tag.expired {
+            background: var(--accent-error);
+            background: rgba(239, 68, 68, 0.1);
+            color: var(--accent-error);
+        }
+
+        /* ========================================================
+           合同详情页
+           ======================================================== */
+        .detail-content {
+            padding: 24px 20px;
+        }
+
+        .placeholder-area {
+            width: 100%;
+            height: calc(100vh - 200px);
+            min-height: 400px;
+            background: var(--bg-secondary);
+            border: 2px dashed var(--border-primary);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .placeholder-area svg {
+            width: 64px;
+            height: 64px;
+            fill: var(--text-muted);
+            opacity: 0.5;
+        }
+
+        .placeholder-text {
+            font-size: 16px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        /* ========================================================
+           底部固定按钮
+           ======================================================== */
+        .bottom-action {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 430px;
+            padding: 16px 20px;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-divider);
+            z-index: 100;
+        }
+
+        .action-btn {
+            width: 100%;
+            height: 52px;
+            background: var(--brand-primary);
+            color: #FFFFFF;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--brand-primary-600);
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ========================================================
+           空状态
+           ======================================================== */
+        .empty-state {
+            padding: 60px 20px;
+            text-align: center;
+        }
+
+        .empty-state svg {
+            width: 80px;
+            height: 80px;
+            fill: var(--text-muted);
+            opacity: 0.3;
+            margin-bottom: 16px;
+        }
+
+        .empty-state p {
+            font-size: 15px;
+            color: var(--text-muted);
+        }
+
+        /* ========================================================
+           响应式适配
+           ======================================================== */
+        @media screen and (max-width: 480px) {
+            .header {
+                padding: 14px 16px;
+            }
+
+            .header-title {
+                font-size: 17px;
+            }
+
+            .menu-section {
+                padding: 20px 16px;
+            }
+
+            .contract-list {
+                padding: 16px 16px;
+            }
+
+            .detail-content {
+                padding: 20px 16px;
+            }
+
+            .bottom-action {
+                padding: 14px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 页面1: 我的寄售主页 -->
+        <div id="page-home" class="page active">
+            <header class="header">
+                <div class="header-spacer"></div>
+                <h1 class="header-title">我的寄售</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="menu-section">
+                <div class="menu-list">
+                    <div class="menu-item" onclick="navigateTo('contracts')">
+                        <div class="menu-icon purple">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                            </svg>
+                        </div>
+                        <div class="menu-info">
+                            <div class="menu-label">查看寄售合同</div>
+                            <div class="menu-desc">管理您的寄售合同</div>
+                        </div>
+                        <svg class="menu-arrow" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                        </svg>
+                    </div>
+
+                    <div class="menu-item" onclick="showToast('功能开发中')">
+                        <div class="menu-icon pink">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/>
+                            </svg>
+                        </div>
+                        <div class="menu-info">
+                            <div class="menu-label">寄售收货</div>
+                            <div class="menu-desc">处理寄售商品收货</div>
+                        </div>
+                        <svg class="menu-arrow" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                        </svg>
+                    </div>
+
+                    <div class="menu-item" onclick="showToast('功能开发中')">
+                        <div class="menu-icon blue">
+                            <svg viewBox="0 0 24 24">
+                                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                            </svg>
+                        </div>
+                        <div class="menu-info">
+                            <div class="menu-label">库存盘点</div>
+                            <div class="menu-desc">定期盘点库存</div>
+                        </div>
+                        <svg class="menu-arrow" viewBox="0 0 24 24">
+                            <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 页面2: 合同列表页 -->
+        <div id="page-contracts" class="page">
+            <header class="header">
+                <button class="header-back" onclick="navigateTo('home')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="header-title">寄售合同</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="contract-list" id="contractList"></div>
+        </div>
+
+        <!-- 页面3: 合同详情页 -->
+        <div id="page-detail" class="page">
+            <header class="header">
+                <button class="header-back" onclick="navigateTo('contracts')">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/>
+                    </svg>
+                </button>
+                <h1 class="header-title">合同详情</h1>
+                <div class="header-spacer"></div>
+            </header>
+
+            <div class="detail-content">
+                <div class="placeholder-area">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/>
+                    </svg>
+                    <div class="placeholder-text">合同内容占位符</div>
+                </div>
+            </div>
+
+            <div class="bottom-action" id="detailAction" style="display: none;">
+                <button class="action-btn" onclick="handleSign()">签署</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div id="toast" style="display: none; position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%); padding: 16px 32px; background: rgba(0, 0, 0, 0.8); color: #FFFFFF; border-radius: 12px; font-size: 15px; z-index: 9999;"></div>
+
+    <script>
+        // Mock数据 - 寄售合同列表
+        const contracts = [
+            {
+                id: 1,
+                name: '2026年度寄售合同',
+                period: '2026-01-01 至 2026-03-31',
+                status: 'signed'
+            },
+            {
+                id: 2,
+                name: '2026年度寄售合同',
+                period: '2026-04-01 至 2026-06-30',
+                status: 'unsigned'
+            },
+            {
+                id: 3,
+                name: '2025年度寄售合同',
+                period: '2025-10-01 至 2025-12-31',
+                status: 'expired'
+            },
+            {
+                id: 4,
+                name: '2025年度寄售合同',
+                period: '2025-07-01 至 2025-09-30',
+                status: 'signed'
+            },
+            {
+                id: 5,
+                name: '2025年度寄售合同',
+                period: '2025-04-01 至 2025-06-30',
+                status: 'expired'
+            }
+        ];
+
+        // 当前选中的合同
+        let currentContract = null;
+
+        // 页面导航
+        function navigateTo(page) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${page}`).classList.add('active');
+            window.scrollTo(0, 0);
+
+            if (page === 'contracts') {
+                renderContractList();
+            }
+        }
+
+        // 渲染合同列表（按合同周期倒序）
+        function renderContractList() {
+            const container = document.getElementById('contractList');
+            
+            // 按合同周期倒序排列（取period的开始日期）
+            const sortedContracts = [...contracts].sort((a, b) => {
+                const dateA = new Date(a.period.split(' 至 ')[0]);
+                const dateB = new Date(b.period.split(' 至 ')[0]);
+                return dateB - dateA;
+            });
+
+            container.innerHTML = sortedContracts.map(contract => {
+                const statusMap = {
+                    signed: { label: '已签署', class: 'signed' },
+                    unsigned: { label: '未签署', class: 'unsigned' },
+                    expired: { label: '已失效', class: 'expired' }
+                };
+                const status = statusMap[contract.status];
+
+                return `
+                    <div class="contract-item" onclick="viewContract(${contract.id})">
+                        <div class="contract-name">${contract.name}</div>
+                        <div class="contract-meta">
+                            <span class="contract-period">
+                                <svg viewBox="0 0 24 24">
+                                    <path d="M19 3h-1V1h-2v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H5V8h14v11zM9 10H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2zm-8 4H7v2h2v-2zm4 0h-2v2h2v-2zm4 0h-2v2h2v-2z"/>
+                                </svg>
+                                ${contract.period}
+                            </span>
+                            <span class="status-tag ${status.class}">${status.label}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 查看合同详情
+        function viewContract(id) {
+            currentContract = contracts.find(c => c.id === id);
+            
+            // 显示签署按钮（仅未签署状态显示）
+            const actionDiv = document.getElementById('detailAction');
+            if (currentContract && currentContract.status === 'unsigned') {
+                actionDiv.style.display = 'block';
+            } else {
+                actionDiv.style.display = 'none';
+            }
+
+            navigateTo('detail');
+        }
+
+        // 签署合同
+        function handleSign() {
+            if (!currentContract) return;
+            
+            // 实际项目中这里应该是调用API签署合同
+            currentContract.status = 'signed';
+            document.getElementById('detailAction').style.display = 'none';
+            showToast('签署成功');
+            
+            // 返回列表页
+            setTimeout(() => {
+                navigateTo('contracts');
+            }, 1500);
+        }
+
+        // 显示Toast提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
