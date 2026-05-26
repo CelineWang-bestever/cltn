@@ -1011,6 +1011,34 @@
             right: 12px;
         }
 
+        .detail-fullscreen-btn {
+            position: absolute;
+            bottom: 12px;
+            right: 12px;
+            width: 40px;
+            height: 40px;
+            border-radius: 999px;
+            border: 1px solid var(--primary-dark);
+            background: var(--primary);
+            color: #FFFFFF;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .detail-fullscreen-btn:hover {
+            background: var(--primary-dark);
+            transform: scale(1.03);
+        }
+
+        .detail-fullscreen-btn svg {
+            width: 18px;
+            height: 18px;
+            fill: currentColor;
+        }
+
         @media screen and (max-width: 1024px) {
             .detail-nav-btn {
                 width: 44px;
@@ -1284,41 +1312,17 @@
             color: var(--text-secondary);
         }
 
-        .pagination {
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-
-        .page-btn {
-            min-width: 32px;
-            height: 32px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 13px;
-            color: var(--text-secondary);
-            background: var(--bg-card);
-            border: 1px solid var(--border-color);
-            border-radius: 6px;
+        .loading-more {
+            text-align: center;
+            padding: 16px;
+            color: var(--text-muted);
+            font-size: 14px;
             cursor: pointer;
-            transition: all 0.2s;
+            transition: color 0.2s;
         }
 
-        .page-btn:hover:not(:disabled):not(.active) {
-            border-color: var(--primary);
+        .loading-more:hover {
             color: var(--primary);
-        }
-
-        .page-btn.active {
-            background: var(--primary);
-            border-color: var(--primary);
-            color: #FFFFFF;
-        }
-
-        .page-btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
         }
 
         .preview-modal {
@@ -2487,28 +2491,7 @@
             object-fit: cover;
         }
 
-        #uploadModal .uploaded-item .status {
-            position: absolute;
-            bottom: 6px;
-            left: 6px;
-            padding: 3px 8px;
-            border-radius: 999px;
-            font-size: 11px;
-            color: #FFFFFF;
-            background: rgba(0, 0, 0, 0.5);
-        }
-
-        #uploadModal .uploaded-item .status.success {
-            background: var(--success);
-        }
-
-        #uploadModal .uploaded-item .status.error {
-            background: var(--error);
-        }
-
-        #uploadModal .uploaded-item .status.uploading {
-            background: var(--primary);
-        }
+        
 
         #uploadModal .uploaded-item .delete-btn {
             position: absolute;
@@ -2776,9 +2759,9 @@
             <div class="gallery-card">
                 <div class="gallery-grid" id="galleryGrid"></div>
                 <div class="table-footer">
-                    <span class="page-info">共 <span id="totalCount">0</span> 条</span>
-                    <div class="pagination" id="pagination"></div>
+                    <span class="page-info">已加载 <span id="loadedCount">0</span> / 共 <span id="totalCount">0</span> 条</span>
                 </div>
+                <div class="loading-more" id="loadingMore">加载更多</div>
             </div>
         </main>
     </div>
@@ -2821,6 +2804,11 @@
                     <button class="detail-nav-btn next" id="detailNextBtn" type="button" onclick="showNextDetail()" aria-label="下一张">
                         <svg viewBox="0 0 24 24">
                             <path d="M8.59 16.59L10 18l6-6-6-6-1.41 1.41L13.17 12z"></path>
+                        </svg>
+                    </button>
+                    <button class="detail-fullscreen-btn" id="detailFullscreenBtn" type="button" onclick="toggleDetailFullscreen()" aria-label="全屏">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"></path>
                         </svg>
                     </button>
                 </div>
@@ -3666,12 +3654,7 @@
             if (e && e.target) e.target.value = '';
         }
 
-        function getStatusText(status) {
-            if (status === 'success') return '已选择';
-            if (status === 'uploading') return '上传中';
-            if (status === 'error') return '失败';
-            return '';
-        }
+        
 
         function renderUploadedList() {
             const section = document.getElementById('uploadedSection');
@@ -3698,7 +3681,6 @@
                     <div class="uploaded-card">
                         <div class="uploaded-item">
                             <img src="${item.thumb}" alt="${safeName}">
-                            <span class="status ${item.status}">${getStatusText(item.status)}</span>
                             <div class="delete-btn" onclick="deleteFile(${item.id})">
                                 <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
                             </div>
@@ -3978,12 +3960,256 @@
                     { filename: '年度数据统计.xlsx', size: '1.1MB', thumb: null },
                 ]
             },
+            {
+                id: 9,
+                type: 'daily',
+                typeName: '每日经营',
+                businessDate: '2024-01-12',
+                uploader: '李美容师',
+                time: '2024-01-13 08:45',
+                description: '门店日常运营照片集',
+                files: [
+                    {
+                        filename: '门店环境-01',
+                        customName: '门店环境-01',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-13 08:45',
+                        modifiedAt: '2024-01-13 08:45',
+                        modifiedBy: '李美容师'
+                    },
+                    {
+                        filename: '门店环境-02',
+                        customName: '门店环境-02',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-13 08:46',
+                        modifiedAt: '2024-01-13 08:46',
+                        modifiedBy: '李美容师'
+                    },
+                    {
+                        filename: '门店环境-03',
+                        customName: '门店环境-03',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-13 08:47',
+                        modifiedAt: '2024-01-13 08:47',
+                        modifiedBy: '李美容师'
+                    },
+                    {
+                        filename: '门店环境-04',
+                        customName: '门店环境-04',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-13 08:48',
+                        modifiedAt: '2024-01-13 08:48',
+                        modifiedBy: '李美容师'
+                    },
+                    {
+                        filename: '门店环境-05',
+                        customName: '门店环境-05',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-13 08:49',
+                        modifiedAt: '2024-01-13 08:49',
+                        modifiedBy: '李美容师'
+                    },
+                    {
+                        filename: '门店环境-06',
+                        customName: '门店环境-06',
+                        type: 'daily',
+                        typeName: '每日经营',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-13 08:50',
+                        modifiedAt: '2024-01-13 08:50',
+                        modifiedBy: '李美容师'
+                    }
+                ]
+            },
+            {
+                id: 10,
+                type: 'appointment',
+                typeName: '预约表',
+                businessDate: '2024-01-10',
+                uploader: '王店长',
+                time: '2024-01-11 14:30',
+                description: '客户活动照片集锦',
+                files: [
+                    {
+                        filename: '活动照片-01',
+                        customName: '活动照片-01',
+                        type: 'appointment',
+                        typeName: '预约表',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-11 14:30',
+                        modifiedAt: '2024-01-11 14:30',
+                        modifiedBy: '王店长'
+                    },
+                    {
+                        filename: '活动照片-02',
+                        customName: '活动照片-02',
+                        type: 'appointment',
+                        typeName: '预约表',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-11 14:31',
+                        modifiedAt: '2024-01-11 14:31',
+                        modifiedBy: '王店长'
+                    },
+                    {
+                        filename: '活动照片-03',
+                        customName: '活动照片-03',
+                        type: 'appointment',
+                        typeName: '预约表',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-11 14:32',
+                        modifiedAt: '2024-01-11 14:32',
+                        modifiedBy: '王店长'
+                    },
+                    {
+                        filename: '活动照片-04',
+                        customName: '活动照片-04',
+                        type: 'appointment',
+                        typeName: '预约表',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-11 14:33',
+                        modifiedAt: '2024-01-11 14:33',
+                        modifiedBy: '王店长'
+                    }
+                ]
+            },
+            {
+                id: 11,
+                type: 'kpi',
+                typeName: '员工月度KPI',
+                businessDate: '2024-01-08',
+                uploader: '刘店长',
+                time: '2024-01-09 10:00',
+                description: '员工培训现场照片',
+                files: [
+                    {
+                        filename: '培训照片-01',
+                        customName: '培训照片-01',
+                        type: 'kpi',
+                        typeName: '员工月度KPI',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-09 10:00',
+                        modifiedAt: '2024-01-09 10:00',
+                        modifiedBy: '刘店长'
+                    },
+                    {
+                        filename: '培训照片-02',
+                        customName: '培训照片-02',
+                        type: 'kpi',
+                        typeName: '员工月度KPI',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-09 10:01',
+                        modifiedAt: '2024-01-09 10:01',
+                        modifiedBy: '刘店长'
+                    },
+                    {
+                        filename: '培训照片-03',
+                        customName: '培训照片-03',
+                        type: 'kpi',
+                        typeName: '员工月度KPI',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-09 10:02',
+                        modifiedAt: '2024-01-09 10:02',
+                        modifiedBy: '刘店长'
+                    }
+                ]
+            },
+            {
+                id: 12,
+                type: 'custom:促销活动',
+                typeName: '促销活动',
+                businessDate: '2024-01-05',
+                uploader: '张店总',
+                time: '2024-01-06 15:20',
+                description: '促销活动宣传素材',
+                files: [
+                    {
+                        filename: '宣传海报-01',
+                        customName: '宣传海报-01',
+                        type: 'custom:促销活动',
+                        typeName: '促销活动',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-06 15:20',
+                        modifiedAt: '2024-01-06 15:20',
+                        modifiedBy: '张店总'
+                    },
+                    {
+                        filename: '宣传海报-02',
+                        customName: '宣传海报-02',
+                        type: 'custom:促销活动',
+                        typeName: '促销活动',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-06 15:21',
+                        modifiedAt: '2024-01-06 15:21',
+                        modifiedBy: '张店总'
+                    },
+                    {
+                        filename: '宣传海报-03',
+                        customName: '宣传海报-03',
+                        type: 'custom:促销活动',
+                        typeName: '促销活动',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-06 15:22',
+                        modifiedAt: '2024-01-06 15:22',
+                        modifiedBy: '张店总'
+                    },
+                    {
+                        filename: '宣传海报-04',
+                        customName: '宣传海报-04',
+                        type: 'custom:促销活动',
+                        typeName: '促销活动',
+                        size: '—',
+                        thumb: './首页APP-新增资料上传入口.png',
+                        uploadTime: '2024-01-06 15:23',
+                        modifiedAt: '2024-01-06 15:23',
+                        modifiedBy: '张店总'
+                    },
+                    {
+                        filename: '宣传海报-05',
+                        customName: '宣传海报-05',
+                        type: 'custom:促销活动',
+                        typeName: '促销活动',
+                        size: '—',
+                        thumb: './首页Pad&PC-新增资料管理入口.png',
+                        uploadTime: '2024-01-06 15:24',
+                        modifiedAt: '2024-01-06 15:24',
+                        modifiedBy: '张店总'
+                    }
+                ]
+            },
         ];
 
-        let currentPage = 1;
-        const pageSize = 12;
+        let loadedCount = 0;
+        const pageSize = 20;
         let filteredItems = [];
         const sortState = { field: 'uploadTime', dir: 'desc' };
+        let isLoading = false;
+        let hasMore = true;
 
         let pendingDeleteTarget = null;
         let currentDetailTarget = null;
@@ -4090,74 +4316,105 @@
             document.getElementById('totalCount').textContent = filteredItems.length;
         }
 
-        function renderGallery() {
+        function renderGallery(reset = true) {
             filterData();
 
-            const totalPages = Math.max(1, Math.ceil(filteredItems.length / pageSize));
-            if (currentPage < 1) currentPage = 1;
-            if (currentPage > totalPages) currentPage = 1;
+            if (reset) {
+                loadedCount = 0;
+                hasMore = true;
+            }
 
-            const start = (currentPage - 1) * pageSize;
-            const end = start + pageSize;
-            const pageData = filteredItems.slice(start, end);
             const grid = document.getElementById('galleryGrid');
+            const loadingEl = document.getElementById('loadingMore');
+            const loadedCountEl = document.getElementById('loadedCount');
+            const totalCountEl = document.getElementById('totalCount');
 
-            if (pageData.length === 0) {
+            totalCountEl.textContent = filteredItems.length;
+
+            if (filteredItems.length === 0) {
                 grid.innerHTML = `
                     <div class="empty-state" style="grid-column: 1 / -1;">
                         <svg viewBox="0 0 24 24"><path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/><path d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z"/></svg>
                         <p>暂无上传图片</p>
                     </div>
                 `;
-                document.getElementById('pagination').innerHTML = '';
+                loadedCountEl.textContent = 0;
+                loadingEl.style.display = 'none';
                 return;
             }
 
-            grid.innerHTML = pageData.map(item => {
-                const name = escapeHtml(item.displayName || '');
-                const alt = escapeHtmlAttr(item.displayName || '');
-                return `
-                    <div class="gallery-item">
-                        <div class="gallery-thumb" onclick="openDetailModal(${item.recordId}, ${item.fileIndex})">
-                            <img src="${item.thumb}" alt="${alt}">
+            hasMore = loadedCount < filteredItems.length;
+
+            if (reset) {
+                const pageData = filteredItems.slice(0, pageSize);
+                loadedCount = pageData.length;
+                
+                grid.innerHTML = pageData.map(item => {
+                    const name = escapeHtml(item.displayName || '');
+                    const alt = escapeHtmlAttr(item.displayName || '');
+                    return `
+                        <div class="gallery-item">
+                            <div class="gallery-thumb" onclick="openDetailModal(${item.recordId}, ${item.fileIndex})">
+                                <img src="${item.thumb}" alt="${alt}">
+                            </div>
+                            <div class="gallery-name">${name}</div>
                         </div>
-                        <div class="gallery-name">${name}</div>
-                    </div>
-                `;
-            }).join('');
-
-            renderPagination();
-        }
-
-        function renderPagination() {
-            const totalPages = Math.ceil(filteredItems.length / pageSize);
-            const paginationEl = document.getElementById('pagination');
-
-            if (totalPages <= 1) {
-                paginationEl.innerHTML = '';
-                return;
+                    `;
+                }).join('');
             }
 
-            let html = `<button class="page-btn" onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>◀</button>`;
+            loadedCountEl.textContent = loadedCount;
+            loadingEl.style.display = hasMore ? 'block' : 'none';
+        }
 
-            for (let i = 1; i <= totalPages; i++) {
-                if (i === 1 || i === totalPages || (i >= currentPage - 2 && i <= currentPage + 2)) {
-                    html += `<button class="page-btn ${i === currentPage ? 'active' : ''}" onclick="goToPage(${i})">${i}</button>`;
-                } else if (i === currentPage - 3 || i === currentPage + 3) {
-                    html += `<span style="padding: 0 8px;">...</span>`;
+        function loadMore() {
+            if (isLoading || !hasMore) return;
+
+            isLoading = true;
+            const loadingEl = document.getElementById('loadingMore');
+            const loadedCountEl = document.getElementById('loadedCount');
+            loadingEl.innerHTML = '加载中...';
+
+            setTimeout(() => {
+                const grid = document.getElementById('galleryGrid');
+                const start = loadedCount;
+                const end = start + pageSize;
+                const pageData = filteredItems.slice(start, end);
+
+                if (pageData.length > 0) {
+                    const html = pageData.map(item => {
+                        const name = escapeHtml(item.displayName || '');
+                        const alt = escapeHtmlAttr(item.displayName || '');
+                        return `
+                            <div class="gallery-item">
+                                <div class="gallery-thumb" onclick="openDetailModal(${item.recordId}, ${item.fileIndex})">
+                                    <img src="${item.thumb}" alt="${alt}">
+                                </div>
+                                <div class="gallery-name">${name}</div>
+                            </div>
+                        `;
+                    }).join('');
+                    grid.innerHTML += html;
+                    loadedCount += pageData.length;
+                    loadedCountEl.textContent = loadedCount;
                 }
-            }
 
-            html += `<button class="page-btn" onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>▶</button>`;
-
-            paginationEl.innerHTML = html;
+                hasMore = loadedCount < filteredItems.length;
+                isLoading = false;
+                loadingEl.innerHTML = hasMore ? '加载更多' : '已加载全部';
+                loadingEl.style.display = hasMore || (loadedCount > 0 && loadedCount >= pageSize) ? 'block' : 'none';
+            }, 500);
         }
 
-        function goToPage(page) {
-            const totalPages = Math.ceil(filteredItems.length / pageSize);
-            if (page >= 1 && page <= totalPages) {
-                currentPage = page;
-                renderGallery();
+        function handleScroll() {
+            const loadingEl = document.getElementById('loadingMore');
+            if (!loadingEl) return;
+
+            const rect = loadingEl.getBoundingClientRect();
+            const windowHeight = window.innerHeight;
+
+            if (rect.top <= windowHeight + 100 && !isLoading && hasMore) {
+                loadMore();
             }
         }
 
@@ -4293,6 +4550,42 @@
             currentDetailTarget = null;
             currentDetailIndex = -1;
             toggleDetailEdit(false);
+            exitFullscreen();
+        }
+
+        function toggleDetailFullscreen() {
+            const imageEl = document.getElementById('detailImage');
+            if (!imageEl) return;
+
+            if (document.fullscreenElement) {
+                exitFullscreen();
+            } else {
+                enterFullscreen(imageEl);
+            }
+        }
+
+        function enterFullscreen(element) {
+            if (element.requestFullscreen) {
+                element.requestFullscreen();
+            } else if (element.webkitRequestFullscreen) {
+                element.webkitRequestFullscreen();
+            } else if (element.mozRequestFullScreen) {
+                element.mozRequestFullScreen();
+            } else if (element.msRequestFullscreen) {
+                element.msRequestFullscreen();
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.exitFullscreen) {
+                document.exitFullscreen();
+            } else if (document.webkitExitFullscreen) {
+                document.webkitExitFullscreen();
+            } else if (document.mozCancelFullScreen) {
+                document.mozCancelFullScreen();
+            } else if (document.msExitFullscreen) {
+                document.msExitFullscreen();
+            }
         }
 
         function toggleDetailEdit(show) {
@@ -4632,17 +4925,19 @@
             if (sortDirBtn) sortDirBtn.textContent = sortState.dir === 'asc' ? '正序' : '倒序';
             sortFieldSelect?.addEventListener('change', function () {
                 sortState.field = this.value;
-                currentPage = 1;
-                renderGallery();
+                renderGallery(true);
             });
             sortDirBtn?.addEventListener('click', function () {
                 sortState.dir = sortState.dir === 'asc' ? 'desc' : 'asc';
                 this.textContent = sortState.dir === 'asc' ? '正序' : '倒序';
-                currentPage = 1;
-                renderGallery();
+                renderGallery(true);
             });
 
             renderGallery();
+
+            window.addEventListener('scroll', handleScroll);
+
+            document.getElementById('loadingMore').addEventListener('click', loadMore);
 
             customTypes = loadCustomTypes();
             renderFilterTypeOptions();

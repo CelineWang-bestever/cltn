@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>克丽缇娜 - 目标管理</title>
+    <title>门店目标管理</title>
     <style>
         :root {
             --primary: #E87C9A;
@@ -76,7 +76,7 @@
         }
 
         .header-content {
-            max-width: 1440px;
+            max-width: 100%;
             margin: 0 auto;
             display: flex;
             align-items: center;
@@ -103,7 +103,7 @@
         .page-main {
             flex: 1;
             padding: 24px;
-            max-width: 1440px;
+            max-width: 100%;
             margin: 0 auto;
             width: 100%;
         }
@@ -111,9 +111,9 @@
         .header-tabs {
             display: flex;
             gap: 8px;
-            padding: 16px 0;
+            padding: 0px 0px 8px 0px;
             border-bottom: 1px solid var(--neutral-200);
-            margin-bottom: 24px;
+            margin-bottom: 16px;
             flex-wrap: wrap;
         }
 
@@ -144,7 +144,6 @@
             display: flex;
             align-items: center;
             gap: 12px;
-            margin-bottom: 24px;
             justify-content: flex-end;
         }
 
@@ -183,10 +182,387 @@
 
         .main-content {
             display: grid;
-            grid-template-columns: 320px 1fr;
-            gap: 24px;
+            width: 100%;
         }
 
+        /* ============ 门店目标TAB页独立布局样式 ============ */
+        .store-goal-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) 1fr;
+            gap: 24px;
+            width: 100%;
+        }
+
+        .store-goal-sidebar {
+            position: sticky;
+            top: 110px;
+            height: fit-content;
+        }
+
+        .store-overview-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .store-overview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .store-circle-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .store-circle-progress-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 16px;
+        }
+
+        .store-circle-progress-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-200) 0deg,
+                var(--primary-200) 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+        }
+
+        .store-circle-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-500) 0deg,
+                var(--primary-600) var(--progress-deg, 280deg),
+                transparent var(--progress-deg, 280deg),
+                transparent 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+            transition: transform 0.3s ease;
+        }
+
+        .store-circle-progress-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .store-circle-percentage {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--neutral-800);
+            display: block;
+        }
+
+        .store-circle-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .store-overview-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .store-stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .store-stat-label {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .store-stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-stat-value.highlight {
+            color: var(--primary-600);
+        }
+
+        .store-goal-main {
+            min-width: 0;
+        }
+
+        .store-month-grid-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            height: fit-content;
+        }
+
+        .store-month-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .store-month-grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-batch-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .store-btn-batch {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .store-btn-batch:hover:not(:disabled) {
+            background: var(--danger-50);
+            border-color: var(--danger-300);
+            color: var(--danger-600);
+        }
+
+        .store-btn-batch:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .store-month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .store-month-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .store-month-card:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+
+        .store-month-card.selected {
+            border-color: var(--primary-400);
+            background: var(--primary-50);
+        }
+
+        .store-month-card.unset {
+            opacity: 0.6;
+        }
+
+        .store-month-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .store-month-select-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--neutral-300);
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .store-month-card.selected .store-month-select-indicator {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+        }
+
+        .store-month-card.selected .store-month-select-indicator::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 5px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .store-month-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 12px;
+        }
+
+        .store-month-info {
+            text-align: left;
+        }
+
+        .store-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .store-info-label {
+            color: var(--neutral-500);
+        }
+
+        .store-info-value {
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-info-value.goal {
+            color: var(--neutral-600);
+        }
+
+        .store-info-value.completed {
+            color: var(--primary-600);
+        }
+
+        .store-month-progress-bar {
+            height: 6px;
+            background: var(--neutral-200);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .store-month-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* ============ 门店目标TAB页响应式样式 ============ */
+        @media (max-width: 1024px) {
+            .store-goal-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .store-goal-sidebar {
+                position: static;
+            }
+
+            .store-overview-card {
+                position: static;
+            }
+
+            .store-month-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .store-goal-layout {
+                gap: 16px;
+            }
+
+            .store-overview-card {
+                padding: 20px;
+            }
+
+            .store-circle-progress-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+
+            .store-circle-percentage {
+                font-size: 24px;
+            }
+
+            .store-month-grid-container {
+                padding: 20px;
+            }
+
+            .store-month-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .store-month-card {
+                padding: 14px;
+            }
+
+            .store-month-grid-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .store-overview-card {
+                padding: 16px;
+            }
+
+            .store-circle-progress-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .store-circle-percentage {
+                font-size: 20px;
+            }
+
+            .store-month-grid-container {
+                padding: 16px;
+            }
+
+            .store-month-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-stat-item {
+                padding: 10px;
+            }
+        }
+
+        /* ============ 原有样式（保留供员工业绩目标使用） ============ */
         .year-overview-card {
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
@@ -760,7 +1136,8 @@
 
             .year-selector {
                 justify-content: flex-start;
-                margin-top: 16px;
+                margin-top: 8px;
+                margin-bottom: 8px;
             }
 
             .month-grid {
@@ -793,6 +1170,545 @@
                 font-size: 16px;
             }
         }
+
+        /* ============ 员工业绩目标页面样式 ============ */
+        .staff-goal-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .staff-goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .month-selector-wrapper {
+            margin-bottom: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 3px;
+        }
+
+        .month-selector {
+            display: inline-flex;
+            gap: 8px;
+            min-width: 100%;
+        }
+
+        .month-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+        }
+
+        .month-btn:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .month-btn.active {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .staff-goal-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+
+        .staff-goal-table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+        }
+
+        .staff-goal-table th,
+        .staff-goal-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--neutral-700);
+            font-size: 13px;
+        }
+
+        .staff-goal-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .staff-name {
+            font-weight: 500;
+            color: var(--neutral-800);
+        }
+
+        .goal-cell {
+            min-width: 140px;
+        }
+
+        .goal-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 4px;
+        }
+
+        .goal-value .label {
+            font-weight: 400;
+            color: var(--neutral-500);
+            margin-right: 4px;
+        }
+
+        .goal-progress-bar {
+            height: 8px;
+            background: var(--neutral-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .goal-progress-fill.achieved {
+            background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+        }
+
+        .goal-progress-fill.not-achieved {
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);;
+        }
+
+        .goal-rate {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .goal-rate.achieved {
+            color: #10B981;
+        }
+
+        .goal-rate.not-achieved {
+            color: #EF4444;
+        }
+
+        .edit-btn {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--primary-300);
+            background: var(--primary-50);
+            color: var(--primary-600);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .summary-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-bottom: 4px;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .summary-value.achieved {
+            color: #10B981;
+        }
+
+        .summary-value.not-achieved {
+            color: var(--primary-600);
+        }
+
+        /* ============ 员工目标编辑弹窗 ============ */
+        .staff-goal-modal .modal-body {
+            padding: 24px;
+        }
+
+        .staff-goal-modal .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-staff-info {
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+
+        .modal-staff-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .modal-month-info {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .goal-fields {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .goal-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .goal-field label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+            margin-bottom: 8px;
+        }
+
+        .goal-field input {
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--neutral-800);
+            background: var(--bg-primary);
+            transition: var(--transition-fast);
+        }
+
+        .goal-field input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(232, 124, 154, 0.1);
+        }
+
+        .goal-field input::placeholder {
+            color: var(--neutral-400);
+        }
+
+        .goal-field .field-unit {
+            font-size: 12px;
+            color: var(--neutral-400);
+            margin-top: 4px;
+        }
+
+        /* ============ 员工业绩目标页面响应式样式 ============ */
+        @media (max-width: 1400px) {
+            .staff-goal-table th,
+            .staff-goal-table td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .goal-cell {
+                min-width: 110px;
+            }
+
+            .goal-value {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .staff-goal-header {
+                flex-direction: column;
+                gap: 12px;
+                align-items: flex-start;
+            }
+
+            .staff-goal-title {
+                font-size: 15px;
+            }
+
+            .staff-goal-table th,
+            .staff-goal-table td {
+                padding: 10px 8px;
+                font-size: 13px;
+            }
+
+            .goal-cell {
+                min-width: 110px;
+            }
+
+            .goal-value {
+                font-size: 13px;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .staff-goal-container {
+                padding: 20px;
+            }
+
+            .staff-goal-title {
+                font-size: 14px;
+            }
+
+            .month-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+
+            .staff-goal-table th,
+            .staff-goal-table td {
+                padding: 8px 6px;
+                font-size: 12px;
+            }
+
+            .goal-cell {
+                min-width: 100px;
+            }
+
+            .goal-value {
+                font-size: 12px;
+            }
+
+            .goal-progress-bar {
+                height: 6px;
+            }
+
+            .edit-btn {
+                padding: 4px 10px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .staff-goal-table-wrapper {
+                border: none;
+                border-radius: 0;
+            }
+
+            .staff-goal-table {
+                display: block;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                min-width: 600px;
+            }
+
+            .staff-goal-table-wrapper {
+                border: 1px solid var(--neutral-100);
+                border-radius: var(--radius-md);
+            }
+
+            .summary-bar {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+
+            .summary-item {
+                flex: 1;
+                min-width: 100px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .staff-goal-table-wrapper {
+                border: none;
+            }
+
+            .staff-goal-table {
+                display: block;
+                overflow-x: visible;
+                border: none;
+                min-width: 100%;
+            }
+
+            .staff-goal-table thead,
+            .staff-goal-table tbody,
+            .staff-goal-table tr,
+            .staff-goal-table th,
+            .staff-goal-table td {
+                display: block;
+            }
+
+            .staff-goal-table thead tr {
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+
+            .staff-goal-table tr {
+                border-bottom: 2px solid var(--neutral-200);
+                margin-bottom: 12px;
+                padding: 8px;
+                background: var(--bg-primary);
+                border-radius: var(--radius-md);
+            }
+
+            .staff-goal-table td {
+                border: none;
+                position: relative;
+                padding-left: 45%;
+                text-align: right;
+                padding-right: 8px;
+                padding-top: 6px;
+                padding-bottom: 6px;
+            }
+
+            .staff-goal-table td::before {
+                content: attr(data-label);
+                position: absolute;
+                left: 8px;
+                width: 40%;
+                padding-right: 10px;
+                white-space: nowrap;
+                text-align: left;
+                font-weight: 600;
+                color: var(--neutral-600);
+                font-size: 12px;
+            }
+
+            .staff-goal-table td:first-child::before {
+                content: '员工姓名';
+            }
+
+            .staff-goal-table td:nth-child(2)::before {
+                content: '业绩目标';
+            }
+
+            .staff-goal-table td:nth-child(3)::before {
+                content: '卡耗目标';
+            }
+
+            .staff-goal-table td:nth-child(4)::before {
+                content: '拓客目标';
+            }
+
+            .staff-goal-table td:nth-child(5)::before {
+                content: '客次目标';
+            }
+
+            .staff-goal-table td:nth-child(6)::before {
+                content: '操作';
+            }
+
+            .edit-btn {
+                margin-top: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .staff-goal-container {
+                padding: 12px;
+            }
+
+            .staff-goal-header {
+                gap: 12px;
+            }
+
+            .staff-goal-title {
+                font-size: 13px;
+            }
+
+            .month-btn {
+                padding: 4px 8px;
+                font-size: 10px;
+            }
+
+            .goal-value {
+                font-size: 12px;
+            }
+
+            .edit-btn {
+                padding: 3px 6px;
+                font-size: 10px;
+            }
+
+            .summary-bar {
+                padding: 12px;
+            }
+
+            .summary-value {
+                font-size: 14px;
+            }
+        }
+
     </style>
 </head>
 <body>
@@ -809,16 +1725,8 @@
         </header>
 
         <main class="page-main">
-            <div class="header-tabs" id="goalTypeTabs">
-                <button class="tab-item active" data-goal-type="store-performance">门店业绩指标</button>
-                <button class="tab-item" data-goal-type="store-card-consume">门店卡耗目标</button>
-                <button class="tab-item" data-goal-type="customer-flow">客流目标</button>
-                <button class="tab-item" data-goal-type="staff-performance">员工业绩目标</button>
-                <button class="tab-item" data-goal-type="staff-card-consume">员工卡耗目标</button>
-            </div>
-
             <div class="year-selector">
-                <button class="year-btn" id="prevYearBtn" disabled>
+                <button class="year-btn" id="prevYearBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M15 19l-7-7 7-7" />
                     </svg>
@@ -830,42 +1738,54 @@
                     </svg>
                 </button>
             </div>
-
-            <div class="main-content">
-                <div class="year-overview-card">
-                    <h2 class="overview-title">年度概览</h2>
-                    <div class="circle-progress-container">
-                        <div class="circle-progress-wrapper">
-                            <div class="circle-progress-bg"></div>
-                            <div class="circle-progress-fill" id="yearProgressFill"></div>
-                            <div class="circle-progress-inner">
-                                <div class="circle-percentage" id="yearCompletionRate">78%</div>
-                                <div class="circle-label">完成率</div>
+            <div class="header-tabs" id="goalTypeTabs">
+                <button class="tab-item active" data-goal-type="store-performance">门店业绩指标</button>
+                <button class="tab-item" data-goal-type="store-card-consume">门店卡耗目标</button>
+                <button class="tab-item" data-goal-type="customer-flow">客流目标</button>
+                <button class="tab-item" data-goal-type="staff-performance">员工业绩目标</button>
+            </div>
+            <div class="store-goal-layout" id="storeGoalContent">
+                <aside class="store-goal-sidebar">
+                    <div class="store-overview-card">
+                        <h2 class="store-overview-title">年度概览</h2>
+                        <div class="store-circle-progress-container">
+                            <div class="store-circle-progress-wrapper">
+                                <div class="store-circle-progress-bg"></div>
+                                <div class="store-circle-progress-fill" id="yearProgressFill"></div>
+                                <div class="store-circle-progress-inner">
+                                    <div class="store-circle-percentage" id="yearCompletionRate">78%</div>
+                                    <div class="store-circle-label">进度</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="store-overview-stats">
+                            <div class="store-stat-item">
+                                <span class="store-stat-label">年度目标</span>
+                                <span class="store-stat-value">¥1,200,000</span>
+                            </div>
+                            <div class="store-stat-item">
+                                <span class="store-stat-label">年度完成</span>
+                                <span class="store-stat-value highlight">¥936,000</span>
                             </div>
                         </div>
                     </div>
-                    <div class="overview-stats">
-                        <div class="stat-item">
-                            <span class="stat-label">年度目标</span>
-                            <span class="stat-value">¥1,200,000</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-label">年度完成</span>
-                            <span class="stat-value highlight">¥936,000</span>
-                        </div>
-                    </div>
-                </div>
+                </aside>
 
-                <div class="month-grid-container">
-                    <div class="month-grid-header">
-                        <h2 class="month-grid-title">月度目标</h2>
-                        <div class="batch-actions">
-                            <button class="btn-batch" id="batchClearBtn" disabled>清空选中 (0)</button>
+                <main class="store-goal-main">
+                    <div class="store-month-grid-container">
+                        <div class="store-month-grid-header">
+                            <h2 class="store-month-grid-title">月度目标</h2>
+                            <div class="store-batch-actions">
+                                <button class="store-btn-batch" id="batchClearBtn" disabled>清空选中的目标 (0)</button>
+                            </div>
+                        </div>
+                        <div class="store-month-grid" id="monthGrid">
                         </div>
                     </div>
-                    <div class="month-grid" id="monthGrid">
-                    </div>
-                </div>
+                </main>
+            </div>
+
+            <div class="main-content" id="staffGoalContent" style="display: none;">
             </div>
         </main>
     </div>
@@ -897,6 +1817,52 @@
             <div class="modal-footer">
                 <button class="modal-btn secondary" id="modalCancelBtn">取消</button>
                 <button class="modal-btn primary" id="modalConfirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 员工目标编辑弹窗 -->
+    <div class="modal-overlay" id="staffGoalModal">
+        <div class="modal-container staff-goal-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="staffModalTitle">编辑员工目标</h3>
+                <button class="modal-close" id="staffModalCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-staff-info">
+                    <div class="modal-staff-name" id="staffModalStaffName">员工姓名</div>
+                    <div class="modal-month-info" id="staffModalMonthInfo">2026年1月</div>
+                </div>
+                <div class="goal-fields">
+                    <div class="goal-field">
+                        <label>业绩目标（元）</label>
+                        <input type="text" id="staffGoalPerformance" placeholder="请输入业绩目标" inputmode="decimal">
+                        <div class="field-unit">单位：人民币</div>
+                    </div>
+                    <div class="goal-field">
+                        <label>卡耗目标（元）</label>
+                        <input type="text" id="staffGoalCardConsume" placeholder="请输入卡耗目标" inputmode="decimal">
+                        <div class="field-unit">单位：人民币</div>
+                    </div>
+                    <div class="goal-field">
+                        <label>拓客目标（人）</label>
+                        <input type="text" id="staffGoalCustomer" placeholder="请输入拓客目标" inputmode="numeric">
+                        <div class="field-unit">单位：人数</div>
+                    </div>
+                    <div class="goal-field">
+                        <label>客次目标（次）</label>
+                        <input type="text" id="staffGoalVisits" placeholder="请输入客次目标" inputmode="numeric">
+                        <div class="field-unit">单位：次数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="staffModalCancelBtn">取消</button>
+                <button class="modal-btn primary" id="staffModalConfirmBtn">保存目标</button>
             </div>
         </div>
     </div>
@@ -1008,16 +1974,16 @@
                 if (goalData) {
                     const rate = Math.min(goalData.completionRate || 0, 100);
                     cardContent = `
-                        <div class="month-info">
-                            <div class="info-row"><span class="info-label">目标</span><span class="info-value goal">${unit}${formatNum(goalData.goal)}</span></div>
-                            <div class="info-row"><span class="info-label">完成</span><span class="info-value completed">${unit}${formatNum(goalData.completed)}</span></div>
-                            <div class="month-progress-bar"><div class="month-progress-fill" style="width:${rate}%"></div></div>
-                            <div class="info-row" style="margin-top:4px"><span class="info-label">进度</span><span class="info-value">${goalData.completionRate}%</span></div>
+                        <div class="store-month-info">
+                            <div class="store-info-row"><span class="store-info-label">目标</span><span class="store-info-value goal">${unit}${formatNum(goalData.goal)}</span></div>
+                            <div class="store-info-row"><span class="store-info-label">完成</span><span class="store-info-value completed">${unit}${formatNum(goalData.completed)}</span></div>
+                            <div class="store-month-progress-bar"><div class="store-month-progress-fill" style="width:${rate}%"></div></div>
+                            <div class="store-info-row" style="margin-top:4px"><span class="store-info-label">进度</span><span class="store-info-value">${goalData.completionRate}%</span></div>
                         </div>`;
                 } else {
-                    cardContent = '<div class="month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div></div>';
+                    cardContent = '<div class="store-month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div></div>';
                 }
-                html += `<div class="month-card ${isSelected?'selected':''} ${isUnset?'unset':''}" data-month="${month}"><div class="month-select-indicator"></div><div class="month-name">${monthName}</div>${cardContent}</div>`;
+                html += `<div class="store-month-card ${isSelected?'selected':''} ${isUnset?'unset':''}" data-month="${month}"><div class="store-month-select-indicator"></div><div class="store-month-name">${monthName}</div>${cardContent}</div>`;
             });
             grid.innerHTML = html;
             updateBatchButton();
@@ -1037,7 +2003,7 @@
             }
             const fill = document.getElementById('yearProgressFill');
             if (fill) fill.style.setProperty('--progress-deg', `${progressDeg}deg`);
-            const stats = document.querySelectorAll('.overview-stats .stat-value');
+            const stats = document.querySelectorAll('.store-overview-stats .store-stat-value');
             if (stats[0]) stats[0].textContent = `¥${formatNum(totalGoal)}`;
             if (stats[1]) stats[1].textContent = `¥${formatNum(totalCompleted)}`;
         }
@@ -1056,7 +2022,7 @@
         function updateBatchButton() {
             const btn = document.getElementById('batchClearBtn');
             if (!btn) return;
-            btn.textContent = `清空选中 (${selectedMonths.length})`;
+            btn.textContent = `清空选中的目标 (${selectedMonths.length})`;
             btn.disabled = selectedMonths.length === 0;
         }
 
@@ -1141,33 +2107,355 @@
             setTimeout(() => { toast.classList.remove('show'); setTimeout(() => container.removeChild(toast), 300); }, 3000);
         }
 
+        async function changeYear(delta) {
+            currentYear += delta;
+            document.getElementById('currentYearDisplay').textContent = currentYear;
+            selectedMonths = [];
+            await fetchGoals();
+        }
+
+        // ============ 员工业绩目标功能 ============
+        // 模拟员工数据
+        const staffList = [
+            { id: 1, name: '张三' },
+            { id: 2, name: '李四' },
+            { id: 3, name: '王五' },
+            { id: 4, name: '赵六' },
+            { id: 5, name: '钱七' },
+            { id: 6, name: '孙八' },
+            { id: 7, name: '周九' },
+            { id: 8, name: '吴十' },
+            { id: 9, name: '郑十一' },
+            { id: 10, name: '王十二' }
+        ];
+
+        // 模拟员工目标数据
+        let staffGoals = {};
+
+        // 初始化员工目标数据
+        function initStaffGoals() {
+            staffGoals = {};
+            staffList.forEach(staff => {
+                staffGoals[staff.id] = {};
+                for (let month = 1; month <= 12; month++) {
+                    const basePerformance = 10000 + Math.floor(Math.random() * 10000);
+                    const baseCardConsume = 5000 + Math.floor(Math.random() * 5000);
+                    const baseCustomer = 15 + Math.floor(Math.random() * 15);
+                    const baseVisits = 80 + Math.floor(Math.random() * 40);
+                    
+                    const completionRate = 60 + Math.floor(Math.random() * 60);
+                    
+                    staffGoals[staff.id][month] = {
+                        performance: {
+                            goal: basePerformance,
+                            completed: Math.round(basePerformance * completionRate / 100)
+                        },
+                        cardConsume: {
+                            goal: baseCardConsume,
+                            completed: Math.round(baseCardConsume * (70 + Math.floor(Math.random() * 50)) / 100)
+                        },
+                        customer: {
+                            goal: baseCustomer,
+                            completed: Math.round(baseCustomer * (65 + Math.floor(Math.random() * 55)) / 100)
+                        },
+                        visits: {
+                            goal: baseVisits,
+                            completed: Math.round(baseVisits * (75 + Math.floor(Math.random() * 45)) / 100)
+                        }
+                    };
+                }
+            });
+        }
+
+        let currentStaffMonth = new Date().getMonth() + 1;
+        let currentStaffView = 'month'; // 'month' 或 'year'
+        let lastStaffMonth = currentStaffMonth;
+        let editingStaffId = null;
+
+        // 获取某员工全年汇总数据
+        function getYearAggregatedGoal(staffId, field) {
+            let goal = 0;
+            let completed = 0;
+            for (let month = 1; month <= 12; month++) {
+                const monthData = staffGoals[staffId]?.[month]?.[field];
+                if (monthData) {
+                    goal += monthData.goal || 0;
+                    completed += monthData.completed || 0;
+                }
+            }
+            return goal > 0 ? { goal, completed } : null;
+        }
+
+        // 渲染员工业绩目标页面
+        function renderStaffGoals() {
+            const staffGoalContent = document.getElementById('staffGoalContent');
+            if (!staffGoalContent) return;
+
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+
+            let html = `
+                <div class="staff-goal-container">
+                    <div class="staff-goal-header">
+                        <div class="staff-goal-title">${currentYear}年${currentStaffView === 'year' ? '全年' : months[currentStaffMonth - 1]} 员工业绩目标</div>
+                    </div>
+                    <div class="month-selector-wrapper">
+                        <div class="month-selector">
+                            ${months.map((monthName, index) => `
+                                <button class="month-btn ${currentStaffView === 'month' && index + 1 === currentStaffMonth ? 'active' : ''}" data-month="${index + 1}">${monthName}</button>
+                            `).join('')}
+                            <button class="month-btn ${currentStaffView === 'year' ? 'active' : ''}" data-view="year">全年</button>
+                        </div>
+                    </div>
+                    <div class="summary-bar">
+                        ${renderSummaryItem('业绩达标率', calculateSummaryRate('performance'))}
+                        ${renderSummaryItem('卡耗达标率', calculateSummaryRate('cardConsume'))}
+                        ${renderSummaryItem('拓客达标率', calculateSummaryRate('customer'))}
+                        ${renderSummaryItem('客次达标率', calculateSummaryRate('visits'))}
+                    </div>
+                    <div class="staff-goal-table-wrapper">
+                        <table class="staff-goal-table">
+                            <thead>
+                                <tr>
+                                    <th>员工姓名</th>
+                                    <th>业绩目标</th>
+                                    <th>卡耗目标</th>
+                                    <th>拓客目标</th>
+                                    <th>客次目标</th>
+                                    ${currentStaffView !== 'year' ? '<th>操作</th>' : ''}
+                                </tr>
+                            </thead>
+                            <tbody>
+            `;
+
+            staffList.forEach(staff => {
+                let goalData;
+                if (currentStaffView === 'year') {
+                    goalData = {
+                        performance: getYearAggregatedGoal(staff.id, 'performance'),
+                        cardConsume: getYearAggregatedGoal(staff.id, 'cardConsume'),
+                        customer: getYearAggregatedGoal(staff.id, 'customer'),
+                        visits: getYearAggregatedGoal(staff.id, 'visits')
+                    };
+                } else {
+                    goalData = staffGoals[staff.id]?.[currentStaffMonth];
+                }
+                
+                html += `
+                    <tr data-staff-id="${staff.id}">
+                        <td><span class="staff-name">${staff.name}</span></td>
+                        <td class="goal-cell">${renderGoalCell(goalData?.performance)}</td>
+                        <td class="goal-cell">${renderGoalCell(goalData?.cardConsume)}</td>
+                        <td class="goal-cell">${renderGoalCell(goalData?.customer, '人')}</td>
+                        <td class="goal-cell">${renderGoalCell(goalData?.visits, '次')}</td>
+                        ${currentStaffView !== 'year' ? `
+                        <td>
+                            <button class="edit-btn" onclick="openStaffGoalModal(${staff.id}, ${currentStaffMonth})">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                                编辑目标
+                            </button>
+                        </td>
+                        ` : ''}
+                    </tr>
+                `;
+            });
+
+            html += `
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            `;
+
+            staffGoalContent.innerHTML = html;
+
+            // 添加月份切换事件
+            document.querySelectorAll('.month-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    if (btn.dataset.view === 'year') {
+                        currentStaffView = 'year';
+                    } else {
+                        currentStaffView = 'month';
+                        currentStaffMonth = parseInt(btn.dataset.month);
+                    }
+                    renderStaffGoals();
+                });
+            });
+        }
+
+        // 渲染目标单元格
+        function renderGoalCell(goalData, unit = '元') {
+            if (!goalData) {
+                return '<div style="color: var(--neutral-400);">未设置</div>';
+            }
+            
+            const rate = Math.round((goalData.completed / goalData.goal) * 100);
+            const isAchieved = rate >= 100;
+            const displayRate = Math.min(rate, 100);
+            
+            return `
+                <div class="goal-value">
+                    <span class="label">目标:</span>${unit === '元' ? '¥' : ''}${formatNum(goalData.goal)}
+                </div>
+                <div class="goal-value">
+                    <span class="label">完成:</span>${unit === '元' ? '¥' : ''}${formatNum(goalData.completed)}
+                </div>
+                <div class="goal-progress-bar">
+                    <div class="goal-progress-fill ${isAchieved ? 'achieved' : 'not-achieved'}" style="width: ${displayRate}%"></div>
+                </div>
+                <div class="goal-rate">
+                    进度: ${rate}%
+                </div>
+            `;
+        }
+
+        // 计算汇总达标率
+        function calculateSummaryRate(goalType) {
+            let totalAchieved = 0;
+            let totalCount = 0;
+
+            staffList.forEach(staff => {
+                let goalData;
+                if (currentStaffView === 'year') {
+                    goalData = getYearAggregatedGoal(staff.id, goalType);
+                } else {
+                    goalData = staffGoals[staff.id]?.[currentStaffMonth]?.[goalType];
+                }
+                
+                if (goalData) {
+                    const rate = (goalData.completed / goalData.goal) * 100;
+                    if (rate >= 100) totalAchieved++;
+                    totalCount++;
+                }
+            });
+
+            return totalCount > 0 ? Math.round((totalAchieved / totalCount) * 100) : 0;
+        }
+
+        // 渲染汇总项
+        function renderSummaryItem(label, rate) {
+            const isAchieved = rate >= 100;
+            return `
+                <div class="summary-item">
+                    <span class="summary-label">${label}</span>
+                    <span class="summary-value ${isAchieved ? 'achieved' : 'not-achieved'}">${rate}%</span>
+                </div>
+            `;
+        }
+
+        // 打开员工目标编辑弹窗
+        function openStaffGoalModal(staffId, month) {
+            editingStaffId = staffId;
+            const staff = staffList.find(s => s.id === staffId);
+            const monthGoals = staffGoals[staffId]?.[month];
+
+            document.getElementById('staffModalStaffName').textContent = staff?.name || '未知员工';
+            document.getElementById('staffModalMonthInfo').textContent = `${currentYear}年${month}月`;
+
+            document.getElementById('staffGoalPerformance').value = monthGoals?.performance?.goal || '';
+            document.getElementById('staffGoalCardConsume').value = monthGoals?.cardConsume?.goal || '';
+            document.getElementById('staffGoalCustomer').value = monthGoals?.customer?.goal || '';
+            document.getElementById('staffGoalVisits').value = monthGoals?.visits?.goal || '';
+
+            document.getElementById('staffGoalModal').classList.add('show');
+        }
+
+        // 关闭员工目标编辑弹窗
+        function closeStaffGoalModal() {
+            document.getElementById('staffGoalModal').classList.remove('show');
+            editingStaffId = null;
+        }
+
+        // 保存员工目标
+        function saveStaffGoals() {
+            if (editingStaffId === null) return;
+
+            const performance = parseFloat(document.getElementById('staffGoalPerformance').value);
+            const cardConsume = parseFloat(document.getElementById('staffGoalCardConsume').value);
+            const customer = parseInt(document.getElementById('staffGoalCustomer').value);
+            const visits = parseInt(document.getElementById('staffGoalVisits').value);
+
+            if (isNaN(performance) || performance <= 0) {
+                showToast('请输入有效的业绩目标', 'error');
+                return;
+            }
+            if (isNaN(cardConsume) || cardConsume <= 0) {
+                showToast('请输入有效的卡耗目标', 'error');
+                return;
+            }
+            if (isNaN(customer) || customer <= 0) {
+                showToast('请输入有效的拓客目标', 'error');
+                return;
+            }
+            if (isNaN(visits) || visits <= 0) {
+                showToast('请输入有效的客次目标', 'error');
+                return;
+            }
+
+            if (!staffGoals[editingStaffId]) {
+                staffGoals[editingStaffId] = {};
+            }
+            if (!staffGoals[editingStaffId][currentStaffMonth]) {
+                staffGoals[editingStaffId][currentStaffMonth] = {
+                    performance: { completed: 0 },
+                    cardConsume: { completed: 0 },
+                    customer: { completed: 0 },
+                    visits: { completed: 0 }
+                };
+            }
+
+            staffGoals[editingStaffId][currentStaffMonth].performance.goal = performance;
+            staffGoals[editingStaffId][currentStaffMonth].cardConsume.goal = cardConsume;
+            staffGoals[editingStaffId][currentStaffMonth].customer.goal = customer;
+            staffGoals[editingStaffId][currentStaffMonth].visits.goal = visits;
+
+            closeStaffGoalModal();
+            renderStaffGoals();
+            showToast('目标保存成功', 'success');
+        }
+
+        // 修改TAB切换逻辑
         async function changeGoalType(typeIndex) {
             currentGoalTypeIndex = typeIndex;
             currentGoalTypeId = goalTypes[typeIndex]?.id;
             document.querySelectorAll('.tab-item').forEach((tab, i) => tab.classList.toggle('active', i === typeIndex));
             selectedMonths = [];
-            await fetchGoals();
-        }
 
-        async function changeYear(delta) {
-            const newYear = currentYear + delta;
-            if (newYear < MIN_YEAR || newYear > MAX_YEAR) return;
-            currentYear = newYear;
-            document.getElementById('currentYearDisplay').textContent = currentYear;
-            document.getElementById('prevYearBtn').disabled = currentYear <= MIN_YEAR;
-            document.getElementById('nextYearBtn').disabled = currentYear >= MAX_YEAR;
-            selectedMonths = [];
-            await fetchGoals();
+            const storeGoalContent = document.getElementById('storeGoalContent');
+            const staffGoalContent = document.getElementById('staffGoalContent');
+
+            // 判断是否是员工业绩目标TAB
+            const currentType = goalTypes[typeIndex];
+            if (currentType && currentType.type_name === '员工业绩目标') {
+                // 显示员工业绩目标页面
+                if (storeGoalContent) storeGoalContent.style.display = 'none';
+                if (staffGoalContent) staffGoalContent.style.display = 'grid';
+                if (!Object.keys(staffGoals).length) {
+                    initStaffGoals();
+                }
+                renderStaffGoals();
+            } else {
+                // 显示原有页面
+                if (storeGoalContent) storeGoalContent.style.display = 'grid';
+                if (staffGoalContent) staffGoalContent.style.display = 'none';
+                await fetchGoals();
+            }
         }
 
         // ============ 初始化 ============
         document.addEventListener('DOMContentLoaded', async () => {
             await loadGoalTypes();
 
-            // 同步年份显示并初始化按钮状态
+            // 同步年份显示
             document.getElementById('currentYearDisplay').textContent = currentYear;
-            document.getElementById('prevYearBtn').disabled = currentYear <= MIN_YEAR;
-            document.getElementById('nextYearBtn').disabled = currentYear >= MAX_YEAR;
+
+            // 确保门店目标内容区域显示，员工目标内容区域隐藏
+            const storeGoalContent = document.getElementById('storeGoalContent');
+            const staffGoalContent = document.getElementById('staffGoalContent');
+            if (storeGoalContent) storeGoalContent.style.display = 'grid';
+            if (staffGoalContent) staffGoalContent.style.display = 'none';
 
             if (currentGoalTypeId) await fetchGoals();
 
@@ -1175,10 +2463,10 @@
             document.getElementById('nextYearBtn').addEventListener('click', () => changeYear(1));
 
             document.getElementById('monthGrid').addEventListener('click', (e) => {
-                const card = e.target.closest('.month-card');
+                const card = e.target.closest('.store-month-card');
                 if (!card || card.classList.contains('disabled')) return;
                 const month = parseInt(card.dataset.month);
-                if (e.target.closest('.month-select-indicator')) {
+                if (e.target.closest('.store-month-select-indicator')) {
                     toggleMonthSelection(month);
                     card.classList.toggle('selected');
                 } else {
@@ -1191,6 +2479,11 @@
             document.getElementById('modalConfirmBtn').addEventListener('click', submitGoal);
             document.getElementById('batchClearBtn').addEventListener('click', batchClearGoals);
             document.getElementById('goalAmountInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitGoal(); });
+
+            // 员工目标编辑弹窗事件
+            document.getElementById('staffModalCloseBtn').addEventListener('click', closeStaffGoalModal);
+            document.getElementById('staffModalCancelBtn').addEventListener('click', closeStaffGoalModal);
+            document.getElementById('staffModalConfirmBtn').addEventListener('click', saveStaffGoals);
         });
     </script>
 </body>
