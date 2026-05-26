@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>上传资料</title>
+    <style>
+        :root {
+            --primary: #E8A0B4;
+            --primary-dark: #D4879B;
+            --primary-light: #F5D5DE;
+            --primary-bg: #FFF5F7;
+            --text-primary: #333333;
+            --text-secondary: #666666;
+            --text-muted: #999999;
+            --bg-page: #FAFAFA;
+            --bg-white: #FFFFFF;
+            --border-color: #EEEEEE;
+            --success: #52C41A;
+            --error: #FF4D4F;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-primary);
+            min-height: 100vh;
+        }
+
+        /* 页面容器 */
+        .page-container {
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: var(--bg-white);
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* 头部 */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            background: var(--bg-white);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .back-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-page);
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .back-btn:hover {
+            background: var(--primary-light);
+        }
+
+        .back-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--text-primary);
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* 主要内容区域 - PC端左右分栏 */
+        .main-content {
+            flex: 1;
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        /* 资料类型选择器 */
+        .type-selector {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .type-selector-label {
+            font-size: 15px;
+            color: var(--text-secondary);
+            margin-bottom: 16px;
+            display: block;
+            font-weight: 500;
+        }
+
+        .type-custom-row {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .type-custom-helper {
+            font-size: 13px;
+            color: var(--text-muted);
+            margin: -4px 0 16px;
+        }
+
+        .type-custom-limit {
+            display: none;
+            padding: 12px 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            background: var(--bg-page);
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+
+        .type-custom-input-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 0;
+        }
+
+        .type-custom-input {
+            width: 100%;
+            height: 44px;
+            padding: 0 16px 0 16px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 15px;
+            background: var(--bg-white);
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .type-custom-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px var(--primary-bg);
+        }
+
+        .type-custom-clear {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 18px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .type-custom-clear:hover {
+            background: rgba(0, 0, 0, 0.12);
+        }
+
+        .type-custom-input-wrap.has-value .type-custom-clear {
+            display: flex;
+        }
+
+        .type-custom-add {
+            height: 44px;
+            padding: 0 24px;
+            border-radius: 12px;
+            border: none;
+            background: var(--primary);
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .type-custom-add:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .type-custom-add:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .type-custom-add:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .type-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .type-option {
+            padding: 10px 20px;
+            font-size: 15px;
+            color: var(--text-primary);
+            background: var(--bg-page);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all 0.2s;
+            flex-shrink: 0;
+            white-space: nowrap;
+        }
+
+        .type-option:hover {
+            border-color: var(--primary);
+            background: var(--primary-bg);
+        }
+
+        .type-option.selected {
+            color: #FFFFFF;
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        /* 上传区域 */
+        .upload-section {
+            background: var(--bg-white);
+            padding: 24px;
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .upload-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+
+        .upload-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .upload-count {
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        /* 已上传列表 */
+        .uploaded-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 16px;
+        }
+
+        .uploaded-card {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .uploaded-item {
+            aspect-ratio: 1;
+            border-radius: 12px;
+            overflow: hidden;
+            position: relative;
+            background: var(--bg-page);
+        }
+
+        .uploaded-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .uploaded-item .delete-btn {
+            position: absolute;
+            top: 6px;
+            right: 6px;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: none;
+        }
+
+        .uploaded-item .delete-btn:hover {
+            background: rgba(0, 0, 0, 0.8);
+            transform: scale(1.1);
+        }
+
+        .uploaded-item .delete-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: #FFFFFF;
+        }
+
+        .uploaded-name-wrap {
+            position: relative;
+            width: 100%;
+            min-width: 0;
+        }
+
+        .uploaded-name-input {
+            width: 100%;
+            height: 36px;
+            padding: 0 36px 0 12px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            background: var(--bg-white);
+            font-size: 13px;
+            color: var(--text-primary);
+            transition: all 0.2s;
+        }
+
+        .uploaded-name-input:focus {
+            border-color: var(--primary);
+        }
+
+        .uploaded-name-clear {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            background: rgba(0, 0, 0, 0.06);
+            color: var(--text-secondary);
+            font-size: 16px;
+            line-height: 1;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        .uploaded-name-wrap.has-value .uploaded-name-clear {
+            display: flex;
+        }
+
+        /* 空状态 */
+        .empty-uploaded {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        .empty-uploaded svg {
+            width: 64px;
+            height: 64px;
+            fill: var(--text-muted);
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        /* 底部操作栏 */
+        .bottom-bar {
+            padding: 20px 24px;
+            background: var(--bg-white);
+            border-top: 1px solid var(--border-color);
+            position: sticky;
+            bottom: 0;
+            z-index: 100;
+        }
+
+        .bottom-buttons {
+            display: flex;
+            gap: 16px;
+            max-width: 1600px;
+            margin: 0 auto;
+        }
+
+        .bottom-btn {
+            flex: 1;
+            min-height: 52px;
+            padding: 14px 24px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .bottom-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+            flex-shrink: 0;
+        }
+
+        .bottom-btn.secondary {
+            background: var(--bg-page);
+            color: var(--text-primary);
+            border: 1px solid var(--border-color);
+        }
+
+        .bottom-btn.secondary:hover {
+            background: var(--border-color);
+        }
+
+        .bottom-btn.secondary:active {
+            transform: scale(0.98);
+        }
+
+        .bottom-btn.primary {
+            background: var(--primary);
+            color: #FFFFFF;
+        }
+
+        .bottom-btn.primary:hover:not(:disabled) {
+            background: var(--primary-dark);
+        }
+
+        .bottom-btn.primary:active:not(:disabled) {
+            transform: scale(0.98);
+        }
+
+        .bottom-btn.primary:disabled {
+            background: #E8E8E8;
+            color: #999999;
+            cursor: not-allowed;
+        }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 16px 32px;
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFFFFF;
+            border-radius: 12px;
+            font-size: 15px;
+            display: none;
+            z-index: 2000;
+        }
+
+        .toast.show {
+            display: block;
+            animation: fadeIn 0.2s;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* 隐藏的文件选择器 */
+        #cameraInput,
+        #galleryInput {
+            display: none;
+        }
+
+        /* ========================================
+           PC端响应式适配 - 1024px及以上
+           ======================================== */
+        @media screen and (min-width: 1024px) {
+            /* 主内容区分栏布局 */
+            .main-content {
+                flex-direction: row;
+                padding: 32px 32px;
+                gap: 16px;
+                align-items: flex-start;
+            }
+
+            /* 左侧边栏 - 资料类型选择器 */
+            .type-selector {
+                flex: 0 0 320px;
+                max-width: 320px;
+                position: sticky;
+                top: 100px;
+            }
+
+            /* 右侧主区域 - 上传区域 */
+            .upload-section {
+                flex: 1;
+                min-width: 0;
+            }
+
+            /* PC端上传网格优化 - 更大尺寸 */
+            .uploaded-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 20px;
+            }
+
+            /* PC端底部按钮最大宽度 */
+            .bottom-buttons {
+                max-width: none;
+            }
+
+            .bottom-btn {
+                max-width: 320px;
+            }
+        }
+
+        /* ========================================
+           超大屏适配 - 1440px及以上
+           ======================================== */
+        @media screen and (min-width: 1440px) {
+            .main-content {
+                padding: 40px 60px;
+                gap: 40px;
+            }
+
+            .type-selector {
+                flex: 0 0 360px;
+                max-width: 360px;
+                padding: 24px;
+            }
+
+            .upload-section {
+                padding: 28px;
+            }
+
+            .uploaded-grid {
+                grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+                gap: 24px;
+            }
+
+        }
+
+        /* ========================================
+           移动端响应式适配
+           ======================================== */
+        @media screen and (max-width: 768px) {
+            .header {
+                padding: 16px 20px;
+            }
+
+            .header-title {
+                font-size: 18px;
+            }
+
+            .back-btn {
+                width: 36px;
+                height: 36px;
+            }
+
+            .back-btn svg {
+                width: 18px;
+                height: 18px;
+            }
+
+            .main-content {
+                padding: 20px;
+                gap: 20px;
+            }
+
+            .type-selector,
+            .upload-section {
+                padding: 20px;
+                border-radius: 12px;
+            }
+
+            .type-option {
+                padding: 8px 16px;
+                font-size: 14px;
+            }
+
+            .uploaded-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 12px;
+            }
+
+            .bottom-bar {
+                padding: 16px 20px;
+            }
+
+            .bottom-buttons {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+
+            .bottom-btn {
+                min-height: 48px;
+                padding: 12px 24px;
+                font-size: 15px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            .header {
+                padding: 14px 16px;
+            }
+
+            .main-content {
+                padding: 16px;
+                gap: 16px;
+            }
+
+            .type-selector,
+            .upload-section {
+                padding: 16px;
+            }
+
+            .type-custom-row {
+                flex-direction: column;
+            }
+
+            .type-custom-input-wrap,
+            .type-custom-add {
+                width: 100%;
+            }
+
+            .type-option {
+                padding: 7px 14px;
+                font-size: 13px;
+            }
+
+            .uploaded-grid {
+                grid-template-columns: repeat(3, 1fr);
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <!-- 头部 -->
+        <header class="header">
+            <div class="header-left">
+                <button class="back-btn" onclick="goBack()">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z" />
+                    </svg>
+                </button>
+                <h1 class="header-title">上传资料</h1>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 左侧 - 资料类型选择器 -->
+            <section class="type-selector">
+                <div class="type-selector-label">资料类型</div>
+                <div class="type-custom-row" id="customTypeRow">
+                    <div class="type-custom-input-wrap" id="customTypeInputWrap">
+                        <input class="type-custom-input" id="customTypeInput" type="text" inputmode="text" maxlength="20" placeholder="添加自定义标签">
+                        <button class="type-custom-clear" id="customTypeClear" type="button" aria-label="清空">×</button>
+                    </div>
+                    <button class="type-custom-add" id="customTypeAddBtn" type="button" disabled>添加</button>
+                </div>
+                <div class="type-custom-helper" id="customTypeHelper">最多可自定义15个标签</div>
+                <div class="type-custom-limit" id="customTypeLimitTip">您已定义15个自定义标签，无法添加新标签</div>
+                <div class="type-options" id="typeOptions"></div>
+            </section>
+
+            <!-- 右侧 - 上传区域 -->
+            <section class="upload-section">
+                <div class="upload-header">
+                    <span class="upload-title">已选择文件</span>
+                    <span class="upload-count" id="uploadedCount">0/12</span>
+                </div>
+
+                <div class="uploaded-section" id="uploadedSection" style="display: none;">
+                    <div class="uploaded-grid" id="uploadedGrid"></div>
+                </div>
+
+                <div class="empty-uploaded" id="emptyUploaded">
+                    <p>请拍照上传或打开相册选择图片</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- 底部操作栏 -->
+        <footer class="bottom-bar">
+            <div class="bottom-buttons">
+                <button class="bottom-btn primary" onclick="triggerCamera()">
+                    <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                            </svg>
+                    拍照上传
+                </button>
+                <button class="bottom-btn primary" onclick="triggerGallery()">
+                    <svg viewBox="0 0 24 24">
+                                <path
+                                    d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 2v3h-2.5V6h-1v3H15V6h-1v3H12.5V6h-1v3H10V6H8zm0 12H4v-1h16v1zm0-3H4v-1h16v1zm0-3H4V9h16v1zm0-3H4V6h16v1z" />
+                            </svg>
+                    相册选择
+                </button>
+                <button class="bottom-btn primary" id="submitBtn" disabled onclick="submitUpload()">确认上传</button>
+                <button class="bottom-btn secondary" onclick="goBack()">取消</button>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+
+    <!-- 隐藏的文件选择器 -->
+    <input type="file" id="cameraInput" accept="image/*" capture="environment" multiple>
+    <input type="file" id="galleryInput" accept="image/jpeg,image/png,image/jpg" multiple>
+
+    <script>
+        // 已选择文件列表
+        let uploadedFiles = [];
+        const maxFiles = 12;
+        const imageExtensions = ['jpg', 'jpeg', 'png'];
+
+        // 当前选中的资料类型
+        let selectedRecordType = 'daily';
+        let selectedRecordTypeLabel = '每日经营';
+        const CUSTOM_TYPES_MAX = 15;
+        const CUSTOM_TYPES_STORAGE_KEY = 'daily_upload_custom_types_v2';
+        const recordTypeMap = {
+            'daily': '每日经营',
+            'customer': '客户资料',
+            'appointment': '预约表',
+            'kpi': '员工月度KPI',
+            'income': '收入及消费分析',
+            'product': '品项经营分析',
+            'financial': '财务支出',
+            'other': '其他'
+        };
+
+        const systemTypes = Object.keys(recordTypeMap).map(k => ({ key: k, label: recordTypeMap[k] }));
+        let customTypes = [];
+
+        // 选择资料类型
+        function selectRecordType(el) {
+            document.querySelectorAll('#typeOptions .type-option').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+            selectedRecordType = el.dataset.type;
+            selectedRecordTypeLabel = el.getAttribute('data-label') || el.textContent.trim() || (recordTypeMap[selectedRecordType] || '');
+        }
+
+        function escapeHtml(str) {
+            return String(str || '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function escapeHtmlAttr(str) {
+            return escapeHtml(str).replace(/\n/g, ' ');
+        }
+
+        function sanitizeCustomTypeLabel(v) {
+            let s = String(v || '');
+            s = s.replace(/[\u0000-\u001f]/g, '');
+            s = s.replace(/[\\\/:*?"<>|]/g, '');
+            s = s.replace(/\s+/g, ' ').trim();
+            if (s.length > 20) s = s.slice(0, 20);
+            return s;
+        }
+
+        function normalizeTypeKeyForCompare(v) {
+            return String(v || '').trim().toLowerCase();
+        }
+
+        function loadCustomTypes() {
+            try {
+                const raw = localStorage.getItem(CUSTOM_TYPES_STORAGE_KEY) || '[]';
+                const arr = JSON.parse(raw);
+                if (!Array.isArray(arr)) return [];
+                return arr.map(x => sanitizeCustomTypeLabel(x)).filter(Boolean);
+            } catch {
+                return [];
+            }
+        }
+
+        function saveCustomTypes() {
+            localStorage.setItem(CUSTOM_TYPES_STORAGE_KEY, JSON.stringify(customTypes.slice()));
+        }
+
+        function updateCustomTypeLimitUi() {
+            const row = document.getElementById('customTypeRow');
+            const helper = document.getElementById('customTypeHelper');
+            const limitTip = document.getElementById('customTypeLimitTip');
+            const reached = customTypes.length >= CUSTOM_TYPES_MAX;
+
+            if (row) row.style.display = reached ? 'none' : 'flex';
+            if (helper) helper.style.display = reached ? 'none' : 'block';
+            if (limitTip) limitTip.style.display = reached ? 'block' : 'none';
+        }
+
+        function renderTypeOptions() {
+            const wrap = document.getElementById('typeOptions');
+            if (!wrap) return;
+
+            const currentKey = String(selectedRecordType || 'daily');
+            const pieces = [];
+
+            systemTypes.forEach(t => {
+                const selected = currentKey === t.key ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(t.key)}" data-label="${escapeHtmlAttr(t.label)}" onclick="selectRecordType(this)">${escapeHtml(t.label)}</div>`);
+            });
+
+            customTypes.forEach(label => {
+                const typeKey = `custom:${label}`;
+                const selected = currentKey === typeKey ? 'selected' : '';
+                pieces.push(`<div class="type-option ${selected}" data-type="${escapeHtmlAttr(typeKey)}" data-label="${escapeHtmlAttr(label)}" onclick="selectRecordType(this)">${escapeHtml(label)}</div>`);
+            });
+
+            wrap.innerHTML = pieces.join('');
+
+            const match = Array.from(wrap.querySelectorAll('.type-option')).find(x => String(x.getAttribute('data-type') || '') === currentKey) || null;
+            if (match) {
+                selectedRecordTypeLabel = match.getAttribute('data-label') || match.textContent.trim() || selectedRecordTypeLabel;
+            } else {
+                const fallback = wrap.querySelector('.type-option[data-type="daily"]');
+                if (fallback) {
+                    fallback.classList.add('selected');
+                    selectedRecordType = 'daily';
+                    selectedRecordTypeLabel = fallback.getAttribute('data-label') || fallback.textContent.trim() || '每日经营';
+                }
+            }
+
+            updateCustomTypeLimitUi();
+        }
+
+        // 返回
+        function goBack() {
+            if (uploadedFiles.length > 0) {
+                if (confirm('您有未上传的文件，确定要离开吗？')) {
+                    window.location.href = 'pad&pc-records-mgmt.html';
+                }
+            } else {
+                window.location.href = 'pad&pc-records-mgmt.html';
+            }
+        }
+
+        // 触发拍照
+        function triggerCamera() {
+            document.getElementById('cameraInput').click();
+        }
+
+        // 触发相册选择
+        function triggerGallery() {
+            document.getElementById('galleryInput').click();
+        }
+
+        // 处理拍照选择
+        document.getElementById('cameraInput').addEventListener('change', handleFiles);
+
+        // 处理相册选择
+        document.getElementById('galleryInput').addEventListener('change', handleFiles);
+
+        // 处理选择的文件
+        function handleFiles(e) {
+            const files = e.target.files;
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+
+                if (uploadedFiles.length >= maxFiles) {
+                    showToast(`最多上传${maxFiles}个文件`);
+                    break;
+                }
+
+                const extension = file.name.split('.').pop().toLowerCase();
+                if (!imageExtensions.includes(extension)) {
+                    showToast(`${file.name} 格式不支持`);
+                    continue;
+                }
+
+                const isDuplicate = uploadedFiles.some(f => f.name === file.name && f.size === file.size);
+                if (isDuplicate) {
+                    continue;
+                }
+
+                uploadedFiles.push({
+                    id: Date.now() + i,
+                    name: file.name,
+                    customName: '',
+                    file: file,
+                    thumb: URL.createObjectURL(file),
+                    status: 'success',
+                    size: file.size
+                });
+            }
+
+            renderUploadedList();
+            updateSubmitBtn();
+
+            // 清空input以便重复选择同一文件
+            e.target.value = '';
+        }
+
+        // 渲染已选择列表
+        function renderUploadedList() {
+            const section = document.getElementById('uploadedSection');
+            const grid = document.getElementById('uploadedGrid');
+            const count = document.getElementById('uploadedCount');
+            const empty = document.getElementById('emptyUploaded');
+
+            if (uploadedFiles.length === 0) {
+                section.style.display = 'none';
+                empty.style.display = 'block';
+                return;
+            }
+
+            section.style.display = 'block';
+            empty.style.display = 'none';
+            count.textContent = `${uploadedFiles.length}/${maxFiles}`;
+
+            grid.innerHTML = uploadedFiles.map(item => {
+                const safeName = escapeHtml(String(item.name || ''));
+                const val = String(item.customName || '');
+                const has = !!val.trim();
+                return `
+                    <div class="uploaded-card">
+                        <div class="uploaded-item">
+                            <img src="${item.thumb}" alt="${safeName}">
+                            <button class="delete-btn" onclick="deleteFile(${item.id})">
+                                <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+                            </button>
+                        </div>
+                        <div class="uploaded-name-wrap ${has ? 'has-value' : ''}">
+                            <input class="uploaded-name-input" data-id="${item.id}" type="text" inputmode="text" maxlength="50" placeholder="图片命名（选填）" value="${escapeHtmlAttr(val)}">
+                            <button class="uploaded-name-clear" type="button" data-action="clear-name" data-id="${item.id}" aria-label="清空">×</button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // 删除文件
+        function deleteFile(id) {
+            event.stopPropagation();
+            uploadedFiles = uploadedFiles.filter(f => f.id !== id);
+            renderUploadedList();
+            updateSubmitBtn();
+        }
+
+        function sanitizeCustomName(v) {
+            let s = String(v || '');
+            s = s.replace(/[\u0000-\u001f]/g, '');
+            s = s.replace(/[\\\/:*?"<>|]/g, '');
+            if (s.length > 50) s = s.slice(0, 50);
+            return s;
+        }
+
+        document.getElementById('uploadedGrid')?.addEventListener('input', function (e) {
+            const el = e.target;
+            if (!(el instanceof HTMLInputElement)) return;
+            if (!el.classList.contains('uploaded-name-input')) return;
+            const id = parseInt(String(el.getAttribute('data-id') || '0'), 10);
+            if (!id) return;
+            const sanitized = sanitizeCustomName(el.value);
+            if (sanitized !== el.value) el.value = sanitized;
+            const item = uploadedFiles.find(x => x.id === id);
+            if (item) item.customName = sanitized;
+            const wrap = el.closest('.uploaded-name-wrap');
+            if (wrap) wrap.classList.toggle('has-value', !!sanitized.trim());
+        });
+
+        document.getElementById('uploadedGrid')?.addEventListener('click', function (e) {
+            const btn = e.target.closest('[data-action="clear-name"]');
+            if (!(btn instanceof Element)) return;
+            const id = parseInt(String(btn.getAttribute('data-id') || '0'), 10);
+            if (!id) return;
+            const item = uploadedFiles.find(x => x.id === id);
+            if (item) item.customName = '';
+            const wrap = btn.closest('.uploaded-name-wrap');
+            const input = wrap?.querySelector('.uploaded-name-input');
+            if (input instanceof HTMLInputElement) input.value = '';
+            if (wrap) wrap.classList.remove('has-value');
+        });
+
+        // 更新提交按钮状态
+        function updateSubmitBtn() {
+            const btn = document.getElementById('submitBtn');
+            const hasFiles = uploadedFiles.length > 0;
+            btn.disabled = !hasFiles;
+        }
+
+        // 提交上传
+        function submitUpload() {
+            if (uploadedFiles.length === 0) {
+                showToast('请先选择文件');
+                return;
+            }
+
+            showToast('正在上传...');
+
+            setTimeout(() => {
+                showToast('上传成功');
+                uploadedFiles = [];
+                renderUploadedList();
+                updateSubmitBtn();
+                setTimeout(() => {
+                    window.location.href = 'pad&pc-records-mgmt.html';
+                }, 1000);
+            }, 1500);
+        }
+
+        // 显示提示
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function () {
+            customTypes = loadCustomTypes();
+            const input = document.getElementById('customTypeInput');
+            const addBtn = document.getElementById('customTypeAddBtn');
+            const wrap = document.getElementById('customTypeInputWrap');
+            const clearBtn = document.getElementById('customTypeClear');
+
+            function syncCustomTypeInputUi() {
+                const v = sanitizeCustomTypeLabel(input?.value || '');
+                const has = !!v;
+                if (wrap) wrap.classList.toggle('has-value', has);
+                if (addBtn) addBtn.disabled = !has;
+            }
+
+            function tryAddCustomType() {
+                if (!input) return;
+                if (customTypes.length >= CUSTOM_TYPES_MAX) {
+                    showToast('最多可自定义15个标签');
+                    updateCustomTypeLimitUi();
+                    return;
+                }
+                const raw = sanitizeCustomTypeLabel(input.value);
+                if (!raw) return;
+
+                const normalized = normalizeTypeKeyForCompare(raw);
+                const systemDup = systemTypes.some(t => normalizeTypeKeyForCompare(t.label) === normalized);
+                const customDup = customTypes.some(t => normalizeTypeKeyForCompare(t) === normalized);
+                if (systemDup || customDup) {
+                    showToast('标签已存在');
+                    return;
+                }
+
+                customTypes.push(raw);
+                saveCustomTypes();
+                updateCustomTypeLimitUi();
+                input.value = '';
+                syncCustomTypeInputUi();
+
+                selectedRecordType = `custom:${raw}`;
+                selectedRecordTypeLabel = raw;
+                renderTypeOptions();
+            }
+
+            input?.addEventListener('input', function () {
+                const sanitized = sanitizeCustomTypeLabel(this.value);
+                if (sanitized !== this.value) this.value = sanitized;
+                syncCustomTypeInputUi();
+            });
+            input?.addEventListener('keydown', function (e) {
+                if (e.key !== 'Enter') return;
+                e.preventDefault();
+                tryAddCustomType();
+            });
+            addBtn?.addEventListener('click', tryAddCustomType);
+            clearBtn?.addEventListener('click', function () {
+                if (!input) return;
+                input.value = '';
+                syncCustomTypeInputUi();
+                input.focus();
+            });
+
+            syncCustomTypeInputUi();
+            renderTypeOptions();
+        });
+    </script>
+</body>
+</html>

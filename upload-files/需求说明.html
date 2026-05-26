@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>upload-files 需求说明</title>
+  <style>
+    :root {
+      --bg: #fafbfc;
+      --card-bg: #ffffff;
+      --text: #1a1a2e;
+      --text-secondary: #4a5568;
+      --border: #e2e8f0;
+      --accent: #3182ce;
+      --accent-light: #ebf4ff;
+      --tag-bg: #edf2f7;
+      --code-bg: #f7fafc;
+      --radius: 10px;
+      --shadow: 0 1px 3px rgba(0,0,0,0.06), 0 1px 2px rgba(0,0,0,0.04);
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.75;
+      padding: 48px 24px;
+      font-size: 15px;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+    }
+
+    /* 顶部标题 */
+    h1 {
+      font-size: 28px;
+      font-weight: 700;
+      color: #1a202c;
+      text-align: center;
+      margin-bottom: 8px;
+      letter-spacing: -0.3px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: var(--text-secondary);
+      font-size: 14px;
+      margin-bottom: 36px;
+      padding: 8px 16px;
+      background: #fffbeb;
+      border: 1px solid #fde68a;
+      border-radius: 8px;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .subtitle strong { color: #92400e; }
+
+    /* 卡片 */
+    section {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 24px;
+    }
+
+    /* 标题层级 */
+    h2 {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1a202c;
+      margin-top: 4px;
+      margin-bottom: 16px;
+      padding-bottom: 10px;
+      border-bottom: 2px solid var(--accent-light);
+    }
+
+    h3 {
+      font-size: 17px;
+      font-weight: 650;
+      color: #2d3748;
+      margin: 24px 0 12px 0;
+    }
+
+    h4 {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--text-secondary);
+      margin: 20px 0 10px 0;
+    }
+
+    /* 段落 */
+    p { margin-bottom: 10px; }
+
+    /* 列表 */
+    ul, ol {
+      padding-left: 22px;
+      margin-bottom: 12px;
+    }
+
+    li {
+      margin-bottom: 6px;
+      color: var(--text-secondary);
+    }
+
+    li > strong {
+      color: var(--text);
+    }
+
+    /* 行内代码 */
+    code {
+      background: var(--code-bg);
+      border: 1px solid #e8ecf1;
+      border-radius: 4px;
+      padding: 2px 6px;
+      font-family: "SF Mono", "Fira Code", "Consolas", "Menlo", monospace;
+      font-size: 13.5px;
+      color: #c7254e;
+      white-space: nowrap;
+    }
+
+    /* 表格 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 16px 0;
+      font-size: 14px;
+    }
+
+    thead th {
+      background: var(--code-bg);
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid var(--border);
+      font-weight: 650;
+      color: var(--text);
+    }
+
+    tbody td {
+      padding: 9px 14px;
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+    }
+
+    tbody tr:nth-child(even) {
+      background: #fafbfc;
+    }
+
+    /* 高亮注意 */
+    .notice {
+      background: #fff8e1;
+      border-left: 4px solid #f0b90b;
+      padding: 14px 18px;
+      border-radius: 6px;
+      margin-bottom: 20px;
+      color: #5d4e37;
+      font-size: 14px;
+    }
+
+    .notice strong { color: #92400e; }
+
+    /* 标签样式的展示 */
+    .tag {
+      display: inline-block;
+      background: var(--tag-bg);
+      border-radius: 4px;
+      padding: 1px 7px;
+      font-size: 13px;
+      font-family: monospace;
+      color: #4a5568;
+    }
+
+    /* 分割线 */
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 24px 0;
+    }
+
+    /* 页脚 */
+    .footer {
+      text-align: center;
+      color: #a0aec0;
+      font-size: 13px;
+      margin-top: 32px;
+    }
+
+    /* 隐藏 markdown 中多余的标题 # 号 */
+    @media print {
+      body { background: #fff; padding: 0; }
+      section { box-shadow: none; break-inside: avoid; }
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 20px 12px; font-size: 14px; }
+      section { padding: 20px 16px; }
+      h1 { font-size: 22px; }
+      h2 { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <h1>upload-files 需求说明</h1>
+
+    <div class="notice">
+      <strong>注意：</strong>后端接口定义以第三方接口文档为准，本文档提及的接口名称仅供设计参考。
+    </div>
+
+    <!-- 1. 项目概述 -->
+    <section>
+      <h2>1. 项目概述</h2>
+      <p><code>upload-files</code> 目录承载"经营数据/资料上传与管理"的前端原型能力，包含两类入口形态：</p>
+      <ul>
+        <li><strong>App 端上传页：</strong>用于移动端快速选择图片、补充可选命名、选择资料类型并提交上传（通过后端 API 上传）。</li>
+        <li><strong>Pad&PC 端资料管理页：</strong>用于在桌面端对已上传图片进行筛选/排序/瀑布流加载浏览，并支持查看详情（含全屏大图）、编辑元信息、删除图片，以及跳转至独立上传页新增图片。</li>
+      </ul>
+      <p>两端共享的核心概念包括：资料类型体系、可持久化的自定义资料类型标签、图片可选命名规则、图片列表的展示与删除等。</p>
+    </section>
+
+    <!-- 2. 功能需求清单 -->
+    <section>
+      <h2>2. 功能需求清单</h2>
+
+      <h3>2.1 App 上传页（app-daily-upload-v2.html）</h3>
+      <ul>
+        <li>资料类型选择：系统类型 + 自定义标签（可新增、去重，通过 <code>GET/POST /api/custom-types</code> 持久化）。</li>
+        <li>资料类型标签收起/展开：当标签内容行数超过 3 行时默认收起，仅展示前 3 行；支持"查看更多/收起"切换。</li>
+        <li>自定义标签数量上限：最多可自定义 15 个；达到上限后隐藏输入区并提示"无法添加新标签"。</li>
+        <li>图片添加：拍照上传、相册选择（多选）。</li>
+        <li>图片列表：缩略图、删除按钮、可选"图片命名"输入。</li>
+        <li>上传提交：校验后调用 <code>POST /api/files/upload</code> + <code>POST /api/records</code>，展示 toast 状态并在成功后清空待上传列表。</li>
+        <li>离开确认：存在未上传图片时返回会二次确认。</li>
+      </ul>
+
+      <h3>2.2 Pad&PC 管理页（pad&pc-daily-records.html）</h3>
+      <ul>
+        <li><strong>检索筛选：</strong>
+          <ul>
+            <li>资料类型：全部/各系统类型/自定义标签（标签式筛选，动态渲染）。</li>
+            <li>资料类型标签收起/展开：默认最多展示 1 行，超出后显示"查看更多/收起"切换。</li>
+            <li>上传日期范围：开始/结束日期。</li>
+            <li>上传人：下拉选择。</li>
+            <li>图片名称：关键字匹配（同时支持大小写不敏感匹配）。</li>
+            <li>支持"搜索/重置"。</li>
+          </ul>
+        </li>
+        <li><strong>排序：</strong>
+          <ul>
+            <li>排序字段：按上传时间 / 按图片名称 / 按修改时间。</li>
+            <li>排序方向：正序/倒序切换。</li>
+          </ul>
+        </li>
+        <li><strong>图片平铺展示 + 瀑布流加载：</strong>
+          <ul>
+            <li>首屏加载 20 张图片，底部展示"加载更多"按钮。</li>
+            <li>支持滚动自动触发加载（按钮进入可视区域 100px 内时自动加载）。</li>
+            <li>加载状态：按钮文字展示"加载中..."→"加载更多"/"已加载全部"。</li>
+            <li>顶部显示"已加载 X / 共 Y 条"计数。</li>
+            <li>空数据时展示空态。</li>
+          </ul>
+        </li>
+        <li><strong>图片查看弹窗（详情弹窗）：</strong>
+          <ul>
+            <li>左侧大图预览，右侧元信息面板。</li>
+            <li>支持上一张/下一张切换（按钮 + 键盘左右方向键）。</li>
+            <li>支持全屏查看大图（使用浏览器 Fullscreen API，大图区内右下角圆形按钮）。</li>
+            <li>支持进入编辑态：修改资料类型（含自定义标签）、修改图片命名（选填）并保存。</li>
+            <li>支持删除当前图片（弹出删除确认弹窗）。</li>
+          </ul>
+        </li>
+        <li><strong>上传入口：</strong>
+          <ul>
+            <li>点击"上传"按钮跳转至独立上传页 <code>pad-pc-upload.html</code>（不再使用弹窗）。</li>
+            <li>上传完成后返回管理页，需手动刷新数据。</li>
+          </ul>
+        </li>
+        <li><strong>自定义标签管理：</strong>
+          <ul>
+            <li>入口位于页面操作条中，位于"上传"按钮左侧。</li>
+            <li>支持通过 <code>DELETE /api/custom-types/:id</code> 删除未被图片使用的自定义标签；已被图片使用的标签禁止删除。</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 3. 页面交互流程 -->
+    <section>
+      <h2>3. 页面交互流程</h2>
+
+      <h3>3.1 App 上传页流程</h3>
+      <ol>
+        <li>进入页面后默认选中资料类型"每日经营"。</li>
+        <li>用户可在"资料类型"区域：
+          <ul>
+            <li>点击系统类型标签切换；</li>
+            <li>输入自定义标签并点击"添加"，新增后自动选中；</li>
+            <li>自定义标签通过 <code>POST /api/custom-types</code> 持久化，页面加载时通过 <code>GET /api/custom-types</code> 获取。</li>
+            <li>自定义标签达到 15 个上限后：输入区隐藏，并提示"您已定义15个自定义标签，无法添加新标签"。</li>
+          </ul>
+        </li>
+        <li>资料类型标签行数超过 3 行时默认收起，点击"查看更多/收起"切换显示全部/仅前三行。</li>
+        <li>页面滚动：资料类型标签区域随页面正常滚动，不再吸顶固定。</li>
+        <li>用户通过"拍照上传 / 相册选择"添加图片（多选）：
+          <ul>
+            <li>超过上限或格式不支持会 toast 提示；</li>
+            <li>同名同大小文件视为重复，会被静默去重；</li>
+            <li>每张图片生成缩略图并展示在"已上传"区域。</li>
+          </ul>
+        </li>
+        <li>用户可为每张图片输入"图片命名（选填）"，也可点击清空按钮一键清空该图片的命名。</li>
+        <li>点击"确认上传"：
+          <ul>
+            <li>若无图片，提示"请先选择文件"；</li>
+            <li>否则先逐张调用 <code>POST /api/files/upload</code> 上传图片，再调用 <code>POST /api/records</code> 提交记录，成功后 toast "上传成功"并清空待上传列表。</li>
+          </ul>
+        </li>
+        <li>点击返回：
+          <ul>
+            <li>若存在待上传图片，会弹出浏览器 confirm 二次确认。</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h3>3.2 Pad&PC 管理页流程</h3>
+
+      <h4>3.2.1 筛选/排序/瀑布流浏览</h4>
+      <ol>
+        <li>页面加载后调用 <code>GET /api/records</code> 获取图片列表并渲染。</li>
+        <li>资料类型筛选标签默认展示 1 行，若超出则显示"查看更多/收起"以展开或收起多行标签。</li>
+        <li>点击资料类型标签（包含自定义标签）触发筛选，与系统标签的交互逻辑一致。</li>
+        <li>用户设置筛选条件后点击"搜索"，会刷新列表并 toast "搜索完成"。</li>
+        <li>点击"重置"恢复默认条件并刷新列表，toast "已重置筛选条件"。</li>
+        <li>修改排序字段或排序方向，会重置加载进度并刷新列表。</li>
+        <li>图片平铺展示采用瀑布流加载：
+          <ul>
+            <li>首屏默认加载 20 张图片。</li>
+            <li>底部显示"加载更多"按钮，点击后追加加载下 20 张。</li>
+            <li>页面滚动时，若"加载更多"按钮进入可视区域 100px 内且未在加载中，自动触发加载。</li>
+            <li>加载中按钮显示"加载中..."（禁用交互），加载完毕显示"加载更多"或"已加载全部"。</li>
+            <li>顶部状态栏显示"已加载 X / 共 Y 条"。</li>
+          </ul>
+        </li>
+        <li>切换筛选/排序条件时，重置加载进度（已加载数归零），重新渲染首屏。</li>
+      </ol>
+
+      <h4>3.2.2 查看图片详情 / 上一张下一张</h4>
+      <ol>
+        <li>点击任意缩略图进入详情弹窗。</li>
+        <li>弹窗左侧展示大图，右侧展示元信息：资料类型、自定义命名、上传时间、上传人、修改时间、修改人。</li>
+        <li>可通过：
+          <ul>
+            <li>"上一张/下一张"按钮切换；</li>
+            <li>键盘 ← / → 切换（当焦点不在输入框/文本域时）。</li>
+          </ul>
+        </li>
+        <li>关闭弹窗（点击遮罩或关闭按钮）后，清空当前详情定位。</li>
+      </ol>
+
+      <h4>3.2.3 详情内编辑与保存</h4>
+      <ol>
+        <li>点击"编辑"进入编辑态：
+          <ul>
+            <li>可修改资料类型：系统类型 + 自定义标签（同样支持新增/去重，通过 <code>GET/POST /api/custom-types</code> 管理）。</li>
+            <li>可修改图片命名（选填）。</li>
+          </ul>
+        </li>
+        <li>点击"保存"：
+          <ul>
+            <li>调用 <code>PATCH /api/records/:id/files/:idx</code> 将 <code>type/typeName/customName</code> 写入后端；</li>
+            <li><code>modifiedAt</code> / <code>modifiedBy</code> 由后端自动更新；</li>
+            <li>刷新右侧元信息展示；</li>
+            <li>刷新图片平铺列表（名称、类型筛选等即时生效）；</li>
+            <li>toast "保存成功"。</li>
+          </ul>
+        </li>
+        <li>点击"取消"退出编辑态，不写回。</li>
+      </ol>
+
+      <h4>3.2.4 删除图片</h4>
+      <ol>
+        <li>在详情弹窗点击"删除"，弹出删除确认弹窗。</li>
+        <li>点击确认后调用 <code>DELETE /api/records/:id/files/:idx</code> 删除图片：
+          <ul>
+            <li>若 <code>record_deleted=true</code>，整个记录被移除；</li>
+            <li>刷新列表并 toast "删除成功"。</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h4>3.2.5 跳转上传页（Pad&PC）</h4>
+      <ol>
+        <li>点击操作条中"上传"按钮，跳转至 <code>pad-pc-upload.html</code>。</li>
+        <li>上传页面为独立的全功能上传页（详见 3.1 App 上传页流程），支持：
+          <ul>
+            <li>资料类型选择（系统类型 + 自定义标签）；</li>
+            <li>拍照上传 / 相册选择（多选）；</li>
+            <li>图片命名（选填）；</li>
+            <li>提交上传（调用后端 API）。</li>
+          </ul>
+        </li>
+        <li>上传完成后用户返回管理页，需刷新列表以获取最新数据。</li>
+      </ol>
+
+      <h4>3.2.6 自定义标签管理（Pad&PC）</h4>
+      <ol>
+        <li>点击操作条中"自定义标签管理"打开管理弹窗。</li>
+        <li>管理弹窗展示：自定义标签名称；已关联图片数量（用于判断是否可删除）。</li>
+        <li>删除：
+          <ul>
+            <li>点击"删除"触发二次确认；</li>
+            <li>若该标签已被图片使用则禁止删除（按钮禁用且提示）；</li>
+            <li>删除成功后调用 <code>DELETE /api/custom-types/:id</code>，并在自定义标签数量低于 15 个时自动恢复输入区可用。</li>
+          </ul>
+        </li>
+      </ol>
+
+      <h4>3.2.7 全屏查看大图</h4>
+      <ol>
+        <li>在详情弹窗左侧大图区域右下角，显示一个圆形全屏按钮（<code>detail-fullscreen-btn</code>）。</li>
+        <li>点击全屏按钮调用浏览器 Fullscreen API 使大图元素进入全屏模式。</li>
+        <li>再次点击全屏按钮（或按 Esc 键）退出全屏。</li>
+        <li>关闭详情弹窗时自动退出全屏（若当前处于全屏状态）。</li>
+        <li>兼容性：支持 <code>requestFullscreen</code> / <code>webkitRequestFullscreen</code> / <code>mozRequestFullScreen</code> / <code>msRequestFullscreen</code> 等浏览器前缀。</li>
+      </ol>
+    </section>
+
+    <!-- 4. 输入输出规范 -->
+    <section>
+      <h2>4. 输入输出规范（字段/数据结构）</h2>
+
+      <h3>4.1 资料类型体系</h3>
+      <ul>
+        <li><strong>系统资料类型（两页一致）：</strong>
+          <table>
+            <thead>
+              <tr><th>Key</th><th>名称</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><code>daily</code></td><td>每日经营</td></tr>
+              <tr><td><code>customer</code></td><td>客户资料</td></tr>
+              <tr><td><code>appointment</code></td><td>预约表</td></tr>
+              <tr><td><code>kpi</code></td><td>员工月度KPI</td></tr>
+              <tr><td><code>income</code></td><td>收入及消费分析</td></tr>
+              <tr><td><code>product</code></td><td>品项经营分析</td></tr>
+              <tr><td><code>financial</code></td><td>财务支出</td></tr>
+              <tr><td><code>other</code></td><td>其他</td></tr>
+            </tbody>
+          </table>
+        </li>
+        <li><strong>自定义资料类型：</strong>
+          <ul>
+            <li>key 形态：<code>custom:${label}</code></li>
+            <li>label 最大长度：20</li>
+            <li>label 数量上限：15</li>
+            <li>label 过滤规则：
+              <ul>
+                <li>去除控制字符（U+0000 ~ U+001F）</li>
+                <li>去除非法字符：<code>\ / : * ? " &lt; &gt; |</code></li>
+                <li>连续空白归一化为单空格并 trim</li>
+              </ul>
+            </li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>4.2 自定义标签（后端 API 管理）</h3>
+      <table>
+        <thead>
+          <tr><th>操作</th><th>接口</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>获取列表</td><td><code>GET /api/custom-types</code></td><td>页面加载时调用，返回 <code>{ total, list: [{id, label}], max: 15 }</code></td></tr>
+          <tr><td>新增标签</td><td><code>POST /api/custom-types</code></td><td>请求 <code>{ label }</code>，返回 <code>{ id, label }</code></td></tr>
+          <tr><td>删除标签</td><td><code>DELETE /api/custom-types/:id</code></td><td>已被图片使用的标签禁止删除</td></tr>
+        </tbody>
+      </table>
+
+      <h3>4.3 App 上传页：待上传图片结构（前端内存态）</h3>
+      <ul>
+        <li><code>uploadedFiles[]</code> item 结构（用于渲染"已上传"网格）：
+          <ul>
+            <li><code>id</code>: number（<code>Date.now() + i</code>）</li>
+            <li><code>name</code>: string（原文件名）</li>
+            <li><code>customName</code>: string（用户输入的图片命名，选填）</li>
+            <li><code>file</code>: File</li>
+            <li><code>thumb</code>: string（<code>URL.createObjectURL(file)</code>）</li>
+            <li><code>status</code>: 'success' | 'error' | 'uploading'（当前实现默认 success）</li>
+            <li><code>size</code>: number（byte）</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>4.4 Pad&PC 管理页：记录与文件结构（后端 API 获取）</h3>
+      <p>核心接口：</p>
+      <table>
+        <thead>
+          <tr><th>操作</th><th>接口</th><th>说明</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>查询列表</td><td><code>GET /api/records</code></td><td>筛选+排序+瀑布流加载，返回图片级列表</td></tr>
+          <tr><td>图片详情</td><td><code>GET /api/records/:id/files/:idx</code></td><td>单张图片的大图及元信息</td></tr>
+          <tr><td>更新元数据</td><td><code>PATCH /api/records/:id/files/:idx</code></td><td>修改类型和命名</td></tr>
+          <tr><td>创建记录</td><td><code>POST /api/records</code></td><td>提交上传记录</td></tr>
+          <tr><td>编辑记录</td><td><code>PUT /api/records/:id</code></td><td>修改整条记录</td></tr>
+          <tr><td>删除图片</td><td><code>DELETE /api/records/:id/files/:idx</code></td><td>删除单张图片</td></tr>
+        </tbody>
+      </table>
+
+      <p>API 响应的图片条目关注字段（由 <code>GET /api/records</code> 返回）：</p>
+      <ul>
+        <li><code>record_id</code>: number（所属记录 ID）</li>
+        <li><code>file_index</code>: number（在记录内的文件序号）</li>
+        <li><code>thumb_url</code>: string（缩略图 URL）</li>
+        <li><code>display_name</code>: string（展示名，custom_name 或 filename 兜底）</li>
+        <li><code>custom_name</code>: string（自定义命名，选填）</li>
+        <li><code>type</code>: string（资料类型 key）</li>
+        <li><code>type_name</code>: string（资料类型展示名）</li>
+        <li><code>uploader</code>: string（上传人）</li>
+        <li><code>upload_time</code>: string（上传时间）</li>
+        <li><code>modified_at</code>: string（最后修改时间）</li>
+        <li><code>modified_by</code>: string（最后修改人）</li>
+      </ul>
+    </section>
+
+    <!-- 5. 业务规则与约束 -->
+    <section>
+      <h2>5. 业务规则与约束</h2>
+
+      <h3>5.1 图片选择与校验（两端共性）</h3>
+      <ul>
+        <li>数量上限：最多 12 张（超过提示并停止继续添加）。</li>
+        <li>支持格式：
+          <ul>
+            <li>App 上传页：通过扩展名校验 <code>jpg/jpeg/png</code>。</li>
+            <li>Pad&PC 管理页（独立上传页 <code>pad-pc-upload.html</code>）：通过扩展名校验 <code>jpg/jpeg/png</code>。</li>
+          </ul>
+        </li>
+        <li>去重规则：同名 + 同 size 的文件视为重复，重复项会被静默忽略。</li>
+      </ul>
+
+      <h3>5.2 图片命名（两端共性）</h3>
+      <ul>
+        <li>字段：<code>customName</code>（选填）。</li>
+        <li>最大长度：50。</li>
+        <li>过滤规则：
+          <ul>
+            <li>去除控制字符（U+0000 ~ U+001F）</li>
+            <li>去除非法字符：<code>\ / : * ? " &lt; &gt; |</code></li>
+          </ul>
+        </li>
+        <li>展示名策略（Pad&PC 管理页）：
+          <ul>
+            <li>优先展示 <code>customName</code>，为空则展示 <code>filename</code>。</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>5.3 Blob URL 生命周期</h3>
+      <ul>
+        <li>App 上传页 / Pad&PC 独立上传页（<code>pad-pc-upload.html</code>）：上传提交成功后清空待上传列表，blob URL 被 revoke。</li>
+        <li>Pad&PC 管理页删除图片时：若 thumb 为 blob URL，会 revoke。</li>
+      </ul>
+
+      <h3>5.4 详情弹窗导航规则（Pad&PC）</h3>
+      <ul>
+        <li>当前图片在"筛选 + 排序"的结果集中定位 index。</li>
+        <li>上一张/下一张按钮：
+          <ul>
+            <li>首张禁用"上一张"，末张禁用"下一张"。</li>
+          </ul>
+        </li>
+        <li>键盘左右方向键：
+          <ul>
+            <li>仅在详情弹窗开启且焦点不在输入框/文本域时生效。</li>
+          </ul>
+        </li>
+      </ul>
+
+      <h3>5.5 可用性与视觉设计要点（从实现抽取）</h3>
+      <ul>
+        <li><strong>App 上传页：</strong>
+          <ul>
+            <li><code>max-width: 430px</code>，强调移动端单列布局；</li>
+            <li>资料类型选择器随页面正常滚动（不吸顶）；</li>
+            <li>资料类型标签超过 3 行时默认收起，提供"查看更多/收起"入口；</li>
+            <li>自定义标签输入区下方提示"最多可自定义15个标签"，达到上限后输入区隐藏并展示占位提示；</li>
+            <li>底部固定操作区：拍照/相册按钮 + 确认上传按钮；</li>
+            <li>已上传区为 3 列网格展示（缩略图 + 删除）。</li>
+          </ul>
+        </li>
+        <li><strong>Pad&PC 管理页：</strong>
+          <ul>
+            <li>顶部筛选卡片（类型标签 + 多条件筛选）；</li>
+            <li>顶部类型标签支持自定义标签动态渲染，默认最多展示 1 行并提供"查看更多/收起"；</li>
+            <li>中部操作条（排序控制 + 上传/管理入口）；</li>
+            <li>操作条右侧包含"自定义标签管理"与"上传"按钮（管理在左、上传在右）；</li>
+            <li>图片平铺展示区（缩略图点击进入详情），采用瀑布流加载方式；</li>
+            <li>图片列表底部显示"加载更多"按钮，顶部显示"已加载 X / 共 Y 条"；</li>
+            <li>详情弹窗右侧采用"查看/编辑面板栈"切换，底部按钮区根据状态切换"编辑/删除"或"取消/保存"；</li>
+            <li>详情弹窗左侧大图区右下角有圆形全屏按钮，点击进入浏览器全屏模式；</li>
+            <li>二次确认弹窗（删除图片/删除自定义标签）需保证 z-index 在所有弹窗之上，避免被遮挡。</li>
+          </ul>
+        </li>
+      </ul>
+    </section>
+
+    <!-- 6. 测试用例 -->
+    <section>
+      <h2>6. 测试用例设计说明</h2>
+
+      <h3>6.1 App 上传页（app-daily-upload-v2.html）</h3>
+      <table>
+        <thead>
+          <tr><th>用例</th><th>操作</th><th>预期</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>A1</strong></td>
+            <td>新增自定义资料类型：输入自定义标签（含空格、非法字符、超长），点击添加</td>
+            <td>标签被 sanitize；重复标签提示"标签已存在"；新增后自动选中；刷新后仍存在（通过 <code>GET /api/custom-types</code> 获取）</td>
+          </tr>
+          <tr>
+            <td><strong>A2</strong></td>
+            <td>图片选择校验：一次选择超过 12 张；选择非 jpg/png 图片</td>
+            <td>超过上限提示"最多上传12个文件"；不支持格式提示"xxx 格式不支持"；重复文件不重复加入</td>
+          </tr>
+          <tr>
+            <td><strong>A3</strong></td>
+            <td>图片命名校验：输入超长 50、非法字符、控制字符</td>
+            <td>输入被实时 sanitize，长度被裁剪；清空按钮生效</td>
+          </tr>
+          <tr>
+            <td><strong>A4</strong></td>
+            <td>提交上传：无图点击确认；有图点击确认</td>
+            <td>无图提示；有图调用 <code>POST /api/files/upload</code> + <code>POST /api/records</code>，成功后列表清空</td>
+          </tr>
+          <tr>
+            <td><strong>A5</strong></td>
+            <td>返回确认：有待上传图片时点击返回</td>
+            <td>弹出二次确认</td>
+          </tr>
+          <tr>
+            <td><strong>A6</strong></td>
+            <td>资料类型标签收起/展开：构造资料类型标签为 2/3/4 行及以上，观察默认展示并点击"查看更多/收起"</td>
+            <td>&gt;3 行时默认只展示前 3 行，点击后可展开全部并可再次收起；&lt;=3 行不展示入口</td>
+          </tr>
+          <tr>
+            <td><strong>A7</strong></td>
+            <td>自定义标签数量上限（15）：连续新增自定义标签直到 15 个，再尝试新增第 16 个</td>
+            <td>达到 15 个时输入区隐藏并展示"无法添加新标签"；新增第 16 个被阻止并提示</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>6.2 Pad&PC 管理页（pad&pc-daily-records.html）</h3>
+      <table>
+        <thead>
+          <tr><th>用例</th><th>操作</th><th>预期</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>P1</strong></td>
+            <td>筛选与搜索：按类型筛选、设置日期范围、选择上传人、输入图片名称关键字，点击搜索</td>
+            <td>列表仅展示匹配图片，瀑布流计数更新，toast"搜索完成"</td>
+          </tr>
+          <tr>
+            <td><strong>P2</strong></td>
+            <td>排序与瀑布流加载：切换排序字段与方向；点击"加载更多"按钮；滚动触发自动加载</td>
+            <td>顺序变化符合规则；加载状态文字切换正确（加载中→加载更多/已加载全部）；"已加载 X / 共 Y 条"计数正确；切换筛选/排序后加载进度重置</td>
+          </tr>
+          <tr>
+            <td><strong>P3</strong></td>
+            <td>详情查看与键盘切换：点击缩略图打开详情；使用按钮/键盘左右切换</td>
+            <td>元信息随图片更新；首末禁用状态正确；输入框聚焦时键盘切换不触发</td>
+          </tr>
+          <tr>
+            <td><strong>P4</strong></td>
+            <td>详情编辑保存：进入编辑态，修改类型/命名并保存</td>
+            <td>右侧元信息更新；平铺列表名称/类型筛选结果同步变化；toast"保存成功"</td>
+          </tr>
+          <tr>
+            <td><strong>P5</strong></td>
+            <td>删除图片：详情内删除，确认</td>
+            <td>图片从列表移除；若 record 无图片则 record 被移除；toast"删除成功"</td>
+          </tr>
+          <tr>
+            <td><strong>P6</strong></td>
+            <td>跳转上传页添加图片：点击"上传"按钮跳转至 <code>pad-pc-upload.html</code>，选择图片、填写命名，提交上传后返回管理页</td>
+            <td>跳转正确打开独立上传页；上传页内数量/格式/去重校验生效；提交后调用 <code>POST /api/files/upload</code> + <code>POST /api/records</code>；返回管理页后刷新列表可看到新增图片</td>
+          </tr>
+          <tr>
+            <td><strong>P7</strong></td>
+            <td>顶部资料类型筛选（含自定义标签）+ 查看更多：创建多条自定义标签并在顶部筛选区点击自定义标签筛选；当标签超过 1 行时点击"查看更多/收起"</td>
+            <td>自定义标签与系统标签筛选行为一致；&gt;1 行时默认收起到 1 行并可展开/收起；筛选状态切换不影响原有功能</td>
+          </tr>
+          <tr>
+            <td><strong>P8</strong></td>
+            <td>自定义标签管理（禁删占用 + 删除未占用）：对已被图片使用的自定义标签尝试删除；对未被使用的自定义标签删除并确认</td>
+            <td>已使用标签删除按钮禁用且提示无法删除；未使用标签可删除（调用 <code>DELETE /api/custom-types/:id</code>），删除后标签数量 &lt;15 时输入区恢复可用</td>
+          </tr>
+          <tr>
+            <td><strong>P9</strong></td>
+            <td>全屏查看大图：打开详情弹窗，点击大图右下角全屏按钮；在全屏状态下按 Esc 或再次点击按钮退出</td>
+            <td>大图进入浏览器全屏模式；退出全屏后回到详情弹窗；关闭详情弹窗时若处于全屏则自动退出全屏</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <div class="footer">
+      更新时间：2026-05-26
+    </div>
+  </div>
+</body>
+</html>
