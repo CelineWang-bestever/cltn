@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>欠款详情 - 克丽缇娜</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --border-color: var(--border-primary, #E5E7EB);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-body {
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            height: 56px;
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            flex-shrink: 0;
+        }
+
+        .header-back {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+        .header-back:hover { background-color: var(--bg-secondary); }
+        .header-back svg { width: 20px; height: 20px; color: var(--text-secondary); }
+
+        .header-title {
+            flex: 1;
+            text-align: center;
+            font-size: 17px;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-right: 36px;
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+            max-width: 1000px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        @media (min-width: 900px) {
+            .main-content {
+                max-width: 1200px;
+                padding: 32px;
+            }
+        }
+
+        @media (min-width: 1200px) {
+            .main-content {
+                max-width: 1400px;
+                padding: 40px;
+            }
+        }
+
+        .debt-card {
+            background: #FFFFFF;
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+        }
+
+        .debt-overview {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .debt-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .debt-section.right {
+            align-items: flex-end;
+        }
+
+        .debt-label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+
+        .debt-amount-wrap {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+        }
+
+        .debt-amount {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .debt-repay-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #FFFFFF;
+            background: linear-gradient(135deg, var(--brand-primary) 0%, #D96A8A 100%);
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(232, 124, 154, 0.35);
+            transition: all 0.2s ease;
+        }
+
+        .debt-repay-link:hover {
+            opacity: 0.92;
+            transform: translateY(-1px);
+        }
+
+        .debt-divider {
+            width: 1px;
+            height: 60px;
+            background: var(--border-color);
+            margin: 0 32px;
+        }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .section-divider {
+            width: 4px;
+            height: 16px;
+            background: var(--brand-primary);
+            border-radius: 2px;
+        }
+
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .debt-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .debt-table thead tr {
+            background: var(--bg-secondary);
+        }
+
+        .debt-table th {
+            padding: 12px 16px;
+            text-align: left;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-muted);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .debt-table td {
+            padding: 16px;
+            font-size: 14px;
+            color: var(--text-secondary);
+            border-bottom: 1px solid #F3F4F6;
+        }
+
+        .debt-table tbody tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .debt-type {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 6px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .debt-type.debt {
+            background: var(--accent-error-light);
+            color: var(--accent-error);
+        }
+
+        .debt-type.repay {
+            background: var(--accent-success-light);
+            color: var(--accent-success);
+        }
+
+        .debt-order-no {
+            font-family: 'SF Mono', Monaco, monospace;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+
+        .debt-amount-cell {
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* 抽屉弹窗 */
+        .drawer-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s;
+        }
+
+        .drawer-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .drawer {
+            position: fixed;
+            top: 0;
+            right: -600px;
+            width: 600px;
+            max-width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            z-index: 1001;
+            display: flex;
+            flex-direction: column;
+            transition: right 0.3s;
+        }
+
+        .drawer.show {
+            right: 0;
+        }
+
+        .drawer-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .drawer-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background-color 0.2s;
+        }
+
+        .drawer-close:hover {
+            background: var(--bg-secondary);
+        }
+
+        .drawer-close svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .drawer-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .drawer-body {
+            flex: 1;
+            padding: 24px;
+            overflow-y: auto;
+        }
+
+        .drawer-footer {
+            display: flex;
+            gap: 12px;
+            padding: 20px 24px;
+            border-top: 1px solid var(--border-color);
+            flex-shrink: 0;
+        }
+
+        .drawer-footer .btn {
+            flex: 1;
+            height: 48px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .form-label .required {
+            color: var(--accent-error);
+            margin-right: 4px;
+        }
+
+        .form-input-wrap {
+            position: relative;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 50px 0 16px;
+            font-size: 16px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        .form-input:focus {
+            border-color: var(--brand-primary);
+        }
+
+        .form-input-suffix {
+            position: absolute;
+            right: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+
+        .form-textarea {
+            width: 100%;
+            padding: 12px 16px;
+            font-size: 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            resize: none;
+            transition: border-color 0.2s;
+            min-height: 100px;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--brand-primary);
+        }
+
+        .form-hint {
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .word-count {
+            text-align: right;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
+
+        .beautician-select {
+            width: 100%;
+            height: 48px;
+            padding: 0 16px;
+            font-size: 14px;
+            border: 1.5px solid var(--border-color);
+            border-radius: 10px;
+            outline: none;
+            background: #FFFFFF;
+            cursor: pointer;
+            transition: border-color 0.2s;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .beautician-select:hover {
+            border-color: var(--brand-primary);
+        }
+
+        .beautician-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .beautician-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 10px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+        }
+
+        .beautician-tag-remove {
+            cursor: pointer;
+            opacity: 0.6;
+        }
+
+        .beautician-tag-remove:hover { opacity: 1; }
+
+        /* Toast提示 */
+        .toast {
+            position: fixed;
+            bottom: 32px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: rgba(0, 0, 0, 0.8);
+            color: #FFFFFF;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.3s;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <div class="page-body">
+        <!-- 顶部导航栏 -->
+        <header class="header">
+            <div class="header-back" onclick="goBack()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 19l-7-7 7-7"/>
+                </svg>
+            </div>
+            <div class="header-title">欠款详情</div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 欠款概览卡片 -->
+            <div class="debt-card">
+                <div class="debt-overview">
+                    <div class="debt-section">
+                        <span class="debt-label">待还款（元）</span>
+                        <div class="debt-amount-wrap">
+                            <span class="debt-amount">2228.00</span>
+                            <span class="debt-repay-link" onclick="openDrawer()">去还款</span>
+                        </div>
+                    </div>
+                    <div class="debt-divider"></div>
+                    <div class="debt-section right">
+                        <span class="debt-label">已还款（元）</span>
+                        <span class="debt-amount">430.00</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 欠款明细表格 -->
+            <div class="debt-card">
+                <div class="section-header">
+                    <div class="section-divider"></div>
+                    <h2 class="section-title">欠款明细</h2>
+                </div>
+
+                <table class="debt-table">
+                    <thead>
+                        <tr>
+                            <th>交易类型</th>
+                            <th>关联订单号</th>
+                            <th>支付方式</th>
+                            <th>金额</th>
+                            <th>交易日期</th>
+                            <th>美容师</th>
+                            <th>备注</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><span class="debt-type debt">欠款</span></td>
+                            <td class="debt-order-no">2026041700050207326</td>
+                            <td>-</td>
+                            <td class="debt-amount-cell">¥300.00</td>
+                            <td>2026-03-15 14:30:22</td>
+                            <td>lisa</td>
+                            <td style="color: var(--text-muted);">关联订单填写的备注</td>
+                        </tr>
+                        <tr>
+                            <td><span class="debt-type repay">还款</span></td>
+                            <td class="debt-order-no">2026041700050207326</td>
+                            <td>微信支付</td>
+                            <td class="debt-amount-cell">-¥100.00</td>
+                            <td>2026-02-28 10:15:08</td>
+                            <td>amy</td>
+                            <td style="color: var(--text-muted);">还款时的备注</td>
+                        </tr>
+                        <tr>
+                            <td><span class="debt-type repay">还款</span></td>
+                            <td class="debt-order-no">2026041700050207326</td>
+                            <td>现金</td>
+                            <td class="debt-amount-cell">-¥50.00</td>
+                            <td>2026-02-18 10:15:08</td>
+                            <td>amy</td>
+                            <td style="color: var(--text-muted);">还款时的备注</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+
+    <!-- 抽屉弹窗遮罩 -->
+    <div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+
+    <!-- 还款抽屉弹窗 -->
+    <aside class="drawer" id="drawer">
+        <div class="drawer-header">
+            <div class="drawer-close" onclick="closeDrawer()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18M6 6l12 12"/>
+                </svg>
+            </div>
+            <h2 class="drawer-title">还款</h2>
+        </div>
+        <div class="drawer-body">
+            <div class="form-group">
+                <label class="form-label"><span class="required">*</span>还款金额</label>
+                <div class="form-input-wrap">
+                    <input type="number" class="form-input" id="repayAmount" placeholder="请输入还款金额" oninput="onAmountChange()">
+                    <span class="form-input-suffix">元</span>
+                </div>
+                <p class="form-hint">最高可还: ¥2,228.00</p>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><span class="required">*</span>还款日期</label>
+                <input type="datetime-local" class="form-input" id="repayDate" style="padding-right: 12px;">
+            </div>
+
+            <div class="form-group">
+                <label class="form-label"><span class="required">*</span>美容师</label>
+                <div class="beautician-select" onclick="toggleBeauticianDropdown()">
+                    <div class="beautician-tags">
+                        <span class="beautician-tag">
+                            roger
+                            <span class="beautician-tag-remove" onclick="removeBeautician(event)">×</span>
+                        </span>
+                    </div>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">备注</label>
+                <textarea class="form-textarea" id="repayRemark" rows="3" placeholder="请输入备注信息" maxlength="200" oninput="updateWordCount()"></textarea>
+                <div class="word-count"><span id="wordCount">0</span>/200</div>
+            </div>
+        </div>
+        <div class="drawer-footer">
+            <button class="btn btn-outline" onclick="closeDrawer()">取消</button>
+            <button class="btn btn-primary" onclick="submitRepay()">确定</button>
+        </div>
+    </aside>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        const MAX_REPAY_AMOUNT = 2228.00;
+
+        function getCurrentDateTime() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            return `${year}-${month}-${day}T${hours}:${minutes}`;
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        function openDrawer() {
+            const overlay = document.getElementById('drawerOverlay');
+            const drawer = document.getElementById('drawer');
+            const dateInput = document.getElementById('repayDate');
+
+            dateInput.value = getCurrentDateTime();
+            overlay.classList.add('show');
+            drawer.classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDrawer() {
+            const overlay = document.getElementById('drawerOverlay');
+            const drawer = document.getElementById('drawer');
+            overlay.classList.remove('show');
+            drawer.classList.remove('show');
+            document.body.style.overflow = '';
+
+            document.getElementById('repayAmount').value = '';
+            document.getElementById('repayRemark').value = '';
+            document.getElementById('wordCount').textContent = '0';
+        }
+
+        function onAmountChange() {
+            const value = document.getElementById('repayAmount').value;
+            if (value) {
+                const numValue = parseFloat(value);
+                if (numValue > MAX_REPAY_AMOUNT) {
+                    document.getElementById('repayAmount').value = MAX_REPAY_AMOUNT;
+                    showToast('还款金额不能超过待还款金额');
+                }
+            }
+        }
+
+        function toggleBeauticianDropdown() {
+            console.log('toggle beautician dropdown');
+        }
+
+        function removeBeautician(e) {
+            e.stopPropagation();
+            e.target.parentElement.remove();
+        }
+
+        function updateWordCount() {
+            const value = document.getElementById('repayRemark').value;
+            document.getElementById('wordCount').textContent = value.length;
+        }
+
+        function submitRepay() {
+            const amount = document.getElementById('repayAmount').value;
+            const date = document.getElementById('repayDate').value;
+            const remark = document.getElementById('repayRemark').value;
+
+            if (!amount || parseFloat(amount) <= 0) {
+                showToast('请输入有效的还款金额');
+                return;
+            }
+
+            if (!date) {
+                showToast('请选择还款日期');
+                return;
+            }
+
+            const orderId = 'REPAY_' + Date.now();
+            const url = 'payment.html?orderId=' + encodeURIComponent(orderId) +
+                '&type=repay' +
+                '&amount=' + encodeURIComponent(amount) +
+                '&date=' + encodeURIComponent(date) +
+                '&remark=' + encodeURIComponent(remark);
+            window.location.href = url;
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>

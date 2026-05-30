@@ -66,8 +66,8 @@ tr:hover td { background:#f8fafc; }
   <div class="stat-card p3"><div class="num">12</div><div class="label">P3 · 体验优化</div></div>
   <div class="stat-card" style="border-left:4px solid #6b7280;"><div class="num" style="color:#6b7280;">11</div><div class="label">未启动</div></div>
   <div class="stat-card" style="border-left:4px solid #7c3aed;"><div class="num" style="color:#7c3aed;">0</div><div class="label">设计中</div></div>
-  <div class="stat-card" style="border-left:4px solid #b45309;"><div class="num" style="color:#b45309;">13</div><div class="label">设计完成</div></div>
-  <div class="stat-card" style="border-left:4px solid #1d4ed8;"><div class="num" style="color:#1d4ed8;">9</div><div class="label">PRD完成</div></div>
+  <div class="stat-card" style="border-left:4px solid #b45309;"><div class="num" style="color:#b45309;">11</div><div class="label">设计完成</div></div>
+  <div class="stat-card" style="border-left:4px solid #1d4ed8;"><div class="num" style="color:#1d4ed8;">11</div><div class="label">PRD完成</div></div>
   <div class="stat-card" style="border-left:4px solid #be185d;"><div class="num" style="color:#be185d;">1</div><div class="label">开发中</div></div>
   <div class="stat-card" style="border-left:4px solid #ea580c;"><div class="num" style="color:#ea580c;">0</div><div class="label">验收中</div></div>
   <div class="stat-card" style="border-left:4px solid #16a34a;"><div class="num" style="color:#16a34a;">0</div><div class="label">已上线</div></div>
@@ -78,8 +78,8 @@ tr:hover td { background:#f8fafc; }
   <strong>📊 当前进展总览（状态推进：未启动 → 设计中 → 设计完成 → PRD完成 → 开发中 → 验收中 → 已上线）：</strong><br>
   ⏳ <strong>未启动：</strong>11项 — 台账报表优化、三端核销一致、物品寄存、默认头像、订单修改日期备注、导入卡退卡、超级管理员、预约撤回、撤销订单权限、权益卡展示顺序、备注外露<br>
   ✏️ <strong>设计中：</strong>0项<br>
-  🎨 <strong>设计完成：</strong>13项 — 多卡组合支付、权益置换、合并下单、欠款关联抵扣、续充赠品、金额卡折扣分离、开卡自动出库、通卡搜索、产品编码展示等<br>
-  📝 <strong>PRD完成：</strong>9项 — 卡项居家产品、卡耗金额展示、买一赠一、定制权益开单、钱包日期备注、PAD返回首页、手机端金额卡余额、PC单次消耗、会员标签<br>
+  🎨 <strong>设计完成：</strong>9项 — 多卡组合支付、权益置换、金额卡折扣分离、开卡自动出库、卡续充赠送、卡续充欠款抵扣、PAD挂单提示、PC/APP产品编码展示、通卡搜索<br>
+  📝 <strong>PRD完成：</strong>11项 — 卡项居家产品、卡耗金额展示、买一赠一、定制权益开单、钱包日期备注、PAD返回首页、手机端金额卡余额、PC单次消耗、会员标签、权益置换、合并下单<br>
   🚀 <strong>开发中：</strong>1项 — 赠送权益退款<br>
   🔍 <strong>验收中：</strong>0项<br>
   ✅ <strong>已上线：</strong>0项<br>
@@ -222,10 +222,10 @@ tr:hover td { background:#f8fafc; }
   <td class="desc">折扣现对所有金额（含赠金）生效，希望赠金/本金折扣分开。开单收银选择使用赠/本，移除卡片消耗比例。</td>
   <td><strong>🔴 第1梯队</strong><br>金额核算准确性</td>
 </tr>
-<tr data-status="设计完成"><td class="num-col">3</td>
+<tr data-status="PRD完成"><td class="num-col">3</td>
   <td><strong>权益置换</strong> <span class="badge badge-p1">P1</span></td>
   <td><span class="app-tag">Pad</span><span class="app-tag">PC</span></td>
-  <td><span class="badge badge-design">设计完成</span></td>
+  <td><span class="badge badge-prd">PRD完成</span></td>
   <td class="desc">次卡内容可置换为其他权益，疗程护理和居家产品互转。金额不一致时补差价或员工改价。</td>
   <td><strong>🟡 第2梯队</strong><br>涉及耗卡/升客单</td>
 </tr>
@@ -287,10 +287,10 @@ tr:hover td { background:#f8fafc; }
 <tr><th class="num-col">#</th><th>需求名称</th><th style="width:90px">涉及端</th><th style="width:80px">状态</th><th>需求描述</th><th>建议排序</th></tr>
 </thead>
 <tbody>
-<tr data-status="设计完成"><td class="num-col">1</td>
+<tr data-status="PRD完成"><td class="num-col">1</td>
   <td><strong>机器人/非机器人项目合并下单</strong> <span class="badge badge-p3">P3</span></td>
   <td><span class="app-tag">APP</span><span class="app-tag">Pad</span><span class="app-tag">PC</span></td>
-  <td><span class="badge badge-design">设计完成</span></td>
+  <td><span class="badge badge-prd">PRD完成</span></td>
   <td class="desc">支付页支持选择2种支付方式，机器人项目默认勾选线上支付且不可改金额。合并支付明细展示。</td>
   <td><strong>🟡 第2梯队</strong><br>支付体验优化</td>
 </tr>
@@ -390,12 +390,20 @@ tr:hover td { background:#f8fafc; }
   <tr style="background:#fff7ed;"><td style="text-align:center;">9</td><td>金额卡赠金/本金折扣分开</td><td style="text-align:center"><span class="badge badge-p1">P1</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>金额核算准确性</td></tr>
   <tr style="background:#fff7ed;"><td style="text-align:center;">10</td><td>赠金/本金区分使用（台账展示）</td><td style="text-align:center"><span class="badge badge-p1">P1</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>关联台账统计</td></tr>
   <tr style="background:#fef2f2;"><td style="text-align:center;">11</td><td>三端核销购买平台一致</td><td style="text-align:center"><span class="badge badge-p0">P0</span></td><td style="text-align:center"><span class="badge badge-pending">未启动</span></td><td>APP端功能缺失</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">12</td><td>开卡自动出库套组产品</td><td style="text-align:center"><span class="badge badge-p1">P1</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>库存联动</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">13</td><td>卡续充/开卡关联欠款抵扣</td><td style="text-align:center"><span class="badge badge-p3">P3</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>欠款流程闭环</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">14</td><td>卡续充赠送商品/赠金</td><td style="text-align:center"><span class="badge badge-p3">P3</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>续充场景完整性</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">15</td><td>PAD支持挂单/取单提示</td><td style="text-align:center"><span class="badge badge-p3">P3</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>减少操作失误</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">16</td><td>PC购买单次护理可选消耗数量</td><td style="text-align:center"><span class="badge badge-p0">P0</span></td><td style="text-align:center"><span class="badge badge-prd">PRD完成</span></td><td>PC端功能补齐</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">17</td><td>三端物品寄存功能一致</td><td style="text-align:center"><span class="badge badge-p0">P0</span></td><td style="text-align:center"><span class="badge badge-pending">未启动</span></td><td>三端功能补齐</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">18</td><td>PC/APP居家产品显示产品编码</td><td style="text-align:center"><span class="badge badge-p3">P3</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>产品识别效率</td></tr>
+  <tr style="background:#fef2f2;"><td style="text-align:center;">19</td><td>通卡增加搜索功能</td><td style="text-align:center"><span class="badge badge-p3">P3</span></td><td style="text-align:center"><span class="badge badge-design">设计完成</span></td><td>通用卡项检索</td></tr>
   </table>
   <br>
   <strong>🟡 第2梯队 — 设计就绪后推进</strong><br>
-  权益置换 · 开卡自动出库套组 · 卡续充关联欠款抵扣 · 卡续充赠送商品 · PAD挂单提示 · 台账统计优化 · 订单修改日期备注 · 导入卡退卡 · PC单次消耗数量 · 手机端金额卡余额 · 合并下单 · 三端物品寄存<br><br>
+  权益置换 · 台账统计优化 · 订单修改日期备注 · 导入卡退卡 · 手机端金额卡余额 · 合并下单<br><br>
   <strong>🟢 第3梯队 — 排期待定，视资源推进</strong><br>
-  会员标签为空 · 手机端默认头像 · 支付方式自定义 · 合并签字 · 产品编码展示 · 预约撤回 · 通卡搜索 · 权益卡展示顺序 · 备注外露 · 超级管理员门店操作 · 撤销订单权限
+  会员标签为空 · 手机端默认头像 · 支付方式自定义 · 合并签字 · 预约撤回 · 权益卡展示顺序 · 备注外露 · 超级管理员门店操作 · 撤销订单权限
 </div>
 
 <h2>📋 关键发现与建议</h2>

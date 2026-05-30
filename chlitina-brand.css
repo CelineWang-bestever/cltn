@@ -299,38 +299,222 @@
  * 十、字体规范 - Typography
  * ======================================================== */
 
+/* -------------------------------------------------
+ * 10.1 字体族系 - Font Families
+ * ------------------------------------------------- */
+
 :root {
-    /* 字体族 */
+    /* 主字体族 - 用于正文、标题等主要文本 */
     --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-    --font-family-secondary: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif;
-    
-    /* 字体大小 */
-    --font-size-xs: 12px;
-    --font-size-sm: 13px;
-    --font-size-base: 14px;
-    --font-size-md: 16px;
-    --font-size-lg: 18px;
-    --font-size-xl: 20px;
-    --font-size-2xl: 24px;
-    --font-size-3xl: 28px;
-    --font-size-4xl: 32px;
-    
-    /* 字体粗细 */
-    --font-weight-normal: 400;
-    --font-weight-medium: 500;
-    --font-weight-semibold: 600;
-    --font-weight-bold: 700;
-    
-    /* 行高 */
-    --line-height-tight: 1.25;
-    --line-height-normal: 1.5;
-    --line-height-relaxed: 1.75;
-    
-    /* 字间距 */
-    --letter-spacing-tight: -0.02em;
-    --letter-spacing-normal: 0;
-    --letter-spacing-wide: 0.02em;
+
+    /* 中文字体族 - 优化中文显示 */
+    --font-family-chinese: 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+
+    /* 数字/代码字体族 - 用于订单号、金额、编码等 */
+    --font-family-mono: 'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Liberation Mono', monospace;
+
+    /* 通用字体族 - 上述字体的完整组合 */
+    --font-family-base: var(--font-family-primary);
 }
+
+/* 字体使用规则：
+ * - 中文内容：优先使用 var(--font-family-chinese)
+ * - 数字/订单号：使用 var(--font-family-mono)
+ * - 英文/混合内容：使用 var(--font-family-primary)
+ */
+
+/* -------------------------------------------------
+ * 10.2 字号层级 - Font Size Scale
+ * ------------------------------------------------- */
+
+:root {
+    /* 基础字号 */
+    --font-size-base: 14px;
+
+    /* 标题字号 */
+    --font-size-h1: 28px;      /* 页面主标题 */
+    --font-size-h2: 24px;       /* 模块标题 */
+    --font-size-h3: 20px;       /* 卡片标题 */
+    --font-size-h4: 18px;       /* 区块标题 */
+
+    /* 正文字号 */
+    --font-size-xl: 18px;      /* 大正文 */
+    --font-size-lg: 16px;       /* 正文大 */
+    --font-size-md: 16px;       /* 正文（默认） */
+    --font-size-base: 14px;     /* 正文小 */
+    --font-size-sm: 13px;       /* 辅助正文 */
+    --font-size-xs: 12px;       /* 标签/注释 */
+
+    /* 特殊字号 */
+    --font-size-display: 32px;  /* 数字展示/金额 */
+    --font-size-micro: 11px;    /* 极小文字 */
+}
+
+/* -------------------------------------------------
+ * 10.3 字重层级 - Font Weight Scale
+ * ------------------------------------------------- */
+
+:root {
+    --font-weight-hairline: 100;
+    --font-weight-thin: 200;
+    --font-weight-light: 300;
+    --font-weight-normal: 400;    /* 常规正文 */
+    --font-weight-medium: 500;     /* 强调正文 */
+    --font-weight-semibold: 600;   /* 标题/按钮 */
+    --font-weight-bold: 700;       /* 强调标题 */
+    --font-weight-extrabold: 800;
+    --font-weight-black: 900;
+}
+
+/* 字号-字重对应关系 */
+.text-h1 { font-size: var(--font-size-h1); font-weight: var(--font-weight-bold); }
+.text-h2 { font-size: var(--font-size-h2); font-weight: var(--font-weight-semibold); }
+.text-h3 { font-size: var(--font-size-h3); font-weight: var(--font-weight-semibold); }
+.text-h4 { font-size: var(--font-size-h4); font-weight: var(--font-weight-medium); }
+.text-body { font-size: var(--font-size-base); font-weight: var(--font-weight-normal); }
+.text-caption { font-size: var(--font-size-sm); font-weight: var(--font-weight-normal); }
+.text-small { font-size: var(--font-size-xs); font-weight: var(--font-weight-normal); }
+
+/* -------------------------------------------------
+ * 10.4 行高规范 - Line Height
+ * ------------------------------------------------- */
+
+:root {
+    --line-height-none: 1;           /* 紧凑（按钮/标签） */
+    --line-height-tight: 1.25;       /* 紧凑（标题） */
+    --line-height-snug: 1.375;       /* 略紧（卡片标题） */
+    --line-height-normal: 1.5;        /* 正常（正文） */
+    --line-height-relaxed: 1.625;     /* 松散（长文本） */
+    --line-height-loose: 2;          /* 松散（辅助说明） */
+}
+
+/* -------------------------------------------------
+ * 10.5 字间距规范 - Letter Spacing
+ * ------------------------------------------------- */
+
+:root {
+    --tracking-tighter: -0.05em;     /* 大标题 */
+    --tracking-tight: -0.025em;      /* 中标题 */
+    --tracking-normal: 0em;          /* 正文 */
+    --tracking-wide: 0.025em;        /* 英文大写/标签 */
+    --tracking-wider: 0.05em;        /* 英文全大写 */
+    --tracking-widest: 0.1em;        /* 序列号/编码 */
+}
+
+/* -------------------------------------------------
+ * 10.6 文本颜色规范 - Text Colors
+ * ------------------------------------------------- */
+
+:root {
+    --text-primary: #111827;         /* 主要文本 - 标题/正文 */
+    --text-secondary: #374151;        /* 次要文本 - 辅助说明 */
+    --text-muted: #6B7280;           /* 弱化文本 - 提示/占位 */
+    --text-disabled: #9CA3AF;         /* 禁用文本 */
+    --text-brand: #D66B85;            /* 品牌色文本 */
+    --text-white: #FFFFFF;            /* 白色文本 */
+    --text-link: #E87C9A;             /* 链接文本 */
+    --text-success: #10B981;           /* 成功状态 */
+    --text-warning: #F59E0B;          /* 警告状态 */
+    --text-error: #EF4444;            /* 错误状态 */
+}
+
+/* -------------------------------------------------
+ * 10.7 字体使用场景规范 - Usage Guidelines
+ * ------------------------------------------------- */
+
+/*
+ * 【页面标题】- h1
+ *   字号: 28px / font-size-h1
+ *   字重: 700 / font-weight-bold
+ *   行高: 1.25 / line-height-tight
+ *   颜色: text-primary
+ *
+ * 【模块标题】- h2
+ *   字号: 24px / font-size-h2
+ *   字重: 600 / font-weight-semibold
+ *   行高: 1.25 / line-height-tight
+ *   颜色: text-primary
+ *
+ * 【卡片标题】- h3
+ *   字号: 20px / font-size-h3
+ *   字重: 600 / font-weight-semibold
+ *   行高: 1.375 / line-height-snug
+ *   颜色: text-primary
+ *
+ * 【正文大】- large text
+ *   字号: 16px / font-size-lg
+ *   字重: 400 / font-weight-normal
+ *   行高: 1.5 / line-height-normal
+ *   颜色: text-secondary
+ *
+ * 【正文】- body text
+ *   字号: 14px / font-size-base
+ *   字重: 400 / font-weight-normal
+ *   行高: 1.5 / line-height-normal
+ *   颜色: text-secondary
+ *
+ * 【辅助文字】- caption
+ *   字号: 13px / font-size-sm
+ *   字重: 400 / font-weight-normal
+ *   行高: 1.5 / line-height-normal
+ *   颜色: text-muted
+ *
+ * 【标签/注释】- label
+ *   字号: 12px / font-size-xs
+ *   字重: 500 / font-weight-medium
+ *   行高: 1.5 / line-height-normal
+ *   颜色: text-muted
+ *   字母间距: 0.05em / tracking-wide
+ *
+ * 【金额/数字展示】- display
+ *   字号: 32px / font-size-display
+ *   字重: 700 / font-weight-bold
+ *   行高: 1 / line-height-none
+ *   颜色: text-primary
+ *   字体族: font-family-primary（禁止使用等宽字体）
+ *
+ * 【订单号/编码】- code/mono
+ *   字号: 12px / font-size-xs
+ *   字重: 400 / font-weight-normal
+ *   行高: 1.5 / line-height-normal
+ *   颜色: text-muted
+ *   字体族: font-family-mono
+ *   字母间距: 0.05em / tracking-wider
+ */
+
+/* -------------------------------------------------
+ * 10.8 统一字体样式类 - Utility Classes
+ * ------------------------------------------------- */
+
+/* 标题系列 */
+.font-h1 { font-family: var(--font-family-primary); font-size: var(--font-size-h1); font-weight: var(--font-weight-bold); line-height: var(--line-height-tight); color: var(--text-primary); }
+.font-h2 { font-family: var(--font-family-primary); font-size: var(--font-size-h2); font-weight: var(--font-weight-semibold); line-height: var(--line-height-tight); color: var(--text-primary); }
+.font-h3 { font-family: var(--font-family-primary); font-size: var(--font-size-h3); font-weight: var(--font-weight-semibold); line-height: var(--line-height-snug); color: var(--text-primary); }
+.font-h4 { font-family: var(--font-family-primary); font-size: var(--font-size-h4); font-weight: var(--font-weight-medium); line-height: var(--line-height-snug); color: var(--text-primary); }
+
+/* 正文系列 */
+.font-lg { font-family: var(--font-family-primary); font-size: var(--font-size-lg); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--text-secondary); }
+.font-base { font-family: var(--font-family-primary); font-size: var(--font-size-base); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--text-secondary); }
+.font-sm { font-family: var(--font-family-primary); font-size: var(--font-size-sm); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--text-muted); }
+.font-xs { font-family: var(--font-family-primary); font-size: var(--font-size-xs); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--text-muted); letter-spacing: var(--tracking-wide); }
+
+/* 特殊用途 */
+.font-display { font-family: var(--font-family-primary); font-size: var(--font-size-display); font-weight: var(--font-weight-bold); line-height: var(--line-height-none); color: var(--text-primary); }
+.font-mono { font-family: var(--font-family-mono); font-size: var(--font-size-xs); font-weight: var(--font-weight-normal); line-height: var(--line-height-normal); color: var(--text-muted); letter-spacing: var(--tracking-wider); }
+.font-label { font-family: var(--font-family-primary); font-size: var(--font-size-xs); font-weight: var(--font-weight-medium); line-height: var(--line-height-normal); color: var(--text-muted); letter-spacing: var(--tracking-wide); text-transform: uppercase; }
+
+/* 按钮文本 */
+.font-btn { font-family: var(--font-family-primary); font-size: var(--font-size-base); font-weight: var(--font-weight-semibold); line-height: 1; }
+
+/* 链接文本 */
+.font-link { font-family: var(--font-family-primary); font-size: var(--font-size-base); font-weight: var(--font-weight-normal); color: var(--text-link); text-decoration: none; }
+.font-link:hover { text-decoration: underline; }
+
+/* 状态文本 */
+.font-success { color: var(--text-success); }
+.font-warning { color: var(--text-warning); }
+.font-error { color: var(--text-error); }
+.font-brand { color: var(--text-brand); }
 
 /* ========================================================
  * 十一、间距规范 - Spacing
@@ -479,6 +663,164 @@
 
 .input::placeholder {
     color: var(--input-placeholder);
+}
+
+/* -------------------------------------------------
+ * 表单组件系统 - Form Components
+ * ------------------------------------------------- */
+
+/* 表单输入框 */
+.form-input {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1.5px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    height: 48px;
+    line-height: 1.5;
+}
+
+.form-input:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-primary-50);
+}
+
+.form-input::placeholder {
+    color: var(--text-disabled);
+}
+
+.form-input:disabled {
+    background: var(--bg-secondary);
+    color: var(--text-disabled);
+    cursor: not-allowed;
+}
+
+/* 文本域 */
+.form-textarea {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1.5px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    resize: vertical;
+    min-height: 100px;
+    line-height: 1.5;
+}
+
+.form-textarea:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-primary-50);
+}
+
+.form-textarea::placeholder {
+    color: var(--text-disabled);
+}
+
+/* 日期时间输入框 */
+input[type="datetime-local"],
+input[type="date"],
+input[type="time"] {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1.5px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    height: 48px;
+    line-height: 1.5;
+}
+
+input[type="datetime-local"]:focus,
+input[type="date"]:focus,
+input[type="time"]:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-primary-50);
+}
+
+/* 数字输入框 */
+input[type="number"] {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-base);
+    padding: var(--spacing-md) var(--spacing-lg);
+    border: 1.5px solid var(--border-primary);
+    border-radius: var(--radius-md);
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    width: 100%;
+    height: 48px;
+    line-height: 1.5;
+}
+
+input[type="number"]:focus {
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px var(--brand-primary-50);
+}
+
+/* 隐藏数字输入框的上下箭头 */
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"] {
+    -moz-appearance: textfield;
+}
+
+/* 表单标签 */
+.form-label {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--text-secondary);
+    margin-bottom: var(--spacing-sm);
+    display: block;
+    line-height: 1.5;
+}
+
+.form-label .required {
+    color: var(--accent-error);
+    margin-right: 2px;
+}
+
+/* 表单提示文字 */
+.form-hint {
+    font-family: var(--font-family-primary);
+    font-size: var(--font-size-xs);
+    color: var(--text-muted);
+    margin-top: var(--spacing-xs);
+    line-height: 1.5;
+}
+
+/* 表单错误状态 */
+.form-input.error,
+input[type="datetime-local"].error,
+input[type="date"].error,
+input[type="number"].error {
+    border-color: var(--accent-error);
+}
+
+.form-input.error:focus,
+input[type="datetime-local"].error:focus,
+input[type="date"].error:focus,
+input[type="number"].error:focus {
+    box-shadow: 0 0 0 3px var(--accent-error-light);
 }
 
 /* 链接基础样式 */

@@ -891,7 +891,7 @@
         <div class="pay-topbar-title">结算支付</div>
         <div class="topbar-right">
             <button class="topbar-btn primary" id="backBtn">返回开单</button>
-            <button class="topbar-btn" id="holdBtn">挂单</button>
+            <button class="topbar-btn" id="closeBtn" style="display:none;">关闭</button>
         </div>
     </div>
 
@@ -914,7 +914,7 @@
                         <div class="calc-left">
                             <div>
                                 <div class="calc-label">待收款</div>
-                                <div class="calc-desc">开单页待收款金额</div>
+                                <div class="calc-desc">待收款金额</div>
                             </div>
                         </div>
                         <div class="calc-amount base" id="totalAmount">¥0.00</div>
@@ -1118,11 +1118,16 @@
 
         function readCheckoutMoneyCards(orderId) {
             const id = String(orderId || '').trim();
+            
+            // 充值/退款/还款场景不显示金额卡
+            if (id.startsWith('WALLET_') || id.startsWith('REPAY_')) {
+                return null;
+            }
+            
             const byId = safeJsonParse(localStorage.getItem('checkout_moneycards_' + id));
             if (byId && Array.isArray(byId.cards)) return byId;
             const latest = safeJsonParse(localStorage.getItem('latest_checkout_moneycards'));
             if (latest && latest.orderId && String(latest.orderId) === id && Array.isArray(latest.cards)) return latest;
-            if (latest && Array.isArray(latest.cards)) return latest;
             return null;
         }
 
@@ -2107,6 +2112,12 @@
                 : true;
             state.hasAppliedMoneyCards = normalizeCheckoutMoneyCards(state.moneyCardSummary).total > 0.000001;
             recomputePayableFromMoneyCards();
+            if (q.type && ['recharge', 'refund', 'payDebt', 'repay'].includes(q.type)) {
+                const backBtn = document.getElementById('backBtn');
+                const closeBtn = document.getElementById('closeBtn');
+                if (backBtn) backBtn.style.display = 'none';
+                if (closeBtn) closeBtn.style.display = '';
+            }
             renderAll();
         }
 
@@ -2327,8 +2338,8 @@
         document.getElementById('backBtn')?.addEventListener('click', () => {
             history.back();
         });
-        document.getElementById('holdBtn')?.addEventListener('click', () => {
-            showToast('已挂单（模拟）');
+        document.getElementById('closeBtn')?.addEventListener('click', () => {
+            history.back();
         });
 
         init();

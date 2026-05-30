@@ -10264,5 +10264,53 @@ document.addEventListener('DOMContentLoaded', function () {
         orderMain.classList.add('guest-mode');
     }
 
+    // 检查是否有从客户详情页跳转过来的数据
+    try {
+        const storageData = localStorage.getItem('createOrderFromDetail');
+        if (storageData) {
+            const data = JSON.parse(storageData);
+            // 数据超过30分钟过期
+            if (data && data.timestamp && (Date.now() - data.timestamp < 1800000)) {
+                // 预填充会员信息
+                if (data.member) {
+                    const member = {
+                        name: data.member.name || '',
+                        phone: data.member.phone || '',
+                        level: data.member.level || '会员',
+                        memberNo: data.member.memberNo || '',
+                        points: data.member.points || '0',
+                        walletBalance: data.member.walletBalance || '0',
+                        cardBalance: data.member.cardBalance || '0',
+                        debt: data.member.debt || '0',
+                        balance: data.member.walletBalance || '0'
+                    };
+                    selectedMember = member;
+                    updateMemberInfo(member);
+                }
+
+                // 添加卡片到已选商品区域
+                if (data.card) {
+                    if (data.card.action === 'upgrade') {
+                        renderUpgradeCardModule(data.card);
+                    } else if (data.card.action === 'recharge') {
+                        renderRechargeCardModule(data.card);
+                    }
+                }
+
+                // 清除localStorage
+                localStorage.removeItem('createOrderFromDetail');
+                return;
+            } else {
+                // 数据过期，删除
+                localStorage.removeItem('createOrderFromDetail');
+            }
+        }
+    } catch (err) {
+        console.warn('Failed to load from localStorage:', err);
+        try {
+            localStorage.removeItem('createOrderFromDetail');
+        } catch (e) {}
+    }
+
     openMemberModal();
 });
