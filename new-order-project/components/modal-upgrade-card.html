@@ -1,0 +1,51 @@
+<!-- upgradeNewCardModalOverlay -- 独立组件模板 -->
+<div class="upgrade-newcard-modal-overlay" id="upgradeNewCardModalOverlay">
+        <div class="upgrade-newcard-modal">
+            <div class="upgrade-newcard-modal-header">
+                <span class="upgrade-newcard-modal-title" id="upgradeNewCardModalTitle">选择卡项</span>
+                <div class="upgrade-newcard-modal-close" id="upgradeNewCardModalClose">×</div>
+            </div>
+            <div class="upgrade-newcard-modal-body">
+                <div class="upgrade-newcard-search-row">
+                    <div class="upgrade-newcard-search-left">
+                        <input type="text" class="upgrade-newcard-search-input" id="upgradeNewCardSearchInput" placeholder="搜索卡项名称">
+                    </div>
+                    <div class="upgrade-newcard-search-right">
+                        <span class="upgrade-newcard-recent-label">最近搜索</span>
+                        <div class="upgrade-newcard-recent-list" id="upgradeNewCardRecentList"></div>
+                    </div>
+                </div>
+
+                <div class="add-service-selected-section">
+                    <div class="add-service-selected-header">
+                        <span class="add-service-selected-title">已选卡项</span>
+                        <div class="add-service-selected-actions">
+                            <button class="add-service-btn clear" id="upgradeNewCardClearBtn">清空</button>
+                            <button class="add-service-btn confirm" id="upgradeNewCardConfirmBtn">确定</button>
+                        </div>
+                    </div>
+                    <div class="add-service-selected-list" id="upgradeNewCardSelectedList">
+                        <div class="add-service-empty-hint">点击卡项名称添加卡项</div>
+                    </div>
+                </div>
+
+                <div class="upgrade-newcard-main">
+                    <div class="upgrade-newcard-categories" id="upgradeNewCardCategoryList">
+                        <div class="upgrade-newcard-category active" data-category="limited">有限次卡</div>
+                        <div class="upgrade-newcard-category" data-category="unlimited">通卡</div>
+                        <div class="upgrade-newcard-category" data-category="amount">金额卡</div>
+                    </div>
+                    <div class="upgrade-newcard-table-wrap">
+                        <table class="upgrade-newcard-table">
+                            <thead id="upgradeNewCardTableHead"></thead>
+                            <tbody id="upgradeNewCardTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="upgrade-newcard-modal-footer">
+                <button type="button" class="upgrade-newcard-btn cancel" id="upgradeNewCardCancel">取消</button>
+                <button type="button" class="upgrade-newcard-btn confirm" id="upgradeNewCardConfirm">确定</button>
+            </div>
+        </div>
+    </div>

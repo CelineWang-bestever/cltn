@@ -1,0 +1,33 @@
+<!-- beauticianSelectModalOverlay -- 独立组件模板 -->
+<div class="beautician-modal-overlay" id="beauticianSelectModalOverlay">
+        <div class="beautician-modal">
+            <div class="add-service-modal-header">
+                <span class="add-service-modal-title">批量设置美容师</span>
+                <div class="add-service-modal-close" id="beauticianModalClose">×</div>
+            </div>
+            <div class="beautician-modal-body">
+                <div class="beautician-search-row">
+                    <div class="beautician-search-box">
+                        <input type="text" class="beautician-search-input" id="beauticianSearchInput" placeholder="搜索美容师姓名">
+                        <button type="button" class="beautician-search-clear" id="beauticianSearchClear" aria-label="清除">
+                            ×
+                        </button>
+                    </div>
+                </div>
+
+                <div class="beautician-empty" id="beauticianEmptyState">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                        <circle cx="12" cy="12" r="9"></circle>
+                        <path d="M8 8l8 8M16 8l-8 8"></path>
+                    </svg>
+                    <div>暂无匹配的美容师</div>
+                </div>
+
+                <div class="beautician-grid" id="beauticianGrid"></div>
+            </div>
+            <div class="beautician-modal-footer">
+                <button type="button" class="beautician-modal-btn cancel" id="beauticianModalCancel">取消</button>
+                <button type="button" class="beautician-modal-btn confirm" id="beauticianModalConfirm">确定</button>
+            </div>
+        </div>
+    </div>

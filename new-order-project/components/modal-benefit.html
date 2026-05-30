@@ -1,0 +1,43 @@
+<!-- benefitModalOverlay -- 独立组件模板 -->
+<div class="benefit-modal-overlay" id="benefitModalOverlay">
+        <div class="benefit-modal">
+            <div class="benefit-modal-header">
+                <span class="benefit-modal-title">客户权益</span>
+                <button class="benefit-modal-close" onclick="hideBenefitModal()">
+                    <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="benefit-modal-body">
+                <!-- 权益搜索区域 -->
+                <div class="benefit-search-section">
+                    <div class="benefit-search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8" />
+                            <path d="M21 21l-4.35-4.35" />
+                        </svg>
+                        <input type="text" class="benefit-search-input" id="benefitSearchInput" placeholder="搜索权益...">
+                        <button class="benefit-search-clear" id="benefitSearchClear" style="display:none;">
+                            <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor"
+                                stroke-width="2">
+                                <path d="M18 6L6 18M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- 最近搜索记录 -->
+                    <div class="benefit-recent-search" id="benefitRecentSearch">
+                        <div class="benefit-recent-title">最近搜索</div>
+                        <div class="benefit-recent-tags" id="benefitRecentTags"></div>
+                    </div>
+                </div>
+
+                <!-- 客户已有权益列表 -->
+                <div class="benefit-list-section">
+                    <div id="benefitCardsList">
+                        <!-- 卡项将通过JS动态渲染 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>查找会员</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #FFFFFF;
+        }
+
+        .find-customer-container {
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* 顶部导航栏 */
+        .header {
+            background: #E87C9A;
+            padding: 18px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-shrink: 0;
+        }
+
+        .header-close {
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 26px;
+            cursor: pointer;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .header-close:hover {
+            background: rgba(255,255,255,0.2);
+        }
+
+        .header-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+        }
+
+        .header-new-btn {
+            padding: 8px 18px;
+            background: #FFFFFF;
+            color: #E87C9A;
+            font-size: 14px;
+            font-weight: 500;
+            border-radius: 6px;
+            cursor: pointer;
+            border: none;
+            transition: opacity 0.2s;
+        }
+
+        .header-new-btn:hover {
+            opacity: 0.85;
+        }
+
+        /* 搜索区域 */
+        .search-section {
+            padding: 12px 24px 24px;
+            flex-shrink: 0;
+        }
+
+        .search-hint {
+            font-size: 16px;
+            color: #333333;
+            margin-bottom: 20px;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .search-input-wrapper {
+            flex: 1;
+            position: relative;
+            display: flex;
+            align-items: center;
+            border: 1px solid #DDDDDD;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .search-input {
+            flex: 1;
+            border: none;
+            outline: none;
+            padding: 14px 16px;
+            font-size: 16px;
+            color: #333333;
+            background: transparent;
+        }
+
+        .search-input::placeholder {
+            color: #CCCCCC;
+        }
+
+        .search-clear-btn {
+            position: absolute;
+            right: 12px;
+            width: 24px;
+            height: 24px;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: #999999;
+            transition: color 0.2s;
+        }
+
+        .search-clear-btn.show {
+            display: flex;
+        }
+
+        .search-clear-btn:hover {
+            color: #333333;
+        }
+
+        .search-clear-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .search-btn {
+            padding: 14px 28px;
+            background: #E87C9A;
+            color: #FFFFFF;
+            font-size: 15px;
+            font-weight: 500;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .search-btn:hover {
+            background: #D66B85;
+        }
+
+        /* 最近选择会员 */
+        .recent-members-section {
+            margin-top: 16px;
+            display: none;
+        }
+
+        .recent-members-section.show {
+            display: block;
+        }
+
+        .recent-members-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .recent-members-title {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .recent-members-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .recent-member-item {
+            display: inline-flex;
+            align-items: center;
+            padding: 8px 14px;
+            border-radius: 999px;
+            background: #F5F5F5;
+            color: #333333;
+            font-size: 14px;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s;
+            user-select: none;
+            max-width: 100%;
+        }
+
+        .recent-member-item:hover {
+            background: #FFF0F4;
+            color: #E87C9A;
+        }
+
+        .recent-member-item:active {
+            transform: scale(0.98);
+        }
+
+        .recent-member-name {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            max-width: 240px;
+        }
+
+        /* 数字键盘区域 */
+        .keypad-section {
+            flex: 1;
+            padding: 0px 48px 28px 48px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .keypad-section.hidden {
+            display: none;
+        }
+
+        /* 会员列表区域 */
+        .member-list-section {
+            flex: 1;
+            padding: 0 24px 24px;
+            display: none;
+            overflow-y: auto;
+        }
+
+        .member-list-section.show {
+            display: block;
+        }
+
+        .member-list-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .member-list-title {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        .member-list-count {
+            font-size: 14px;
+            color: #E87C9A;
+        }
+
+        .member-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .member-item {
+            padding: 14px 16px;
+            background: #FAFAFA;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+            border: 1px solid transparent;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .member-item:hover {
+            background: #F0F0F0;
+            border-color: #E87C9A;
+        }
+
+        .member-item.selected {
+            background: #FFF0F4;
+            border-color: #E87C9A;
+        }
+
+        .member-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: #333333;
+            min-width: 80px;
+            flex-shrink: 0;
+        }
+
+        .member-phone {
+            font-size: 14px;
+            color: #666666;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        .member-level {
+            font-size: 12px;
+            color: #FFFFFF;
+            background: #E87C9A;
+            padding: 3px 10px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        /* 空状态 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px 24px;
+            color: #999999;
+        }
+
+        .empty-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 16px;
+            opacity: 0.5;
+        }
+
+        .empty-text {
+            font-size: 16px;
+            margin-bottom: 8px;
+        }
+
+        .empty-hint {
+            font-size: 14px;
+            color: #CCCCCC;
+        }
+
+        /* 加载状态 */
+        .loading-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px;
+        }
+
+        .loading-spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid #E87C9A;
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 16px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            font-size: 14px;
+            color: #999999;
+        }
+
+        .keypad-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 86px);
+            gap: 18px 24px;
+        }
+
+        .key-item {
+            width: 86px;
+            height: 86px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 30px;
+            font-weight: 400;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            user-select: none;
+        }
+
+        .key-number {
+            background: #F5F5F5;
+            color: #333333;
+            border: none;
+        }
+
+        .key-number:hover {
+            background: #EBEBEB;
+        }
+
+        .key-number:active {
+            background: #E0E0E0;
+        }
+
+        /* 功能键样式 */
+        .key-action {
+            background: #333333;
+            color: #FFFFFF;
+            font-size: 26px;
+        }
+
+        .key-action:hover {
+            background: #444444;
+        }
+
+        .key-action:active {
+            background: #555555;
+        }
+    </style>
+</head>
+<body>
+    <div class="find-customer-container">
+        <!-- 顶部栏 -->
+        <div class="header">
+            <div class="header-close" id="btnClose">×</div>
+            <span class="header-title">查找会员</span>
+            <button class="header-new-btn" id="btnNewMember">新建会员</button>
+        </div>
+
+        <!-- 搜索区域 -->
+        <div class="search-section">
+            <div class="search-hint">您想要查找哪位会员？</div>
+            <div class="search-bar">
+                <div class="search-input-wrapper">
+                    <input type="text" class="search-input" id="searchInput" placeholder="姓名/手机号" readonly>
+                    <div class="search-clear-btn" id="searchClearBtn">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                        </svg>
+                    </div>
+                </div>
+                <button class="search-btn" id="btnSearch">查询</button>
+            </div>
+
+            <div class="recent-members-section" id="recentMembersSection">
+                <div class="recent-members-header">
+                    <span class="recent-members-title">最近选择</span>
+                </div>
+                <div class="recent-members-list" id="recentMembersList"></div>
+            </div>
+        </div>
+
+        <!-- 数字键盘 -->
+        <div class="keypad-section" id="keypadSection">
+            <div class="keypad-grid" id="keypadGrid">
+                <div class="key-item key-number" data-key="1">1</div>
+                <div class="key-item key-number" data-key="2">2</div>
+                <div class="key-item key-number" data-key="3">3</div>
+                <div class="key-item key-action" data-key="backspace">←</div>
+
+                <div class="key-item key-number" data-key="4">4</div>
+                <div class="key-item key-number" data-key="5">5</div>
+                <div class="key-item key-number" data-key="6">6</div>
+                <div class="key-item key-action" data-key="close">×</div>
+
+                <div class="key-item key-number" data-key="7">7</div>
+                <div class="key-item key-number" data-key="8">8</div>
+                <div class="key-item key-number" data-key="9">9</div>
+                <div class="key-item key-action" data-key="confirm">✓</div>
+
+                <div class="key-item key-number" data-key="0">0</div>
+                <div class="key-item key-number" data-key=".">.</div>
+            </div>
+        </div>
+
+        <!-- 会员列表区域 -->
+        <div class="member-list-section" id="memberListSection">
+            <div class="member-list-header">
+                <span class="member-list-title">搜索结果</span>
+                <span class="member-list-count" id="memberCount">0</span>
+            </div>
+            <div class="member-list" id="memberList">
+                <div class="loading-state" id="loadingState">
+                    <div class="loading-spinner"></div>
+                    <div class="loading-text">搜索中...</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var searchInput = document.getElementById('searchInput');
+        var searchClearBtn = document.getElementById('searchClearBtn');
+        var keypadGrid = document.getElementById('keypadGrid');
+        var keypadSection = document.getElementById('keypadSection');
+        var memberListSection = document.getElementById('memberListSection');
+        var memberList = document.getElementById('memberList');
+        var memberCount = document.getElementById('memberCount');
+        var loadingState = document.getElementById('loadingState');
+        var btnClose = document.getElementById('btnClose');
+        var btnSearch = document.getElementById('btnSearch');
+        var btnNewMember = document.getElementById('btnNewMember');
+        var recentMembersSection = document.getElementById('recentMembersSection');
+        var recentMembersList = document.getElementById('recentMembersList');
+
+        var selectedMember = null;
+        var recentMembers = [];
+
+        function escapeHtml(value) {
+            return String(value ?? '')
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        function loadRecentMembers() {
+            try {
+                var raw = localStorage.getItem('recentSelectedMembers') || '[]';
+                var parsed = JSON.parse(raw);
+                recentMembers = Array.isArray(parsed) ? parsed : [];
+            } catch (e) {
+                recentMembers = [];
+            }
+        }
+
+        function saveRecentMembers() {
+            try {
+                localStorage.setItem('recentSelectedMembers', JSON.stringify(recentMembers));
+            } catch (e) {}
+        }
+
+        function addToRecentMembers(memberData) {
+            if (!memberData || !memberData.id) return;
+            var id = String(memberData.id);
+            recentMembers = recentMembers.filter(function (m) { return String(m && m.id) !== id; });
+            recentMembers.unshift(memberData);
+            if (recentMembers.length > 10) recentMembers = recentMembers.slice(0, 10);
+            saveRecentMembers();
+            renderRecentMembers();
+        }
+
+        function renderRecentMembers() {
+            if (!recentMembersSection || !recentMembersList) return;
+            var items = (recentMembers || []).slice(0, 10).filter(function (m) { return m && m.name; });
+            if (items.length === 0) {
+                recentMembersSection.classList.remove('show');
+                recentMembersList.innerHTML = '';
+                return;
+            }
+            recentMembersSection.classList.add('show');
+            recentMembersList.innerHTML = items.map(function (m) {
+                var safeName = escapeHtml(m.name || '');
+                var encId = encodeURIComponent(String(m.id || ''));
+                return '<div class="recent-member-item" data-id="' + encId + '"><span class="recent-member-name">' + safeName + '</span></div>';
+            }).join('');
+        }
+
+        recentMembersList && recentMembersList.addEventListener('click', function (e) {
+            var item = e.target.closest('.recent-member-item');
+            if (!item) return;
+            var encId = item.getAttribute('data-id') || '';
+            var id = '';
+            try { id = decodeURIComponent(encId); } catch (err) { id = encId; }
+            if (!id) return;
+            var found = (recentMembers || []).find(function (m) { return String(m && m.id) === String(id); });
+            if (!found) return;
+            selectedMember = found;
+            addToRecentMembers(found);
+            window.parent.postMessage({
+                type: 'selectMember',
+                data: found
+            }, '*');
+        });
+
+        // 更新清除按钮显示状态
+        function updateClearBtn() {
+            if (searchInput.value.trim()) {
+                searchClearBtn.classList.add('show');
+            } else {
+                searchClearBtn.classList.remove('show');
+            }
+        }
+
+        // 键盘点击
+        keypadGrid.addEventListener('click', function(e) {
+            var keyItem = e.target.closest('.key-item');
+            if (!keyItem) return;
+
+            var key = keyItem.dataset.key;
+
+            switch(key) {
+                case 'backspace':
+                    searchInput.value = searchInput.value.slice(0, -1);
+                    updateClearBtn();
+                    break;
+                case 'close':
+                    closeModal();
+                    break;
+                case 'confirm':
+                    doSearch();
+                    break;
+                default:
+                    searchInput.value += key;
+                    updateClearBtn();
+            }
+        });
+
+        // 查询按钮
+        btnSearch.addEventListener('click', doSearch);
+
+        // 清除按钮
+        searchClearBtn.addEventListener('click', function() {
+            // 清空输入框
+            searchInput.value = '';
+            updateClearBtn();
+            // 恢复数字键盘区域，隐藏会员列表
+            showKeypad();
+            hideMemberList();
+        });
+
+        // 新建会员
+        btnNewMember.addEventListener('click', function() {
+            window.parent.postMessage({ type: 'newMember' }, '*');
+        });
+
+        // 关闭
+        btnClose.addEventListener('click', closeModal);
+
+        function closeModal() {
+            // 重置状态
+            resetSearch();
+            window.parent.postMessage({ type: 'closeFindCustomer' }, '*');
+        }
+
+        function resetSearch() {
+            searchInput.value = '';
+            selectedMember = null;
+            showKeypad();
+            hideMemberList();
+        }
+
+        function showKeypad() {
+            keypadSection.classList.remove('hidden');
+        }
+
+        function hideKeypad() {
+            keypadSection.classList.add('hidden');
+        }
+
+        function showMemberList() {
+            memberListSection.classList.add('show');
+        }
+
+        function hideMemberList() {
+            memberListSection.classList.remove('show');
+        }
+
+        function showLoading() {
+            loadingState.style.display = 'flex';
+            memberList.querySelectorAll('.member-item').forEach(function(item) {
+                item.style.display = 'none';
+            });
+        }
+
+        function hideLoading() {
+            loadingState.style.display = 'none';
+        }
+
+        function doSearch() {
+            var keyword = searchInput.value.trim();
+            if (!keyword) {
+                showToast('请输入搜索内容');
+                return;
+            }
+
+            // 显示加载状态，隐藏数字键盘，显示会员列表区域
+            hideKeypad();
+            showMemberList();
+            showLoading();
+
+            // 模拟搜索延迟，确保用户看到加载状态
+            setTimeout(function() {
+                window.parent.postMessage({
+                    type: 'searchCustomer',
+                    keyword: keyword
+                }, '*');
+            }, 100);
+        }
+
+        // 渲染会员列表
+        function renderMemberList(members) {
+            hideLoading();
+            
+            if (!members || members.length === 0) {
+                showEmptyState();
+                return;
+            }
+
+            memberCount.textContent = members.length + ' 位会员';
+            
+            memberList.innerHTML = members.map(function(member) {
+                var isSelected = selectedMember && selectedMember.id === member.id;
+                return `
+                    <div class="member-item ${isSelected ? 'selected' : ''}" data-id="${member.id}" 
+                         data-name="${member.name}" data-phone="${member.phone}"
+                         data-level="${member.level || '普通会员'}"
+                         data-wallet-balance="${member.walletBalance || ''}"
+                         data-card-balance="${member.cardBalance || ''}"
+                         data-debt="${member.debt || ''}"
+                         data-points="${member.points || ''}">
+                        <span class="member-name">${member.name}</span>
+                        <span class="member-phone">${member.phone || '-'}</span>
+                        <span class="member-level">${member.level || '普通会员'}</span>
+                    </div>
+                `;
+            }).join('');
+
+            // 绑定会员点击事件
+            memberList.querySelectorAll('.member-item').forEach(function(item) {
+                item.addEventListener('click', function() {
+                    selectMember(this);
+                });
+            });
+        }
+
+        function selectMember(element) {
+            // 取消其他选中状态
+            memberList.querySelectorAll('.member-item').forEach(function(item) {
+                item.classList.remove('selected');
+            });
+            
+            // 设置当前选中状态
+            element.classList.add('selected');
+            
+            // 获取会员数据
+            var memberData = {
+                id: element.dataset.id,
+                name: element.dataset.name,
+                phone: element.dataset.phone,
+                level: element.dataset.level,
+                walletBalance: element.dataset.walletBalance,
+                cardBalance: element.dataset.cardBalance,
+                debt: element.dataset.debt,
+                points: element.dataset.points
+            };
+            
+            selectedMember = memberData;
+            addToRecentMembers(memberData);
+            
+            // 通知父窗口选择了会员
+            window.parent.postMessage({
+                type: 'selectMember',
+                data: memberData
+            }, '*');
+        }
+
+        function showEmptyState() {
+            memberCount.textContent = '0 位会员';
+            memberList.innerHTML = `
+                <div class="empty-state">
+                    <svg class="empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                    <div class="empty-text">未找到匹配的会员</div>
+                    <div class="empty-hint">请尝试其他搜索条件</div>
+                </div>
+            `;
+        }
+
+        function showToast(message) {
+            // 创建临时提示
+            var toast = document.createElement('div');
+            toast.style.cssText = `
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background: rgba(0,0,0,0.7);
+                color: #fff;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-size: 14px;
+                z-index: 1000;
+                animation: fadeIn 0.2s ease;
+            `;
+            toast.textContent = message;
+            document.body.appendChild(toast);
+
+            setTimeout(function() {
+                toast.style.animation = 'fadeOut 0.2s ease';
+                setTimeout(function() {
+                    document.body.removeChild(toast);
+                }, 200);
+            }, 1500);
+        }
+
+        // 添加动画样式
+        var style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+                to { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+            }
+            @keyframes fadeOut {
+                from { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+                to { opacity: 0; transform: translate(-50%, -50%) scale(0.9); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // 监听来自父窗口的消息
+        window.addEventListener('message', function(e) {
+            if (e.data.type === 'clearSearch') {
+                resetSearch();
+            } else if (e.data.type === 'setSearchValue') {
+                searchInput.value = e.data.value || '';
+            } else if (e.data.type === 'searchResult') {
+                // 接收搜索结果
+                renderMemberList(e.data.members);
+            } else if (e.data.type === 'searchError') {
+                hideLoading();
+                showEmptyState();
+                showToast(e.data.message || '搜索失败');
+            }
+        });
+
+        loadRecentMembers();
+        renderRecentMembers();
+    </script>
+</body>
+</html>

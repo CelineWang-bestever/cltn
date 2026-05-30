@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PAD / PC端 · 需求功能清单</title>
+<style>
+:root {
+  --primary: #E87C9A; --primary-bg: #FFF5F7;
+  --blue: #3b82f6; --blue-bg: #eff6ff;
+  --amber: #b45309; --amber-bg: #fffbeb;
+  --green: #16a34a; --green-bg: #f0fdf4;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font:14px/1.7 "Microsoft YaHei","PingFang SC",sans-serif; background:#f5f6fa; color:#333; padding:24px; }
+.container { max-width:1400px; margin:0 auto; }
+h1 { font-size:24px; color:#1e293b; border-bottom:3px solid #E87C9A; padding-bottom:12px; margin-bottom:8px; }
+h2 { font-size:18px; color:#334155; margin:32px 0 14px; padding-bottom:8px; border-bottom:2px solid #e2e8f0; }
+h3 { font-size:15px; color:#475569; margin:18px 0 10px; }
+.subtitle { color:#94a3b8; font-size:13px; margin-bottom:24px; }
+
+.stat-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(180px,1fr)); gap:12px; margin-bottom:28px; }
+.stat-card { background:#fff; border-radius:10px; padding:16px; box-shadow:0 1px 3px rgba(0,0,0,.08); text-align:center; }
+.stat-card .num { font-size:28px; font-weight:700; color:#E87C9A; }
+.stat-card .label { font-size:12px; color:#64748b; margin-top:2px; }
+
+.module { background:#fff; border-radius:10px; padding:0; box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:18px; overflow:hidden; }
+.module-header { background:var(--primary-bg); padding:12px 18px; display:flex; align-items:center; gap:10px; }
+.module-header .dot { width:10px; height:10px; border-radius:50%; background:var(--primary); flex-shrink:0; }
+.module-header .name { font-weight:600; color:#1e293b; }
+.module-header .count { margin-left:auto; font-size:12px; color:#94a3b8; }
+.module-body { padding:14px 18px; }
+.module-body table { width:100%; border-collapse:collapse; }
+.module-body th { background:#f8fafc; padding:8px 10px; text-align:left; font-size:12px; color:#64748b; font-weight:500; border-bottom:2px solid #e2e8f0; }
+.module-body td { padding:8px 10px; border-bottom:1px solid #f1f5f9; font-size:13px; vertical-align:top; }
+.module-body tr:hover td { background:#fafafa; }
+.module-body .num-col { width:36px; text-align:center; color:#94a3b8; }
+.module-body .desc { color:#64748b; font-size:12px; }
+
+.tag { display:inline-block; padding:1px 8px; border-radius:4px; font-size:11px; font-weight:500; }
+.tag-main { background:#fee2e2; color:#dc2626; }
+.tag-sub { background:#e2e8f0; color:#475569; }
+.tag-ui { background:#e0e7ff; color:#4338ca; }
+.tag-placeholder { background:#fef3c7; color:#b45309; }
+
+.file-source { font-size:12px; color:#94a3b8; margin-bottom:2px; }
+
+.divider { border:none; border-top:1px dashed #e2e8f0; margin:20px 0; }
+
+.summary-box { background:#fff; border-radius:10px; padding:20px; box-shadow:0 1px 3px rgba(0,0,0,.08); margin-bottom:20px; line-height:2; }
+.summary-box strong { color:#1e293b; }
+</style>
+</head>
+<body>
+<div class="container">
+
+<h1>📋 PAD / PC端 · 需求功能清单</h1>
+<p class="subtitle">从 create-order-pad.html 和 customer-detail-pad.html 源码中提取 | 生成时间：2026-05-30</p>
+
+<!-- 总览统计 -->
+<div class="stat-grid">
+  <div class="stat-card"><div class="num">129</div><div class="label">功能点总计</div></div>
+  <div class="stat-card"><div class="num">102</div><div class="label">开单收银页</div></div>
+  <div class="stat-card"><div class="num">27</div><div class="label">客户详情页</div></div>
+  <div class="stat-card"><div class="num">18</div><div class="label">弹窗/模态框</div></div>
+  <div class="stat-card"><div class="num">1</div><div class="label">Tab页已实现</div></div>
+  <div class="stat-card"><div class="num">6</div><div class="label">Tab页占位中</div></div>
+</div>
+
+<!-- ==================== 一、开单收银页 ==================== -->
+<p class="file-source">来源文件：new-order-project/create-order-pad.html（18620行）</p>
+<h2>一、开单收银页（create-order-pad.html） — 102项功能</h2>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">1. 客户选择与身份管理</span><span class="count">9项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>选择会员</td><td class="desc">打开会员搜索/选择弹窗（iframe嵌入），搜索并选择会员</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>散客开单</td><td class="desc">非会员快速开单模式，跳过会员关联</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">3</td><td>散客/会员身份切换</td><td class="desc">切换时弹出确认提示</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">4</td><td>会员信息面板</td><td class="desc">左侧栏显示会员姓名、类型标签（新客/体验客/会员）、手机号</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">5</td><td>钱包余额显示</td><td class="desc">左侧栏显示会员钱包余额</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">6</td><td>金额卡余额显示</td><td class="desc">左侧栏显示会员金额卡总余额</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">7</td><td>欠款显示</td><td class="desc">左侧栏显示会员欠款信息</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">8</td><td>还款入口</td><td class="desc">左侧栏还款按钮，快速跳转还款功能</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">9</td><td>会员详情跳转</td><td class="desc">点击跳转至 customer-detail-pad.html</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">2. 商品添加（左侧操作入口）</span><span class="count">5项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">10</td><td>客户权益入口</td><td class="desc">消耗/升卡/充值已有权益（仅会员可见）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">11</td><td>添加单次护理</td><td class="desc">打开单次疗程添加弹窗，按分类筛选并选入购物车</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">12</td><td>添加产品</td><td class="desc">打开产品添加弹窗，支持分类筛选和表格排序</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">13</td><td>添加疗程卡</td><td class="desc">打开疗程卡添加弹窗，仅会员可见</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">14</td><td>添加金额卡</td><td class="desc">打开金额卡添加弹窗，仅会员可见</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">3. 已选商品管理（分类表格）</span><span class="count">13项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">15</td><td>单次护理区域</td><td class="desc">已选单次疗程表格：商品名称、原价、购买数量、本次消耗、使用卡项、折扣、折后价、美容师</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">16</td><td>全部消耗按钮</td><td class="desc">批量消耗所有单次护理</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">17</td><td>产品区域</td><td class="desc">已选产品表格，含拿走数量</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">18</td><td>全部拿走按钮</td><td class="desc">批量拿走所有产品</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">19</td><td>金额卡区域</td><td class="desc">已选金额卡表格：售卖价格、充值金额、赠送金额、购买数量、折扣、折后价</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">20</td><td>疗程卡区域</td><td class="desc">已选疗程卡表格：售卖价格、购买数量、使用卡项、折扣、折后价</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">21</td><td>消耗已有权益区域</td><td class="desc">消耗会员已有卡项中的权益项目：来源卡项、可用数量、使用数量</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">22</td><td>赠送标识</td><td class="desc">每行可标记为"赠品"</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">23</td><td>数量步进器</td><td class="desc">购买数量/消耗数量的 +/- 控件</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">24</td><td>折扣输入</td><td class="desc">逐行折扣百分比输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">25</td><td>折后价输入</td><td class="desc">逐行折后价金额输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">26</td><td>删除行</td><td class="desc">逐行删除按钮</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">27</td><td>美容师分配</td><td class="desc">每行可选择美容师</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">4. 弹窗/模态框系统</span><span class="count">15项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>弹窗名称</th><th>功能说明</th><th>类型</th></tr>
+      <tr><td class="num-col">28</td><td>会员选择弹窗</td><td class="desc">iframe加载会员列表，支持搜索选择</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">29</td><td>客户权益弹窗</td><td class="desc">展示会员已有卡项及权益，支持充卡/升卡/使用</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">30</td><td>散客开单确认弹窗</td><td class="desc">确认切换到散客模式</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">31</td><td>优惠明细弹窗</td><td class="desc">展示整单优惠计算明细</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">32</td><td>金额卡选择弹窗</td><td class="desc">选择用于支付的金额卡</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">33</td><td>添加单次疗程弹窗</td><td class="desc">商品搜索、分类筛选（全部/面部护理/身体护理/SPA/特殊护理）、已选列表</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">34</td><td>添加产品弹窗</td><td class="desc">商品搜索、分类筛选（全部/护肤品/彩妆/工具/套装）、表格排序、已选列表</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">35</td><td>添加卡项弹窗</td><td class="desc">卡项搜索、分类筛选（全部/有限次卡/通卡/金额卡）、已选列表</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">36</td><td>添加疗程卡弹窗</td><td class="desc">疗程搜索、分类筛选（全部/有限次卡/通卡）、左右面板（列表+详情）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">37</td><td>备注弹窗</td><td class="desc">输入订单备注</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">38</td><td>金额卡规则弹窗</td><td class="desc">展示金额卡使用规则说明</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">39</td><td>升卡选择卡项弹窗</td><td class="desc">选择要升到的目标卡项（有限次卡/通卡/金额卡）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">40</td><td>卡片权益查看弹窗</td><td class="desc">查看升卡目标卡片的权益详情</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">41</td><td>修改卡金弹窗</td><td class="desc">修改金额卡的售卡金额、充值金额、赠送金额</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">42</td><td>数字键盘弹窗</td><td class="desc">全局数值输入键盘（0-9、小数点、退格、确认），标题根据上下文动态适配</td><td><span class="tag tag-ui">交互</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">5. 美容师管理</span><span class="count">3项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">43</td><td>批量美容师选择弹窗</td><td class="desc">搜索美容师、多选（最多5人）、一键分配</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">44</td><td>单行美容师选择弹窗</td><td class="desc">为特定商品行独立选择美容师</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">45</td><td>美容师搜索</td><td class="desc">批量/单行弹窗内搜索美容师</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">6. 搜索与筛选</span><span class="count">10项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">46</td><td>权益弹窗内搜索</td><td class="desc">搜索会员已有权益/卡项</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">47</td><td>最近搜索记录</td><td class="desc">权益弹窗中的最近搜索标签（最多8条）</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">48</td><td>单次疗程搜索</td><td class="desc">按商品名称搜索单次护理</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">49</td><td>产品搜索</td><td class="desc">按商品名称搜索产品 + 表格列排序</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">50</td><td>卡项搜索</td><td class="desc">按名称搜索卡项</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">51</td><td>疗程卡搜索</td><td class="desc">按名称搜索疗程卡</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">52</td><td>升卡卡项搜索</td><td class="desc">搜索目标升卡卡项</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">53</td><td>分类标签筛选</td><td class="desc">服务/产品/卡项各类弹窗中的分类Tab切换</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">54</td><td>美容师搜索</td><td class="desc">批量/单行美容师弹窗内搜索</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">55</td><td>搜索清除</td><td class="desc">各搜索框的清除/重置功能</td><td><span class="tag tag-ui">交互</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">7. 价格与优惠管理</span><span class="count">9项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">56</td><td>整单改价</td><td class="desc">弹出整单改价面板，输入整单优惠金额</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">57</td><td>整单改价最低限制提示</td><td class="desc">显示最低改价金额/最低折扣提示</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">58</td><td>移除整单改价优惠</td><td class="desc">清除整单改价，恢复原价</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">59</td><td>移除商品优惠</td><td class="desc">清除逐商品优惠</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">60</td><td>整单与逐行改价互斥</td><td class="desc">整单改价时禁止逐行改价，反之亦然</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">61</td><td>优惠金额输入</td><td class="desc">订单折叠面板中的优惠金额字段</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">62</td><td>应付金额联动</td><td class="desc">修改应付金额时优惠金额同步调整</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">63</td><td>折扣/折后价冲突校验</td><td class="desc">输入冲突时弹出提示</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">64</td><td>金额卡支付</td><td class="desc">选择金额卡抵扣订单金额</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">8. 订单信息面板</span><span class="count">6项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">65</td><td>下单时间选择</td><td class="desc">datetime-local 输入选择下单日期时间</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">66</td><td>批量分配美容师</td><td class="desc">为所有商品统一分配美容师（最多5人）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">67</td><td>优惠金额</td><td class="desc">订单级优惠金额输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">68</td><td>应付金额</td><td class="desc">订单级应付金额输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">69</td><td>备注</td><td class="desc">订单备注文本输入</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">70</td><td>面板展开/收起</td><td class="desc">折叠面板切换</td><td><span class="tag tag-ui">交互</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">9. 底部支付汇总栏</span><span class="count">6项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">71</td><td>待收款显示</td><td class="desc">当前应收总额实时汇总</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">72</td><td>金额卡支付显示</td><td class="desc">金额卡支付汇总信息</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">73</td><td>共优惠显示</td><td class="desc">总优惠金额汇总</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">74</td><td>优惠明细按钮</td><td class="desc">查看优惠计算明细</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">75</td><td>配料按钮</td><td class="desc">配料功能（条件显示）</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">76</td><td>挂单按钮</td><td class="desc">挂起当前订单，暂不提交</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">10. 结账与提交流程</span><span class="count">5项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">77</td><td>结账按钮</td><td class="desc">提交订单，跳转支付页（payment.html）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">78</td><td>结账数据构建</td><td class="desc">构建完整订单payload（含所有商品类型、美容师、金额卡信息）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">79</td><td>金额卡支付汇总</td><td class="desc">结账时汇总金额卡使用情况</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">80</td><td>结账前校验</td><td class="desc">金额卡名称非空、充值金额非空等校验</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">81</td><td>结账数据本地缓存</td><td class="desc">localStorage存储结账payload</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">11. 顶部操作栏</span><span class="count">3项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">82</td><td>扫码核销</td><td class="desc">扫码核销功能入口按钮</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">83</td><td>取单</td><td class="desc">取回已挂订单</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">84</td><td>退出</td><td class="desc">退出开单页面</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">12. 权益卡操作（客户权益弹窗内）</span><span class="count">9项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">85</td><td>充卡</td><td class="desc">为已有金额卡充值（含禁用状态/禁用原因提示）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">86</td><td>升卡</td><td class="desc">将已有卡升级到更高等级（含禁用状态/禁用原因提示）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">87</td><td>权益使用</td><td class="desc">消耗卡项中的护理/产品权益（含进度条、剩余/总数显示）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">88</td><td>自定义疗程卡</td><td class="desc">疗程卡弹窗中的自定义疗程卡入口</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">89</td><td>充值金额输入</td><td class="desc">充卡时的金额输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">90</td><td>赠送金额输入</td><td class="desc">充卡时的赠送金额</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">91</td><td>赠送权益管理</td><td class="desc">充值赠送的护理项目/家居产品/卡项，支持删除和数量调整</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">92</td><td>修改卡金</td><td class="desc">升卡时修改金额卡的售卡金额、充值金额、赠送金额</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">93</td><td>升卡更换卡项</td><td class="desc">更换升卡目标卡项、删除已添加的升卡/充值模块</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">13. 全局交互组件</span><span class="count">4项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">94</td><td>Toast提示</td><td class="desc">全局消息提示条，自动消失</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">95</td><td>数字键盘</td><td class="desc">全局数值输入键盘（数字、小数点、退格、清空、确认），标题动态适配</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">96</td><td>确认/提示弹窗</td><td class="desc">通用确认对话框（支持确认回调和纯提示模式）</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">97</td><td>价格保护机制</td><td class="desc">整单改价时校验最低金额限制、最高金额限制、折扣与金额卡互斥</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">14. 美容师分配功能（已选项目）</span><span class="count">5项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">98</td><td>批量美容师弹窗</td><td class="desc">搜索美容师，多选（最多5人），确认分配</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">99</td><td>单行美容师弹窗</td><td class="desc">为特定商品行独立选择美容师</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">100</td><td>美容师搜索</td><td class="desc">弹窗内搜索美容师</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">101</td><td>美容师上限校验</td><td class="desc">每服务项最多5人限制</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">102</td><td>美容师显示</td><td class="desc">已选商品行中显示分配的美容师</td><td><span class="tag tag-ui">展示</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<!-- ==================== 二、客户详情页 ==================== -->
+<p class="file-source">来源文件：new-order-project/customer-detail-pad.html（4182行）</p>
+<h2>二、客户详情页（customer-detail-pad.html） — 27项功能</h2>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">1. 左侧信息栏 — 客户概要</span><span class="count">6项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>客户头像与基本信息</td><td class="desc">显示头像、姓名、VIP徽章、脱敏手机号(131****7967)</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">2</td><td>"更多信息"按钮</td><td class="desc">打开会员信息编辑弹窗</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">3</td><td>关键信息列表</td><td class="desc">入会时间、生日、责任美容师</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">4</td><td>账户概览</td><td class="desc">钱包余额、欠款（可点击）、金额卡总余额+赠金</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">5</td><td>消费画像</td><td class="desc">累计消费金额、总消费次数、上次服务日期+距今天数、到店次数</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">6</td><td>快捷操作按钮组</td><td class="desc">预约、开单（跳转create-order-pad.html）、测肤</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">2. 右侧主内容区 — Tab导航</span><span class="count">7项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>Tab名称</th><th>状态</th><th>说明</th></tr>
+      <tr><td class="num-col">1</td><td>客户权益</td><td><span class="tag tag-main">已实现</span></td><td class="desc">默认激活，展示会员卡项及权益列表</td></tr>
+      <tr><td class="num-col">2</td><td>交易记录</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无交易记录</td></tr>
+      <tr><td class="num-col">3</td><td>服务记录</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无服务记录</td></tr>
+      <tr><td class="num-col">4</td><td>服务日志</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无服务日志</td></tr>
+      <tr><td class="num-col">5</td><td>物品寄存</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无物品寄存</td></tr>
+      <tr><td class="num-col">6</td><td>平台核销</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无平台核销记录</td></tr>
+      <tr><td class="num-col">7</td><td>测肤记录</td><td><span class="tag tag-placeholder">占位</span></td><td class="desc">暂无测肤记录</td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">3. 客户权益Tab — 搜索与筛选</span><span class="count">3项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>权益搜索框</td><td class="desc">输入关键词实时筛选卡片，支持按卡片名称和项目名称搜索</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>搜索清除按钮</td><td class="desc">清空搜索词，恢复全部显示</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">3</td><td>可使用/失效权益切换</td><td class="desc">权益状态筛选切换器（UI已实现，逻辑待开发）</td><td><span class="tag tag-placeholder">待完善</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">4. 客户权益Tab — 卡片与权益展示</span><span class="count">7项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>有限次卡展示</td><td class="desc">以卡片形式展示，含服务/产品项目、剩余/总次数、使用进度条</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>金额卡展示</td><td class="desc">余额+赠金显示、折扣规则展示（居家/服务折扣）、赠品展示</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">3</td><td>无卡片权益列表</td><td class="desc">独立于卡片外的会员权益项展示</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">4</td><td>进度条可视化</td><td class="desc">每个服务/产品项配有进度条显示剩余/总数</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">5</td><td>赠品标记</td><td class="desc">橙色"赠"标签标识赠品</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">6</td><td>查看详情（展开/折叠）</td><td class="desc">展开/折叠卡片详细信息（如有效期）</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">7</td><td>置换/升卡/充卡入口</td><td class="desc">卡片级操作按钮（当前显示"开发中"）</td><td><span class="tag tag-placeholder">待开发</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">5. 已选项目区域</span><span class="count">7项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>已选项目表格</td><td class="desc">列：项目名称、来源卡项、使用数量、美容师、操作</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>数字步进器</td><td class="desc">每行支持 +/- 调整使用数量（范围1~最大剩余）</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">3</td><td>美容师下拉选择</td><td class="desc">每行独立选择美容师（周炜/李婷/王芳/陈静/张敏）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">4</td><td>行复制</td><td class="desc">复制当前行到新行，同步扣减剩余次数</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">5</td><td>行删除</td><td class="desc">删除当前行，还原对应权益次数到进度条</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">6</td><td>清空全部</td><td class="desc">一键清空所有已选项目，全部还原权益次数</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">7</td><td>已选计数徽章 + 空状态提示</td><td class="desc">实时显示已选数量，无项目时显示引导提示</td><td><span class="tag tag-ui">交互</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">6. 订单信息区域</span><span class="count">3项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>批量分配美容师</td><td class="desc">下拉选择美容师 + "应用到全部"按钮</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>备注输入</td><td class="desc">文本域输入订单备注</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">3</td><td>显示/隐藏逻辑</td><td class="desc">仅客户权益Tab + 有已选项目时才显示</td><td><span class="tag tag-ui">交互</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">7. 底部固定操作栏</span><span class="count">4项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>总使用次数统计</td><td class="desc">实时汇总已选项目的总数量</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">2</td><td>待收款金额</td><td class="desc">实时计算应收金额</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">3</td><td>补单功能</td><td class="desc">打开补单日期时间弹窗，设置后显示补单时间（yyyy-mm-dd hh:mm）</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">4</td><td>确认服务按钮</td><td class="desc">校验已选项目不为空、美容师已选，然后提交确认</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">8. 弹窗/模态框</span><span class="count">3项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>弹窗名称</th><th>功能说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>补单日期弹窗</td><td class="desc">选择日期+时间，确认后显示在底部栏</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>价格保护提示弹窗</td><td class="desc">自动触发（改价冲突时），显示价格限制提示信息</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">3</td><td>会员更多信息弹窗</td><td class="desc">完整的会员信息编辑面板（见下方详细子功能）</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">9. 会员更多信息弹窗 — 标签管理</span><span class="count">7项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>标签展示</td><td class="desc">显示已有关联标签（老顾客、敏感肌、VIP顾客等）</td><td><span class="tag tag-ui">展示</span></td></tr>
+      <tr><td class="num-col">2</td><td>编辑/完成切换</td><td class="desc">点击"编辑"进入编辑模式，按钮变"完成"</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">3</td><td>删除标签</td><td class="desc">编辑模式下每个标签显示X删除按钮</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">4</td><td>添加自定义标签</td><td class="desc">输入框 + "添加"按钮，回车也可添加</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">5</td><td>预设标签选择</td><td class="desc">8个预设标签：敏感肌、油性/干性/混合型皮肤、老/新/VIP顾客、需要跟进</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">6</td><td>标签上限校验</td><td class="desc">最多10个标签，不可重复</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">7</td><td>标签保存/取消</td><td class="desc">编辑数据保存到localStorage，取消恢复备份</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">10. 会员更多信息弹窗 — 基础信息编辑</span><span class="count">7项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>字段</th><th>编辑形式</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>顾客姓名</td><td class="desc">文本输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">2</td><td>手机号码</td><td class="desc">tel输入，含11位校验</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">3</td><td>进店渠道</td><td class="desc">文本输入</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">4</td><td>责任美容师</td><td class="desc">文本输入</td><td><span class="tag tag-main">核心</span></td></tr>
+      <tr><td class="num-col">5</td><td>婚姻状况</td><td class="desc">下拉选择（未婚/已婚/保密）</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">6</td><td>会员生日</td><td class="desc">日期选择器</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">7</td><td>职业 + 家庭地址</td><td class="desc">文本输入 / 文本域（全宽）</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">11. 会员更多信息弹窗 — 补充信息编辑</span><span class="count">5项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>信息组</th><th>形式 / 选项</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>皮肤情况</td><td class="desc">多选复选框：敏感肌、干性/油性/混合型皮肤、暗沉、有痘印</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">2</td><td>护肤习惯</td><td class="desc">多选复选框：洁面、爽肤水、精华液、乳液/面霜、敷面膜、防晒霜</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">3</td><td>护肤诉求</td><td class="desc">多选复选框：补水保湿、美白淡斑、抗衰紧致、修复敏感、控油祛痘、收缩毛孔</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">4</td><td>过往美容师</td><td class="desc">多选复选框：李婷、王芳、陈静、张敏</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">5</td><td>补充说明</td><td class="desc">文本域自由输入</td><td><span class="tag tag-sub">辅助</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<div class="module">
+  <div class="module-header"><div class="dot"></div><span class="name">12. 全局功能</span><span class="count">4项</span></div>
+  <div class="module-body">
+    <table>
+      <tr><th class="num-col">#</th><th>功能点</th><th>说明</th><th>类型</th></tr>
+      <tr><td class="num-col">1</td><td>Toast提示</td><td class="desc">顶部居中弹出，2.2秒自动消失</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">2</td><td>悬浮返回顶部按钮</td><td class="desc">右下角固定，点击平滑滚动到顶部</td><td><span class="tag tag-ui">交互</span></td></tr>
+      <tr><td class="num-col">3</td><td>数据持久化</td><td class="desc">会员更多信息通过localStorage存储和读取</td><td><span class="tag tag-sub">辅助</span></td></tr>
+      <tr><td class="num-col">4</td><td>权益次数追踪</td><td class="desc">remainTracker对象追踪每个权益的剩余次数，支持增/减/还原</td><td><span class="tag tag-main">核心</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<hr class="divider">
+
+<h2>📊 统计概览</h2>
+<div class="summary-box">
+  <strong>开单收银页（create-order-pad.html）：</strong>102项功能点<br>
+  ├ 客户选择与身份管理：9项<br>
+  ├ 商品添加入口：5项<br>
+  ├ 已选商品管理：13项<br>
+  ├ 弹窗/模态框系统：15项<br>
+  ├ 美容师管理：3项<br>
+  ├ 搜索与筛选：10项<br>
+  ├ 价格与优惠管理：9项<br>
+  ├ 订单信息面板：6项<br>
+  ├ 底部支付汇总栏：6项<br>
+  ├ 结账与提交：5项<br>
+  ├ 顶部操作栏：3项<br>
+  ├ 权益卡操作：9项<br>
+  ├ 全局交互组件：4项<br>
+  └ 美容师分配：5项<br><br>
+
+  <strong>客户详情页（customer-detail-pad.html）：</strong>27项功能点<br>
+  ├ 左侧信息栏：6项<br>
+  ├ Tab导航：7项（1已实现 + 6占位）<br>
+  ├ 客户权益Tab-搜索筛选：3项<br>
+  ├ 客户权益Tab-卡片权益展示：7项<br>
+  ├ 已选项目区域：7项<br>
+  ├ 订单信息区域：3项<br>
+  ├ 底部操作栏：4项<br>
+  ├ 弹窗/模态框：3项<br>
+  ├ 会员标签管理：7项<br>
+  ├ 基础信息编辑：7项<br>
+  ├ 补充信息编辑：5项<br>
+  └ 全局功能：4项<br><br>
+
+  <strong>⚠️ 待完善/待开发：</strong><br>
+  • 客户详情页 7个Tab中仅「客户权益」已实现，其余6个均为占位状态<br>
+  • 客户权益Tab中「可使用/失效权益」筛选器UI已实现但逻辑待开发<br>
+  • 置换、升卡、充卡功能在客户详情页中显示"功能开发中"<br>
+  • 开单收银页提供了完整的充卡/升卡流程（在客户权益弹窗中），但与客户详情页尚未联动
+</div>
+
+<p style="text-align:center;color:#94a3b8;margin-top:32px;font-size:12px;">
+  生成时间：2026-05-30 · 源码分析：create-order-pad.html（18620行）+ customer-detail-pad.html（4182行）
+</p>
+
+</div>
+</body>
+</html>

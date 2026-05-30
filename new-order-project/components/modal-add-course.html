@@ -1,0 +1,41 @@
+<!-- addCourseModalOverlay -- 独立组件模板 -->
+<div class="add-course-modal-overlay" id="addCourseModalOverlay">
+        <div class="add-course-modal">
+            <div class="add-course-modal-header">
+                <span class="add-course-modal-title">添加疗程卡</span>
+                <div class="add-course-modal-close" id="addCourseModalClose">×</div>
+            </div>
+            <div class="add-course-modal-body">
+                <!-- 搜索区域 -->
+                <div class="add-course-search-section">
+                    <div class="add-course-search-left">
+                        <input type="text" class="add-course-search-input" id="addCourseSearchInput"
+                            placeholder="搜索疗程名称">
+                        <button class="add-course-custom-btn primary">自定义疗程卡</button>
+                    </div>
+                    <div class="add-course-recent-search">
+                        <span class="add-course-recent-label">最近搜索</span>
+                        <div class="add-course-recent-list" id="addCourseRecentList"></div>
+                    </div>
+                </div>
+
+                <!-- 待选区域 - 左右布局 -->
+                <div class="add-course-content-section">
+                    <!-- 左侧：疗程卡列表 -->
+                    <div class="add-course-left-panel">
+                        <div class="add-course-tabs">
+                            <div class="add-course-tab-item active" data-category="all">全部</div>
+                            <div class="add-course-tab-item" data-category="limited">有限次卡</div>
+                            <div class="add-course-tab-item" data-category="unlimited">通卡</div>
+                        </div>
+                        <div class="add-course-card-list" id="addCourseCardList"></div>
+                    </div>
+
+                    <!-- 右侧：选中卡片明细 -->
+                    <div class="add-course-right-panel" id="addCourseRightPanel">
+                        <div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>

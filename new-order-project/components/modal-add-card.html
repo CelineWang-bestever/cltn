@@ -1,0 +1,47 @@
+<!-- addCardItemModalOverlay -- 独立组件模板 -->
+<div class="add-service-modal-overlay" id="addCardItemModalOverlay">
+        <div class="add-service-modal">
+            <div class="add-service-modal-header">
+                <span class="add-service-modal-title">添加卡项</span>
+                <div class="add-service-modal-close" id="addCardItemModalClose">×</div>
+            </div>
+            <div class="add-service-modal-body">
+                <div class="add-service-search-section">
+                    <div class="add-service-search-left">
+                        <div class="add-service-search-box">
+                            <input type="text" class="add-service-search-input" id="addCardItemSearchInput"
+                                placeholder="搜索卡项名称">
+                        </div>
+                        <div class="add-service-recent-search" id="addCardItemRecentSearch">
+                            <div class="add-service-recent-title">最近搜索</div>
+                            <div class="add-service-recent-list" id="addCardItemRecentList"></div>
+                            <button type="button" class="add-service-recent-clear-btn" id="addCardItemRecentClearBtn">清空</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="add-service-selected-section">
+                    <div class="add-service-selected-header">
+                        <span class="add-service-selected-title">已选卡项</span>
+                        <div class="add-service-selected-actions">
+                            <button class="add-service-btn clear" id="addCardItemClearBtn">清空</button>
+                            <button class="add-service-btn confirm" id="addCardItemConfirmBtn">确定</button>
+                        </div>
+                    </div>
+                    <div class="add-service-selected-list" id="addCardItemSelectedList">
+                        <div class="add-service-empty-hint">点击卡项名称添加卡项</div>
+                    </div>
+                </div>
+
+                <div class="add-service-products-section">
+                    <div class="add-card-item-categories">
+                        <div class="add-card-item-category-item active" data-category="all">全部</div>
+                        <div class="add-card-item-category-item" data-category="有限次卡">有限次卡</div>
+                        <div class="add-card-item-category-item" data-category="通卡">通卡</div>
+                        <div class="add-card-item-category-item" data-category="金额卡">金额卡</div>
+                    </div>
+                    <div class="add-service-products-grid" id="addCardItemGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>

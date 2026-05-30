@@ -1,0 +1,50 @@
+<!-- addServiceModalOverlay -- 独立组件模板 -->
+<div class="add-service-modal-overlay" id="addServiceModalOverlay">
+        <div class="add-service-modal">
+            <div class="add-service-modal-header">
+                <span class="add-service-modal-title">添加单次疗程</span>
+                <div class="add-service-modal-close" id="addServiceModalClose">×</div>
+            </div>
+            <div class="add-service-modal-body">
+                <!-- 搜索区域 -->
+                <div class="add-service-search-section">
+                    <div class="add-service-search-left">
+                        <div class="add-service-search-box">
+                            <input type="text" class="add-service-search-input" id="addServiceSearchInput"
+                                placeholder="搜索商品名称">
+                        </div>
+                        <div class="add-service-recent-search">
+                            <div class="add-service-recent-title">最近搜索</div>
+                            <div class="add-service-recent-list" id="addServiceRecentList"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 已选商品区域 -->
+                <div class="add-service-selected-section">
+                    <div class="add-service-selected-header">
+                        <span class="add-service-selected-title">已选疗程</span>
+                        <div class="add-service-selected-actions">
+                            <button class="add-service-btn clear" id="addServiceClearBtn">清空</button>
+                            <button class="add-service-btn confirm" id="addServiceConfirmBtn">确定</button>
+                        </div>
+                    </div>
+                    <div class="add-service-selected-list" id="addServiceSelectedList">
+                        <div class="add-service-empty-hint">点击商品名称添加商品</div>
+                    </div>
+                </div>
+
+                <!-- 待选商品区域 -->
+                <div class="add-service-products-section">
+                    <div class="add-service-categories">
+                        <div class="add-service-category-item active" data-category="all">全部</div>
+                        <div class="add-service-category-item" data-category="facial">面部护理</div>
+                        <div class="add-service-category-item" data-category="body">身体护理</div>
+                        <div class="add-service-category-item" data-category="spa">SPA</div>
+                        <div class="add-service-category-item" data-category="special">特殊护理</div>
+                    </div>
+                    <div class="add-service-products-grid" id="addServiceProductsGrid"></div>
+                </div>
+            </div>
+        </div>
+    </div>
