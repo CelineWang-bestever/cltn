@@ -10,7 +10,7 @@
 - 服务器: lhins-p0csjffm (124.222.211.194)
 
 ## 已完成部署
-- `/var/www/cltn/new-order-project/` — 新订单项目
+- `http://124.222.211.194:9018/` — cltn 全项目，Docker 容器名 cltn，Node.js test_server.js 静态服务（端口 9018），部署路径 `/var/www/cltn/`
 - `/var/www/store_goal_mgmt_hl/` — 门店目标管理(含API反向代理 /api/→localhost:5001)
 - `/var/www/upload-files/` — 文件上传模块
 

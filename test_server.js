@@ -20,7 +20,7 @@ const server = http.createServer((req, res) => {
         pathname = '/';
     }
 
-    if (pathname === '/') pathname = '/app_product_mgmt.html';
+    if (pathname === '/') pathname = '/index.html';
     const relativePath = pathname.replace(/^\/+/, '');
     const filePath = path.resolve(ROOT_DIR, relativePath);
     if (!filePath.startsWith(path.resolve(ROOT_DIR))) {
