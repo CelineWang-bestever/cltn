@@ -867,10 +867,10 @@
         function goBack() {
             if (uploadedFiles.length > 0) {
                 if (confirm('您有未上传的文件，确定要离开吗？')) {
-                    window.location.href = 'pad&pc-records-mgmt.html';
+                    window.location.href = 'pad-pc-records-mgmt.html';
                 }
             } else {
-                window.location.href = 'pad&pc-records-mgmt.html';
+                window.location.href = 'pad-pc-records-mgmt.html';
             }
         }
 
@@ -1034,7 +1034,7 @@
                 renderUploadedList();
                 updateSubmitBtn();
                 setTimeout(() => {
-                    window.location.href = 'pad&pc-records-mgmt.html';
+                    window.location.href = 'pad-pc-records-mgmt.html';
                 }, 1000);
             }, 1500);
         }

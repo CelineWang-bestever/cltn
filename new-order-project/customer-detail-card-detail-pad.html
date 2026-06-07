@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>克丽缇娜店务通 - 客户权益</title>
+<!-- Tailwind CSS -->
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<!-- Iconify -->
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<!-- ECharts -->
+<script src="https://modao.cc/agent-py/static/source/js/echarts.min.js"></script>
+<style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&display=swap');
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #f5f5f5;
+        }
+        .glass-effect {
+            backdrop-filter: blur(8px);
+            background-color: rgba(255, 255, 255, 0.4);
+        }
+        .tab-active {
+            color: #F06292;
+            border-bottom: 2px solid #F06292;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #F8BBD0;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+<!-- 主容器 Pad/PC 宽屏 -->
+<div class="w-full max-w-[1200px] h-[800px] bg-white rounded-[32px] shadow-2xl overflow-hidden flex relative">
+<!-- 左侧区域：纯装饰遮罩层 (12%) -->
+<div class="w-[12%] relative overflow-hidden">
+<!-- 背景底图 -->
+<img alt="Luxury spa interior background" class="absolute inset-0 w-full h-full object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-06-01/61f79810ad5c4dbe85873fb9fe5c0a61.jpg"/>
+<!-- 半透明遮罩层 -->
+<div class="absolute inset-0 bg-gray-100/60 backdrop-blur-sm"></div>
+</div>
+<!-- 右侧区域：主内容面板 (88%) -->
+<div class="w-[88%] bg-white flex flex-col relative z-20 shadow-[-10px_0_30px_rgba(0,0,0,0.05)]">
+<!-- 顶部标题栏 -->
+<div class="px-8 py-6 flex items-center justify-between border-b border-gray-50">
+<div class="flex items-center space-x-4">
+<button class="p-2 hover:bg-gray-100 rounded-full transition-colors">
+<iconify-icon class="text-2xl text-gray-600" icon="mdi:chevron-left"></iconify-icon>
+</button>
+<h2 class="text-xl font-bold text-[#1A237E]">客户权益</h2>
+</div>
+</div>
+<!-- 内容滚动区 -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-8">
+<!-- 双卡片左右并排布局 -->
+<div class="flex items-stretch gap-4 mb-8">
+<!-- 左侧：次卡信息卡 -->
+<div class="flex-[3] bg-gradient-to-r from-[#FCE4EC] to-[#F8BBD0] rounded-3xl p-6 shadow-md relative overflow-hidden">
+<div class="absolute -right-4 -top-4 w-24 h-24 bg-white/20 rounded-full blur-2xl"></div>
+<div class="relative z-10">
+<div class="flex items-center mb-4">
+<span class="bg-[#F06292] text-white text-xs px-2 py-0.5 rounded-md mr-3">次卡</span>
+<h3 class="text-lg font-bold text-[#1A237E]">1680水妍润泽通卡</h3>
+</div>
+<div class="flex justify-between items-end">
+<div class="space-y-1">
+<p class="text-xs text-gray-500">使用期限</p>
+<p class="text-sm font-medium text-gray-700">2026-03-31 至 2027-03-31</p>
+</div>
+<div class="text-right">
+<p class="text-xs text-gray-500 mb-1">剩余次数</p>
+<p class="text-3xl font-black text-[#F06292]">9<span class="text-lg text-gray-400 font-normal">/10次</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- 右侧：快捷操作卡 -->
+<div class="flex-[2] bg-white rounded-3xl p-5 shadow-sm border border-gray-100 flex flex-col">
+<div class="flex items-center mb-3">
+<span class="w-1 h-4 bg-[#E8838C] rounded-full mr-2 inline-block"></span>
+<span class="text-xs text-gray-400 font-medium tracking-wider">快捷操作</span>
+</div>
+<div class="grid grid-cols-3 gap-2 flex-1">
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('购卡订单')">购卡订单</button>
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('升卡操作')">升卡</button>
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('充卡操作')">充卡</button>
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('退卡操作')">退卡</button>
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('卡延期操作')">卡延期</button>
+<button class="col-span-1 px-3 py-2.5 border border-[#E8838C] text-[#E8838C] text-xs font-medium rounded-lg bg-white hover:bg-pink-50 hover:shadow-sm transition-all duration-200" onclick="showToast('置换权益操作')">置换权益</button>
+</div>
+</div>
+</div>
+<!-- 标签页 Tab -->
+<div class="flex items-center space-x-6 border-b border-gray-100 mb-6 overflow-x-auto">
+<button class="pb-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition-all whitespace-nowrap" id="tab-purchase" onclick="switchTab('purchase')">购买权益</button>
+<button class="pb-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition-all whitespace-nowrap" id="tab-gift" onclick="switchTab('gift')">赠送权益</button>
+<button class="pb-3 text-sm font-bold tab-active transition-all whitespace-nowrap" id="tab-detail" onclick="switchTab('detail')">卡耗明细</button>
+<button class="pb-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition-all whitespace-nowrap" id="tab-exchange" onclick="switchTab('exchange')">置换记录</button>
+<button class="pb-3 text-sm font-bold text-gray-400 hover:text-gray-600 transition-all whitespace-nowrap" id="tab-recharge" onclick="switchTab('recharge')">充值记录</button>
+</div>
+<!-- Tab 内容区：卡耗明细（默认显示） -->
+<div class="space-y-4" id="content-detail">
+<!-- 表格 -->
+<div class="overflow-x-auto rounded-2xl shadow-sm">
+<table class="w-full text-sm">
+<thead>
+<tr class="bg-[#F7F8FA] text-[#323233]">
+<th class="px-3 py-3 text-left font-medium tracking-wide rounded-tl-2xl">商品信息</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">耗卡次数</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">订单编号</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">美容师</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">服务时间</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide rounded-tr-2xl">制单人</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260520001 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽护理</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260520001</td>
+<td class="px-3 py-3 text-center text-gray-600">王琳</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-05-20 14:30</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小张</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260515003 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽护理</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260515003</td>
+<td class="px-3 py-3 text-center text-gray-600">李雅</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-05-15 10:00</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小王</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260508007 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽深层补水</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260508007</td>
+<td class="px-3 py-3 text-center text-gray-600">王琳</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-05-08 16:20</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小张</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260428012 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽护理</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260428012</td>
+<td class="px-3 py-3 text-center text-gray-600">张美</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-04-28 09:45</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小李</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260415006 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽舒缓</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260415006</td>
+<td class="px-3 py-3 text-center text-gray-600">李雅</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-04-15 15:10</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小王</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors cursor-pointer" onclick="showToast('查看订单 ORD20260402018 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽护理</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">1次</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260402018</td>
+<td class="px-3 py-3 text-center text-gray-600">王琳</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-04-02 11:30</td>
+<td class="px-3 py-3 text-center text-gray-600">前台小张</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors cursor-pointer rounded-b-2xl" onclick="showToast('查看订单 ORD20260331001 详情')">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽通卡开卡</td>
+<td class="px-3 py-3 text-center text-gray-400 font-medium">0次(开卡)</td>
+<td class="px-3 py-3 text-center text-gray-500 text-xs font-mono">ORD20260331001</td>
+<td class="px-3 py-3 text-center text-gray-600">系统</td>
+<td class="px-3 py-3 text-center text-gray-500">2026-03-31 10:00</td>
+<td class="px-3 py-3 text-center text-gray-600">系统</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 购买权益 Tab 内容 -->
+<div class="hidden space-y-4" id="content-purchase">
+<div class="overflow-x-auto rounded-2xl shadow-sm">
+<table class="w-full text-sm">
+<thead>
+<tr class="bg-[#F7F8FA] text-[#323233]">
+<th class="px-3 py-3 text-left font-medium tracking-wide rounded-tl-2xl">权益名称</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">权益类型</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">规格</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">售卖价格</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide rounded-tr-2xl">数量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽通卡</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">10次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥1,680</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">玫瑰精华护理</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">5次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥980</td>
+<td class="px-3 py-3 text-center text-gray-600">2</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">深层清洁套餐</td>
+<td class="px-3 py-3 text-center text-gray-600">套卡</td>
+<td class="px-3 py-3 text-center text-gray-500">3次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥680</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">紧致提升护理</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">10次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥2,280</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors rounded-b-2xl">
+<td class="px-3 py-3 text-gray-800 font-medium">舒缓放松体验</td>
+<td class="px-3 py-3 text-center text-gray-600">体验卡</td>
+<td class="px-3 py-3 text-center text-gray-500">1次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥298</td>
+<td class="px-3 py-3 text-center text-gray-600">3</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 赠送权益 Tab 内容 -->
+<div class="hidden space-y-4" id="content-gift">
+<div class="overflow-x-auto rounded-2xl shadow-sm">
+<table class="w-full text-sm">
+<thead>
+<tr class="bg-[#F7F8FA] text-[#323233]">
+<th class="px-3 py-3 text-left font-medium tracking-wide rounded-tl-2xl">权益名称</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">权益类型</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">规格</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">售卖价格</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide rounded-tr-2xl">数量</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">水妍润泽护理</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">1次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥168</td>
+<td class="px-3 py-3 text-center text-gray-600">2</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">玫瑰面膜体验</td>
+<td class="px-3 py-3 text-center text-gray-600">体验卡</td>
+<td class="px-3 py-3 text-center text-gray-500">1次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥128</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-800 font-medium">手部护理服务</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">3次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥388</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors rounded-b-2xl">
+<td class="px-3 py-3 text-gray-800 font-medium">头部舒缓按摩</td>
+<td class="px-3 py-3 text-center text-gray-600">次卡</td>
+<td class="px-3 py-3 text-center text-gray-500">2次</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥258</td>
+<td class="px-3 py-3 text-center text-gray-600">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 置换记录 Tab 内容 -->
+<div class="hidden space-y-4" id="content-exchange">
+<div class="overflow-x-auto rounded-2xl shadow-sm">
+<table class="w-full text-sm">
+<thead>
+<tr class="bg-[#F7F8FA] text-[#323233]">
+<th class="px-3 py-3 text-left font-medium tracking-wide rounded-tl-2xl">置换权益时间</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">操作人</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">卡内参与更换的权益</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">更换后的权益</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">备注</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide rounded-tr-2xl">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-05-20 14:30</td>
+<td class="px-3 py-3 text-center text-gray-600">王琳</td>
+<td class="px-3 py-3 text-center text-gray-700">玫瑰精华护理(剩余3次)</td>
+<td class="px-3 py-3 text-center text-gray-700">水妍润泽护理(3次)</td>
+<td class="px-3 py-3 text-center text-gray-500">客户要求更换</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看置换记录详情')">查看置换记录</button>
+</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-05-10 10:00</td>
+<td class="px-3 py-3 text-center text-gray-600">李雅</td>
+<td class="px-3 py-3 text-center text-gray-700">深层清洁套餐(剩余2次)</td>
+<td class="px-3 py-3 text-center text-gray-700">舒缓放松体验(2次)</td>
+<td class="px-3 py-3 text-center text-gray-500">过敏无法继续使用</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看置换记录详情')">查看置换记录</button>
+</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-04-25 16:15</td>
+<td class="px-3 py-3 text-center text-gray-600">张美</td>
+<td class="px-3 py-3 text-center text-gray-700">紧致提升护理(剩余5次)</td>
+<td class="px-3 py-3 text-center text-gray-700">水妍润泽深层补水(5次)</td>
+<td class="px-3 py-3 text-center text-gray-500">升级服务项目</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看置换记录详情')">查看置换记录</button>
+</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors rounded-b-2xl">
+<td class="px-3 py-3 text-gray-500 text-xs rounded-bl-2xl">2026-04-08 09:30</td>
+<td class="px-3 py-3 text-center text-gray-600">王琳</td>
+<td class="px-3 py-3 text-center text-gray-700">舒缓放松体验(剩余1次)</td>
+<td class="px-3 py-3 text-center text-gray-700">手部护理服务(1次)</td>
+<td class="px-3 py-3 text-center text-gray-500">个人偏好调整</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看置换记录详情')">查看置换记录</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- 充值记录 Tab 内容 -->
+<div class="hidden space-y-4" id="content-recharge">
+<div class="overflow-x-auto rounded-2xl shadow-sm">
+<table class="w-full text-sm">
+<thead>
+<tr class="bg-[#F7F8FA] text-[#323233]">
+<th class="px-3 py-3 text-left font-medium tracking-wide rounded-tl-2xl">充值时间</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">充值本金</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide">充值赠额</th>
+<th class="px-3 py-3 text-center font-medium tracking-wide rounded-tr-2xl">操作</th>
+</tr>
+</thead>
+<tbody>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-05-20 14:30</td>
+<td class="px-3 py-3 text-center text-gray-800 font-medium">¥1,000</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥200</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看订单详情')">查看订单</button>
+</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-05-10 10:00</td>
+<td class="px-3 py-3 text-center text-gray-800 font-medium">¥2,000</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥500</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看订单详情')">查看订单</button>
+</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-04-25 16:15</td>
+<td class="px-3 py-3 text-center text-gray-800 font-medium">¥500</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥100</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看订单详情')">查看订单</button>
+</td>
+</tr>
+<tr class="bg-gray-50/70 hover:bg-pink-50 transition-colors">
+<td class="px-3 py-3 text-gray-500 text-xs">2026-04-08 09:30</td>
+<td class="px-3 py-3 text-center text-gray-800 font-medium">¥3,000</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥800</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看订单详情')">查看订单</button>
+</td>
+</tr>
+<tr class="bg-white hover:bg-pink-50 transition-colors rounded-b-2xl">
+<td class="px-3 py-3 text-gray-500 text-xs rounded-bl-2xl">2026-03-20 11:00</td>
+<td class="px-3 py-3 text-center text-gray-800 font-medium">¥1,500</td>
+<td class="px-3 py-3 text-center text-[#F06292] font-medium">¥300</td>
+<td class="px-3 py-3 text-center">
+<button class="px-3 py-1.5 bg-[#F06292] text-white text-xs rounded-full hover:bg-[#E91E63] transition-colors shadow-sm" onclick="showToast('查看订单详情')">查看订单</button>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+<!-- 底部提示 -->
+<div class="p-6 text-center border-t border-gray-50">
+<p class="text-xs text-gray-300 tracking-widest">该权益由克丽缇娜提供</p>
+</div>
+</div>
+</div>
+<!-- Toast 提示 -->
+<div class="fixed bottom-10 left-1/2 -translate-x-1/2 px-6 py-3 bg-gray-800 text-white text-sm rounded-full shadow-2xl opacity-0 transition-all duration-300 pointer-events-none z-50" id="toast">
+        提示信息
+    </div>
+<script>
+        // Tab 切换逻辑
+        function switchTab(tab) {
+            const tabs = ['purchase', 'gift', 'detail', 'exchange', 'recharge'];
+            tabs.forEach(t => {
+                document.getElementById(`content-${t}`).classList.add('hidden');
+                document.getElementById(`tab-${t}`).classList.remove('tab-active');
+                document.getElementById(`tab-${t}`).classList.add('text-gray-400');
+            });
+
+            document.getElementById(`content-${tab}`).classList.remove('hidden');
+            document.getElementById(`tab-${tab}`).classList.add('tab-active');
+            document.getElementById(`tab-${tab}`).classList.remove('text-gray-400');
+        }
+
+        // Toast 提示逻辑
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.innerText = msg;
+            toast.classList.remove('opacity-0', 'translate-y-4');
+            toast.classList.add('opacity-100', '-translate-y-2');
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'translate-y-4');
+                toast.classList.remove('opacity-100', '-translate-y-2');
+            }, 2000);
+        }
+    </script>
+</body>
+</html>
