@@ -2867,4 +2867,398 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     })();
 
+    // ============================================================
+    // 交易记录 Tab — 完整逻辑
+    // ============================================================
+
+    // ---- Mock 数据 ----
+    var mockOrders = [
+        {
+            id: 'ORDER_001',
+            orderTime: '2026-06-02 22:57:00',
+            status: 'completed',
+            hasRefund: false,
+            items: [
+                { id: 'item_001', productName: '闻香精油', productImage: '', attribute: '耗卡', unitPrice: 598.00, quantity: 1, beautician: null, itemAmount: 598.00 },
+                { id: 'item_002', productName: '保湿面膜', productImage: '', attribute: '耗卡', unitPrice: 398.00, quantity: 2, beautician: 'roger', itemAmount: 796.00 },
+                { id: 'item_003', productName: '洁面乳', productImage: '', attribute: null, unitPrice: 168.00, quantity: 1, beautician: null, itemAmount: 168.00 }
+            ],
+            totalAmount: 1562.00
+        },
+        {
+            id: 'ORDER_002',
+            orderTime: '2026-06-01 15:20:00',
+            status: 'pending_sign',
+            hasRefund: false,
+            items: [
+                { id: 'item_004', productName: '100元护理', productImage: '', attribute: '耗卡', unitPrice: 200.00, quantity: 1, beautician: null, itemAmount: 200.00 }
+            ],
+            totalAmount: 200.00
+        },
+        {
+            id: 'ORDER_003',
+            orderTime: '2026-06-02 22:57:00',
+            status: 'refunded',
+            hasRefund: true,
+            items: [
+                { id: 'item_005', productName: '100元护理', productImage: '', attribute: '耗卡', unitPrice: 200.00, quantity: 1, beautician: 'roger', itemAmount: 398.00 }
+            ],
+            totalAmount: 398.00,
+            refundAmount: 398.00
+        }
+    ];
+
+    // ---- 产品默认缩略图 ----
+    function productImgSrc(src) {
+        return src || 'default_image.jpg';
+    }
+
+    // ---- 状态映射 ----
+    var statusMap = {
+        'pending_sign':    { label: '待签字',   cls: 'order-status--pending',        dot: '#F59E0B' },
+        'completed':       { label: '已完成',   cls: 'order-status--completed',       dot: '#10B981' },
+        'refunded':        { label: '已退款',   cls: 'order-status--refunded',        dot: '#EF4444' },
+        'partial_refund':  { label: '部分退款', cls: 'order-status--partial-refund',  dot: '#EF4444' },
+        'cancelled':       { label: '已取消',   cls: 'order-status--cancelled',       dot: '#9CA3AF' }
+    };
+
+    var attrLabelMap = {
+        '耗卡': 'order-table__product-attr--consume',
+        '购买': 'order-table__product-attr--buy',
+        '赠送': 'order-table__product-attr--gift'
+    };
+
+    // ---- 筛选状态 ----
+    var txnFilter = { name: '', dateStart: '', dateEnd: '' };
+
+    function getFilteredOrders() {
+        return mockOrders.filter(function(o) {
+            if (txnFilter.name) {
+                var matchName = false;
+                o.items.forEach(function(item) {
+                    if (item.productName.indexOf(txnFilter.name) !== -1) matchName = true;
+                });
+                if (!matchName) return false;
+            }
+            if (txnFilter.dateStart) {
+                if (o.orderTime.slice(0,10) < txnFilter.dateStart) return false;
+            }
+            if (txnFilter.dateEnd) {
+                if (o.orderTime.slice(0,10) > txnFilter.dateEnd) return false;
+            }
+            return true;
+        });
+    }
+
+    function getPendingOrders() {
+        return mockOrders.filter(function(o) { return o.status === 'pending_sign'; });
+    }
+
+    // ---- 渲染订单列表 ----
+    function renderTransactions() {
+        var container = document.getElementById('transactions-list');
+        var emptyEl   = document.getElementById('txn-empty-placeholder');
+        var orders    = getFilteredOrders();
+
+        if (!container) return;
+
+        if (orders.length === 0) {
+            container.innerHTML = '';
+            if (emptyEl) emptyEl.style.display = '';
+            updateBatchSignButton();
+            return;
+        }
+
+        if (emptyEl) emptyEl.style.display = 'none';
+
+        var html = '';
+        orders.forEach(function(order) {
+            var actionText = order.hasRefund ? '退单详情' : '订单详情';
+            var totalCls  = order.hasRefund ? ' order-block__total--refund' : '';
+            var totalLabel = (order.status === 'refunded' || order.status === 'partial_refund') ? '退款金额：' : '订单总额：';
+            var totalAmt   = order.refundAmount || order.totalAmount;
+
+            // 状态信息
+            var st = statusMap[order.status] || { label: order.status, cls: '', dot: '#9CA3AF' };
+
+            html += '<div class="order-block">';
+
+            // 订单头部
+            html += '<div class="order-block__header">';
+            html += '<span class="order-block__header-time">下单时间：' + order.orderTime + '</span>';
+            html += '<a class="order-block__header-action" href="javascript:void(0)">' + actionText + '</a>';
+            html += '</div>';
+
+            // 商品表格
+            html += '<table class="order-table"><thead><tr>';
+            html += '<th style="width:200px;">商品</th>';
+            html += '<th class="col-price" style="width:100px;">单价</th>';
+            html += '<th class="col-qty" style="width:60px;">数量</th>';
+            html += '<th class="col-beautician" style="width:100px;">美容师</th>';
+            html += '<th class="col-amount" style="width:120px;">金额</th>';
+            html += '<th class="col-status" style="width:100px;">状态</th>';
+            html += '</tr></thead><tbody>';
+
+            var itemsLen = order.items.length;
+            order.items.forEach(function(item, idx) {
+                var amountCls = (order.hasRefund && idx === itemsLen - 1) ? ' col-amount--refund' : '';
+                var amountText = (idx === itemsLen - 1 && order.refundAmount)
+                    ? '实退¥' + order.refundAmount.toFixed(0)
+                    : '¥' + item.itemAmount.toFixed(0);
+                var attrHtml = item.attribute
+                    ? '<span class="order-table__product-attr ' + (attrLabelMap[item.attribute] || '') + '">' + item.attribute + '</span>'
+                    : '';
+                var beautician = item.beautician || '-';
+
+                html += '<tr class="order-table__row">';
+                // 商品列
+                html += '<td><div class="col-product">';
+                html += '<div class="order-table__product-img"><img src="' + productImgSrc(item.productImage) + '" alt="' + item.productName + '" onerror="this.src=\'default_image.jpg\'"></div>';
+                html += '<div class="order-table__product-info">';
+                html += '<span class="order-table__product-name">' + item.productName + '</span>';
+                html += attrHtml;
+                html += '</div></div></td>';
+                // 单价
+                html += '<td class="col-price">¥' + item.unitPrice.toFixed(0) + '</td>';
+                // 数量
+                html += '<td class="col-qty">x' + item.quantity + '</td>';
+                // 美容师
+                html += '<td class="col-beautician">' + beautician + '</td>';
+                // 金额
+                html += '<td class="col-amount' + amountCls + '">' + amountText + '</td>';
+                // 状态 — 只第一行显示（跨行）
+                if (idx === 0) {
+                    html += '<td class="col-status" rowspan="' + itemsLen + '">';
+                    html += '<span class="order-status ' + st.cls + '">';
+                    html += '<span class="order-status__dot"></span>';
+                    html += st.label;
+                    html += '</span></td>';
+                }
+                html += '</tr>';
+            });
+
+            html += '</tbody></table>';
+
+            // 汇总行
+            html += '<div class="order-block__total' + totalCls + '">';
+            html += totalLabel + '¥' + totalAmt.toFixed(0);
+            html += '</div>';
+
+            html += '</div>';
+        });
+
+        container.innerHTML = html;
+        updateBatchSignButton();
+    }
+
+    // ---- 更新批量签字按钮可见性 ----
+    function updateBatchSignButton() {
+        var area = document.getElementById('txn-batch-sign-area');
+        var countEl = document.getElementById('batch-sign-count');
+        var pendingOrders = getPendingOrders();
+
+        if (!area) return;
+
+        if (pendingOrders.length > 0) {
+            area.style.display = '';
+            if (countEl) countEl.textContent = '待签字订单：' + pendingOrders.length + ' 笔';
+        } else {
+            area.style.display = 'none';
+        }
+    }
+
+    // ---- Canvas 签名逻辑 ----
+    var batchSignCanvas = null;
+    var batchSignCtx = null;
+    var batchSignDrawn = false;
+    var batchSignDrawing = false;
+
+    function initBatchSignCanvas() {
+        batchSignCanvas = document.getElementById('batchSignCanvas');
+        if (!batchSignCanvas) return;
+        batchSignCtx = batchSignCanvas.getContext('2d');
+
+        function getPos(e) {
+            var rect = batchSignCanvas.getBoundingClientRect();
+            var scaleX = batchSignCanvas.width / rect.width;
+            var scaleY = batchSignCanvas.height / rect.height;
+            var clientX, clientY;
+            if (e.touches && e.touches.length > 0) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else if (e.changedTouches && e.changedTouches.length > 0) {
+                clientX = e.changedTouches[0].clientX;
+                clientY = e.changedTouches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function startDraw(e) {
+            e.preventDefault();
+            batchSignDrawing = true;
+            var pos = getPos(e);
+            batchSignCtx.beginPath();
+            batchSignCtx.moveTo(pos.x, pos.y);
+        }
+
+        function draw(e) {
+            if (!batchSignDrawing) return;
+            e.preventDefault();
+            var pos = getPos(e);
+            batchSignCtx.lineWidth = 2.5;
+            batchSignCtx.lineCap = 'round';
+            batchSignCtx.lineJoin = 'round';
+            batchSignCtx.strokeStyle = '#333';
+            batchSignCtx.lineTo(pos.x, pos.y);
+            batchSignCtx.stroke();
+            batchSignCtx.beginPath();
+            batchSignCtx.moveTo(pos.x, pos.y);
+            markDrawn();
+        }
+
+        function endDraw(e) {
+            if (!batchSignDrawing) return;
+            batchSignDrawing = false;
+            batchSignCtx.beginPath();
+        }
+
+        function markDrawn() {
+            if (!batchSignDrawn) {
+                batchSignDrawn = true;
+                var placeholder = document.getElementById('batchSignCanvasPlaceholder');
+                if (placeholder) placeholder.classList.add('hidden');
+                updateConfirmButton();
+            }
+        }
+
+        batchSignCanvas.addEventListener('mousedown', startDraw);
+        batchSignCanvas.addEventListener('mousemove', draw);
+        batchSignCanvas.addEventListener('mouseup', endDraw);
+        batchSignCanvas.addEventListener('mouseleave', endDraw);
+        batchSignCanvas.addEventListener('touchstart', startDraw, { passive: false });
+        batchSignCanvas.addEventListener('touchmove', draw, { passive: false });
+        batchSignCanvas.addEventListener('touchend', endDraw);
+    }
+
+    function clearBatchSignCanvas() {
+        if (!batchSignCtx) return;
+        batchSignCtx.clearRect(0, 0, batchSignCanvas.width, batchSignCanvas.height);
+        batchSignDrawn = false;
+        var placeholder = document.getElementById('batchSignCanvasPlaceholder');
+        if (placeholder) placeholder.classList.remove('hidden');
+        updateConfirmButton();
+    }
+
+    function updateConfirmButton() {
+        var checkbox = document.getElementById('batchSignCheckbox');
+        var confirmBtn = document.getElementById('batchSignConfirm');
+        if (!confirmBtn) return;
+        var isChecked = checkbox && checkbox.checked;
+        confirmBtn.disabled = !(isChecked && batchSignDrawn);
+    }
+
+    // ---- 批量签字弹窗 ----
+    function openBatchSignModal() {
+        var overlay = document.getElementById('batchSignOverlay');
+        var pendingOrders = getPendingOrders();
+        if (!overlay || pendingOrders.length === 0) return;
+
+        // 渲染订单清单
+        var tbody = document.getElementById('batchSignOrderTbody');
+        var countEl = document.getElementById('batchSignCount');
+        var hintEl = document.getElementById('batchSignHint');
+
+        if (countEl) countEl.textContent = pendingOrders.length;
+        if (hintEl) hintEl.innerHTML = '以下 <span>' + pendingOrders.length + '</span> 笔订单需要客户签字确认：';
+
+        if (tbody) {
+            tbody.innerHTML = pendingOrders.map(function(o) {
+                var productNames = o.items.map(function(item) { return item.productName; }).join('、');
+                return '<tr><td>' + o.orderTime + '</td><td>' + productNames + '</td></tr>';
+            }).join('');
+        }
+
+        // 重置
+        var checkbox = document.getElementById('batchSignCheckbox');
+        if (checkbox) checkbox.checked = false;
+        clearBatchSignCanvas();
+
+        overlay.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function closeBatchSignModal() {
+        var overlay = document.getElementById('batchSignOverlay');
+        if (overlay) overlay.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+
+    function confirmBatchSign() {
+        var pendingOrders = getPendingOrders();
+        if (pendingOrders.length === 0) return;
+
+        // 批量更新状态
+        pendingOrders.forEach(function(o) {
+            o.status = 'completed';
+            o.hasRefund = false;
+        });
+
+        closeBatchSignModal();
+        renderTransactions();
+        showToast(pendingOrders.length + ' 笔订单签字完成');
+    }
+
+    // ---- 筛选事件 ----
+    document.getElementById('txn-btn-search').addEventListener('click', function() {
+        txnFilter.name     = document.getElementById('txn-search-name').value.trim();
+        txnFilter.dateStart = document.getElementById('txn-date-start').value;
+        txnFilter.dateEnd   = document.getElementById('txn-date-end').value;
+        renderTransactions();
+    });
+
+    document.getElementById('txn-btn-reset').addEventListener('click', function() {
+        document.getElementById('txn-search-name').value = '';
+        document.getElementById('txn-date-start').value = '';
+        document.getElementById('txn-date-end').value = '';
+        txnFilter = { name: '', dateStart: '', dateEnd: '' };
+        renderTransactions();
+    });
+
+    // ---- 批量签字按钮 ----
+    document.getElementById('btn-batch-sign').addEventListener('click', function() {
+        openBatchSignModal();
+    });
+
+    // ---- 弹窗关闭 ----
+    document.getElementById('batchSignClose').addEventListener('click', function() {
+        closeBatchSignModal();
+    });
+
+    document.getElementById('batchSignOverlay').addEventListener('click', function(e) {
+        if (e.target === this) closeBatchSignModal();
+    });
+
+    // ---- 复选框 & Canvas 联动 ----
+    document.getElementById('batchSignCheckbox').addEventListener('change', function() {
+        updateConfirmButton();
+    });
+
+    document.getElementById('batchSignClear').addEventListener('click', function() {
+        clearBatchSignCanvas();
+    });
+
+    document.getElementById('batchSignConfirm').addEventListener('click', function() {
+        confirmBatchSign();
+    });
+
+    // ---- 初始化 ----
+    initBatchSignCanvas();
+    renderTransactions();
+
 });

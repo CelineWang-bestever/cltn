@@ -2691,3 +2691,534 @@ body {
 .add-product-table .select-btn:hover { background: var(--primary-500); color: white; border-color: var(--primary-500); }
 .add-product-table tr.selected .select-btn { background: var(--primary-500); color: white; border-color: var(--primary-500); }
 #addProductModalOverlay .add-service-modal { height: 650px; max-height: 750px; max-width: 1200px; }
+
+/* ============================================================
+ * 全局工具类（交易记录Tab依赖）
+ * ============================================================ */
+.btn-primary {
+    background: linear-gradient(135deg, #F1A3B8 0%, #E87C9A 100%);
+    color: #FFFFFF;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+
+.btn-outline {
+    background: #FFFFFF;
+    color: #E87C9A;
+    border: 1px solid #E87C9A;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: all 0.2s;
+}
+.btn-outline:hover { background: #FFF1F5; }
+
+.form-input {
+    font-family: inherit;
+    font-size: 14px;
+    padding: 10px 14px;
+    border: 1px solid #E5E7EB;
+    border-radius: 8px;
+    outline: none;
+    background: #FFFFFF;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    color: #374151;
+    line-height: 1.5;
+}
+.form-input:focus { border-color: #E87C9A; box-shadow: 0 0 0 3px rgba(232,124,154,0.1); }
+.form-input::placeholder { color: #9CA3AF; }
+
+/* ============================================================
+ * 交易记录 Tab — 完整样式
+ * ============================================================ */
+
+/* ---- 搜索筛选栏 ---- */
+.transactions-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 16px;
+    background: #FFFFFF;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    margin-bottom: 4px;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+.transactions-toolbar__search {
+    width: 200px;
+    flex-shrink: 0;
+}
+
+.transactions-toolbar__date {
+    width: 150px;
+    flex-shrink: 0;
+}
+
+.transactions-toolbar__btn {
+    padding: 10px 22px !important;
+    font-size: 14px !important;
+    flex-shrink: 0;
+}
+
+.transactions-toolbar__reset {
+    background: none;
+    border: none;
+    color: #6B7280;
+    font-size: 14px;
+    cursor: pointer;
+    padding: 8px 4px;
+    transition: color 0.2s;
+    flex-shrink: 0;
+}
+.transactions-toolbar__reset:hover {
+    color: #E87C9A;
+}
+
+.transactions-toolbar__spacer {
+    flex: 1;
+    min-width: 0;
+}
+
+.transactions-toolbar__batch-area {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.transactions-toolbar__batch-btn {
+    display: inline-flex !important;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px !important;
+    font-size: 14px !important;
+    white-space: nowrap;
+}
+
+.transactions-toolbar__batch-hint {
+    font-size: 12px;
+    color: #6B7280;
+    white-space: nowrap;
+}
+
+/* ---- 订单列表 ---- */
+.transactions-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+/* ---- 订单区块 ---- */
+.order-block {
+    background: #FFFFFF;
+    border-radius: 10px;
+    border: 1px solid #F0F0F0;
+    overflow: hidden;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.03);
+}
+
+.order-block__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    border-bottom: 1px solid #F3F4F6;
+}
+
+.order-block__header-time {
+    font-size: 13px;
+    color: #374151;
+    font-weight: 500;
+}
+
+.order-block__header-action {
+    font-size: 14px;
+    color: #E87C9A;
+    cursor: pointer;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+.order-block__header-action:hover {
+    color: #D66B85;
+    text-decoration: underline;
+}
+
+/* ---- 商品明细表格 ---- */
+.order-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.order-table thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 12px;
+    background: #F9FAFB;
+    border-bottom: 1px solid #F0F0F0;
+}
+.order-table thead th.col-price,
+.order-table thead th.col-amount {
+    text-align: right;
+}
+.order-table thead th.col-qty,
+.order-table thead th.col-beautician,
+.order-table thead th.col-status {
+    text-align: center;
+}
+
+.order-table tbody tr.order-table__row {
+    border-bottom: 1px solid #F5F5F5;
+    transition: background 0.15s;
+}
+.order-table tbody tr.order-table__row:hover {
+    background: #FFF7FA;
+}
+.order-table tbody tr.order-table__row:nth-child(even) {
+    background: #F9FAFB;
+}
+.order-table tbody tr.order-table__row:nth-child(even):hover {
+    background: #FFF7FA;
+}
+
+.order-table td {
+    padding: 10px 12px;
+    vertical-align: middle;
+    color: #374151;
+}
+
+/* 商品列 */
+.order-table .col-product {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.order-table__product-img {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    background: #F3F4F6;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+.order-table__product-img img,
+.order-table__product-img svg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.order-table__product-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.order-table__product-name {
+    font-size: 13px;
+    color: #111827;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.order-table__product-attr {
+    display: inline-block;
+    font-size: 11px;
+    padding: 1px 8px;
+    border-radius: 4px;
+    background: #F3F4F6;
+    color: #6B7280;
+    align-self: flex-start;
+}
+
+/* 属性标签颜色 */
+.order-table__product-attr--consume { background: #F3F4F6; color: #6B7280; }
+.order-table__product-attr--buy { background: #F3F4F6; color: #6B7280; }
+.order-table__product-attr--gift { background: #D1FAE5; color: #059669; }
+
+/* 其他列 */
+.order-table td.col-price {
+    text-align: right;
+    color: #374151;
+    white-space: nowrap;
+}
+.order-table td.col-qty {
+    text-align: center;
+    white-space: nowrap;
+}
+.order-table td.col-beautician {
+    text-align: center;
+    color: #6B7280;
+    white-space: nowrap;
+}
+.order-table td.col-amount {
+    text-align: right;
+    font-weight: 500;
+    color: #111827;
+    white-space: nowrap;
+}
+.order-table td.col-amount--refund {
+    color: #EF4444;
+}
+
+.order-table td.col-status {
+    text-align: center;
+}
+
+/* ---- 订单汇总行 ---- */
+.order-block__total {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px 16px;
+    border-top: 1px solid #F0F0F0;
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+    background: #FAFBFC;
+}
+.order-block__total--refund {
+    color: #EF4444;
+}
+
+/* ---- 订单状态标签 ---- */
+.order-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 3px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+}
+
+.order-status__dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+/* 待签字 */
+.order-status--pending {
+    background: #FEF3C7;
+    color: #D97706;
+    border: 1px solid #FDE68A;
+    animation: sign-pulse 1.5s ease-in-out infinite;
+}
+.order-status--pending .order-status__dot {
+    background: #F59E0B;
+}
+
+/* 已完成 */
+.order-status--completed {
+    background: #D1FAE5;
+    color: #059669;
+    border: 1px solid #A7F3D0;
+}
+.order-status--completed .order-status__dot {
+    background: #10B981;
+}
+
+/* 已退款 */
+.order-status--refunded {
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+}
+.order-status--refunded .order-status__dot {
+    background: #EF4444;
+}
+
+/* 部分退款 */
+.order-status--partial-refund {
+    background: #FEE2E2;
+    color: #DC2626;
+    border: 1px solid #FECACA;
+}
+.order-status--partial-refund .order-status__dot {
+    background: #EF4444;
+}
+
+/* 已取消 */
+.order-status--cancelled {
+    background: #F3F4F6;
+    color: #9CA3AF;
+    border: 1px solid #E5E7EB;
+}
+.order-status--cancelled .order-status__dot {
+    background: #9CA3AF;
+}
+
+@keyframes sign-pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+/* ---- 批量签字弹窗 ---- */
+.batch-sign-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.45);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+}
+.batch-sign-overlay.show { display: flex; }
+
+.batch-sign-modal {
+    background: #FFFFFF;
+    border-radius: 14px;
+    width: 520px;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+}
+
+.batch-sign-body {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.batch-sign-hint {
+    font-size: 14px;
+    color: #374151;
+    font-weight: 500;
+}
+.batch-sign-hint span {
+    font-weight: 700;
+    color: #E87C9A;
+}
+
+/* 订单清单 */
+.batch-sign-list-wrap {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #F0F0F0;
+    border-radius: 8px;
+}
+
+.batch-sign-list {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+}
+
+.batch-sign-list thead th {
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #6B7280;
+    font-size: 12px;
+    background: #F9FAFB;
+    border-bottom: 1px solid #F0F0F0;
+    position: sticky;
+    top: 0;
+}
+
+.batch-sign-list tbody td {
+    padding: 8px 12px;
+    color: #374151;
+    border-bottom: 1px solid #F5F5F5;
+}
+
+.batch-sign-list__time { width: 180px; }
+.batch-sign-list__product { width: auto; }
+
+/* 复选框区域 */
+.batch-sign-checkbox-area {
+    display: flex;
+    align-items: center;
+}
+
+.batch-sign-checkbox-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #374151;
+}
+
+.batch-sign-checkbox-label input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #E87C9A;
+    cursor: pointer;
+}
+
+.batch-sign-checkbox-text {
+    user-select: none;
+}
+
+/* Canvas 签名画布 */
+.batch-sign-canvas-wrap {
+    position: relative;
+    width: 100%;
+    background: #F5F5F5;
+    border: 2px dashed #D1D5DB;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.batch-sign-canvas {
+    display: block;
+    width: 100%;
+    height: 180px;
+    cursor: crosshair;
+    touch-action: none;
+}
+
+.batch-sign-canvas-placeholder {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 14px;
+    color: #9CA3AF;
+    pointer-events: none;
+    transition: opacity 0.2s;
+}
+.batch-sign-canvas-placeholder.hidden {
+    opacity: 0;
+}
+
+/* 免责声明 */
+.batch-sign-disclaimer {
+    text-align: center;
+    font-size: 12px;
+    color: #999;
+}
+
+/* 按钮区域 */
+.batch-sign-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    padding-top: 4px;
+}
+
+.batch-sign-actions .modal-btn-confirm:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}

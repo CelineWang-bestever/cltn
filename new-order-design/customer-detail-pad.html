@@ -407,7 +407,28 @@
 
             <!-- ===== 交易记录标签页内容 ===== -->
             <div class="tab-content" id="tab-transaction">
-                <div class="tab-placeholder">
+                <!-- 搜索筛选栏 -->
+                <div class="transactions-toolbar">
+                    <input type="text" class="form-input transactions-toolbar__search" placeholder="输入商品名称" id="txn-search-name">
+                    <input type="date" class="form-input transactions-toolbar__date" id="txn-date-start" placeholder="开始时间">
+                    <input type="date" class="form-input transactions-toolbar__date" id="txn-date-end" placeholder="结束时间">
+                    <button class="btn btn-primary transactions-toolbar__btn" id="txn-btn-search">查询</button>
+                    <button class="transactions-toolbar__reset" id="txn-btn-reset">重置</button>
+                    <div class="transactions-toolbar__spacer"></div>
+                    <div class="transactions-toolbar__batch-area" id="txn-batch-sign-area" style="display:none;">
+                        <button class="btn btn-outline transactions-toolbar__batch-btn" id="btn-batch-sign">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                            批量签字
+                        </button>
+                        <span class="transactions-toolbar__batch-hint" id="batch-sign-count"></span>
+                    </div>
+                </div>
+
+                <!-- 订单列表 -->
+                <div class="transactions-list" id="transactions-list"></div>
+
+                <!-- 空状态 -->
+                <div class="tab-placeholder" id="txn-empty-placeholder" style="display:none;">
                     <div class="tab-placeholder-icon">
                         <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z"/></svg>
                     </div>
@@ -1109,6 +1130,52 @@
 
                     <div class="key-item key-number" data-key="0">0</div>
                     <div class="key-item key-number" data-key=".">.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== 批量签字弹窗 ===== -->
+    <div class="batch-sign-overlay" id="batchSignOverlay">
+        <div class="batch-sign-modal">
+            <div class="modal-header">
+                <span class="modal-title">批量签字</span>
+                <button class="modal-close" id="batchSignClose">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#666" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>
+            <div class="modal-body batch-sign-body">
+                <div class="batch-sign-hint" id="batchSignHint">以下 <span id="batchSignCount">0</span> 笔订单需要客户签字确认：</div>
+
+                <div class="batch-sign-list-wrap">
+                    <table class="batch-sign-list" id="batchSignOrderList">
+                        <thead>
+                            <tr>
+                                <th class="batch-sign-list__time">下单时间</th>
+                                <th class="batch-sign-list__product">商品</th>
+                            </tr>
+                        </thead>
+                        <tbody id="batchSignOrderTbody"></tbody>
+                    </table>
+                </div>
+
+                <div class="batch-sign-checkbox-area">
+                    <label class="batch-sign-checkbox-label" id="batchSignCheckboxLabel">
+                        <input type="checkbox" id="batchSignCheckbox">
+                        <span class="batch-sign-checkbox-text">贵重物品已带回，签名已核对</span>
+                    </label>
+                </div>
+
+                <div class="batch-sign-canvas-wrap">
+                    <canvas id="batchSignCanvas" class="batch-sign-canvas" width="480" height="180"></canvas>
+                    <div class="batch-sign-canvas-placeholder" id="batchSignCanvasPlaceholder">请在此处签名</div>
+                </div>
+
+                <div class="batch-sign-disclaimer">签名即代表知悉并同意，请谨慎填写！</div>
+
+                <div class="batch-sign-actions">
+                    <button class="modal-btn modal-btn-cancel" id="batchSignClear">清除重签</button>
+                    <button class="modal-btn modal-btn-confirm" id="batchSignConfirm" disabled>确认签字</button>
                 </div>
             </div>
         </div>
