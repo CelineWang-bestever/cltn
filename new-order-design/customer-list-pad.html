@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CHLITINA 克丽缇娜 - 客户管理系统</title>
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#F1A3B8',
+                        'brand-light': '#FCEEF1',
+                        'bg-gray': '#F7F8FA',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #ccc; }
+        .sticky-left { position: sticky; left: 0; z-index: 20; background-color: white; }
+        .sticky-right { position: sticky; right: 0; z-index: 20; background-color: white; }
+        thead .sticky-left, thead .sticky-right { background-color: #F9FAFB; }
+        .table-row-hover:hover { background-color: #FFF9FA; }
+        .shadow-left { box-shadow: 4px 0 8px -4px rgba(0,0,0,0.1); }
+        .shadow-right { box-shadow: -4px 0 8px -4px rgba(0,0,0,0.1); }
+        /* 新增客户弹窗样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.25);
+            width: 600px;
+            max-height: 85vh;
+            display: flex;
+            flex-direction: column;
+            animation: modalIn 0.2s ease-out;
+        }
+        @keyframes modalIn {
+            from { opacity: 0; transform: translateY(20px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 24px;
+            border-bottom: 1px solid #f0f0f0;
+            position: relative;
+        }
+        .modal-header .close-btn {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #9ca3af;
+            font-size: 20px;
+            line-height: 1;
+            border: none;
+            background: none;
+            padding: 4px;
+            transition: color 0.2s;
+        }
+        .modal-header .close-btn:hover {
+            color: #6b7280;
+        }
+        .modal-header h2 {
+            font-size: 18px;
+            font-weight: 700;
+            color: #111827;
+            margin: 0;
+        }
+        .modal-body {
+            padding: 24px 28px;
+            overflow-y: auto;
+            flex: 1;
+        }
+        .form-section-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111827;
+            margin-bottom: 20px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .form-row {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 18px;
+        }
+        .form-label {
+            width: 100px;
+            flex-shrink: 0;
+            font-size: 14px;
+            color: #111827;
+            line-height: 36px;
+            text-align: left;
+            padding-right: 12px;
+        }
+        .form-label .required {
+            color: #ef4444;
+            margin-right: 2px;
+        }
+        .form-control {
+            flex: 1;
+            min-width: 0;
+        }
+        .form-control input[type="text"],
+        .form-control input[type="tel"],
+        .form-control select {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            background: #fff;
+            outline: none;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            box-sizing: border-box;
+        }
+        .form-control input[type="text"]:focus,
+        .form-control input[type="tel"]:focus,
+        .form-control select:focus {
+            border-color: #F1A3B8;
+            box-shadow: 0 0 0 3px rgba(241,163,184,0.15);
+        }
+        .form-control input::placeholder,
+        .form-control select::placeholder {
+            color: #d1d5db;
+        }
+        .form-control select {
+            appearance: none;
+            -webkit-appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            padding-right: 32px;
+        }
+        .radio-group {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding-top: 6px;
+        }
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+        }
+        .radio-group input[type="radio"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 50%;
+            margin: 0;
+            cursor: pointer;
+            position: relative;
+            transition: border-color 0.2s;
+        }
+        .radio-group input[type="radio"]:checked {
+            border-color: #F1A3B8;
+        }
+        .radio-group input[type="radio"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 3px;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: #F1A3B8;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+            padding-top: 6px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+        }
+        .checkbox-group input[type="checkbox"] {
+            appearance: none;
+            -webkit-appearance: none;
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            margin: 0;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: border-color 0.2s, background-color 0.2s;
+        }
+        .checkbox-group input[type="checkbox"]:checked {
+            border-color: #F1A3B8;
+            background-color: #F1A3B8;
+        }
+        .checkbox-group input[type="checkbox"]:checked::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 5px;
+            width: 4px;
+            height: 8px;
+            border: solid #fff;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+        .form-control textarea {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            outline: none;
+            resize: vertical;
+            min-height: 72px;
+            font-family: inherit;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control textarea:focus {
+            border-color: #F1A3B8;
+            box-shadow: 0 0 0 3px rgba(241,163,184,0.15);
+        }
+        .form-control textarea::placeholder {
+            color: #d1d5db;
+        }
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            padding: 16px 28px;
+            border-top: 1px solid #f0f0f0;
+        }
+        .modal-footer .btn-cancel {
+            padding: 8px 28px;
+            background: #fff;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-footer .btn-cancel:hover {
+            background: #f9fafb;
+        }
+        .modal-footer .btn-save {
+            padding: 8px 28px;
+            background: #F1A3B8;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #fff;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        .modal-footer .btn-save:hover {
+            background: #e891a8;
+        }
+        .form-control .date-input {
+            margin-top: 10px;
+        }
+        .form-control .date-input input[type="date"] {
+            width: 100%;
+            padding: 8px 12px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #374151;
+            outline: none;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+        .form-control .date-input input[type="date"]:focus {
+            border-color: #F1A3B8;
+            box-shadow: 0 0 0 3px rgba(241,163,184,0.15);
+        }
+        /* 展开搜索条件动画 */
+        .expand-section {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out, margin 0.25s ease-in-out;
+            opacity: 0;
+            margin-top: 0;
+        }
+        .expand-section.open {
+            max-height: 400px;
+            opacity: 1;
+            margin-top: 4px;
+            overflow: visible;
+        }
+        /* 可搜索下拉框样式 */
+        .search-select-wrapper {
+            position: relative;
+            z-index: 9999;
+            width: 100%;
+            max-width: 20rem;
+        }
+        .search-select-trigger {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 8px 12px;
+            font-size: 14px;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            background: #fff;
+            color: #374151;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-sizing: border-box;
+            gap: 4px;
+        }
+        .search-select-trigger:hover {
+            border-color: #d1d5db;
+        }
+        .search-select-trigger:focus-within {
+            outline: none;
+            ring: 2px solid rgba(241, 163, 184, 0.2);
+            border-color: #F1A3B8;
+        }
+        .search-select-trigger .trigger-text {
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #9ca3af;
+            user-select: none;
+        }
+        .search-select-trigger .trigger-text.selected {
+            color: #374151;
+        }
+        .search-select-trigger .trigger-arrow {
+            flex-shrink: 0;
+            color: #9ca3af;
+            transition: transform 0.2s;
+        }
+        .search-select-trigger .trigger-arrow.open {
+            transform: rotate(180deg);
+        }
+        .search-select-dropdown {
+            position: fixed;
+            z-index: 99999;
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+            width: 280px;
+            max-height: 260px;
+            overflow-y: auto;
+            display: none;
+        }
+        .search-select-dropdown.open {
+            display: block;
+        }
+        .search-select-search {
+            padding: 8px;
+            border-bottom: 1px solid #f3f4f6;
+            flex-shrink: 0;
+        }
+        .search-select-search input {
+            width: 100%;
+            padding: 6px 10px;
+            font-size: 13px;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            outline: none;
+            box-sizing: border-box;
+            background: #f9fafb;
+            transition: all 0.2s;
+        }
+        .search-select-search input:focus {
+            border-color: #F1A3B8;
+            background: #fff;
+            ring: 2px solid rgba(241, 163, 184, 0.15);
+        }
+        .search-select-options {
+            overflow-y: auto;
+            flex: 1;
+            padding: 4px 0;
+        }
+        .search-select-option {
+            padding: 8px 14px;
+            font-size: 14px;
+            color: #374151;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+        .search-select-option:hover {
+            background: #FCEEF1;
+        }
+        .search-select-option.selected {
+            background: #FCEEF1;
+            color: #F1A3B8;
+            font-weight: 500;
+        }
+        .search-select-option .highlight {
+            font-weight: 600;
+            color: #111827;
+        }
+        .search-select-no-result {
+            padding: 16px 14px;
+            font-size: 13px;
+            color: #9ca3af;
+            text-align: center;
+        }
+    </style>
+</head>
+<body class="bg-bg-gray h-screen flex flex-col overflow-hidden">
+<!-- 1. 顶部状态栏 (模拟平板/移动端系统栏) -->
+<div class="h-10 bg-gray-100 flex items-center justify-between px-6 text-sm text-gray-600 border-b border-gray-200">
+<div class="flex items-center space-x-4">
+<span class="font-bold">23:04</span>
+<span>6月2日 周二</span>
+</div>
+<div class="flex items-center space-x-4">
+<iconify-icon class="text-lg" icon="mdi:wifi"></iconify-icon>
+<div class="flex items-center space-x-1">
+<span>24%</span>
+<iconify-icon class="text-lg rotate-90" icon="mdi:battery-20"></iconify-icon>
+</div>
+<div class="flex items-center space-x-2 ml-4">
+<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+<span class="font-medium text-gray-800">roger</span>
+<span class="bg-gray-200 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
+</div>
+</div>
+</div>
+<!-- 2. 品牌与店铺信息栏 -->
+<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-100">
+<div class="flex items-center space-x-8">
+<div class="text-xl font-bold tracking-wider text-gray-800 flex items-center">
+<span class="text-brand mr-1">CHLITINA</span>
+<span>克麗緹娜</span>
+</div>
+<div class="relative group cursor-pointer flex items-center space-x-1 border border-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-50">
+<span>测试店1</span>
+<iconify-icon icon="mdi:chevron-down"></iconify-icon>
+</div>
+</div>
+<div class="flex items-center space-x-4">
+<button class="p-2 text-gray-400 hover:text-brand transition-colors">
+<iconify-icon class="text-xl" icon="mdi:bell-outline"></iconify-icon>
+</button>
+</div>
+</div>
+<div class="flex-1 flex overflow-hidden">
+<!-- 3. 左侧导航栏 -->
+<div class="w-24 bg-white border-r border-gray-100 flex flex-col items-center py-4 space-y-2">
+<nav class="flex-1 w-full space-y-1">
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:home"></iconify-icon>
+<span class="text-xs">首页</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:calendar-clock"></iconify-icon>
+<span class="text-xs">预约</span>
+</a>
+<!-- 选中态 -->
+<a class="flex flex-col items-center py-3 bg-brand text-white shadow-lg shadow-brand/30 transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:account-group"></iconify-icon>
+<span class="text-xs font-medium">客户</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:credit-card"></iconify-icon>
+<span class="text-xs">收银</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:chart-bar"></iconify-icon>
+<span class="text-xs">报表</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:cog"></iconify-icon>
+<span class="text-xs">设置</span>
+</a>
+<div class="border-t border-gray-50 my-2 mx-4"></div>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:shopping"></iconify-icon>
+<span class="text-xs scale-90">店销展厅</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:shopping-search"></iconify-icon>
+<span class="text-xs scale-90 text-center">HomeSpa</span>
+</a>
+</nav>
+<div class="text-[10px] text-gray-300 pb-2">V2.1.4</div>
+</div>
+<!-- 4. 主界面内容 -->
+<div class="flex-1 flex flex-col overflow-hidden">
+<!-- 搜索与筛选区 -->
+<div class="p-6 bg-white space-y-6 shadow-sm z-10">
+<div class="flex items-center justify-between">
+<div class="flex items-center space-x-4 flex-1">
+<div class="relative w-96">
+<input class="w-full pl-4 pr-12 py-2.5 bg-gray-50 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" placeholder="客户姓名/手机号" type="text"/>
+<button class="absolute right-1 top-1 bottom-1 px-4 bg-brand text-white rounded-md hover:bg-opacity-90 transition-all font-medium text-sm" onclick="handleSearch()">
+                                搜索
+                            </button>
+</div>
+<div class="text-sm text-gray-400">
+                            最近查看：<span class="text-gray-600 hover:text-brand cursor-pointer">王 15290031...</span>
+</div>
+</div>
+<button class="flex items-center space-x-2 px-6 py-2.5 bg-brand text-white rounded-lg hover:shadow-lg hover:shadow-brand/30 transition-all font-medium" onclick="handleAddCustomer()">
+<iconify-icon icon="mdi:plus"></iconify-icon>
+<span>新增客户</span>
+</button>
+</div>
+<div class="space-y-4 pt-2">
+<!-- 责任美容师 -->
+<div class="flex items-start">
+<span class="text-sm font-medium text-gray-500 w-24 pt-1">责任美容师：</span>
+<div class="flex-1 flex flex-wrap gap-2" id="beautician-list">
+<span class="px-3 py-1 text-sm rounded-full bg-brand-light text-brand cursor-pointer border border-brand/20">牛宁宁</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">周宇</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">刘嵇</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">张琳</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">陈静</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">王芳</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">李婷</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100">赵雪</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100 flex-shrink-0" id="more-beauticians" style="display:none;">吴丹</span>
+<span class="px-3 py-1 text-sm rounded-full bg-gray-50 text-gray-600 cursor-pointer hover:bg-gray-100 flex-shrink-0" id="more-beauticians-2" style="display:none;">郑颖</span>
+</div>
+<div class="flex items-center space-x-4 ml-4">
+<button class="text-sm text-gray-400 hover:text-brand" onclick="resetAllFilters()">全部重置</button>
+<button class="text-sm text-brand flex items-center space-x-1" id="expandToggleBtn" onclick="toggleExpandFilters(this)">
+<span>展开</span>
+<iconify-icon icon="mdi:chevron-down"></iconify-icon>
+</button>
+</div>
+</div>
+<!-- 近期生日顾客 -->
+<div class="flex items-center">
+<span class="text-sm font-medium text-gray-500 w-24">近期生日：</span>
+<div class="inline-flex bg-gray-100 p-1 rounded-lg">
+<button class="px-4 py-1 text-sm rounded-md bg-white shadow-sm text-brand font-medium">阳历</button>
+<button class="px-4 py-1 text-sm rounded-md text-gray-500 hover:text-gray-700">阴历</button>
+</div>
+</div>
+<!-- 展开的搜索条件 -->
+<div class="expand-section" id="expandFilters">
+<div class="space-y-3">
+<!-- 进店渠道 -->
+<div class="flex items-start">
+<span class="text-sm font-medium text-gray-500 w-24 pt-1">进店渠道：</span>
+<div class="flex-1">
+<select class="w-full max-w-xs px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" id="filterChannel" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px;">
+<option value="全部">全部</option>
+<option value="自然到店">自然到店</option>
+<option value="线上预约">线上预约</option>
+<option value="老客推荐">老客推荐</option>
+<option value="广告引流">广告引流</option>
+<option value="社交媒体">社交媒体</option>
+<option value="其他">其他</option>
+</select>
+</div>
+</div>
+<!-- 客户类型 -->
+<div class="flex items-start">
+<span class="text-sm font-medium text-gray-500 w-24 pt-1">客户类型：</span>
+<div class="flex-1">
+<select class="w-full max-w-xs px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" id="filterCustomerType" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px;">
+<option value="全部">全部</option>
+<option value="会员">会员</option>
+<option value="新客">新客</option>
+<option value="体验客">体验客</option>
+</select>
+</div>
+</div>
+<!-- 末次到店 -->
+<div class="flex items-start">
+<span class="text-sm font-medium text-gray-500 w-24 pt-1">末次到店：</span>
+<div class="flex-1">
+<select class="w-full max-w-xs px-3 py-2 text-sm border border-gray-200 rounded-lg bg-white text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-brand/20 focus:border-brand transition-all" id="filterLastVisit" style="background-image: url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 24 24'%3E%3Cpath d='M7 10l5 5 5-5z'/%3E%3C/svg%3E&quot;); background-repeat: no-repeat; background-position: right 10px center; padding-right: 32px;">
+<option value="全部">全部</option>
+<option value="1个月未到店">1个月未到店</option>
+<option value="2个月未到店">2个月未到店</option>
+<option value="3个月未到店">3个月未到店</option>
+<option value="半年未到店">半年未到店</option>
+</select>
+</div>
+</div>
+<!-- 标签 -->
+<div class="flex items-start">
+<span class="text-sm font-medium text-gray-500 w-24 pt-1">标签：</span>
+<div class="flex-1">
+<div class="search-select-wrapper" id="filterTagWrapper">
+<div class="search-select-trigger" id="tagTrigger" onclick="toggleTagDropdownNew()">
+<span class="trigger-text" id="tagTriggerText">请选择或搜索标签</span>
+<iconify-icon class="trigger-arrow" icon="mdi:chevron-down"></iconify-icon>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 客户列表表格 -->
+<div class="flex-1 overflow-auto custom-scrollbar p-6">
+<div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
+<table class="w-full text-left border-collapse min-w-[1400px]">
+<thead class="bg-gray-50 text-gray-500 text-sm font-medium border-b border-gray-100">
+<tr>
+<th class="py-4 px-6 sticky-left shadow-right z-30">顾客信息</th>
+<th class="py-4 px-4">次卡资产 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4">金额卡资产 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4">钱包余额 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4">欠款 <iconify-icon class="ml-1 align-middle text-brand" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4">累计消费</th>
+<th class="py-4 px-4">到店次数</th>
+<th class="py-4 px-4">上次消费</th>
+<th class="py-4 px-4">责任美容师</th>
+<th class="py-4 px-6 sticky-right shadow-left z-30 text-center">操作</th>
+</tr>
+</thead>
+<tbody class="text-sm divide-y divide-gray-50">
+<!-- 数据行 1 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">王美玲</div>
+<div class="text-gray-500">13812345678</div>
+<span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡3张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥39,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡5张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥49,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥2,000.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥1,000.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥102,234.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">34次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：23次</div>
+<div class="text-xs text-orange-500">末次到店：2026-05-11 21天没来</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">05/08 12:00</div>
+<div class="text-gray-800">李乐</div>
+<div class="text-brand font-medium">¥3,231.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">牛宁宁</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('王美玲')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('王美玲')">开单</button>
+</div>
+</td>
+</tr>
+<!-- 数据行 2 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">李晓红</div>
+<div class="text-gray-500">15290031234</div>
+<span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-500 text-[10px] rounded border border-blue-100">新客</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡1张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥5,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡0张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥0.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥500.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥0.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥5,500.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">2次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：2次</div>
+<div class="text-xs text-green-500">末次到店：2026-06-01 1天前</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">06/01 10:00</div>
+<div class="text-gray-800">周宇</div>
+<div class="text-brand font-medium">¥2,500.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">周宇</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('李晓红')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('李晓红')">开单</button>
+</div>
+</td>
+</tr>
+<!-- 数据行 3 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">张丽华</div>
+<div class="text-gray-500">13988887777</div>
+<span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡2张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥12,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡3张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥15,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥1,200.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥500.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥45,000.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">15次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：12次</div>
+<div class="text-xs text-orange-500">末次到店：2026-05-25 8天没来</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">05/25 15:30</div>
+<div class="text-gray-800">刘嵇</div>
+<div class="text-brand font-medium">¥1,800.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">刘嵇</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('张丽华')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('张丽华')">开单</button>
+</div>
+</td>
+</tr>
+<!-- 数据行 4 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">陈思思</div>
+<div class="text-gray-500">18611112222</div>
+<span class="inline-block px-2 py-0.5 bg-orange-50 text-orange-500 text-[10px] rounded border border-orange-100">体验客</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡0张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥0.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡0张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥0.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥0.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥0.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥198.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">1次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：1次</div>
+<div class="text-xs text-orange-500">末次到店：2026-05-30 3天没来</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">05/30 14:00</div>
+<div class="text-gray-800">张琳</div>
+<div class="text-brand font-medium">¥198.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">张琳</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('陈思思')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('陈思思')">开单</button>
+</div>
+</td>
+</tr>
+<!-- 数据行 5 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">赵敏</div>
+<div class="text-gray-500">13700009999</div>
+<span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡4张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥56,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡2张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥20,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥5,000.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥2,000.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥150,000.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">50次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：45次</div>
+<div class="text-xs text-red-500">末次到店：2026-05-05 28天没来</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">05/05 11:00</div>
+<div class="text-gray-800">陈静</div>
+<div class="text-brand font-medium">¥5,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">陈静</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('赵敏')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('赵敏')">开单</button>
+</div>
+</td>
+</tr>
+<!-- 数据行 6 -->
+<tr class="table-row-hover transition-colors">
+<td class="py-4 px-6 sticky-left shadow-right z-20">
+<div class="space-y-1">
+<div class="font-bold text-gray-800 text-base">孙悦</div>
+<div class="text-gray-500">15066665555</div>
+<span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-500 text-[10px] rounded border border-blue-100">新客</span>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡1张</div>
+<div class="text-gray-400 text-xs">次卡剩余价值：</div>
+<div class="text-gray-800">¥3,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-medium">持卡1张</div>
+<div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
+<div class="text-gray-800">¥5,000.00</div>
+</div>
+</td>
+<td class="py-4 px-4 font-medium text-gray-800">¥300.00</td>
+<td class="py-4 px-4 font-bold text-brand">¥0.00</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-800 font-bold">¥8,300.00</div>
+<div class="text-gray-400 text-xs">累计消费次数：</div>
+<div class="text-gray-600">3次</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">总计到店：3次</div>
+<div class="text-xs text-green-500">末次到店：2026-06-02 今天</div>
+</div>
+</td>
+<td class="py-4 px-4">
+<div class="space-y-1">
+<div class="text-gray-600">06/02 09:00</div>
+<div class="text-gray-800">王芳</div>
+<div class="text-brand font-medium">¥1,200.00</div>
+</div>
+</td>
+<td class="py-4 px-4 text-gray-600">王芳</td>
+<td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
+<div class="flex flex-col space-y-1">
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('孙悦')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('孙悦')">开单</button>
+</div>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</div>
+</div>
+<!-- 新增客户弹窗 -->
+<div class="modal-overlay" id="addCustomerModal" onclick="if(event.target===this)closeAddCustomerModal()">
+<div class="modal-content">
+<div class="modal-header">
+<button class="close-btn" onclick="closeAddCustomerModal()">✕</button>
+<h2>新增客户</h2>
+</div>
+<div class="modal-body">
+<!-- 基础信息 -->
+<div class="form-section-title">基础信息</div>
+<form id="customerForm" onsubmit="return false;">
+<!-- 顾客姓名（必填） -->
+<div class="form-row">
+<div class="form-label"><span class="required">*</span>顾客姓名</div>
+<div class="form-control">
+<input id="custName" placeholder="请输入" type="text"/>
+</div>
+</div>
+<!-- 手机号码 -->
+<div class="form-row">
+<div class="form-label">手机号码</div>
+<div class="form-control">
+<input id="custPhone" placeholder="请输入" type="tel"/>
+</div>
+</div>
+<!-- 进店渠道 -->
+<div class="form-row">
+<div class="form-label">进店渠道</div>
+<div class="form-control">
+<select id="custChannel">
+<option disabled="" selected="" value="">请选择</option>
+<option value="自然到店">自然到店</option>
+<option value="线上预约">线上预约</option>
+<option value="老客推荐">老客推荐</option>
+<option value="广告引流">广告引流</option>
+<option value="社交媒体">社交媒体</option>
+<option value="其他">其他</option>
+</select>
+</div>
+</div>
+<!-- 责任美容师 -->
+<div class="form-row">
+<div class="form-label">责任美容师</div>
+<div class="form-control">
+<select id="custBeautician">
+<option disabled="" selected="" value="">选择美容师</option>
+<option value="牛宁宁">牛宁宁</option>
+<option value="周宇">周宇</option>
+<option value="刘嵇">刘嵇</option>
+<option value="张琳">张琳</option>
+<option value="陈静">陈静</option>
+<option value="王芳">王芳</option>
+<option value="李婷">李婷</option>
+<option value="赵雪">赵雪</option>
+<option value="吴丹">吴丹</option>
+<option value="郑颖">郑颖</option>
+</select>
+</div>
+</div>
+<!-- 婚姻状况 -->
+<div class="form-row">
+<div class="form-label">婚姻状况</div>
+<div class="form-control">
+<div class="radio-group">
+<label><input name="marriage" type="radio" value="已婚"/> 已婚</label>
+<label><input name="marriage" type="radio" value="未婚"/> 未婚</label>
+<label><input name="marriage" type="radio" value="保密"/> 保密</label>
+</div>
+</div>
+</div>
+<!-- 会员生日 -->
+<div class="form-row">
+<div class="form-label">会员生日</div>
+<div class="form-control">
+<div class="radio-group">
+<label><input checked="" id="birthdayTypeYang" name="birthdayType" type="radio" value="阳历"/> 阳历</label>
+<label><input id="birthdayTypeNong" name="birthdayType" type="radio" value="农历"/> 农历</label>
+</div>
+<div class="date-input">
+<input id="custBirthday" type="date"/>
+</div>
+</div>
+</div>
+</form>
+<!-- 补充信息 -->
+<div class="form-section-title" style="margin-top:28px;">补充信息</div>
+<form onsubmit="return false;">
+<!-- 皮肤情况 -->
+<div class="form-row">
+<div class="form-label">皮肤情况</div>
+<div class="form-control">
+<div class="checkbox-group">
+<label><input type="checkbox" value="无过敏史"/> 无过敏史</label>
+<label><input type="checkbox" value="化妆品过敏"/> 化妆品过敏</label>
+<label><input type="checkbox" value="接触性过敏"/> 接触性过敏</label>
+<label><input type="checkbox" value="季节性过敏"/> 季节性过敏</label>
+<label><input type="checkbox" value="香料过敏"/> 香料过敏</label>
+</div>
+</div>
+</div>
+<!-- 护肤习惯 -->
+<div class="form-row">
+<div class="form-label">护肤习惯</div>
+<div class="form-control">
+<div class="checkbox-group">
+<label><input type="checkbox" value="清洁"/> 清洁</label>
+<label><input type="checkbox" value="保湿"/> 保湿</label>
+<label><input type="checkbox" value="精华"/> 精华</label>
+<label><input type="checkbox" value="乳霜"/> 乳霜</label>
+<label><input type="checkbox" value="防晒"/> 防晒</label>
+</div>
+</div>
+</div>
+<!-- 护肤诉求 -->
+<div class="form-row">
+<div class="form-label">护肤诉求</div>
+<div class="form-control">
+<div class="checkbox-group">
+<label><input type="checkbox" value="补水"/> 补水</label>
+<label><input type="checkbox" value="美白"/> 美白</label>
+<label><input type="checkbox" value="抗衰"/> 抗衰</label>
+<label><input type="checkbox" value="修护"/> 修护</label>
+</div>
+</div>
+</div>
+<!-- 过往美容史 -->
+<div class="form-row">
+<div class="form-label">过往美容史</div>
+<div class="form-control">
+<div class="checkbox-group">
+<label><input type="checkbox" value="无"/> 无</label>
+<label><input type="checkbox" value="其他生美机构"/> 其他生美机构</label>
+<label><input type="checkbox" value="光电医美"/> 光电医美</label>
+<label><input type="checkbox" value="整形医美"/> 整形医美</label>
+</div>
+</div>
+</div>
+<!-- 职业 -->
+<div class="form-row">
+<div class="form-label">职业</div>
+<div class="form-control">
+<input placeholder="请输入" type="text"/>
+</div>
+</div>
+<!-- 家庭地址 -->
+<div class="form-row">
+<div class="form-label">家庭地址</div>
+<div class="form-control">
+<input placeholder="请输入" style="width:120%;" type="text"/>
+</div>
+</div>
+</form>
+</div>
+<div class="modal-footer">
+<button class="btn-cancel" onclick="closeAddCustomerModal()">取消</button>
+<button class="btn-save" onclick="saveCustomer()">保存</button>
+</div>
+</div>
+</div>
+<script>
+        function handleSearch() {
+            alert('正在搜索中...');
+        }
+
+        function handleAddCustomer() {
+            document.getElementById('addCustomerModal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeAddCustomerModal() {
+            document.getElementById('addCustomerModal').classList.remove('active');
+            document.body.style.overflow = '';
+            // 重置表单
+            document.getElementById('customerForm').reset();
+            document.getElementById('birthdayTypeYang').checked = true;
+            document.getElementById('birthdayTypeNong').checked = false;
+            document.querySelectorAll('input[name="marriage"]').forEach(r => r.checked = false);
+        }
+
+        function saveCustomer() {
+            const name = document.getElementById('custName').value.trim();
+            if (!name) {
+                alert('请输入顾客姓名');
+                return;
+            }
+            alert('新增客户成功！');
+            closeAddCustomerModal();
+        }
+
+        function handleDetail(name) {
+            alert('查看客户详情：' + name);
+        }
+
+        function handleBill(name) {
+            alert('为客户 ' + name + ' 创建新的消费订单');
+        }
+
+        function toggleBeauticians(btn) {
+            const more1 = document.getElementById('more-beauticians');
+            const more2 = document.getElementById('more-beauticians-2');
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('iconify-icon');
+
+            if (more1.style.display === 'none') {
+                more1.style.display = 'inline-block';
+                more2.style.display = 'inline-block';
+                span.innerText = '收起';
+                icon.setAttribute('icon', 'mdi:chevron-up');
+            } else {
+                more1.style.display = 'none';
+                more2.style.display = 'none';
+                span.innerText = '展开';
+                icon.setAttribute('icon', 'mdi:chevron-down');
+            }
+        }
+
+        function toggleExpandFilters(btn) {
+            const section = document.getElementById('expandFilters');
+            const span = btn.querySelector('span');
+            const icon = btn.querySelector('iconify-icon');
+
+            if (section.classList.contains('open')) {
+                section.classList.remove('open');
+                span.innerText = '展开';
+                icon.setAttribute('icon', 'mdi:chevron-down');
+            } else {
+                section.classList.add('open');
+                span.innerText = '收起';
+                icon.setAttribute('icon', 'mdi:chevron-up');
+            }
+        }
+
+        function resetAllFilters() {
+            // 重置美容师标签选中状态（全部取消高亮）
+            document.querySelectorAll('#beautician-list > span').forEach(el => {
+                el.classList.remove('bg-brand-light', 'text-brand', 'border-brand/20');
+                el.classList.add('bg-gray-50', 'text-gray-600');
+            });
+            // 重置展开区域的搜索条件
+            document.getElementById('filterChannel').value = '全部';
+            document.getElementById('filterCustomerType').value = '全部';
+            document.getElementById('filterLastVisit').value = '全部';
+            document.getElementById('filterTagWrapper').querySelector('.trigger-text').innerText = '请选择或搜索标签';
+            document.getElementById('filterTagWrapper').querySelector('.trigger-text').classList.remove('selected');
+            tagSelectedValue = '';
+            const tagBodyDropdown = document.getElementById('tag-body-dropdown');
+            if (tagBodyDropdown) tagBodyDropdown.style.display = 'none';
+        }
+
+        /* ===== 标签可搜索下拉框（body-level 修复层叠上下文遮挡） ===== */
+        let tagSelectedValue = '';
+
+        function buildTagDropdown() {
+            if (document.getElementById('tag-body-dropdown')) return;
+
+            const dropdown = document.createElement('div');
+            dropdown.id = 'tag-body-dropdown';
+            dropdown.className = 'search-select-dropdown';
+            dropdown.style.display = 'none';
+
+            const searchInput = document.createElement('input');
+            searchInput.type = 'text';
+            searchInput.className = 'search-select-search';
+            searchInput.placeholder = '搜索标签...';
+            searchInput.style.cssText = 'width:100%;padding:8px 12px;border:1px solid #F1A3B8;border-radius:6px;outline:none;font-size:14px;box-sizing:border-box;margin-bottom:4px;';
+
+            const optionsDiv = document.createElement('div');
+            optionsDiv.id = 'tag-body-options';
+
+            dropdown.appendChild(searchInput);
+            dropdown.appendChild(optionsDiv);
+            document.body.appendChild(dropdown);
+
+            searchInput.addEventListener('input', function() {
+                const query = this.value;
+                const allOptions = ['VIP客户','高潜客户','敏感肌肤','干性肌肤','油性肌肤','痘痘肌','孕期护理','抗衰需求','美白需求','定期护理','老客推荐','新客体验'];
+                const filtered = query ? allOptions.filter(o => o.includes(query)) : allOptions;
+                renderBodyOptions(filtered);
+            });
+
+            document.addEventListener('click', function(e) {
+                const trigger = document.querySelector('.search-select-trigger');
+                if (!dropdown.contains(e.target) && e.target !== trigger && !trigger.contains(e.target)) {
+                    dropdown.style.display = 'none';
+                }
+            });
+        }
+
+        function renderBodyOptions(options) {
+            const container = document.getElementById('tag-body-options');
+            container.innerHTML = '';
+            if (options.length === 0) {
+                container.innerHTML = '<div style="padding:8px 12px;color:#999;font-size:13px;">无匹配结果</div>';
+                return;
+            }
+            options.forEach(opt => {
+                const div = document.createElement('div');
+                div.className = 'search-select-option';
+                div.textContent = opt;
+                if (opt === tagSelectedValue) {
+                    div.classList.add('selected');
+                }
+                div.style.cssText = 'padding:8px 12px;cursor:pointer;font-size:14px;border-radius:4px;';
+                div.onmouseenter = () => div.style.background = '#FCEEF1';
+                div.onmouseleave = () => div.style.background = 'transparent';
+                div.onclick = function() {
+                    tagSelectedValue = opt;
+                    const trigger = document.querySelector('.search-select-trigger');
+                    const triggerText = document.getElementById('tagTriggerText');
+                    triggerText.innerText = opt;
+                    triggerText.classList.add('selected');
+                    document.getElementById('tag-body-dropdown').style.display = 'none';
+                };
+                container.appendChild(div);
+            });
+        }
+
+        function toggleTagDropdownNew() {
+            buildTagDropdown();
+            const dropdown = document.getElementById('tag-body-dropdown');
+            const trigger = document.querySelector('.search-select-trigger');
+
+            if (dropdown.style.display === 'block') {
+                dropdown.style.display = 'none';
+                return;
+            }
+
+            const rect = trigger.getBoundingClientRect();
+            dropdown.style.position = 'fixed';
+            dropdown.style.top = (rect.bottom + 4) + 'px';
+            dropdown.style.left = rect.left + 'px';
+            dropdown.style.width = rect.width + 'px';
+            dropdown.style.display = 'block';
+
+            const searchInput = dropdown.querySelector('.search-select-search');
+            searchInput.value = '';
+            renderBodyOptions(['VIP客户','高潜客户','敏感肌肤','干性肌肤','油性肌肤','痘痘肌','孕期护理','抗衰需求','美白需求','定期护理','老客推荐','新客体验']);
+            searchInput.focus();
+        }
+    </script>
+</body>
+</html>

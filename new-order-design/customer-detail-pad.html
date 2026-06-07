@@ -16,76 +16,92 @@
             <div class="sidebar-avatar-area">
                 <div class="sidebar-avatar">
                     <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3E%3Cpath d='M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z'/%3E%3C/svg%3E" alt="头像">
+                    <span class="vip-badge-lg">会员</span>
                 </div>
                 <div class="sidebar-customer-info">
-                    <div class="sidebar-customer-name">
-                        付小姐
-                        <span class="vip-badge-lg">会员</span>
-                    </div>
+                    <div class="sidebar-customer-name">付小姐</div>
                     <div class="sidebar-phone">131****7967</div>
                 </div>
-                <button class="sidebar-more-info-btn" >更多信息</button>
+                <button class="sidebar-more-info-btn">更多信息 ›</button>
+                <button type="button" class="privacy-eye-btn" id="privacyEyeBtn" aria-label="显示/隐藏敏感信息" aria-pressed="false">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                        <path d="M10.733 5.08A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a18.058 18.058 0 0 1-2.017 3.07"/>
+                        <path d="M14.084 14.158a3 3 0 0 1-4.242-4.242"/>
+                        <path d="M17.479 17.499A10.75 10.75 0 0 1 12 19c-7 0-10-7-10-7a18.096 18.096 0 0 1 4.211-5.446"/>
+                        <path d="M2 2l20 20"/>
+                    </svg>
+                </button>
             </div>
 
 <!-- 关键信息列表 -->
             <div class="sidebar-key-info">
                 <div class="sidebar-info-item">
                     <span class="sidebar-info-label">入会时间</span>
-                    <span class="sidebar-info-value">2025-5-11</span>
+                    <span class="sidebar-info-value">2025-05-11</span>
                 </div>
                 <div class="sidebar-info-item">
-                    <span class="sidebar-info-label">生日</span>
-                    <span class="sidebar-info-value">阳历 1990-10-20</span>
+                    <span class="sidebar-info-label">生日（阳历）</span>
+                    <span class="sidebar-info-value">1990-10-20</span>
                 </div>
                 <div class="sidebar-info-item">
-                    <span class="sidebar-info-label">美容师</span>
-                    <span class="sidebar-info-value">周炜</span>
+                    <span class="sidebar-info-label">专属美容师</span>
+                    <span class="sidebar-info-value sidebar-info-value-pink">周炜</span>
                 </div>
             </div>
 
             <!-- 余额信息 -->
             <div class="sidebar-balance-section">
-                <div class="sidebar-balance-title">账户概览</div>
+                <div class="sidebar-balance-title sidebar-asset-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#E87C9A" aria-hidden="true"><path d="M21 18v1c0 1.1-.9 2-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14c1.1 0 2 .9 2 2v1h-9a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+                    账户资产
+                </div>
                 <div class="sidebar-balance-grid">
                     <div class="sidebar-balance-item sidebar-balance-clickable" >
                         <span class="sidebar-balance-label">钱包余额</span>
-                        <span class="sidebar-balance-value">¥888.00 <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                        <span class="sidebar-balance-value">¥888.00 ›</span>
                     </div>
                     <div class="sidebar-balance-item sidebar-balance-clickable" >
                         <span class="sidebar-balance-label">欠款</span>
-                        <span class="sidebar-balance-value" class="color-danger">¥2,228.00<svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#999" stroke-width="2"><path d="M9 18l6-6-6-6"/></svg></span>
+                        <span class="sidebar-balance-value color-danger">¥2,228.00 ›</span>
                     </div>
                     <div class="sidebar-balance-total">
                         <span class="sidebar-balance-label">金额卡余额</span>
                         <div class="sidebar-balance-total-val-wrap">
                             <span class="sidebar-balance-total-val" id="sidebar-gold-card-total">￥5,500.00</span>
-                            <span class="sidebar-balance-total-gift">(含赠金500.00)</span>
+                            <span class="sidebar-balance-total-gift">(含赠金¥500.00)</span>
+                        </div>
+                    </div>
+                    <div class="sidebar-balance-total">
+                        <span class="sidebar-balance-label">次卡剩余价值</span>
+                        <div class="sidebar-balance-total-val-wrap">
+                            <span class="sidebar-balance-total-val" id="sidebar-times-card-total">￥0.00</span>
                         </div>
                     </div>
                 </div>
             </div>
 
             <div class="sidebar-portrait-section">
-                <div class="sidebar-balance-title">消费画像</div>
-                <div class="sidebar-portrait-list">
-                    <div class="sidebar-info-item">
-                        <span class="sidebar-info-label">累计消费金额（元）</span>
-                        <span class="sidebar-info-value portrait-highlight">¥12,680.00</span>
+                <div class="sidebar-balance-title sidebar-portrait-title">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#E87C9A" aria-hidden="true"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+                    消费画像
+                </div>
+                <div class="portrait-grid">
+                    <div class="portrait-card">
+                        <div class="portrait-card-label">累计消费金额</div>
+                        <div class="portrait-card-value portrait-highlight">¥12,680.00</div>
                     </div>
-                    <div class="sidebar-info-item">
-                        <span class="sidebar-info-label">总消费次数</span>
-                        <span class="sidebar-info-value">32</span>
+                    <div class="portrait-card">
+                        <div class="portrait-card-label">总消费次数</div>
+                        <div class="portrait-card-value">32次</div>
                     </div>
-                    <div class="sidebar-info-item">
-                        <span class="sidebar-info-label">上次服务</span>
-                        <div>
-                            <span class="sidebar-info-value">2026-5-11</span>
-                            <span class="info-tag-highlight">21天没来</span>
-                        </div>
+                    <div class="portrait-card">
+                        <div class="portrait-card-label">上次服务</div>
+                        <div class="portrait-card-value">2026-05-11</div>
+                        <div class="portrait-card-tag">21天没来</div>
                     </div>
-                    <div class="sidebar-info-item">
-                        <span class="sidebar-info-label">到店次数</span>
-                        <span class="sidebar-info-value">28</span>
+                    <div class="portrait-card">
+                        <div class="portrait-card-label">到店次数</div>
+                        <div class="portrait-card-value">28次</div>
                     </div>
                 </div>
             </div>
@@ -749,7 +765,7 @@
                         <div class="exchange-section-actions">
                             <button class="exchange-btn exchange-btn-secondary" onclick="selectCardBenefit()">
                                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                                选择权益
+                                选择卡内权益
                             </button>
                         </div>
                     </div>

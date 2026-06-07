@@ -15,11 +15,45 @@ document.addEventListener('DOMContentLoaded', function () {
         if (btn) btn.addEventListener('click', function () { window.openMemberMoreInfo(); });
     })();
 
+    (function () {
+        var btn = document.getElementById('privacyEyeBtn');
+        if (!(btn instanceof HTMLButtonElement)) return;
+
+        var closedSvg = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M10.733 5.08A10.744 10.744 0 0 1 12 5c7 0 10 7 10 7a18.058 18.058 0 0 1-2.017 3.07\"/><path d=\"M14.084 14.158a3 3 0 0 1-4.242-4.242\"/><path d=\"M17.479 17.499A10.75 10.75 0 0 1 12 19c-7 0-10-7-10-7a18.096 18.096 0 0 1 4.211-5.446\"/><path d=\"M2 2l20 20\"/></svg>";
+        var openSvg = "<svg viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z\"/><circle cx=\"12\" cy=\"12\" r=\"3\"/></svg>";
+
+        var accountSection = document.querySelector('.sidebar-balance-section');
+        var portraitSection = document.querySelector('.sidebar-portrait-section');
+
+        function setSectionsHidden(hidden) {
+            [accountSection, portraitSection].forEach(function (section) {
+                if (!section) return;
+                if (!section.dataset) return;
+                if (typeof section.dataset.originalDisplay === 'undefined') {
+                    section.dataset.originalDisplay = section.style.display || '';
+                }
+                section.style.display = hidden ? 'none' : section.dataset.originalDisplay;
+            });
+        }
+
+        var isOpen = false;
+        btn.innerHTML = closedSvg;
+        btn.setAttribute('aria-pressed', 'false');
+        setSectionsHidden(true);
+
+        btn.addEventListener('click', function () {
+            isOpen = !isOpen;
+            btn.innerHTML = isOpen ? openSvg : closedSvg;
+            btn.setAttribute('aria-pressed', String(isOpen));
+            setSectionsHidden(!isOpen);
+        });
+    })();
+
     // 2. 账户概览 — 钱包余额点击跳转
     (function () {
         var items = document.querySelectorAll('.sidebar-balance-clickable');
-        if (items[0]) items[0].addEventListener('click', function () { location.href = 'customer-wallet.html'; });
-        if (items[1]) items[1].addEventListener('click', function () { location.href = 'customer-debt.html'; });
+        if (items[0]) items[0].addEventListener('click', function () { location.href = 'customer-detail-wallet.html'; });
+        if (items[1]) items[1].addEventListener('click', function () { location.href = 'customer-detail-debt.html'; });
     })();
 
     // 3. 快捷操作按钮 — 开单 & 测肤
@@ -1595,7 +1629,6 @@ document.addEventListener('DOMContentLoaded', function () {
     });
 
     // ========== 会员更多信息功能 ==========
-    (function() {
         // 数据模型
         var memberData = {
             tags: ['老顾客', '敏感肌', 'VIP顾客'],
@@ -1772,8 +1805,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.closeMemberMoreInfo = function() {
             memberOverlay.classList.remove('show');
         };
-
-    })();
+        
 
         // ===== 置换权益侧边抽屉相关函数 =====
         var exchangeOverlay = document.getElementById('exchangeOverlay');

@@ -1,0 +1,3498 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>门店目标管理</title>
+    <style>
+        :root {
+            --primary: #0D9488;
+            --primary-dark: #0B7B72;
+            --primary-50: #ECFDF5;
+            --primary-100: #D1FAE5;
+            --primary-200: #A7F3D0;
+            --primary-300: #6EE7B7;
+            --primary-400: #34D399;
+            --primary-500: #0D9488;
+            --primary-600: #0B7B72;
+            --primary-700: #09625B;
+            
+            --neutral-50: #F9FAFB;
+            --neutral-100: #F3F4F6;
+            --neutral-200: #E5E7EB;
+            --neutral-300: #D1D5DB;
+            --neutral-400: #9CA3AF;
+            --neutral-500: #6B7280;
+            --neutral-600: #4B5563;
+            --neutral-700: #374151;
+            --neutral-800: #1F2937;
+            --neutral-900: #111827;
+            
+            --bg-primary: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-tertiary: var(--primary-50);
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            
+            --transition-fast: all 0.15s ease;
+            --transition-normal: all 0.25s ease;
+            --transition-slow: all 0.35s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: var(--bg-secondary);
+            color: var(--neutral-800);
+            min-height: 100vh;
+        }
+
+        .page-container {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .page-header {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--neutral-200);
+            padding: 16px 24px;
+            box-shadow: var(--shadow-sm);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-content {
+            max-width: 100%;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--neutral-900);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .page-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(180deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 2px;
+        }
+
+        .page-main {
+            flex: 1;
+            padding: 24px;
+            max-width: 100%;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .header-tabs {
+            display: flex;
+            gap: 8px;
+            padding: 0px 0px 8px 0px;
+            border-bottom: 1px solid var(--neutral-200);
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .add-goal-type-btn {
+            margin-left: auto;
+            padding: 10px 16px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            border: 1px dashed var(--neutral-300);
+            background: transparent;
+            color: var(--neutral-600);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .add-goal-type-btn:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .tab-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .tab-actions {
+            display: flex;
+            gap: 2px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .tab-wrapper:hover .tab-actions {
+            opacity: 1;
+        }
+
+        .tab-edit-btn,
+        .tab-delete-btn {
+            width: 24px;
+            height: 24px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--neutral-400);
+            transition: var(--transition-fast);
+        }
+
+        .tab-edit-btn:hover {
+            background: var(--primary-50);
+            color: var(--primary-600);
+        }
+
+        .tab-delete-btn:hover {
+            background: #FEF2F2;
+            color: #EF4444;
+        }
+
+        .tab-item {
+            padding: 10px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            background: transparent;
+            border: 1px solid transparent;
+            color: var(--neutral-500);
+        }
+
+        .tab-item:hover {
+            background: var(--primary-50);
+            color: var(--primary-600);
+        }
+
+        .tab-item.active {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .year-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition-fast);
+            color: var(--neutral-600);
+        }
+
+        .year-btn:hover:not(:disabled) {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .year-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .year-display {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .main-content {
+            display: grid;
+            width: 100%;
+        }
+
+        /* ============ 门店目标TAB页独立布局样式 ============ */
+        .store-goal-layout {
+            display: grid;
+            grid-template-columns: minmax(280px, 340px) 1fr;
+            gap: 24px;
+            width: 100%;
+            min-height: 300px;
+        }
+
+        .store-goal-sidebar {
+            position: sticky;
+            top: 110px;
+            height: fit-content;
+        }
+
+        .store-overview-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .store-overview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .store-circle-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .store-circle-progress-wrapper {
+            position: relative;
+            width: 140px;
+            height: 140px;
+            margin-bottom: 16px;
+        }
+
+        .store-circle-progress-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-200) 0deg,
+                var(--primary-200) 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+        }
+
+        .store-circle-progress-fill {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-500) 0deg,
+                var(--primary-600) var(--progress-deg, 280deg),
+                transparent var(--progress-deg, 280deg),
+                transparent 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+            transition: transform 0.3s ease;
+        }
+
+        .store-circle-progress-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .store-circle-percentage {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--neutral-800);
+            display: block;
+        }
+
+        .store-circle-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .store-overview-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .store-stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .store-stat-label {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .store-stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-stat-value.highlight {
+            color: var(--primary-600);
+        }
+
+        /* ============ 趋势图样式 ============ */
+        .store-trend-section {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px solid var(--neutral-100);
+        }
+
+        .store-trend-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 16px;
+        }
+
+        .store-trend-chart {
+            position: relative;
+            height: 180px;
+            padding: 0 8px;
+        }
+
+        .store-trend-y-axis {
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 24px;
+            width: 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            font-size: 11px;
+            color: var(--neutral-400);
+            text-align: right;
+            padding-right: 8px;
+        }
+
+        .store-trend-content {
+            margin-left: 48px;
+            height: calc(100% - 24px);
+            position: relative;
+        }
+
+        .store-trend-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .store-trend-grid-line {
+            height: 1px;
+            background: var(--neutral-100);
+        }
+
+        .store-trend-lines {
+            position: relative;
+            height: 100%;
+        }
+
+        .store-trend-line {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .store-trend-path {
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: stroke-dashoffset 0.3s ease;
+        }
+
+        .store-trend-path.current {
+            stroke: var(--primary-500);
+        }
+
+        .store-trend-path.last-year {
+            stroke: var(--neutral-400);
+            stroke-dasharray: 4, 4;
+        }
+
+        .store-trend-points {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+
+        .store-trend-point {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .store-trend-point:hover {
+            transform: scale(1.5);
+        }
+
+        .store-trend-point.current {
+            background: var(--primary-500);
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(13, 148, 136, 0.4);
+        }
+
+        .store-trend-point.last-year {
+            background: var(--neutral-400);
+            border: 2px solid white;
+            box-shadow: 0 2px 4px rgba(156, 163, 175, 0.4);
+        }
+
+        .store-trend-x-axis {
+            display: flex;
+            justify-content: space-between;
+            padding-top: 8px;
+            font-size: 11px;
+            color: var(--neutral-400);
+        }
+
+        .store-trend-legend {
+            display: flex;
+            gap: 16px;
+            margin-top: 12px;
+            justify-content: center;
+        }
+
+        .store-trend-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .store-trend-legend-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
+
+        .store-trend-legend-dot.current {
+            background: var(--primary-500);
+        }
+
+        .store-trend-legend-dot.last-year {
+            background: var(--neutral-400);
+        }
+
+        .store-goal-main {
+            min-width: 0;
+            min-height: 400px;
+        }
+
+        .store-month-grid-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            min-height: 300px;
+        }
+
+        .store-month-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .store-month-grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-batch-actions {
+            display: flex;
+            gap: 12px;
+        }
+
+        .store-btn-batch {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+            font-size: 13px;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .store-btn-batch:hover:not(:disabled) {
+            background: var(--danger-50);
+            border-color: var(--danger-300);
+            color: var(--danger-600);
+        }
+
+        .store-btn-batch:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .store-month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .store-month-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            position: relative;
+            border: 2px solid transparent;
+        }
+
+        .store-month-card:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+        }
+
+        .store-month-card.selected {
+            border-color: var(--primary-400);
+            background: var(--primary-50);
+        }
+
+        .store-month-card.unset {
+            opacity: 0.6;
+        }
+
+        .store-month-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .store-month-select-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--neutral-300);
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .store-month-card.selected .store-month-select-indicator {
+            background: var(--primary-500);
+            border-color: var(--primary-500);
+        }
+
+        .store-month-card.selected .store-month-select-indicator::after {
+            content: '';
+            position: absolute;
+            top: 3px;
+            left: 5px;
+            width: 4px;
+            height: 8px;
+            border: solid white;
+            border-width: 0 2px 2px 0;
+            transform: rotate(45deg);
+        }
+
+        .store-month-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 12px;
+        }
+
+        .store-month-info {
+            text-align: left;
+        }
+
+        .store-info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 13px;
+        }
+
+        .store-info-label {
+            color: var(--neutral-500);
+        }
+
+        .store-info-value {
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .store-info-value.goal {
+            color: var(--neutral-600);
+        }
+
+        .store-info-value.completed {
+            color: var(--primary-600);
+        }
+
+        .store-month-progress-bar {
+            height: 6px;
+            background: var(--neutral-200);
+            border-radius: 3px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .store-month-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 3px;
+            transition: width 0.3s ease;
+        }
+
+        /* ============ 门店目标TAB页响应式样式 ============ */
+        @media (max-width: 1024px) {
+            .store-goal-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .store-goal-sidebar {
+                position: static;
+            }
+
+            .store-overview-card {
+                position: static;
+            }
+
+            .store-month-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .store-goal-layout {
+                gap: 16px;
+            }
+
+            .store-overview-card {
+                padding: 20px;
+            }
+
+            .store-circle-progress-wrapper {
+                width: 120px;
+                height: 120px;
+            }
+
+            .store-circle-percentage {
+                font-size: 24px;
+            }
+
+            .store-month-grid-container {
+                padding: 20px;
+            }
+
+            .store-month-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .store-month-card {
+                padding: 14px;
+            }
+
+            .store-month-grid-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 12px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .store-overview-card {
+                padding: 16px;
+            }
+
+            .store-circle-progress-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .store-circle-percentage {
+                font-size: 20px;
+            }
+
+            .store-month-grid-container {
+                padding: 16px;
+            }
+
+            .store-month-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .store-stat-item {
+                padding: 10px;
+            }
+        }
+
+        /* ============ 原有样式（保留供员工业绩目标使用） ============ */
+        .year-overview-card {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+            position: sticky;
+            top: 110px;
+        }
+
+        .overview-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .circle-progress-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .circle-progress-wrapper {
+            position: relative;
+            width: 160px;
+            height: 160px;
+            margin-bottom: 16px;
+        }
+
+        .circle-progress-bg {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary-200) 0deg,
+                var(--primary-200) 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+        }
+
+        .circle-progress-fill {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: conic-gradient(
+                var(--primary) 0deg,
+                var(--primary-600) var(--progress-deg, 180deg),
+                transparent var(--progress-deg, 180deg),
+                transparent 360deg
+            );
+            mask: radial-gradient(transparent 55%, black 56%);
+            -webkit-mask: radial-gradient(transparent 55%, black 56%);
+            position: absolute;
+            top: 0;
+            left: 0;
+            transition: var(--transition-slow);
+        }
+
+        .circle-progress-inner {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .circle-percentage {
+            font-size: 32px;
+            font-weight: 700;
+            color: var(--primary-600);
+        }
+
+        .circle-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .overview-stats {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .stat-label {
+            font-size: 14px;
+            color: var(--neutral-500);
+        }
+
+        .stat-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .stat-value.highlight {
+            color: var(--primary-600);
+        }
+
+        .month-grid-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .month-grid-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .month-grid-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .batch-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-batch {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+        }
+
+        .btn-batch:hover:not(:disabled) {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .btn-batch:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .month-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+        }
+
+        .month-card {
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            padding: 16px;
+            cursor: pointer;
+            transition: var(--transition-normal);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        .month-card:hover {
+            background: var(--primary-50);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .month-card.selected {
+            border-color: var(--primary);
+            background: var(--primary-50);
+        }
+
+        .month-card.unset {
+            opacity: 0.6;
+        }
+
+        .month-card.unset:hover {
+            opacity: 0.8;
+        }
+
+        .month-card.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .month-select-indicator {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--neutral-300);
+            border-radius: 50%;
+            transition: var(--transition-fast);
+        }
+
+        .month-card.selected .month-select-indicator {
+            background: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .month-select-indicator::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            opacity: 0;
+            transition: var(--transition-fast);
+        }
+
+        .month-card.selected .month-select-indicator::after {
+            opacity: 1;
+        }
+
+        .month-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 8px;
+        }
+
+        .month-card.unset .month-name {
+            color: var(--neutral-400);
+        }
+
+        .month-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .info-label {
+            color: var(--neutral-500);
+        }
+
+        .info-value {
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+
+        .info-value.goal {
+            color: var(--primary-600);
+        }
+
+        .info-value.completed {
+            color: var(--neutral-600);
+        }
+
+        .month-progress-bar {
+            height: 4px;
+            background: var(--neutral-200);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 8px;
+        }
+
+        .month-progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            border-radius: 2px;
+            transition: var(--transition-slow);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-xl);
+            width: 90%;
+            max-width: 480px;
+            box-shadow: var(--shadow-lg);
+            transform: scale(0.95);
+            transition: var(--transition-normal);
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: scale(1);
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            padding: 20px 24px;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: white;
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            transition: var(--transition-fast);
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .modal-body {
+            padding: 24px;
+        }
+
+        .modal-field {
+            margin-bottom: 20px;
+        }
+
+        .modal-label {
+            display: block;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-700);
+            margin-bottom: 8px;
+        }
+
+        .modal-value {
+            display: block;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-600);
+        }
+
+        .modal-input-wrap {
+            display: flex;
+            align-items: center;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-200);
+            transition: var(--transition-fast);
+            overflow: hidden;
+        }
+
+        .modal-input-wrap:focus-within {
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px var(--primary-50);
+        }
+
+        .modal-input-prefix {
+            padding: 0 12px;
+            color: var(--neutral-500);
+            font-size: 16px;
+            font-weight: 600;
+        }
+
+        .modal-input {
+            flex: 1;
+            padding: 14px 12px;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            outline: none;
+        }
+
+        .modal-input::placeholder {
+            color: var(--neutral-400);
+        }
+
+        .modal-tip {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 8px;
+        }
+
+        .modal-footer {
+            padding: 16px 24px;
+            border-top: 1px solid var(--neutral-100);
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+
+        .modal-btn {
+            padding: 12px 24px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid transparent;
+        }
+
+        .modal-btn.secondary {
+            background: var(--bg-secondary);
+            color: var(--neutral-600);
+            border-color: var(--neutral-200);
+        }
+
+        .modal-btn.secondary:hover {
+            background: var(--neutral-100);
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+        }
+
+        .modal-btn.primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 80px;
+            right: 24px;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .toast {
+            background: var(--neutral-900);
+            color: white;
+            padding: 14px 20px;
+            border-radius: var(--radius-md);
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: var(--transition-normal);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .toast-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .toast.success .toast-icon::before {
+            content: '✓';
+            color: #10B981;
+        }
+
+        .toast.error .toast-icon::before {
+            content: '✕';
+            color: #EF4444;
+        }
+
+        .mobile-menu-toggle {
+            display: none;
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            cursor: pointer;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .mobile-menu-toggle span {
+            width: 20px;
+            height: 2px;
+            background: var(--neutral-600);
+            border-radius: 1px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+
+            .year-overview-card {
+                position: static;
+            }
+
+            .month-grid {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .page-header {
+                padding: 12px 16px;
+            }
+
+            .page-title {
+                font-size: 16px;
+            }
+
+            .page-main {
+                padding: 16px;
+            }
+
+            .header-tabs {
+                gap: 6px;
+            }
+
+            .tab-item {
+                padding: 8px 14px;
+                font-size: 13px;
+            }
+
+            .year-selector {
+                justify-content: flex-start;
+                margin-top: 8px;
+                margin-bottom: 8px;
+            }
+
+            .month-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .month-card {
+                padding: 12px;
+            }
+
+            .modal-container {
+                width: 95%;
+                margin: 16px;
+            }
+
+            .toast-container {
+                right: 16px;
+                left: 16px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .month-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .year-display {
+                min-width: 60px;
+                font-size: 16px;
+            }
+        }
+
+        /* ============ 员工业绩目标页面样式 ============ */
+        .staff-goal-container {
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            box-shadow: var(--shadow-md);
+        }
+
+        .staff-goal-all-view {
+            padding: 24px;
+        }
+        .staff-goal-all-header {
+            margin-bottom: 20px;
+        }
+        .staff-goal-all-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin: 0;
+        }
+        .staff-goal-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr;
+            min-height: 500px;
+            background: var(--bg-primary);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+            border: 1px solid var(--neutral-100);
+        }
+
+        .staff-sidebar {
+            background: var(--neutral-50);
+            border-right: 1px solid var(--neutral-100);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-sidebar-header {
+            padding: 16px 20px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-sidebar-header h3 {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin: 0 0 12px 0;
+        }
+
+        .staff-month-selector {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--bg-primary);
+            border-radius: var(--radius-md);
+            padding: 6px 8px;
+        }
+
+        .month-nav-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 28px;
+            height: 28px;
+            border: none;
+            border-radius: var(--radius-sm);
+            background: transparent;
+            color: var(--neutral-600);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .month-nav-btn:hover {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .staff-month-label {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .staff-list-body {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+        }
+
+        .staff-list-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all 0.2s;
+            margin-bottom: 2px;
+        }
+
+        .staff-list-item:hover {
+            background: var(--neutral-100);
+        }
+
+        .staff-list-item.active {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .staff-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--primary-100);
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+            flex-shrink: 0;
+        }
+
+        .staff-list-item.active .staff-avatar {
+            background: var(--primary);
+            color: white;
+        }
+
+        .staff-item-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--neutral-800);
+        }
+
+        .staff-list-item.active .staff-item-name {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .staff-main {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .staff-main-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-main-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .staff-main-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .staff-goal-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+            gap: 16px;
+            flex: 1;
+        }
+
+        .staff-goal-card {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: all 0.2s;
+        }
+
+        .staff-goal-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+            border-color: var(--primary-200);
+        }
+
+        .staff-goal-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 16px;
+            background: var(--neutral-50);
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-card-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .staff-goal-card-unit {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .staff-goal-card-body {
+            padding: 16px;
+        }
+
+        .staff-goal-card-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .staff-goal-card-label {
+            font-size: 13px;
+            color: var(--neutral-600);
+        }
+
+        .staff-goal-card-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .staff-goal-card-value.completed {
+            color: var(--primary);
+        }
+
+        .staff-goal-card-progress {
+            height: 6px;
+            background: var(--neutral-100);
+            border-radius: 3px;
+            margin: 12px 0 8px;
+            overflow: hidden;
+        }
+
+        .staff-goal-card-progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            transition: width 0.3s;
+        }
+
+        .staff-goal-card-progress-fill.achieved {
+            background: #10B981;
+        }
+
+        .staff-goal-card-progress-fill.not-achieved {
+            background: var(--primary);
+        }
+
+        .staff-goal-card-rate {
+            font-size: 12px;
+            color: var(--neutral-500);
+            text-align: right;
+        }
+
+        .staff-goal-card-rate .achieved {
+            color: #10B981;
+            font-weight: 600;
+        }
+
+        .staff-goal-card-footer {
+            display: flex;
+            gap: 8px;
+            padding: 12px 16px;
+            border-top: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-edit-btn,
+        .staff-goal-delete-btn {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            padding: 6px 12px;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .staff-goal-edit-btn {
+            background: var(--primary-50);
+            color: var(--primary);
+        }
+
+        .staff-goal-edit-btn:hover {
+            background: var(--primary-100);
+        }
+
+        .staff-goal-delete-btn {
+            background: #FEF2F2;
+            color: #EF4444;
+        }
+
+        .staff-goal-delete-btn:hover {
+            background: #FEE2E2;
+        }
+
+        .add-staff-goal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 8px 16px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--primary);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 13px;
+            color: var(--primary);
+            background: transparent;
+        }
+
+        .add-staff-goal-btn:hover {
+            background: var(--primary);
+            color: white;
+        }
+
+        @media (max-width: 992px) {
+            .staff-goal-layout { grid-template-columns: 1fr; }
+            .staff-sidebar { border-right: none; border-bottom: 1px solid var(--neutral-100); max-height: 250px; }
+            .staff-list-body { display: flex; flex-wrap: wrap; gap: 4px; }
+            .staff-list-item { padding: 8px 12px; }
+            .staff-goal-cards { grid-template-columns: 1fr; }
+        }
+
+        .staff-goal-type-section {
+            background: var(--bg-primary);
+            border: 1px solid var(--neutral-100);
+            border-radius: var(--radius-lg);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        .staff-goal-type-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+        .staff-goal-type-name {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+        .staff-goal-type-unit {
+            font-size: 13px;
+            color: var(--neutral-500);
+        }
+        .staff-goal-type-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .staff-goal-type-table th,
+        .staff-goal-type-table td {
+            padding: 10px 12px;
+            text-align: center;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+        .staff-goal-type-table th {
+            background: var(--neutral-50);
+            font-weight: 600;
+            color: var(--neutral-700);
+        }
+        .staff-goal-type-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+            color: var(--neutral-600);
+        }
+        .staff-goal-type-table .completed-val {
+            color: var(--primary);
+            font-weight: 500;
+        }
+        .mini-progress {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        .mini-progress-fill {
+            height: 6px;
+            border-radius: 3px;
+            transition: width 0.3s;
+            flex: 1;
+            min-width: 30px;
+        }
+        .mini-progress-fill.achieved { background: #10B981; }
+        .mini-progress-fill.not-achieved { background: var(--primary); }
+        .mini-progress-text {
+            font-size: 11px;
+            color: var(--neutral-500);
+            min-width: 35px;
+            text-align: right;
+        }
+        .mini-progress-text.achieved { color: #10B981; font-weight: 600; }
+        .mini-edit-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 6px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: var(--primary-50);
+            color: var(--primary);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .mini-edit-btn:hover { background: var(--primary-100); }
+        .staff-goal-type-actions {
+            display: flex;
+            justify-content: flex-end;
+            margin-top: 12px;
+        }
+        .staff-goal-delete-type-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 14px;
+            border: none;
+            border-radius: var(--radius-md);
+            background: #FEF2F2;
+            color: #EF4444;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .staff-goal-delete-type-btn:hover { background: #FEE2E2; }
+        .add-staff-goal-btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px;
+            border-radius: var(--radius-lg);
+            border: 2px dashed var(--neutral-200);
+            cursor: pointer;
+            transition: all 0.25s;
+            font-size: 14px;
+            color: var(--neutral-500);
+            background: transparent;
+            width: 100%;
+        }
+        .add-staff-goal-btn:hover {
+            border-color: var(--primary);
+            color: var(--primary);
+            background: var(--primary-50);
+        }
+        @media (max-width: 768px) {
+            .staff-goal-type-table { font-size: 11px; }
+            .staff-goal-type-table th, .staff-goal-type-table td { padding: 6px 4px; }
+            .staff-goal-type-section { padding: 12px; }
+        }
+        /* ============ 响应式 ============ */
+        @media (max-width: 992px) {
+            .staff-goal-type-section { padding: 14px; }
+            .staff-goal-type-table { font-size: 12px; }
+            .staff-goal-type-table th, .staff-goal-type-table td { padding: 8px 6px; }
+        }
+        @media (max-width: 768px) {
+            .staff-goal-all-view { padding: 16px; }
+            .staff-goal-type-section { padding: 10px; margin-bottom: 14px; }
+            .staff-goal-type-table { font-size: 11px; }
+            .staff-goal-type-table th, .staff-goal-type-table td { padding: 6px 4px; }
+        }
+        @media (max-width: 576px) {
+            .staff-goal-type-table { font-size: 10px; }
+            .staff-goal-type-name { font-size: 13px; }
+            .staff-goal-type-unit { font-size: 11px; }
+            .staff-goal-type-actions button { font-size: 11px; padding: 6px 10px; }
+        }
+
+        .month-selector-wrapper {
+            margin-bottom: 16px;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 8px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar {
+            height: 6px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 3px;
+        }
+
+        .month-selector-wrapper::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 3px;
+        }
+
+        .month-selector {
+            display: inline-flex;
+            gap: 8px;
+            min-width: 100%;
+        }
+
+        .month-btn {
+            padding: 8px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--neutral-200);
+            background: var(--bg-primary);
+            color: var(--neutral-600);
+        }
+
+        .month-btn:hover {
+            background: var(--primary-50);
+            border-color: var(--primary-300);
+            color: var(--primary-600);
+        }
+
+        .month-btn.active {
+            background: linear-gradient(135deg, var(--primary-400) 0%, var(--primary-600) 100%);
+            color: white;
+            border-color: var(--primary-500);
+        }
+
+        .staff-goal-table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar-track {
+            background: var(--bg-secondary);
+            border-radius: 4px;
+        }
+
+        .staff-goal-table-wrapper::-webkit-scrollbar-thumb {
+            background: var(--neutral-300);
+            border-radius: 4px;
+        }
+
+        .staff-goal-table {
+            width: 100%;
+            min-width: 700px;
+            border-collapse: collapse;
+        }
+
+        .staff-goal-table th,
+        .staff-goal-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--neutral-100);
+        }
+
+        .staff-goal-table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--neutral-700);
+            font-size: 13px;
+        }
+
+        .staff-goal-table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        .staff-name {
+            font-weight: 500;
+            color: var(--neutral-800);
+        }
+
+        .goal-cell {
+            min-width: 140px;
+        }
+
+        .goal-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+            margin-bottom: 4px;
+        }
+
+        .goal-value .label {
+            font-weight: 400;
+            color: var(--neutral-500);
+            margin-right: 4px;
+        }
+
+        .goal-progress-bar {
+            height: 8px;
+            background: var(--neutral-200);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-bottom: 4px;
+        }
+
+        .goal-progress-fill {
+            height: 100%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .goal-progress-fill.achieved {
+            background: linear-gradient(90deg, #10B981 0%, #059669 100%);
+        }
+
+        .goal-progress-fill.not-achieved {
+            background: linear-gradient(90deg, var(--primary-400) 0%, var(--primary-600) 100%);;
+        }
+
+        .goal-rate {
+            font-size: 12px;
+            color: var(--neutral-500);
+        }
+
+        .goal-rate.achieved {
+            color: #10B981;
+        }
+
+        .goal-rate.not-achieved {
+            color: #EF4444;
+        }
+
+        .edit-btn {
+            padding: 6px 12px;
+            border-radius: var(--radius-sm);
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition-fast);
+            border: 1px solid var(--primary-300);
+            background: var(--primary-50);
+            color: var(--primary-600);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .edit-btn:hover {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .summary-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+        }
+
+        .summary-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-bottom: 4px;
+        }
+
+        .summary-value {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .summary-value.achieved {
+            color: #10B981;
+        }
+
+        .summary-value.not-achieved {
+            color: var(--primary-600);
+        }
+
+        /* ============ 员工目标编辑弹窗 ============ */
+        .staff-goal-modal .modal-body {
+            padding: 24px;
+        }
+
+        .staff-goal-modal .modal-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .modal-staff-info {
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+        }
+
+        .modal-staff-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--neutral-800);
+        }
+
+        .modal-month-info {
+            font-size: 12px;
+            color: var(--neutral-500);
+            margin-top: 4px;
+        }
+
+        .goal-fields {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 16px;
+        }
+
+        .goal-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .goal-field label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--neutral-700);
+            margin-bottom: 8px;
+        }
+
+        .goal-field input {
+            padding: 10px 12px;
+            border: 1px solid var(--neutral-200);
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            color: var(--neutral-800);
+            background: var(--bg-primary);
+            transition: var(--transition-fast);
+        }
+
+        .goal-field input:focus {
+            outline: none;
+            border-color: var(--primary-400);
+            box-shadow: 0 0 0 3px rgba(232, 124, 154, 0.1);
+        }
+
+        .goal-field input::placeholder {
+            color: var(--neutral-400);
+        }
+
+        .goal-field .field-unit {
+            font-size: 12px;
+            color: var(--neutral-400);
+            margin-top: 4px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="page-container">
+        <header class="page-header">
+            <div class="header-content">
+                <h1 class="page-title">目标管理</h1>
+                <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
+            </div>
+        </header>
+
+        <main class="page-main">
+            <div class="year-selector">
+                <button class="year-btn" id="prevYearBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M15 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <div class="year-display" id="currentYearDisplay">2026</div>
+                <button class="year-btn" id="nextYearBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M9 5l7 7-7 7" />
+                    </svg>
+                </button>
+            </div>
+            <div class="header-tabs" id="goalTypeTabs">
+                <button class="tab-item active" data-goal-type="store-performance">门店现金目标</button>
+                <button class="tab-item" data-goal-type="store-card-consume">门店卡耗目标</button>
+                <button class="tab-item" data-goal-type="customer-flow">客流目标</button>
+                <button class="tab-item" data-goal-type="staff-performance">员工业绩目标</button>
+                <button class="add-goal-type-btn" id="addGoalTypeBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    新增目标类型
+                </button>
+            </div>
+            <div class="store-goal-layout" id="storeGoalContent">
+                <aside class="store-goal-sidebar">
+                    <div class="store-overview-card">
+                        <h2 class="store-overview-title">年度概览</h2>
+                        <div class="store-circle-progress-container">
+                            <div class="store-circle-progress-wrapper">
+                                <div class="store-circle-progress-bg"></div>
+                                <div class="store-circle-progress-fill" id="yearProgressFill"></div>
+                                <div class="store-circle-progress-inner">
+                                    <div class="store-circle-percentage" id="yearCompletionRate">78%</div>
+                                    <div class="store-circle-label">进度</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="store-overview-stats">
+                            <div class="store-stat-item">
+                                <span class="store-stat-label">年度目标</span>
+                                <span class="store-stat-value">¥1,200,000</span>
+                            </div>
+                            <div class="store-stat-item">
+                                <span class="store-stat-label">年度完成</span>
+                                <span class="store-stat-value highlight">¥936,000</span>
+                            </div>
+                        </div>
+                        
+                        <div class="store-trend-section">
+                            <h3 class="store-trend-title">月度趋势对比</h3>
+                            <div class="store-trend-chart" id="yearTrendChart">
+                                <div class="store-trend-y-axis" id="trendYAxis"></div>
+                                <div class="store-trend-content">
+                                    <div class="store-trend-grid">
+                                        <div class="store-trend-grid-line"></div>
+                                        <div class="store-trend-grid-line"></div>
+                                        <div class="store-trend-grid-line"></div>
+                                        <div class="store-trend-grid-line"></div>
+                                        <div class="store-trend-grid-line"></div>
+                                    </div>
+                                    <div class="store-trend-lines">
+                                        <svg class="store-trend-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                            <path class="store-trend-path current" id="currentYearTrend"></path>
+                                        </svg>
+                                        <svg class="store-trend-line" viewBox="0 0 100 100" preserveAspectRatio="none">
+                                            <path class="store-trend-path last-year" id="lastYearTrend"></path>
+                                        </svg>
+                                    </div>
+                                    <div class="store-trend-points" id="trendPoints"></div>
+                                </div>
+                                <div class="store-trend-x-axis" id="trendXAxis"></div>
+                                <div class="store-trend-legend" id="trendLegend">
+                                    <div class="store-trend-legend-item">
+                                        <span class="store-trend-legend-dot current"></span>
+                                        <span id="legendCurrentYear">2026年</span>
+                                    </div>
+                                    <div class="store-trend-legend-item">
+                                        <span class="store-trend-legend-dot last-year"></span>
+                                        <span id="legendLastYear">2025年</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <main class="store-goal-main">
+                    <div class="store-month-grid-container">
+                        <div class="store-month-grid-header">
+                            <h2 class="store-month-grid-title">月度目标</h2>
+                            <div class="store-batch-actions">
+                                <button class="store-btn-batch" id="batchClearBtn" disabled>清空选中的目标 (0)</button>
+                            </div>
+                        </div>
+                        <div class="store-month-grid" id="monthGrid">
+                        </div>
+                    </div>
+                </main>
+            </div>
+
+            <div class="main-content" id="staffGoalContent" style="display: none;">
+                <div class="staff-goal-layout">
+                    <div class="staff-sidebar">
+                        <div class="staff-sidebar-header">
+                            <h3>员工列表</h3>
+                            <div class="staff-month-selector">
+                                <button class="month-nav-btn" id="staffPrevMonthBtn">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M15 19l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                <span class="staff-month-label" id="staffMonthLabel">5月</span>
+                                <button class="month-nav-btn" id="staffNextMonthBtn">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M9 5l7 7-7 7" />
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="staff-list-body" id="staffListBody"></div>
+                    </div>
+                    <div class="staff-main">
+                        <div class="staff-main-header">
+                            <h3 class="staff-main-title" id="staffMainTitle">请选择员工</h3>
+                            <div class="staff-main-actions">
+                                <button class="add-staff-goal-btn" id="addStaffGoalBtn">
+                                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M12 5v14M5 12h14" />
+                                    </svg>
+                                    新增目标
+                                </button>
+                            </div>
+                        </div>
+                        <div class="staff-goal-cards" id="staffGoalCards"></div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal-overlay" id="goalModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="modalTitle">设置目标</h3>
+                <button class="modal-close" id="modalCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-field">
+                    <label class="modal-label">目标所属</label>
+                    <div class="modal-value" id="modalTargetInfo">2026年1月</div>
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">目标数值</label>
+                    <div class="modal-input-wrap">
+                        <span class="modal-input-prefix" id="goalUnitPrefix">¥</span>
+                        <input type="text" class="modal-input" id="goalAmountInput" placeholder="请输入目标数值" inputmode="decimal">
+                    </div>
+                    <div class="modal-tip" id="goalModalTip">请输入有效的数字</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="modalCancelBtn">取消</button>
+                <button class="modal-btn primary" id="modalConfirmBtn">确定</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 员工目标编辑弹窗 -->
+    <div class="modal-overlay" id="staffGoalModal">
+        <div class="modal-container staff-goal-modal">
+            <div class="modal-header">
+                <h3 class="modal-title" id="staffModalTitle">编辑员工目标</h3>
+                <button class="modal-close" id="staffModalCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-staff-info">
+                    <div class="modal-staff-name" id="staffModalStaffName">员工姓名</div>
+                    <div class="modal-month-info" id="staffModalMonthInfo">2026年1月</div>
+                </div>
+                <div class="goal-fields" id="staffGoalFields"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="staffModalCancelBtn">取消</button>
+                <button class="modal-btn primary" id="staffModalConfirmBtn">保存目标</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增员工目标类型弹窗 -->
+    <div class="modal-overlay" id="addStaffGoalTypeModal">
+        <div class="modal-container" style="max-width:520px">
+            <div class="modal-header">
+                <h3 class="modal-title">新增员工目标</h3>
+                <button class="modal-close" id="addStaffGoalTypeCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body" style="max-height:70vh;overflow-y:auto">
+                <div class="modal-field">
+                    <label class="modal-label">目标名称</label>
+                    <input type="text" class="modal-input" id="staffGoalTypeNameInput" placeholder="请输入目标名称" style="width:100%;padding:10px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:14px">
+                </div>
+                <div class="modal-field" style="margin-top:16px">
+                    <label class="modal-label">计量单位</label>
+                    <select id="staffGoalTypeUnitInput" style="width:100%;padding:10px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:14px;background:var(--bg-primary)">
+                        <option value="元">元</option>
+                        <option value="人">人</option>
+                        <option value="次">次</option>
+                        <option value="笔">笔</option>
+                        <option value="个">个</option>
+                    </select>
+                </div>
+                <div class="modal-field" style="margin-top:20px">
+                    <label class="modal-label">设置各员工目标（${currentYear}年${currentStaffMonth}月）</label>
+                    <div id="staffGoalValuesContainer"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="addStaffGoalTypeCancelBtn">取消</button>
+                <button class="modal-btn primary" id="addStaffGoalTypeConfirmBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 新增目标类型弹窗 -->
+    <div class="modal-overlay" id="goalTypeModal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 class="modal-title" id="goalTypeModalTitle">新增目标类型</h3>
+                <button class="modal-close" id="goalTypeModalCloseBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="goalTypeIdInput">
+                <div class="modal-field">
+                    <label class="modal-label">目标类型名称</label>
+                    <input type="text" class="modal-input" id="goalTypeNameInput" placeholder="请输入目标类型名称" style="padding: 14px 12px; border: 1px solid var(--neutral-200); border-radius: var(--radius-md); width: 100%;">
+                </div>
+                <div class="modal-field">
+                    <label class="modal-label">计量单位</label>
+                    <select class="modal-input" id="goalTypeUnitInput" style="padding: 14px 12px; border: 1px solid var(--neutral-200); border-radius: var(--radius-md); width: 100%;">
+                        <option value="元">元</option>
+                        <option value="人">人</option>
+                        <option value="次">次</option>
+                        <option value="笔">笔</option>
+                        <option value="个">个</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" id="goalTypeModalCancelBtn">取消</button>
+                <button class="modal-btn primary" id="goalTypeModalConfirmBtn">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        const API_BASE = 'http://124.222.211.194:5001/api';
+
+        const CURRENT_YEAR = new Date().getFullYear();
+        const MIN_YEAR = CURRENT_YEAR - 5;
+        const MAX_YEAR = CURRENT_YEAR;
+
+        // 默认目标类型数据（用于API不可用时）
+        const defaultGoalTypes = [
+            { id: 1, type_name: '门店现金目标', unit: '元' },
+            { id: 2, type_name: '门店卡耗目标', unit: '元' },
+            { id: 3, type_name: '客流目标', unit: '人' },
+            { id: 4, type_name: '员工业绩目标', unit: '元' }
+        ];
+        
+        let goalTypes = [];
+        let currentGoalTypeId = null;
+        let currentGoalTypeIndex = 0;
+        let currentYear = CURRENT_YEAR;
+        let selectedMonths = [];
+        let editingMonth = null;
+        let monthlyGoals = {};
+        let isLoading = false;
+        let useMockData = true;
+
+        // ============ API 请求封装（含异常处理） ============
+        async function apiRequest(url, options = {}) {
+            const controller = new AbortController();
+            const timeout = setTimeout(() => controller.abort(), 10000);
+            try {
+                const res = await fetch(url, { ...options, signal: controller.signal });
+                clearTimeout(timeout);
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                const data = await res.json();
+                if (data.code !== 0) throw new Error(data.message || '服务器错误');
+                return data.data;
+            } catch (err) {
+                clearTimeout(timeout);
+                if (err.name === 'AbortError') throw new Error('请求超时，请检查网络连接');
+                if (err.message === 'Failed to fetch') throw new Error('网络连接失败，请检查服务器状态');
+                throw err;
+            }
+        }
+
+        // ============ 数据加载 ============
+        async function loadGoalTypes() {
+            console.log('loadGoalTypes called');
+            useMockData = true;
+            goalTypes = JSON.parse(JSON.stringify(defaultGoalTypes));
+            currentGoalTypeId = goalTypes[0].id;
+            currentGoalTypeIndex = 0;
+            console.log('Goal types set:', goalTypes, 'currentGoalTypeId:', currentGoalTypeId);
+            renderTabs();
+            showToast('使用本地数据模式', 'success');
+        }
+
+        async function fetchGoals() {
+            if (!currentGoalTypeId) return;
+            
+            // 本地数据模式下生成模拟数据
+            if (useMockData) {
+                const currentType = goalTypes[currentGoalTypeIndex] || {};
+                monthlyGoals = {};
+                
+                // 默认目标类型（id <= 4）生成模拟数据，新增目标类型（id > 4）显示空数据
+                if (currentType.id && currentType.id <= 4) {
+                    const unit = currentType.unit || '元';
+                    for (let month = 1; month <= 12; month++) {
+                        const baseGoal = unit === '元' ? (80000 + Math.floor(Math.random() * 40000)) :
+                                         unit === '人' ? (30 + Math.floor(Math.random() * 20)) :
+                                         (100 + Math.floor(Math.random() * 80));
+                        const completionRate = 60 + Math.floor(Math.random() * 50);
+                        monthlyGoals[month] = {
+                            goal: baseGoal,
+                            completed: Math.round(baseGoal * completionRate / 100),
+                            completionRate: completionRate
+                        };
+                    }
+                }
+                
+                renderMonthGrid();
+                updateYearOverview();
+                return;
+            }
+            
+            try {
+                setLoading(true);
+                monthlyGoals = await apiRequest(
+                    `${API_BASE}/goals?type_id=${currentGoalTypeId}&year=${currentYear}`
+                );
+                setLoading(false);
+                renderMonthGrid();
+                updateYearOverview();
+            } catch (err) {
+                setLoading(false);
+                showToast('加载目标数据失败: ' + err.message, 'error');
+                monthlyGoals = {};
+                renderMonthGrid();
+                updateYearOverview();
+            }
+        }
+
+        // ============ 渲染函数 ============
+        function renderTabs() {
+            const container = document.getElementById('goalTypeTabs');
+            const tabsHtml = goalTypes.map((t, i) => {
+                const isStaff = t.type_name === '员工业绩目标';
+                return `
+                    <div class="tab-wrapper">
+                        <button class="tab-item${i === currentGoalTypeIndex ? ' active' : ''}" data-goal-type="${t.id}" data-type-index="${i}">${t.type_name}</button>
+                        ${!isStaff ? `
+                            <div class="tab-actions">
+                                <button class="tab-edit-btn" data-type-index="${i}" title="编辑">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                        <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                    </svg>
+                                </button>
+                                <button class="tab-delete-btn" data-type-index="${i}" title="删除">
+                                    <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                    </svg>
+                                </button>
+                            </div>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+            
+            container.innerHTML = tabsHtml + `
+                <button class="add-goal-type-btn" id="addGoalTypeBtn">
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M12 5v14M5 12h14" />
+                    </svg>
+                    新增目标类型
+                </button>
+            `;
+            
+            container.querySelectorAll('.tab-item').forEach(tab => {
+                tab.addEventListener('click', () => changeGoalType(parseInt(tab.dataset.typeIndex)));
+            });
+            container.querySelectorAll('.tab-edit-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.dataset.typeIndex);
+                    openGoalTypeModal(index);
+                });
+            });
+            container.querySelectorAll('.tab-delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const index = parseInt(btn.dataset.typeIndex);
+                    deleteGoalType(index);
+                });
+            });
+            container.querySelector('#addGoalTypeBtn')?.addEventListener('click', () => openGoalTypeModal());
+        }
+
+        function renderMonthGrid() {
+            console.log('renderMonthGrid called, monthlyGoals:', monthlyGoals);
+            const grid = document.getElementById('monthGrid');
+            if (!grid) {
+                console.error('monthGrid element not found!');
+                return;
+            }
+            if (isLoading) {
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--neutral-400)">加载中...</div>';
+                return;
+            }
+
+            let html = '';
+            const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+            const currentType = goalTypes[currentGoalTypeIndex] || {};
+            const unit = currentType.unit || '元';
+            const prefix = unit === '元' ? '¥' : '';
+            const suffix = unit === '元' ? '' : unit;
+            
+            months.forEach((monthName, index) => {
+                const month = index + 1;
+                const goalData = monthlyGoals[month];
+                const isSelected = selectedMonths.includes(month);
+                const isUnset = !goalData;
+                
+                let cardContent = '';
+                if (goalData) {
+                    const rate = Math.min(goalData.completionRate || 0, 100);
+                    cardContent = `
+                        <div class="store-month-info">
+                            <div class="store-info-row"><span class="store-info-label">目标</span><span class="store-info-value goal">${prefix}${formatNum(goalData.goal)}${suffix}</span></div>
+                            <div class="store-info-row"><span class="store-info-label">完成</span><span class="store-info-value completed">${prefix}${formatNum(goalData.completed)}${suffix}</span></div>
+                            <div class="store-month-progress-bar"><div class="store-month-progress-fill" style="width:${rate}%"></div></div>
+                            <div class="store-info-row" style="margin-top:4px"><span class="store-info-label">进度</span><span class="store-info-value">${goalData.completionRate}%</span></div>
+                        </div>`;
+                } else {
+                    cardContent = '<div class="store-month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div></div>';
+                }
+                html += `<div class="store-month-card ${isSelected?'selected':''} ${isUnset?'unset':''}" data-month="${month}"><div class="store-month-select-indicator"></div><div class="store-month-name">${monthName}</div>${cardContent}</div>`;
+            });
+            console.log('Setting monthGrid innerHTML, html length:', html.length);
+            grid.innerHTML = html;
+            console.log('monthGrid innerHTML set, child element count:', grid.children.length);
+            updateBatchButton();
+        }
+
+        function updateYearOverview() {
+            let totalGoal = 0, totalCompleted = 0;
+            Object.values(monthlyGoals).forEach(d => { totalGoal += d.goal; totalCompleted += d.completed; });
+            const completionRate = totalGoal > 0 ? Math.round((totalCompleted / totalGoal) * 100) : 0;
+            const safeRate = Math.min(completionRate, 100);
+            const progressDeg = (safeRate / 100) * 360;
+            const el = document.getElementById('yearCompletionRate');
+            if (el) {
+                el.textContent = `${completionRate}%`;
+                if (completionRate > 100) el.style.color = '#10B981';
+                else el.style.color = '';
+            }
+            const fill = document.getElementById('yearProgressFill');
+            if (fill) fill.style.setProperty('--progress-deg', `${progressDeg}deg`);
+            const stats = document.querySelectorAll('.store-overview-stats .store-stat-value');
+            const currentType = goalTypes[currentGoalTypeIndex] || {};
+            const unit = currentType.unit || '元';
+            const prefix = unit === '元' ? '¥' : '';
+            if (stats[0]) stats[0].textContent = `${prefix}${formatNum(totalGoal)}`;
+            if (stats[1]) stats[1].textContent = `${prefix}${formatNum(totalCompleted)}`;
+            
+            updateLegendYears();
+            renderTrendChart();
+        }
+
+        function updateLegendYears() {
+            const currentYearEl = document.getElementById('legendCurrentYear');
+            const lastYearEl = document.getElementById('legendLastYear');
+            if (currentYearEl) currentYearEl.textContent = `${currentYear}年`;
+            if (lastYearEl) lastYearEl.textContent = `${currentYear - 1}年`;
+        }
+
+        // 生成去年模拟数据
+        function generateLastYearData() {
+            const lastYearData = {};
+            const currentType = goalTypes[currentGoalTypeIndex] || {};
+            const unit = currentType.unit || '元';
+            for (let month = 1; month <= 12; month++) {
+                const baseGoal = unit === '元' ? (70000 + Math.floor(Math.random() * 35000)) :
+                                 unit === '人' ? (25 + Math.floor(Math.random() * 18)) :
+                                 (80 + Math.floor(Math.random() * 70));
+                const completionRate = 55 + Math.floor(Math.random() * 50);
+                lastYearData[month] = {
+                    goal: baseGoal,
+                    completed: Math.round(baseGoal * completionRate / 100),
+                    completionRate: completionRate
+                };
+            }
+            return lastYearData;
+        }
+
+        // 渲染趋势图
+        function renderTrendChart() {
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            const lastYearData = generateLastYearData();
+            
+            const currentType = goalTypes[currentGoalTypeIndex] || {};
+            const unit = currentType.unit || '元';
+            
+            let maxValue = 0;
+            const currentYearValues = [];
+            const lastYearValues = [];
+            
+            for (let month = 1; month <= 12; month++) {
+                const current = monthlyGoals[month]?.completed || 0;
+                const last = lastYearData[month]?.completed || 0;
+                currentYearValues.push(current);
+                lastYearValues.push(last);
+                maxValue = Math.max(maxValue, current, last);
+            }
+            
+            if (maxValue === 0) maxValue = 100000;
+            const padding = maxValue * 0.2;
+            maxValue += padding;
+            
+            renderYAxis(maxValue, unit);
+            renderXAxis(months);
+            renderTrendLines(currentYearValues, lastYearValues, maxValue);
+        }
+
+        function renderYAxis(maxValue, unit) {
+            const yAxis = document.getElementById('trendYAxis');
+            if (!yAxis) return;
+            
+            const prefix = unit === '元' ? '¥' : '';
+            const suffix = unit === '元' ? '' : unit;
+            
+            const values = [maxValue, maxValue * 0.75, maxValue * 0.5, maxValue * 0.25, 0];
+            yAxis.innerHTML = values.map(v => {
+                let displayValue = '';
+                if (unit === '元') {
+                    if (v >= 10000) {
+                        displayValue = `${(v / 10000).toFixed(0)}万`;
+                    } else {
+                        displayValue = Math.round(v).toString();
+                    }
+                } else {
+                    displayValue = Math.round(v).toString();
+                }
+                return `<span>${prefix}${displayValue}${suffix}</span>`;
+            }).join('');
+        }
+
+        function renderXAxis(months) {
+            const xAxis = document.getElementById('trendXAxis');
+            if (!xAxis) return;
+            xAxis.innerHTML = months.map(m => `<span>${m}</span>`).join('');
+        }
+
+        function renderTrendLines(currentValues, lastValues, maxValue) {
+            const currentPath = document.getElementById('currentYearTrend');
+            const lastPath = document.getElementById('lastYearTrend');
+            
+            if (currentPath) {
+                currentPath.setAttribute('d', generatePath(currentValues, maxValue));
+            }
+            if (lastPath) {
+                lastPath.setAttribute('d', generatePath(lastValues, maxValue));
+            }
+        }
+
+        function generatePath(values, maxValue) {
+            if (!values || values.length === 0) return '';
+            
+            const points = values.map((value, index) => {
+                const x = (index / (values.length - 1)) * 100;
+                const y = 100 - (value / maxValue) * 100;
+                return `${x},${y}`;
+            });
+            
+            return `M${points.join(' L')}`;
+        }
+
+        function renderTrendPoints(currentValues, lastValues, maxValue) {
+            const container = document.getElementById('trendPoints');
+            if (!container) return;
+            
+            let pointsHtml = '';
+            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            
+            currentValues.forEach((value, index) => {
+                const x = (index / (currentValues.length - 1)) * 100;
+                const y = 100 - (value / maxValue) * 100;
+                pointsHtml += `
+                    <div class="store-trend-point current" 
+                         style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"
+                         title="${months[index]}: ${formatNum(value)}"></div>
+                `;
+            });
+            
+            lastValues.forEach((value, index) => {
+                const x = (index / (lastValues.length - 1)) * 100;
+                const y = 100 - (value / maxValue) * 100;
+                pointsHtml += `
+                    <div class="store-trend-point last-year" 
+                         style="left:${x}%;top:${y}%;transform:translate(-50%,-50%)"
+                         title="${months[index]}: ${formatNum(value)}"></div>
+                `;
+            });
+            
+            container.innerHTML = pointsHtml;
+        }
+
+        function setLoading(state) {
+            isLoading = state;
+        }
+
+        // ============ 格式化 ============
+        function formatNum(value) {
+            if (typeof value !== 'number' || isNaN(value)) return '0.00';
+            return value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+        }
+
+        // ============ 操作函数 ============
+        function updateBatchButton() {
+            const btn = document.getElementById('batchClearBtn');
+            if (!btn) return;
+            btn.textContent = `清空选中的目标 (${selectedMonths.length})`;
+            btn.disabled = selectedMonths.length === 0;
+        }
+
+        function toggleMonthSelection(month) {
+            const idx = selectedMonths.indexOf(month);
+            if (idx > -1) selectedMonths.splice(idx, 1);
+            else selectedMonths.push(month);
+            updateBatchButton();
+        }
+
+        function openGoalModal(month) {
+            editingMonth = month;
+            const goalData = monthlyGoals[month];
+            document.getElementById('modalTitle').textContent = '设置目标';
+            document.getElementById('modalTargetInfo').textContent = `${currentYear}年${month}月`;
+            document.getElementById('goalAmountInput').value = goalData ? goalData.goal : '';
+            
+            const currentType = goalTypes[currentGoalTypeIndex];
+            const unit = currentType?.unit || '元';
+            const prefix = unit === '元' ? '¥' : unit;
+            document.getElementById('goalUnitPrefix').textContent = prefix;
+            document.getElementById('goalAmountInput').placeholder = `请输入目标${unit}`;
+            document.getElementById('goalModalTip').textContent = `请输入有效的数字（单位：${unit}）`;
+            
+            document.getElementById('goalAmountInput').focus();
+            document.getElementById('goalModal').classList.add('show');
+        }
+
+        function closeGoalModal() {
+            document.getElementById('goalModal').classList.remove('show');
+            editingMonth = null;
+            document.getElementById('goalAmountInput').value = '';
+        }
+
+        async function submitGoal() {
+            if (editingMonth === null) return;
+            const input = document.getElementById('goalAmountInput');
+            const value = parseFloat(input.value);
+            if (isNaN(value) || value <= 0) {
+                showToast('请输入有效的目标金额', 'error');
+                return;
+            }
+            try {
+                await apiRequest(`${API_BASE}/goals`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type_id: currentGoalTypeId,
+                        year: currentYear,
+                        month: editingMonth,
+                        goal: Math.round(value * 100) / 100
+                    })
+                });
+                closeGoalModal();
+                await fetchGoals();
+                showToast('目标设置成功', 'success');
+            } catch (err) {
+                showToast('保存失败: ' + err.message, 'error');
+            }
+        }
+
+        async function batchClearGoals() {
+            if (selectedMonths.length === 0) return;
+            try {
+                await apiRequest(`${API_BASE}/goals`, {
+                    method: 'DELETE',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        type_id: currentGoalTypeId,
+                        year: currentYear,
+                        months: [...selectedMonths]
+                    })
+                });
+                const count = selectedMonths.length;
+                selectedMonths = [];
+                await fetchGoals();
+                showToast(`已清空 ${count} 个月份的目标`, 'success');
+            } catch (err) {
+                showToast('清空失败: ' + err.message, 'error');
+            }
+        }
+
+        function showToast(message, type = 'success') {
+            const container = document.getElementById('toastContainer');
+            if (!container) return;
+            const toast = document.createElement('div');
+            toast.className = `toast ${type} show`;
+            toast.innerHTML = `<div class="toast-icon"></div><span>${message}</span>`;
+            container.appendChild(toast);
+            setTimeout(() => { toast.classList.remove('show'); setTimeout(() => container.removeChild(toast), 300); }, 3000);
+        }
+
+        async function changeYear(delta) {
+            currentYear += delta;
+            document.getElementById('currentYearDisplay').textContent = currentYear;
+            selectedMonths = [];
+            await fetchGoals();
+        }
+
+        // ============ 目标类型管理 ============
+        function openGoalTypeModal(index = -1) {
+            const modal = document.getElementById('goalTypeModal');
+            const title = document.getElementById('goalTypeModalTitle');
+            const nameInput = document.getElementById('goalTypeNameInput');
+            const unitInput = document.getElementById('goalTypeUnitInput');
+            const idInput = document.getElementById('goalTypeIdInput');
+
+            if (index >= 0 && goalTypes[index]) {
+                const type = goalTypes[index];
+                title.textContent = '编辑目标类型';
+                nameInput.value = type.type_name;
+                unitInput.value = type.unit || '元';
+                idInput.value = type.id;
+            } else {
+                title.textContent = '新增目标类型';
+                nameInput.value = '';
+                unitInput.value = '元';
+                idInput.value = '';
+            }
+            nameInput.focus();
+            modal.classList.add('show');
+        }
+
+        function closeGoalTypeModal() {
+            document.getElementById('goalTypeModal').classList.remove('show');
+            document.getElementById('goalTypeIdInput').value = '';
+            document.getElementById('goalTypeNameInput').value = '';
+            document.getElementById('goalTypeUnitInput').value = '元';
+        }
+
+        async function saveGoalType() {
+            try {
+                const nameInput = document.getElementById('goalTypeNameInput');
+                const unitInput = document.getElementById('goalTypeUnitInput');
+                const idInput = document.getElementById('goalTypeIdInput');
+
+                if (!nameInput || !unitInput || !idInput) {
+                    showToast('找不到表单元素', 'error');
+                    return;
+                }
+
+                const name = nameInput.value.trim();
+                const unit = unitInput.value;
+                const id = idInput.value;
+
+                if (!name) {
+                    showToast('请输入目标类型名称', 'error');
+                    return;
+                }
+
+                if (goalTypes.some(t => t.type_name === name && t.id !== parseInt(id))) {
+                    showToast('目标类型名称已存在', 'error');
+                    return;
+                }
+
+                if (useMockData) {
+                    if (id) {
+                        const index = goalTypes.findIndex(t => t.id === parseInt(id));
+                        if (index >= 0) {
+                            goalTypes[index].type_name = name;
+                            goalTypes[index].unit = unit;
+                        }
+                        showToast('目标类型更新成功', 'success');
+                    } else {
+                        const maxId = Math.max(...goalTypes.map(t => t.id));
+                        const newType = { id: maxId + 1, type_name: name, unit };
+                        goalTypes.push(newType);
+                        showToast('目标类型添加成功', 'success');
+                    }
+                    closeGoalTypeModal();
+                    renderTabs();
+                } else {
+                    if (id) {
+                        await apiRequest(`${API_BASE}/goal-types/${id}`, {
+                            method: 'PUT',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type_name: name, unit })
+                        });
+                        const index = goalTypes.findIndex(t => t.id === parseInt(id));
+                        if (index >= 0) {
+                            goalTypes[index].type_name = name;
+                            goalTypes[index].unit = unit;
+                        }
+                        showToast('目标类型更新成功', 'success');
+                    } else {
+                        const newType = await apiRequest(`${API_BASE}/goal-types`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ type_name: name, unit })
+                        });
+                        goalTypes.push(newType);
+                        showToast('目标类型添加成功', 'success');
+                    }
+                    closeGoalTypeModal();
+                    renderTabs();
+                }
+            } catch (err) {
+                console.error('saveGoalType error:', err);
+                showToast('保存失败: ' + err.message, 'error');
+            }
+        }
+
+        async function deleteGoalType(index) {
+            const type = goalTypes[index];
+            if (!type || type.type_name === '员工业绩目标') {
+                showToast('系统默认类型不能删除', 'error');
+                return;
+            }
+
+            if (!confirm(`确定要删除目标类型 "${type.type_name}" 吗？`)) {
+                return;
+            }
+
+            try {
+                if (useMockData) {
+                    goalTypes.splice(index, 1);
+                    if (currentGoalTypeIndex >= goalTypes.length) {
+                        currentGoalTypeIndex = Math.max(0, goalTypes.length - 1);
+                    }
+                    currentGoalTypeId = goalTypes[currentGoalTypeIndex]?.id;
+                    renderTabs();
+                    showToast('目标类型删除成功', 'success');
+                } else {
+                    await apiRequest(`${API_BASE}/goal-types/${type.id}`, {
+                        method: 'DELETE'
+                    });
+                    goalTypes.splice(index, 1);
+                    if (currentGoalTypeIndex >= goalTypes.length) {
+                        currentGoalTypeIndex = Math.max(0, goalTypes.length - 1);
+                    }
+                    currentGoalTypeId = goalTypes[currentGoalTypeIndex]?.id;
+                    renderTabs();
+                    if (currentGoalTypeId) {
+                        await fetchGoals();
+                    }
+                    showToast('目标类型删除成功', 'success');
+                }
+            } catch (err) {
+                showToast('删除失败: ' + err.message, 'error');
+            }
+        }
+
+        // ============ 员工业绩目标功能 ============
+        const staffList = [
+            { id: 1, name: '张三' },
+            { id: 2, name: '李四' },
+            { id: 3, name: '王五' },
+            { id: 4, name: '赵六' },
+            { id: 5, name: '钱七' }
+        ];
+
+        let staffGoalTypes = [
+            { id: 1, name: '现金目标', unit: '元' },
+            { id: 2, name: '卡耗目标', unit: '元' },
+            { id: 3, name: '拓客目标', unit: '人' },
+            { id: 4, name: '客次目标', unit: '次' }
+        ];
+
+        let staffGoals = {};
+        let currentStaffId = staffList[0]?.id;
+        let currentStaffMonth = new Date().getMonth() + 1;
+        let currentStaffView = 'month';
+        let editingStaffId = null;
+        let staffYear = currentYear;
+
+        function initStaffGoals() {
+            staffGoals = {};
+            staffList.forEach(staff => {
+                staffGoals[staff.id] = {};
+                for (let month = 1; month <= 12; month++) {
+                    staffGoals[staff.id][month] = {};
+                    staffGoalTypes.forEach(gt => {
+                        const baseGoal = gt.unit === '元' ? (5000 + Math.floor(Math.random() * 15000)) :
+                                         gt.unit === '人' ? (10 + Math.floor(Math.random() * 30)) :
+                                         gt.unit === '次' ? (50 + Math.floor(Math.random() * 80)) :
+                                         (5 + Math.floor(Math.random() * 20));
+                        const completionRate = 60 + Math.floor(Math.random() * 60);
+                        staffGoals[staff.id][month][gt.id] = {
+                            goal: baseGoal,
+                            completed: Math.round(baseGoal * completionRate / 100)
+                        };
+                    });
+                }
+            });
+        }
+
+        function getYearAggregatedGoal(staffId, goalTypeId) {
+            let goal = 0, completed = 0;
+            for (let month = 1; month <= 12; month++) {
+                const d = staffGoals[staffId]?.[month]?.[goalTypeId];
+                if (d) { goal += d.goal || 0; completed += d.completed || 0; }
+            }
+            return goal > 0 ? { goal, completed } : null;
+        }
+
+        function updateStaffMonthLabel() {
+            const label = document.getElementById('staffMonthLabel');
+            if (label) label.textContent = `${currentStaffMonth}月`;
+        }
+
+        function changeStaffMonth(delta) {
+            currentStaffMonth += delta;
+            if (currentStaffMonth > 12) { currentStaffMonth = 1; staffYear++; }
+            if (currentStaffMonth < 1) { currentStaffMonth = 12; staffYear--; }
+            updateStaffMonthLabel();
+            renderStaffGoalCards();
+        }
+
+        function renderStaffList() {
+            const container = document.getElementById('staffListBody');
+            if (!container) return;
+            container.innerHTML = staffList.map(s => `
+                <div class="staff-list-item ${currentStaffId === s.id ? 'active' : ''}" data-staff-id="${s.id}">
+                    <div class="staff-avatar">${s.name.charAt(0)}</div>
+                    <div class="staff-item-name">${s.name}</div>
+                </div>
+            `).join('');
+            container.querySelectorAll('.staff-list-item').forEach(item => {
+                item.addEventListener('click', () => {
+                    currentStaffId = parseInt(item.dataset.staffId);
+                    renderStaffList();
+                    renderStaffGoalCards();
+                });
+            });
+        }
+
+        function renderStaffGoalCards() {
+            const titleEl = document.getElementById('staffMainTitle');
+            const cardsContainer = document.getElementById('staffGoalCards');
+            if (!cardsContainer) return;
+
+            if (!currentStaffId) {
+                if (titleEl) titleEl.textContent = '请选择员工';
+                cardsContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--neutral-400);font-size:15px">请在左侧选择一位员工</div>';
+                return;
+            }
+
+            const staff = staffList.find(s => s.id === currentStaffId);
+            if (titleEl) titleEl.textContent = `${staff?.name || ''} - ${staffYear}年${currentStaffMonth}月`;
+
+            let cardsHtml = '';
+            staffGoalTypes.forEach(gt => {
+                const goalData = staffGoals[currentStaffId]?.[currentStaffMonth]?.[gt.id];
+                const prefix = gt.unit === '元' ? '¥' : '';
+                const suffix = gt.unit === '元' ? '' : gt.unit;
+                const rate = goalData ? Math.round((goalData.completed / goalData.goal) * 100) : 0;
+                const displayRate = Math.min(rate, 100);
+                const isAchieved = rate >= 100;
+
+                cardsHtml += `
+                    <div class="staff-goal-card">
+                        <div class="staff-goal-card-header">
+                            <span class="staff-goal-card-name">${gt.name}</span>
+                            <span class="staff-goal-card-unit">单位：${gt.unit}</span>
+                        </div>
+                        ${goalData ? `
+                            <div class="staff-goal-card-body">
+                                <div class="staff-goal-card-row">
+                                    <span class="staff-goal-card-label">目标</span>
+                                    <span class="staff-goal-card-value">${prefix}${formatNum(goalData.goal)}${suffix}</span>
+                                </div>
+                                <div class="staff-goal-card-row">
+                                    <span class="staff-goal-card-label">完成</span>
+                                    <span class="staff-goal-card-value completed">${prefix}${formatNum(goalData.completed)}${suffix}</span>
+                                </div>
+                                <div class="staff-goal-card-progress">
+                                    <div class="staff-goal-card-progress-fill ${isAchieved ? 'achieved' : 'not-achieved'}" style="width:${displayRate}%"></div>
+                                </div>
+                                <div class="staff-goal-card-rate">
+                                    进度 <span class="${isAchieved ? 'achieved' : ''}">${rate}%</span>
+                                </div>
+                            </div>
+                        ` : `
+                            <div class="staff-goal-card-body">
+                                <div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div>
+                            </div>
+                        `}
+                        <div class="staff-goal-card-footer">
+                            <button class="staff-goal-edit-btn" data-goal-type-id="${gt.id}">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+                                </svg>
+                                编辑
+                            </button>
+                            <button class="staff-goal-delete-btn" data-goal-type-id="${gt.id}">
+                                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
+                                </svg>
+                                删除
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cardsContainer.innerHTML = cardsHtml;
+
+            cardsContainer.querySelectorAll('.staff-goal-edit-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    openStaffGoalModal(currentStaffId, parseInt(btn.dataset.goalTypeId));
+                });
+            });
+            cardsContainer.querySelectorAll('.staff-goal-delete-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    deleteStaffGoalType(parseInt(btn.dataset.goalTypeId));
+                });
+            });
+        }
+
+        function renderStaffGoals() {
+            renderStaffList();
+            renderStaffGoalCards();
+            updateStaffMonthLabel();
+        }
+
+        function openStaffGoalModal(staffId, goalTypeId) {
+            editingStaffId = staffId;
+            const staff = staffList.find(s => s.id === staffId);
+            const gt = staffGoalTypes.find(t => t.id === goalTypeId);
+            const goalData = staffGoals[staffId]?.[currentStaffMonth]?.[goalTypeId];
+
+            document.getElementById('staffModalStaffName').textContent = staff?.name || '未知员工';
+            document.getElementById('staffModalMonthInfo').textContent = `${staffYear}年${currentStaffMonth}月`;
+
+            const fieldsContainer = document.getElementById('staffGoalFields');
+            fieldsContainer.innerHTML = `
+                <div class="goal-field">
+                    <label>${gt?.name || '目标'}（${gt?.unit || '元'}）</label>
+                    <input type="text" id="staffGoalValueInput" placeholder="请输入${gt?.name || '目标'}" inputmode="decimal" value="${goalData?.goal || ''}">
+                    <div class="field-unit">单位：${gt?.unit || '元'}</div>
+                </div>
+            `;
+            fieldsContainer.dataset.goalTypeId = goalTypeId;
+
+            document.getElementById('staffGoalModal').classList.add('show');
+            document.getElementById('staffGoalValueInput').focus();
+        }
+
+        function closeStaffGoalModal() {
+            document.getElementById('staffGoalModal').classList.remove('show');
+            editingStaffId = null;
+        }
+
+        function saveStaffGoals() {
+            if (editingStaffId === null) return;
+
+            const fieldsContainer = document.getElementById('staffGoalFields');
+            const goalTypeId = parseInt(fieldsContainer.dataset.goalTypeId);
+            const valueInput = document.getElementById('staffGoalValueInput');
+            const value = parseFloat(valueInput.value);
+
+            if (isNaN(value) || value <= 0) {
+                showToast('请输入有效的目标数值', 'error');
+                return;
+            }
+
+            if (!staffGoals[editingStaffId]) staffGoals[editingStaffId] = {};
+            if (!staffGoals[editingStaffId][currentStaffMonth]) staffGoals[editingStaffId][currentStaffMonth] = {};
+
+            if (!staffGoals[editingStaffId][currentStaffMonth][goalTypeId]) {
+                staffGoals[editingStaffId][currentStaffMonth][goalTypeId] = { completed: 0 };
+            }
+            staffGoals[editingStaffId][currentStaffMonth][goalTypeId].goal = value;
+
+            closeStaffGoalModal();
+            renderStaffGoalCards();
+            showToast('目标保存成功', 'success');
+        }
+
+        function openAddStaffGoalTypeModal() {
+            document.getElementById('staffGoalTypeNameInput').value = '';
+            document.getElementById('staffGoalTypeUnitInput').value = '元';
+
+            const container = document.getElementById('staffGoalValuesContainer');
+            let html = '';
+            staffList.forEach(s => {
+                html += `
+                    <div class="modal-field" style="margin-top:12px;display:flex;align-items:center;gap:12px">
+                        <label class="modal-label" style="min-width:60px;margin:0">${s.name}</label>
+                        <input type="text" class="staff-goal-value-input" data-staff-id="${s.id}" placeholder="请输入目标数值" inputmode="decimal" style="flex:1;padding:8px 10px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:13px">
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+
+            document.getElementById('addStaffGoalTypeModal').classList.add('show');
+        }
+
+        function closeAddStaffGoalTypeModal() {
+            document.getElementById('addStaffGoalTypeModal').classList.remove('show');
+        }
+
+        function saveStaffGoalType() {
+            const name = document.getElementById('staffGoalTypeNameInput').value.trim();
+            const unit = document.getElementById('staffGoalTypeUnitInput').value;
+
+            if (!name) {
+                showToast('请输入目标名称', 'error');
+                return;
+            }
+            if (staffGoalTypes.some(t => t.name === name)) {
+                showToast('目标名称已存在', 'error');
+                return;
+            }
+
+            const maxId = Math.max(...staffGoalTypes.map(t => t.id), 0);
+            const newTypeId = maxId + 1;
+            const newType = { id: newTypeId, name, unit };
+            staffGoalTypes.push(newType);
+
+            staffList.forEach(s => {
+                const input = document.querySelector(`.staff-goal-value-input[data-staff-id="${s.id}"]`);
+                if (input) {
+                    const value = parseFloat(input.value);
+                    if (!isNaN(value) && value > 0) {
+                        if (!staffGoals[s.id]) staffGoals[s.id] = {};
+                        if (!staffGoals[s.id][currentStaffMonth]) staffGoals[s.id][currentStaffMonth] = {};
+                        staffGoals[s.id][currentStaffMonth][newTypeId] = {
+                            goal: value,
+                            completed: 0
+                        };
+                    }
+                }
+            });
+
+            closeAddStaffGoalTypeModal();
+            renderStaffGoalCards();
+            showToast('目标类型添加成功', 'success');
+        }
+
+        function deleteStaffGoalType(goalTypeId) {
+            const gt = staffGoalTypes.find(t => t.id === goalTypeId);
+            if (!gt) return;
+            if (!confirm(`确定要删除目标 "${gt.name}" 吗？`)) return;
+
+            staffGoalTypes = staffGoalTypes.filter(t => t.id !== goalTypeId);
+            renderStaffGoalCards();
+            showToast('目标类型删除成功', 'success');
+        }
+
+        // 渲染目标单元格
+        function renderGoalCell(goalData, unit = '元') {
+            if (!goalData) {
+                return '<div style="color: var(--neutral-400);">未设置</div>';
+            }
+            
+            const rate = Math.round((goalData.completed / goalData.goal) * 100);
+            const isAchieved = rate >= 100;
+            const displayRate = Math.min(rate, 100);
+            const prefix = unit === '元' ? '¥' : '';
+            const suffix = unit === '元' ? '' : unit;
+            
+            return `
+                <div class="goal-value">
+                    <span class="label">目标:</span>${prefix}${formatNum(goalData.goal)}${suffix}
+                </div>
+                <div class="goal-value">
+                    <span class="label">完成:</span>${prefix}${formatNum(goalData.completed)}${suffix}
+                </div>
+                <div class="goal-progress-bar">
+                    <div class="goal-progress-fill ${isAchieved ? 'achieved' : 'not-achieved'}" style="width: ${displayRate}%"></div>
+                </div>
+                <div class="goal-rate">
+                    进度: ${rate}%
+                </div>
+            `;
+        }
+
+        // 修改TAB切换逻辑
+        async function changeGoalType(typeIndex) {
+            currentGoalTypeIndex = typeIndex;
+            currentGoalTypeId = goalTypes[typeIndex]?.id;
+            document.querySelectorAll('.tab-item').forEach((tab, i) => tab.classList.toggle('active', i === typeIndex));
+            selectedMonths = [];
+
+            const storeGoalContent = document.getElementById('storeGoalContent');
+            const staffGoalContent = document.getElementById('staffGoalContent');
+
+            const currentType = goalTypes[typeIndex];
+            if (currentType && currentType.type_name === '员工业绩目标') {
+                if (storeGoalContent) storeGoalContent.style.display = 'none';
+                if (staffGoalContent) staffGoalContent.style.display = 'block';
+                if (!Object.keys(staffGoals).length) {
+                    initStaffGoals();
+                }
+                renderStaffGoals();
+            } else {
+                if (storeGoalContent) storeGoalContent.style.display = 'grid';
+                if (staffGoalContent) staffGoalContent.style.display = 'none';
+                await fetchGoals();
+            }
+        }
+
+        // ============ 初始化 ============
+        document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Page initialized');
+            try {
+                await loadGoalTypes();
+                console.log('Goal types loaded');
+
+                // 同步年份显示
+                const yearDisplay = document.getElementById('currentYearDisplay');
+                if (yearDisplay) yearDisplay.textContent = currentYear;
+
+                // 确保门店目标内容区域显示，员工目标内容区域隐藏
+                const storeGoalContent = document.getElementById('storeGoalContent');
+                const staffGoalContent = document.getElementById('staffGoalContent');
+                if (storeGoalContent) storeGoalContent.style.display = 'grid';
+                if (staffGoalContent) staffGoalContent.style.display = 'none';
+
+                console.log('Before fetchGoals, currentGoalTypeId:', currentGoalTypeId);
+                if (currentGoalTypeId) {
+                    await fetchGoals();
+                    console.log('fetchGoals completed, monthlyGoals:', monthlyGoals);
+                }
+
+                document.getElementById('prevYearBtn').addEventListener('click', () => changeYear(-1));
+                document.getElementById('nextYearBtn').addEventListener('click', () => changeYear(1));
+
+                // 目标类型管理事件 - 注意：addGoalTypeBtn 的事件绑定已经在 renderTabs() 中完成
+                document.getElementById('goalTypeModalCloseBtn').addEventListener('click', closeGoalTypeModal);
+                document.getElementById('goalTypeModalCancelBtn').addEventListener('click', closeGoalTypeModal);
+                document.getElementById('goalTypeModalConfirmBtn').addEventListener('click', saveGoalType);
+                document.getElementById('goalTypeNameInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') saveGoalType(); });
+
+                document.getElementById('monthGrid').addEventListener('click', (e) => {
+                const card = e.target.closest('.store-month-card');
+                if (!card || card.classList.contains('disabled')) return;
+                const month = parseInt(card.dataset.month);
+                if (e.target.closest('.store-month-select-indicator')) {
+                    toggleMonthSelection(month);
+                    card.classList.toggle('selected');
+                } else {
+                    openGoalModal(month);
+                }
+            });
+
+            document.getElementById('modalCloseBtn').addEventListener('click', closeGoalModal);
+            document.getElementById('modalCancelBtn').addEventListener('click', closeGoalModal);
+            document.getElementById('modalConfirmBtn').addEventListener('click', submitGoal);
+            document.getElementById('batchClearBtn').addEventListener('click', batchClearGoals);
+            document.getElementById('goalAmountInput').addEventListener('keydown', (e) => { if (e.key === 'Enter') submitGoal(); });
+
+            // 员工目标编辑弹窗事件
+            document.getElementById('staffModalCloseBtn').addEventListener('click', closeStaffGoalModal);
+            document.getElementById('staffModalCancelBtn').addEventListener('click', closeStaffGoalModal);
+            document.getElementById('staffModalConfirmBtn').addEventListener('click', saveStaffGoals);
+
+            // 新增员工目标类型弹窗事件
+            document.getElementById('addStaffGoalBtn').addEventListener('click', openAddStaffGoalTypeModal);
+            document.getElementById('addStaffGoalTypeCloseBtn').addEventListener('click', closeAddStaffGoalTypeModal);
+            document.getElementById('addStaffGoalTypeCancelBtn').addEventListener('click', closeAddStaffGoalTypeModal);
+            document.getElementById('addStaffGoalTypeConfirmBtn').addEventListener('click', saveStaffGoalType);
+
+            // 月份切换事件
+            document.getElementById('staffPrevMonthBtn').addEventListener('click', () => changeStaffMonth(-1));
+            document.getElementById('staffNextMonthBtn').addEventListener('click', () => changeStaffMonth(1));
+            
+            console.log('Initialization complete');
+        } catch (error) {
+            console.error('Error during initialization:', error);
+            showToast('初始化失败: ' + error.message, 'error');
+        }
+    });
+    </script>
+</body>
+</html>

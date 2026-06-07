@@ -20,7 +20,7 @@
 
                 <!-- ── 客户选择区域 ── -->
             <div class="customer-section">
-                <div class="section-label">选择客户</div>
+                <div class="section-label">选择会员</div>
                 <div class="customer-actions">
                     <!-- 选择会员按钮（置顶） -->
                     <button class="customer-btn member btn-outline" onclick="openMemberModal()">
@@ -45,7 +45,7 @@
                             <path d="M17 18c0-3.87-3.13-7-7-7S3 14.13 3 18" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">散客开单</span>
+                            <span class="customer-btn-title">散客</span>
                         </div>
                     </button>
                 </div>
@@ -56,7 +56,7 @@
 
                 <!-- ── 商品添加区域 ── -->
             <div class="action-section">
-                <div class="section-label">添加商品</div>
+                <div class="section-label">选择商品</div>
                 <div class="action-grid">
                     <!-- 客户权益 - 票券/权益卡图标 -->
                     <div class="action-card benefit member-only-btn btn-primary" style="display: none;" onclick="openBenefitModal()">
@@ -82,7 +82,7 @@
                                 d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加单次护理</span>
+                            <span class="customer-btn-title">单次护理</span>
                         </div>
                     </div>
 
@@ -97,7 +97,7 @@
                             <path d="M8 21H16" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加产品</span>
+                            <span class="customer-btn-title">产品</span>
                         </div>
                     </div>
 
@@ -112,7 +112,7 @@
                             <path d="M9 9H9.01" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加疗程卡</span>
+                            <span class="customer-btn-title">疗程卡</span>
                         </div>
                     </div>
 
@@ -126,7 +126,7 @@
                             <circle cx="17" cy="15" r="1.5" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加金额卡</span>
+                            <span class="customer-btn-title">金额卡</span>
                         </div>
                     </div>
                 </div>
@@ -157,12 +157,16 @@
                                 </div>
                                 <!-- 第二行：钱包余额、金额卡余额 -->
                                 <div class="member-info-row member-row-bottom">
-                                    <div class="member-balance-item">
+                                    <div class="member-balance-item" data-balance="wallet">
                                         <span class="member-balance-label">钱包余额</span>
                                         <span class="member-balance-value"></span>
                                     </div>
-                                    <div class="member-balance-item">
+                                    <div class="member-balance-item" data-balance="moneycard">
                                         <span class="member-balance-label">金额卡余额</span>
+                                        <span class="member-balance-value"></span>
+                                    </div>
+                                    <div class="member-balance-item" data-balance="timescard">
+                                        <span class="member-balance-label">次卡剩余价值</span>
                                         <span class="member-balance-value"></span>
                                     </div>
                                     <div class="member-debt-section">
@@ -211,7 +215,7 @@
                                         d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3-8H9V7h6v2z" />
                                 </svg>
                             </div>
-                            <p class="empty-state-text">请从左侧【添加商品】区域点击菜单开始选购</p>
+                            <p class="empty-state-text">请从左侧【选择商品】区域点击菜单开始选购</p>
                         </div>
 
                                 <!-- ·· 单次护理 ·· -->
@@ -607,7 +611,7 @@
                         </div>
                     </div>
                     <div class="add-service-selected-list" id="addServiceSelectedList">
-                        <div class="add-service-empty-hint">点击商品名称添加商品</div>
+                        <div class="add-service-empty-hint">点击商品名称选择商品</div>
                     </div>
                 </div>
 
@@ -660,7 +664,7 @@
                         </div>
                     </div>
                     <div class="add-service-selected-list" id="addProductSelectedList">
-                        <div class="add-service-empty-hint">点击商品名称添加商品</div>
+                        <div class="add-service-empty-hint">点击商品名称选择商品</div>
                     </div>
                 </div>
 
@@ -1049,6 +1053,7 @@
         </div>
     </div>
 
+    <script src="selected-items-reset.js"></script>
     <script src="create-order-pad.js"></script>
 </body>
 

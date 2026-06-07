@@ -1,0 +1,1006 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>费用支出记账 - 回蓝美容</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#0D9488;--primary-light:#14B8A6;--primary-dark:#0F766E;
+            --bg-main:#F0FBFA;--bg-card:#FFFFFF;--bg-hover:#ECFDFD;--border:#CCFBF1;
+            --text-primary:#1F2937;--text-secondary:#6B7280;--text-muted:#9CA3AF;
+            --success:#10B981;--warning:#F59E0B;--error:#EF4444;--info:#3B82F6;
+            --pink:#EC4899;--gold:#F59E0B;--purple:#8B5CF6;--rose:#F43F5E;
+        }
+        body{font-family:'Noto Sans SC','Inter',sans-serif;background:var(--bg-main);color:var(--text-primary);height:100vh;overflow:hidden}
+        .app{display:flex;height:100vh}
+
+        .sidebar{width:280px;background:linear-gradient(180deg, var(--primary) 0%, var(--primary-dark) 100%);display:flex;flex-direction:column;color:white}
+        .sidebar-header{padding:20px;text-align:center;border-bottom:1px solid rgba(255,255,255,.2)}
+        .user-avatar{width:60px;height:60px;border-radius:50%;background:white;margin:0 auto 10px;display:flex;align-items:center;justify-content:center}
+        .user-avatar svg{width:32px;height:32px;color:var(--primary)}
+        .user-name{font-size:16px;font-weight:600;margin-bottom:4px}
+        .user-role{font-size:12px;opacity:.8}
+        .shop-badge{display:inline-block;padding:2px 8px;background:rgba(255,255,255,.2);border-radius:12px;font-size:10px;margin-top:6px}
+
+        .sidebar-brand{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px 20px}
+        .brand-logo{width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.1);display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+        .brand-logo svg{width:36px;height:36px}
+        .brand-title{font-size:24px;font-weight:700;letter-spacing:4px;margin-bottom:4px}
+        .brand-subtitle{font-size:12px;opacity:.7;letter-spacing:2px}
+        .brand-slogan{font-size:11px;opacity:.5;margin-top:16px}
+
+        .main-area{flex:1;display:flex;flex-direction:column;background:var(--bg-main);overflow:hidden}
+
+        .page-header{background:var(--bg-card);border-bottom:1px solid var(--border);padding:20px 30px;display:flex;justify-content:space-between;align-items:center}
+        .page-title{font-size:20px;font-weight:700;color:var(--text-primary);display:flex;align-items:center;gap:10px}
+        .page-title-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg, var(--primary-light), var(--primary));display:flex;align-items:center;justify-content:center;color:white}
+        .page-actions{display:flex;gap:12px}
+        .btn{padding:10px 20px;border-radius:8px;font-size:13px;font-weight:500;cursor:pointer;border:none;transition:all .2s;display:flex;align-items:center;gap:6px}
+        .btn-primary{background:var(--primary);color:white}
+        .btn-primary:hover{background:var(--primary-dark);transform:translateY(-1px)}
+        .btn-secondary{background:var(--bg-main);color:var(--text-secondary);border:1px solid var(--border)}
+        .btn-secondary:hover{background:var(--bg-hover);color:var(--text-primary)}
+
+        .content-area{flex:1;overflow-y:auto;padding:24px 30px}
+
+        .stats-bar{display:grid;grid-template-columns:repeat(4, 1fr);gap:16px;margin-bottom:24px}
+        .stat-card{background:var(--bg-card);border-radius:14px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid var(--border);transition:all .2s}
+        .stat-card:hover{transform:translateY(-2px);box-shadow:0 4px 20px rgba(0,0,0,.1)}
+        .stat-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+        .stat-label{font-size:12px;color:var(--text-muted);font-weight:500}
+        .stat-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+        .stat-icon.blue{background:rgba(59,130,246,.1);color:var(--info)}
+        .stat-icon.green{background:rgba(16,185,129,.1);color:var(--success)}
+        .stat-icon.orange{background:rgba(245,158,11,.1);color:var(--warning)}
+        .stat-icon.rose{background:rgba(244,63,94,.1);color:var(--rose)}
+        .stat-value{font-size:24px;font-weight:700;color:var(--text-primary)}
+        .stat-change{font-size:11px;color:var(--text-muted);margin-top:4px}
+
+        .panel{background:var(--bg-card);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid var(--border);overflow:hidden}
+        .panel-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .panel-title{font-size:15px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px}
+        .panel-title-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+        .panel-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+        .search-box{position:relative}
+        .search-box input{padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--border);font-size:13px;width:220px;outline:none;transition:all .2s}
+        .search-box input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+        .search-box svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--text-muted);width:14px;height:14px}
+        .filter-select{padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;outline:none;background:var(--bg-card);color:var(--text-secondary);cursor:pointer}
+
+        .table-container{overflow-x:auto}
+        table{width:100%;border-collapse:collapse;font-size:13px}
+        thead th{padding:14px 16px;text-align:left;font-weight:600;color:var(--text-secondary);background:var(--bg-main);border-bottom:1px solid var(--border);white-space:nowrap;position:sticky;top:0;z-index:1}
+        tbody td{padding:14px 16px;border-bottom:1px solid var(--border);color:var(--text-primary);vertical-align:middle}
+        tbody tr:hover{background:var(--bg-hover)}
+        tbody tr:last-child td{border-bottom:none}
+
+        .category-text{font-size:13px;color:var(--text-secondary);font-weight:500}
+
+        .amount{font-weight:600;font-family:'Inter',sans-serif;color:var(--rose)}
+
+        .person-info{display:flex;align-items:center;gap:8px}
+        .person-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg, var(--primary-light), var(--primary));display:flex;align-items:center;justify-content:center;color:white;font-size:11px;font-weight:600}
+
+        .action-btns{display:flex;gap:6px}
+        .action-btn{width:28px;height:28px;border-radius:6px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .action-btn:hover{background:var(--bg-main)}
+        .action-btn svg{width:14px;height:14px;color:var(--text-muted)}
+        .action-btn:hover svg{color:var(--primary)}
+
+        .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px)}
+        .modal-overlay.active{display:flex}
+        .modal{background:var(--bg-card);border-radius:20px;width:780px;max-height:90vh;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.2);animation:modalIn .3s ease}
+        @keyframes modalIn{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
+        .modal-header{padding:24px 28px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+        .modal-title{font-size:18px;font-weight:700}
+        .modal-close{width:32px;height:32px;border-radius:8px;border:none;background:var(--bg-main);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
+        .modal-close:hover{background:var(--border)}
+        .modal-close svg{width:16px;height:16px;color:var(--text-secondary)}
+
+        .modal-search{padding:16px 24px;border-bottom:1px solid var(--border);background:var(--bg-main)}
+        .modal-search-box{position:relative;display:flex;align-items:center}
+        .modal-search-box svg{position:absolute;left:12px;color:var(--text-muted);width:16px;height:16px;pointer-events:none}
+        .modal-search-input{width:100%;padding:10px 14px 10px 38px;border-radius:10px;border:1px solid var(--border);font-size:13px;outline:none;background:var(--bg-card);transition:all .2s}
+        .modal-search-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+        .modal-search-input::placeholder{color:var(--text-muted)}
+
+        .modal-tabs{display:flex;border-bottom:1px solid var(--border);padding:0 28px;background:var(--bg-main)}
+        .modal-tab{padding:14px 20px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;transition:all .2s}
+        .modal-tab:hover{color:var(--text-primary)}
+        .modal-tab.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600;background:var(--bg-card)}
+        .modal-tab-badge{background:var(--rose);color:white;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:6px;vertical-align:middle}
+
+        .modal-body{overflow:hidden;max-height:calc(90vh - 140px)}
+        .modal-view{display:none;flex-direction:column;overflow:hidden}
+        .modal-view.active{display:flex}
+
+        .modal-split{display:flex;flex:1;overflow:hidden;min-height:200px}
+        .modal-left{width:180px;border-right:1px solid var(--border);overflow-y:auto;background:var(--bg-main);flex-shrink:0}
+        .modal-left-item{padding:14px 16px;font-size:13px;cursor:pointer;transition:all .2s;color:var(--text-secondary);font-weight:500;border-left:3px solid transparent;display:flex;align-items:center;gap:8px}
+        .modal-left-item:hover{background:var(--bg-hover);color:var(--text-primary)}
+        .modal-left-item.active{background:var(--bg-card);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+        .modal-left-item .icon{width:20px;height:20px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+        .modal-right{flex:1;overflow-y:auto;padding:20px 24px}
+        .modal-right-title{font-size:15px;font-weight:600;color:var(--text-primary);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+        .modal-right-title .dot{width:6px;height:6px;border-radius:50%;background:var(--primary)}
+        .project-grid{display:grid;grid-template-columns:repeat(2, 1fr);gap:10px}
+        .project-item{padding:12px 14px;border-radius:10px;border:1px solid var(--border);cursor:pointer;transition:all .2s;font-size:13px;display:flex;align-items:center;gap:10px;background:var(--bg-card)}
+        .project-item:hover{border-color:var(--primary-light);background:var(--bg-hover);transform:translateY(-1px)}
+        .project-item.selected{border-color:var(--primary);background:rgba(13,148,136,.08);color:var(--primary-dark)}
+        .project-item .check{width:18px;height:18px;border-radius:50%;border:2px solid var(--border);display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0}
+        .project-item.selected .check{border-color:var(--primary);background:var(--primary)}
+        .project-item.selected .check::after{content:'';width:5px;height:8px;border:solid white;border-width:0 2px 2px 0;transform:rotate(45deg);margin-bottom:2px}
+        .modal-form{border-top:1px solid var(--border);padding:20px 24px;background:var(--bg-main)}
+
+        .filter-bar{padding:16px 24px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:var(--bg-main)}
+        .filter-bar .filter-select{min-width:120px}
+        .filter-bar .form-input{width:140px;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;outline:none;background:var(--bg-card)}
+        .filter-result{flex:1;overflow-y:auto;padding:16px 24px}
+        .filter-result-item{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;border-radius:10px;border:1px solid var(--border);margin-bottom:8px;transition:all .2s;background:var(--bg-card)}
+        .filter-result-item:hover{border-color:var(--primary-light);box-shadow:0 2px 8px rgba(0,0,0,.06)}
+        .filter-result-left{display:flex;flex-direction:column;gap:6px}
+        .filter-result-project{font-size:13px;font-weight:600;color:var(--text-primary)}
+        .filter-result-meta{font-size:12px;color:var(--text-muted);display:flex;gap:16px;align-items:center}
+        .filter-result-amount{font-size:15px;font-weight:700;color:var(--rose);font-family:'Inter',sans-serif;white-space:nowrap}
+        .filter-result-summary{font-size:12px;color:var(--text-muted);margin-bottom:12px;padding-bottom:12px;border-bottom:1px dashed var(--border)}
+        .filter-result-summary span{font-weight:600;color:var(--primary)}
+
+        .form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+        .form-group{flex:1}
+        .form-label{display:block;font-size:12px;font-weight:500;color:var(--text-secondary);margin-bottom:6px}
+        .form-input{width:100%;padding:10px 14px;border-radius:10px;border:1px solid var(--border);font-size:13px;outline:none;transition:all .2s;font-family:inherit}
+        .form-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+
+        .modal-footer{padding:20px 28px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px}
+
+        .pagination{display:flex;justify-content:center;align-items:center;gap:8px;padding:16px 24px;border-top:1px solid var(--border)}
+        .page-btn{padding:6px 12px;border-radius:6px;border:1px solid var(--border);background:var(--bg-card);font-size:12px;cursor:pointer;transition:all .2s;color:var(--text-secondary)}
+        .page-btn:hover{border-color:var(--primary);color:var(--primary)}
+        .page-btn.active{background:var(--primary);color:white;border-color:var(--primary)}
+        .page-btn:disabled{opacity:.5;cursor:not-allowed}
+        .page-info{font-size:12px;color:var(--text-muted)}
+
+        .add-custom-btn{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:12px;border:2px dashed var(--border);cursor:pointer;transition:all .25s;font-size:13px;color:var(--text-muted);background:transparent;width:100%;margin-top:4px}
+        .add-custom-btn:hover{border-color:var(--primary);color:var(--primary);background:rgba(13,148,136,.04);transform:translateY(-1px);box-shadow:0 2px 8px rgba(13,148,136,.08)}
+        .add-custom-btn svg{width:16px;height:16px;flex-shrink:0;transition:transform .2s}
+        .add-custom-btn:hover svg{transform:scale(1.1)}
+
+        .add-custom-left{margin:4px 10px 8px;padding:12px 14px;border-radius:10px;font-size:13px;cursor:pointer;transition:all .25s;color:var(--text-muted);font-weight:500;display:flex;align-items:center;justify-content:center;gap:8px;border:2px dashed var(--border);background:transparent}
+        .add-custom-left:hover{border-color:var(--primary);color:var(--primary);background:rgba(13,148,136,.04);box-shadow:0 2px 8px rgba(13,148,136,.08)}
+        .add-custom-left svg{width:16px;height:16px;flex-shrink:0;transition:transform .2s}
+        .add-custom-left:hover svg{transform:scale(1.1)}
+
+        .inline-input-wrap{margin:4px 10px 8px;display:flex;gap:8px;align-items:center}
+        .inline-input{flex:1;padding:8px 12px;border-radius:8px;border:1px solid var(--border);font-size:13px;outline:none;font-family:inherit;background:var(--bg-card);transition:all .2s}
+        .inline-input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(13,148,136,.1)}
+        .inline-input::placeholder{color:var(--text-muted)}
+        .inline-confirm{width:32px;height:32px;border-radius:8px;border:none;background:var(--primary);color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+        .inline-confirm:hover{background:var(--primary-dark);transform:scale(1.05)}
+        .inline-confirm svg{width:14px;height:14px}
+        .inline-cancel{width:32px;height:32px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:all .2s}
+        .inline-cancel:hover{background:var(--bg-hover);border-color:var(--text-muted)}
+        .inline-cancel svg{width:14px;height:14px;color:var(--text-secondary)}
+
+        .project-item .delete-project{display:none;width:16px;height:16px;border-radius:4px;border:none;background:transparent;cursor:pointer;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0}
+        .project-item .delete-project svg{width:10px;height:10px;color:var(--text-muted)}
+        .project-item:hover .delete-project{display:flex}
+        .project-item:hover .delete-project:hover svg{color:var(--error)}
+
+        .modal-left-item .delete-category{display:none;width:16px;height:16px;border-radius:4px;border:none;background:transparent;cursor:pointer;align-items:center;justify-content:center;margin-left:auto;flex-shrink:0}
+        .modal-left-item:hover .delete-category{display:flex}
+        .modal-left-item:hover .delete-category:hover svg{color:var(--error)}
+        .modal-left-item .delete-category svg{width:10px;height:10px;color:var(--text-muted)}
+
+        @media(max-width:1200px){.stats-bar{grid-template-columns:repeat(2, 1fr)}}
+        @media(max-width:768px){.stats-bar{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.modal{width:95vw}}
+    </style>
+</head>
+<body>
+    <div class="app">
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <div class="user-avatar">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                        <circle cx="12" cy="7" r="4"/>
+                    </svg>
+                </div>
+                <div class="user-name">张店长</div>
+                <div class="user-role">门店管理员</div>
+                <span class="shop-badge">回蓝美容·天河店</span>
+            </div>
+            <div class="sidebar-brand">
+                <div class="brand-logo">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <path d="M8 15s1.5-2 4-2 4 2 4 2"/>
+                        <path d="M9 9h.01"/>
+                        <path d="M15 9h.01"/>
+                    </svg>
+                </div>
+                <div class="brand-title">CHLITINA</div>
+                <div class="brand-subtitle">店务管理系统</div>
+                <div class="brand-slogan">回蓝美容 · 让美丽更简单</div>
+            </div>
+        </div>
+
+        <div class="main-area">
+            <div class="page-header">
+                <div class="page-title">
+                    <div class="page-title-icon">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="3" width="20" height="14" rx="2"/>
+                            <line x1="8" y1="21" x2="16" y2="21"/>
+                            <line x1="12" y1="17" x2="12" y2="21"/>
+                        </svg>
+                    </div>
+                    费用支出记账
+                </div>
+                <div class="page-actions">
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        导出
+                    </button>
+                    <button class="btn btn-primary" onclick="openModal()">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <line x1="12" y1="5" x2="12" y2="19"/>
+                            <line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        记一笔
+                    </button>
+                </div>
+            </div>
+
+            <div class="content-area">
+                <div class="stats-bar">
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">本月总支出</span>
+                            <div class="stat-icon blue">&#128176;</div>
+                        </div>
+                        <div class="stat-value">¥ 48,650</div>
+                        <div class="stat-change">较上月 +12.5%</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">支出笔数</span>
+                            <div class="stat-icon green">&#128200;</div>
+                        </div>
+                        <div class="stat-value">24</div>
+                        <div class="stat-change">本月共记录 24 笔</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">最大单笔</span>
+                            <div class="stat-icon orange">&#128293;</div>
+                        </div>
+                        <div class="stat-value">¥ 18,500</div>
+                        <div class="stat-change">工资支出</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-header">
+                            <span class="stat-label">今日支出</span>
+                            <div class="stat-icon rose">&#128197;</div>
+                        </div>
+                        <div class="stat-value">¥ 2,300</div>
+                        <div class="stat-change">共 3 笔</div>
+                    </div>
+                </div>
+
+                <div class="panel">
+                    <div class="panel-header">
+                        <div class="panel-title">
+                            <div class="panel-title-dot"></div>
+                            支出明细
+                        </div>
+                        <div class="panel-tools">
+                            <div class="search-box">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="11" cy="11" r="8"/>
+                                    <path d="m21 21-4.35-4.35"/>
+                                </svg>
+                                <input type="text" placeholder="搜索项目...">
+                            </div>
+                            <select class="filter-select" id="categoryFilter">
+                                <option value="">全部类别</option>
+                                <option value="daily">日常运营成本</option>
+                                <option value="staff">人员支出</option>
+                                <option value="product">产品耗材</option>
+                                <option value="equipment">设备相关</option>
+                                <option value="marketing">营销推广</option>
+                                <option value="other">其他费用</option>
+                            </select>
+                            <select class="filter-select" id="projectFilter">
+                                <option value="">全部项目</option>
+                                <optgroup label="日常运营成本" data-category="daily">
+                                    <option value="房租">房租</option>
+                                    <option value="物业费">物业费</option>
+                                    <option value="水费">水费</option>
+                                    <option value="电费">电费</option>
+                                    <option value="网络通讯费">网络通讯费</option>
+                                    <option value="清洁耗材">清洁耗材</option>
+                                    <option value="其他（鲜花/水果/茶水）">其他（鲜花/水果/茶水）</option>
+                                </optgroup>
+                                <optgroup label="人员支出" data-category="staff">
+                                    <option value="工资">工资</option>
+                                    <option value="社保">社保</option>
+                                    <option value="公积金">公积金</option>
+                                    <option value="培训费用">培训费用</option>
+                                    <option value="节日福利">节日福利</option>
+                                    <option value="生日礼金">生日礼金</option>
+                                    <option value="生育期薪资">生育期薪资</option>
+                                </optgroup>
+                                <optgroup label="产品耗材" data-category="product">
+                                    <option value="美容产品">美容产品</option>
+                                    <option value="仪器耗材">仪器耗材</option>
+                                </optgroup>
+                                <optgroup label="设备相关" data-category="equipment">
+                                    <option value="仪器折旧费">仪器折旧费</option>
+                                    <option value="设备维护费">设备维护费</option>
+                                    <option value="新设备购置">新设备购置</option>
+                                </optgroup>
+                                <optgroup label="营销推广" data-category="marketing">
+                                    <option value="线上推广（美团/抖音）">线上推广（美团/抖音）</option>
+                                    <option value="线下活动物料">线下活动物料</option>
+                                    <option value="客户礼品">客户礼品</option>
+                                </optgroup>
+                                <optgroup label="其他费用" data-category="other">
+                                    <option value="税费">税费</option>
+                                    <option value="工商年检费">工商年检费</option>
+                                    <option value="基础设施维修/更换">基础设施维修/更换</option>
+                                </optgroup>
+                            </select>
+                            <input type="date" class="filter-select" id="dateFrom">
+                            <span style="font-size:12px;color:var(--text-muted)">~</span>
+                            <input type="date" class="filter-select" id="dateTo">
+                            <button class="btn btn-secondary" onclick="applyTimeFilter()" style="padding:8px 16px;font-size:12px;white-space:nowrap">筛选</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>支出类别</th>
+                                    <th>具体项目</th>
+                                    <th>实际支出</th>
+                                    <th>支出日期</th>
+                                    <th>经办人</th>
+                                    <th>操作</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><span class="category-text">日常运营成本</span></td>
+                                    <td>房租</td>
+                                    <td><span class="amount">¥ 15,000</span></td>
+                                    <td>2026-05-05</td>
+                                    <td><div class="person-info"><div class="person-avatar">张</div>张店长</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">人员支出</span></td>
+                                    <td>工资</td>
+                                    <td><span class="amount">¥ 18,500</span></td>
+                                    <td>2026-05-10</td>
+                                    <td><div class="person-info"><div class="person-avatar">张</div>张店长</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">产品耗材</span></td>
+                                    <td>美容产品</td>
+                                    <td><span class="amount">¥ 4,800</span></td>
+                                    <td>2026-05-12</td>
+                                    <td><div class="person-info"><div class="person-avatar">李</div>李前台</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">设备相关</span></td>
+                                    <td>设备维护费</td>
+                                    <td><span class="amount">¥ 1,500</span></td>
+                                    <td>2026-05-15</td>
+                                    <td><div class="person-info"><div class="person-avatar">张</div>张店长</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">营销推广</span></td>
+                                    <td>线上推广（美团/抖音）</td>
+                                    <td><span class="amount">¥ 2,850</span></td>
+                                    <td>2026-05-18</td>
+                                    <td><div class="person-info"><div class="person-avatar">李</div>李前台</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">日常运营成本</span></td>
+                                    <td>物业费</td>
+                                    <td><span class="amount">¥ 800</span></td>
+                                    <td>2026-05-20</td>
+                                    <td><div class="person-info"><div class="person-avatar">李</div>李前台</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td><span class="category-text">人员支出</span></td>
+                                    <td>社保</td>
+                                    <td><span class="amount">¥ 4,500</span></td>
+                                    <td>2026-05-22</td>
+                                    <td><div class="person-info"><div class="person-avatar">张</div>张店长</div></td>
+                                    <td>
+                                        <div class="action-btns">
+                                            <button class="action-btn" title="编辑">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                                                </svg>
+                                            </button>
+                                            <button class="action-btn" title="删除">
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                                    <polyline points="3 6 5 6 21 6"/>
+                                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                                                </svg>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pagination">
+                        <button class="page-btn" disabled>上一页</button>
+                        <button class="page-btn active">1</button>
+                        <button class="page-btn">2</button>
+                        <button class="page-btn">3</button>
+                        <span class="page-info">共 3 页</span>
+                        <button class="page-btn">下一页</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="modal">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">新增支出</div>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"/>
+                        <line x1="6" y1="6" x2="18" y2="18"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-search">
+                    <div class="modal-search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/>
+                            <path d="m21 21-4.35-4.35"/>
+                        </svg>
+                        <input type="text" class="modal-search-input" placeholder="搜索支出项目...（如：房租、工资、电费）" id="projectSearch" oninput="searchProjects(this.value)">
+                    </div>
+                </div>
+                <div id="addView">
+                    <div class="modal-split">
+                        <div class="modal-left" id="categoryList">
+                            <div class="modal-left-item active" data-category="daily" onclick="switchCategory('daily', this)">
+                                <div class="icon" style="background:rgba(59,130,246,.1);color:#3B82F6"></div>
+                                <span>日常运营成本</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('daily')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div class="modal-left-item" data-category="staff" onclick="switchCategory('staff', this)">
+                                <div class="icon" style="background:rgba(16,185,129,.1);color:#10B981">👤</div>
+                                <span>人员支出</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('staff')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div class="modal-left-item" data-category="product" onclick="switchCategory('product', this)">
+                                <div class="icon" style="background:rgba(236,72,153,.1);color:#EC4899">🧴</div>
+                                <span>产品耗材</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('product')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div class="modal-left-item" data-category="equipment" onclick="switchCategory('equipment', this)">
+                                <div class="icon" style="background:rgba(245,158,11,.1);color:#F59E0B">⚙️</div>
+                                <span>设备相关</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('equipment')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div class="modal-left-item" data-category="marketing" onclick="switchCategory('marketing', this)">
+                                <div class="icon" style="background:rgba(139,92,246,.1);color:#8B5CF6">📢</div>
+                                <span>营销推广</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('marketing')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div class="modal-left-item" data-category="other" onclick="switchCategory('other', this)">
+                                <div class="icon" style="background:rgba(244,63,94,.1);color:#F43F5E">📋</div>
+                                <span>其他费用</span>
+                                <button class="delete-category" onclick="event.stopPropagation();deleteCategory('other')" title="删除类别">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                                </button>
+                            </div>
+                            <div id="addCategoryArea">
+                                <div class="add-custom-left" onclick="showAddCategoryInput()">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>自定义类别</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-right" id="projectList">
+                            <div class="modal-right-title"><div class="dot"></div><span id="currentCategoryTitle">日常运营成本</span></div>
+                            <div class="project-grid" id="projectGrid">
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>房租</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>物业费</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>水费</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>电费</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>网络通讯费</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>清洁耗材</span>
+                                </div>
+                                <div class="project-item" onclick="selectProject(this)">
+                                    <div class="check"></div>
+                                    <span>其他（鲜花/水果/茶水）</span>
+                                </div>
+                                <div class="add-custom-btn" onclick="showAddProjectInput()" style="grid-column:1/-1">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                    <span>自定义项目</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">实际支出金额</label>
+                                <input type="number" class="form-input" placeholder="输入实际支出金额">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">支出日期</label>
+                                <input type="date" class="form-input">
+                            </div>
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">经办人</label>
+                                <select class="form-input">
+                                    <option value="">请选择经办人</option>
+                                    <option value="张店长">张店长</option>
+                                    <option value="李前台">李前台</option>
+                                    <option value="王美容师">王美容师</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">备注</label>
+                                <input type="text" class="form-input" placeholder="输入备注信息...">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" onclick="closeModal()">取消</button>
+                <button class="btn btn-primary" onclick="saveExpense()">保存</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const categoryIcons = ['🏠','💼','📦','🔧','📣','📝','🎯','🎨','💡','🔑','🛡️','🌟'];
+        const categoryColors = [
+            {bg:'rgba(59,130,246,.1)',color:'#3B82F6'},
+            {bg:'rgba(16,185,129,.1)',color:'#10B981'},
+            {bg:'rgba(236,72,153,.1)',color:'#EC4899'},
+            {bg:'rgba(245,158,11,.1)',color:'#F59E0B'},
+            {bg:'rgba(139,92,246,.1)',color:'#8B5CF6'},
+            {bg:'rgba(244,63,94,.1)',color:'#F43F5E'},
+            {bg:'rgba(20,184,166,.1)',color:'#14B8A6'},
+            {bg:'rgba(249,115,22,.1)',color:'#F97316'},
+            {bg:'rgba(168,85,247,.1)',color:'#A855F7'},
+            {bg:'rgba(34,197,94,.1)',color:'#22C55E'},
+            {bg:'rgba(6,182,212,.1)',color:'#06B6D4'},
+            {bg:'rgba(239,68,68,.1)',color:'#EF4444'}
+        ];
+
+        const categoryData = {
+            daily: { title: '日常运营成本', icon: '🏠', colorIdx: 0, projects: ['房租', '物业费', '水费', '电费', '网络通讯费', '清洁耗材', '其他（鲜花/水果/茶水）'] },
+            staff: { title: '人员支出', icon: '👤', colorIdx: 1, projects: ['工资', '社保', '公积金', '培训费用', '节日福利', '生日礼金', '生育期薪资'] },
+            product: { title: '产品耗材', icon: '🧴', colorIdx: 2, projects: ['美容产品', '仪器耗材'] },
+            equipment: { title: '设备相关', icon: '⚙️', colorIdx: 3, projects: ['仪器折旧费', '设备维护费', '新设备购置'] },
+            marketing: { title: '营销推广', icon: '📢', colorIdx: 4, projects: ['线上推广（美团/抖音）', '线下活动物料', '客户礼品'] },
+            other: { title: '其他费用', icon: '📋', colorIdx: 5, projects: ['税费', '工商年检费', '基础设施维修/更换'] }
+        };
+
+        let customCategoryCounter = 0;
+        let currentCategory = 'daily';
+
+        function getCategoryStyle(catKey) {
+            const cat = categoryData[catKey];
+            if (!cat) return {bg:'rgba(156,163,175,.1)',color:'#9CA3AF',icon:'📌'};
+            const colorIdx = cat.colorIdx !== undefined ? cat.colorIdx : Object.keys(categoryData).indexOf(catKey) % categoryColors.length;
+            const color = categoryColors[colorIdx] || categoryColors[0];
+            const icon = cat.icon || categoryIcons[colorIdx % categoryIcons.length] || '📌';
+            return {bg: color.bg, color: color.color, icon: icon};
+        }
+
+        function renderCategoryList() {
+            const list = document.getElementById('categoryList');
+            let html = '';
+            Object.keys(categoryData).forEach(key => {
+                const cat = categoryData[key];
+                const style = getCategoryStyle(key);
+                const isActive = key === currentCategory ? ' active' : '';
+                html += `<div class="modal-left-item${isActive}" data-category="${key}" onclick="switchCategory('${key}', this)">
+                    <div class="icon" style="background:${style.bg};color:${style.color}">${style.icon}</div>
+                    <span>${cat.title}</span>
+                    <button class="delete-category" onclick="event.stopPropagation();deleteCategory('${key}')" title="删除类别">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    </button>
+                </div>`;
+            });
+            html += `<div id="addCategoryArea">
+                <div class="add-custom-left" onclick="showAddCategoryInput()">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    <span>自定义类别</span>
+                </div>
+            </div>`;
+            list.innerHTML = html;
+        }
+
+        function renderProjects(category, projects) {
+            const list = projects || categoryData[category]?.projects || [];
+            const grid = document.getElementById('projectGrid');
+            grid.innerHTML = list.map(p =>
+                `<div class="project-item" onclick="selectProject(this)"><div class="check"></div><span>${p}</span><button class="delete-project" onclick="event.stopPropagation();deleteProject('${category}','${p}')" title="删除项目"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div>`
+            ).join('');
+            grid.innerHTML += `<div class="add-custom-btn" onclick="showAddProjectInput()" style="grid-column:1/-1">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>自定义项目</span>
+            </div>`;
+        }
+
+        function showAddCategoryInput() {
+            const area = document.getElementById('addCategoryArea');
+            area.innerHTML = `<div class="inline-input-wrap">
+                <input type="text" class="inline-input" id="newCategoryInput" placeholder="输入类别名称..." onkeydown="if(event.key==='Enter')confirmAddCategory();if(event.key==='Escape')cancelAddCategory()">
+                <button class="inline-confirm" onclick="confirmAddCategory()" title="确认">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button class="inline-cancel" onclick="cancelAddCategory()" title="取消">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+            </div>`;
+            document.getElementById('newCategoryInput').focus();
+        }
+
+        function confirmAddCategory() {
+            const input = document.getElementById('newCategoryInput');
+            const name = input.value.trim();
+            if (!name) { input.focus(); return; }
+            const exists = Object.values(categoryData).some(c => c.title === name);
+            if (exists) { alert('该类别已存在'); input.focus(); return; }
+            customCategoryCounter++;
+            const key = 'custom_' + customCategoryCounter;
+            const colorIdx = Object.keys(categoryData).length % categoryColors.length;
+            categoryData[key] = { title: name, icon: categoryIcons[colorIdx % categoryIcons.length], colorIdx: colorIdx, projects: [] };
+            currentCategory = key;
+            renderCategoryList();
+            renderProjects(key);
+            document.getElementById('currentCategoryTitle').textContent = name;
+            updateFilterDropdowns();
+        }
+
+        function cancelAddCategory() {
+            const area = document.getElementById('addCategoryArea');
+            area.innerHTML = `<div class="add-custom-left" onclick="showAddCategoryInput()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span>自定义类别</span>
+            </div>`;
+        }
+
+        function deleteCategory(key) {
+            if (Object.keys(categoryData).length <= 1) { alert('至少保留一个类别'); return; }
+            if (!confirm(`确定删除类别「${categoryData[key].title}」及其所有项目吗？`)) return;
+            delete categoryData[key];
+            if (currentCategory === key) {
+                currentCategory = Object.keys(categoryData)[0];
+            }
+            renderCategoryList();
+            renderProjects(currentCategory);
+            document.getElementById('currentCategoryTitle').textContent = categoryData[currentCategory]?.title || '';
+            updateFilterDropdowns();
+        }
+
+        function showAddProjectInput() {
+            const grid = document.getElementById('projectGrid');
+            const addBtn = grid.querySelector('.add-custom-btn');
+            if (!addBtn) return;
+            const wrapper = document.createElement('div');
+            wrapper.className = 'inline-input-wrap';
+            wrapper.style.gridColumn = '1/-1';
+            wrapper.id = 'addProjectInputWrap';
+            wrapper.innerHTML = `<input type="text" class="inline-input" id="newProjectInput" placeholder="输入项目名称..." onkeydown="if(event.key==='Enter')confirmAddProject();if(event.key==='Escape')cancelAddProject()">
+                <button class="inline-confirm" onclick="confirmAddProject()" title="确认">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+                </button>
+                <button class="inline-cancel" onclick="cancelAddProject()" title="取消">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>`;
+            addBtn.replaceWith(wrapper);
+            document.getElementById('newProjectInput').focus();
+        }
+
+        function confirmAddProject() {
+            const input = document.getElementById('newProjectInput');
+            const name = input.value.trim();
+            if (!name) { input.focus(); return; }
+            const cat = categoryData[currentCategory];
+            if (cat.projects.includes(name)) { alert('该项目已存在'); input.focus(); return; }
+            cat.projects.push(name);
+            renderProjects(currentCategory);
+            updateFilterDropdowns();
+        }
+
+        function cancelAddProject() {
+            renderProjects(currentCategory);
+        }
+
+        function deleteProject(category, projectName) {
+            const cat = categoryData[category];
+            if (!cat) return;
+            if (!confirm(`确定删除项目「${projectName}」吗？`)) return;
+            cat.projects = cat.projects.filter(p => p !== projectName);
+            renderProjects(category);
+            updateFilterDropdowns();
+        }
+
+        function openModal() {
+            document.getElementById('modal').classList.add('active');
+            currentCategory = Object.keys(categoryData)[0];
+            renderCategoryList();
+            renderProjects(currentCategory);
+            document.getElementById('currentCategoryTitle').textContent = categoryData[currentCategory]?.title || '';
+        }
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            const searchInput = document.getElementById('projectSearch');
+            if (searchInput) searchInput.value = '';
+        }
+        function searchProjects(keyword) {
+            const term = keyword.trim().toLowerCase();
+            if (!term) {
+                renderProjects(currentCategory);
+                document.querySelectorAll('.modal-left-item').forEach(item => {
+                    item.style.opacity = '1';
+                    item.style.pointerEvents = 'auto';
+                });
+                return;
+            }
+            const allProjects = [];
+            Object.entries(categoryData).forEach(([key, val]) => {
+                val.projects.forEach(p => {
+                    if (p.toLowerCase().includes(term)) {
+                        allProjects.push({ name: p, category: key, title: val.title });
+                    }
+                });
+            });
+            document.querySelectorAll('.modal-left-item').forEach(item => {
+                const cat = item.dataset.category;
+                const hasMatch = allProjects.some(p => p.category === cat);
+                item.style.opacity = hasMatch ? '1' : '0.3';
+                item.style.pointerEvents = hasMatch ? 'auto' : 'none';
+            });
+            if (allProjects.length > 0) {
+                const firstMatch = allProjects[0];
+                const catItem = document.querySelector(`.modal-left-item[data-category="${firstMatch.category}"]`);
+                if (catItem && !catItem.classList.contains('active')) {
+                    switchCategory(firstMatch.category, catItem);
+                } else {
+                    renderProjects(firstMatch.category, allProjects.filter(p => p.category === firstMatch.category).map(p => p.name));
+                }
+                document.getElementById('currentCategoryTitle').textContent = `搜索结果（${allProjects.length} 个匹配）`;
+            } else {
+                document.getElementById('projectGrid').innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:30px;color:var(--text-muted)">未找到匹配项目</div>';
+            }
+        }
+        function switchCategory(category, el) {
+            currentCategory = category;
+            document.querySelectorAll('.modal-left-item').forEach(item => {
+                item.style.opacity = '1';
+                item.style.pointerEvents = 'auto';
+                item.classList.remove('active');
+            });
+            el.classList.add('active');
+            document.getElementById('currentCategoryTitle').textContent = categoryData[category].title;
+            document.getElementById('projectSearch').value = '';
+            renderProjects(category);
+        }
+        function selectProject(el) {
+            document.querySelectorAll('.project-item').forEach(opt => opt.classList.remove('selected'));
+            el.classList.add('selected');
+        }
+        function saveExpense() {
+            closeModal();
+        }
+        function exportData() {
+            alert('导出功能开发中...');
+        }
+        document.getElementById('modal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        function updateFilterDropdowns() {
+            const categoryFilter = document.getElementById('categoryFilter');
+            const currentCatVal = categoryFilter.value;
+            categoryFilter.innerHTML = '<option value="">全部类别</option>';
+            Object.entries(categoryData).forEach(([key, val]) => {
+                categoryFilter.innerHTML += `<option value="${key}">${val.title}</option>`;
+            });
+            categoryFilter.value = currentCatVal;
+
+            const projectFilter = document.getElementById('projectFilter');
+            const currentProjVal = projectFilter.value;
+            projectFilter.innerHTML = '<option value="">全部项目</option>';
+            Object.entries(categoryData).forEach(([key, val]) => {
+                let optgroupHtml = `<optgroup label="${val.title}" data-category="${key}">`;
+                val.projects.forEach(p => {
+                    optgroupHtml += `<option value="${p}">${p}</option>`;
+                });
+                optgroupHtml += '</optgroup>';
+                projectFilter.innerHTML += optgroupHtml;
+            });
+            projectFilter.value = currentProjVal;
+        }
+
+        document.getElementById('categoryFilter').addEventListener('change', function() {
+            const category = this.value;
+            const projectSelect = document.getElementById('projectFilter');
+            const optgroups = projectSelect.querySelectorAll('optgroup');
+            optgroups.forEach(group => {
+                if (!category || group.dataset.category === category) {
+                    group.style.display = '';
+                } else {
+                    group.style.display = 'none';
+                }
+            });
+            projectSelect.value = '';
+        });
+
+        function initDefaultDate() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const firstDay = `${year}-${month}-01`;
+            const lastDay = `${year}-${month}-${String(new Date(year, now.getMonth() + 1, 0).getDate()).padStart(2, '0')}`;
+            document.getElementById('dateFrom').value = firstDay;
+            document.getElementById('dateTo').value = lastDay;
+        }
+        initDefaultDate();
+
+        function applyTimeFilter() {
+            const dateFrom = document.getElementById('dateFrom').value;
+            const dateTo = document.getElementById('dateTo').value;
+            if (!dateFrom || !dateTo) {
+                alert('请选择完整的日期范围');
+                return;
+            }
+            alert(`筛选时间范围：${dateFrom} ~ ${dateTo}`);
+        }
+    </script>
+</body>
+</html>

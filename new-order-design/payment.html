@@ -155,9 +155,6 @@
             overflow: auto;
             padding-right: 8px;
         }
-        .hide-third-party {
-            display: none !important;
-        }
         .pay-group {
             margin-top: 10px;
         }
@@ -914,7 +911,6 @@
                         <div class="calc-left">
                             <div>
                                 <div class="calc-label">待收款</div>
-                                <div class="calc-desc">待收款金额</div>
                             </div>
                         </div>
                         <div class="calc-amount base" id="totalAmount">¥0.00</div>
@@ -931,7 +927,7 @@
                     <div class="calc-divider" id="calcDivider2"></div>
                     <div class="calc-row" id="calcRemainingRow">
                         <div class="calc-left">
-                            <div class="calc-symbol eq">=</div>
+                            <!-- <div class="calc-symbol eq">=</div> -->
                             <div>
                                 <div class="calc-label">剩余应支付</div>
                                 <div class="calc-desc" id="remainingDesc">待收款 - 金额卡抵扣</div>
@@ -985,17 +981,6 @@
         </div>
     </div>
 
-    <div class="modal-overlay hide-third-party" id="thirdPartyModal">
-        <div class="modal">
-            <div class="modal-header">确认使用第三方渠道收款</div>
-            <div class="modal-body" id="thirdPartyModalBody"></div>
-            <div class="modal-actions">
-                <button class="modal-btn" id="thirdPartyCancel">取消</button>
-                <button class="modal-btn primary" id="thirdPartyConfirm">确定</button>
-            </div>
-        </div>
-    </div>
-
     <div class="modal-overlay" id="payStatusModal">
         <div class="modal">
             <div class="modal-header">支付状态</div>
@@ -1020,10 +1005,15 @@
                     { id: 'wechat', type: 'normal', title: '微信', subtitle: '', single: true },
                     { id: 'alipay', type: 'normal', title: '支付宝', subtitle: '', single: true },
                     { id: 'pos', type: 'normal', title: '银行卡POS', subtitle: '', single: true },
-                    { id: 'wallet', type: 'normal', title: '钱包', subtitle: '', single: true },
                     { id: 'bankTransfer', type: 'normal', title: '银行卡转账', subtitle: '', single: true },
                     { id: 'dept', type: 'normal', title: '部门结算', subtitle: '', single: true },
-                    { id: 'cloudShop', type: 'normal', title: '云店', subtitle: '', single: true },
+                    { id: 'cloudShop', type: 'normal', title: '云店', subtitle: '', single: true }
+                ]
+            },
+            memberAccount: {
+                group: '会员账户',
+                items: [
+                    { id: 'wallet', type: 'normal', title: '钱包', subtitle: '', single: true },
                     { id: 'debt', type: 'normal', title: '欠款', subtitle: '', single: true, icon: 'debt' }
                 ]
             },
@@ -1032,20 +1022,8 @@
                 items: [
                     { id: 'onlinePay', type: 'onlinePay', title: '线上支付', subtitle: '二维码收款', single: true }
                 ]
-            },
-            thirdParty: {
-                group: '第三方渠道收款',
-                items: [
-                    { id: 'mt', type: 'thirdParty', title: '美团/点评', subtitle: '券码核销', single: true },
-                    { id: 'dy', type: 'thirdParty', title: '抖音', subtitle: '券码核销', single: true },
-                    { id: 'cloudCourse', type: 'thirdParty', title: '云店疗程', subtitle: '券码核销', single: true },
-                    { id: 'giftCard', type: 'thirdParty', title: '礼品卡', subtitle: '券码核销', single: true },
-                    { id: 'cloudPickup', type: 'thirdParty', title: '云店自提订单', subtitle: '券码核销', single: true }
-                ]
             }
         };
-
-        const HIDE_THIRD_PARTY = true;
 
         const state = {
             orderId: '',
@@ -1060,8 +1038,6 @@
             discountAmount: 0,
             comboEnabled: false,
             selected: [],
-            thirdPartyPending: null,
-            thirdPartyCoupon: '',
             pay: {
                 inFlight: false,
                 payId: '',
@@ -1086,11 +1062,6 @@
         const remainingDescEl = document.getElementById('remainingDesc');
         const toastEl = document.getElementById('toast');
         const confirmBtn = document.getElementById('confirmBtn');
-
-        const thirdPartyModal = document.getElementById('thirdPartyModal');
-        const thirdPartyModalBody = document.getElementById('thirdPartyModalBody');
-        const thirdPartyCancel = document.getElementById('thirdPartyCancel');
-        const thirdPartyConfirm = document.getElementById('thirdPartyConfirm');
 
         const payStatusModal = document.getElementById('payStatusModal');
         const statusTitle = document.getElementById('statusTitle');
@@ -1273,8 +1244,6 @@
             if (isZero) {
                 if (state.selected.length > 0) state.selected = [];
                 state.comboEnabled = false;
-                state.thirdPartyPending = null;
-                state.thirdPartyCoupon = '';
                 return;
             }
 
@@ -1302,12 +1271,7 @@
             return state.selected.some(x => x.type === 'onlinePay');
         }
 
-        function hasThirdPartySelected() {
-            return state.selected.some(x => x.type === 'thirdParty');
-        }
-
         function canEnableComboForCurrentSelection() {
-            if (hasThirdPartySelected()) return false;
             if (hasOnlinePaySelected()) return false;
             return true;
         }
@@ -1321,8 +1285,6 @@
 
             state.selected = [{ id: 'cash', type: 'normal', label, amount: payable }];
             state.comboEnabled = false;
-            state.thirdPartyPending = null;
-            state.thirdPartyCoupon = '';
             normalizeAmounts();
         }
 
@@ -1330,7 +1292,7 @@
             const desired = !!next;
             if (desired) {
                 if (!canEnableComboForCurrentSelection()) {
-                    showToast('线上支付与第三方渠道收款不支持组合收款');
+                    showToast('线上支付不支持组合收款');
                     state.comboEnabled = false;
                     renderAll();
                     return;
@@ -1361,14 +1323,6 @@
         function addOrToggleMethod(item) {
             if (!item) return;
 
-            if (item.type === 'thirdParty') {
-                if (HIDE_THIRD_PARTY) return;
-                if (state.comboEnabled) state.comboEnabled = false;
-                state.thirdPartyPending = item;
-                openThirdPartyModal(item);
-                return;
-            }
-
             if (item.type === 'onlinePay') {
                 state.comboEnabled = false;
                 state.selected = [{ id: item.id, type: 'onlinePay', label: item.title, amount: clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER) }];
@@ -1385,7 +1339,7 @@
                     return;
                 }
 
-                if (hasOnlinePaySelected() || hasThirdPartySelected()) {
+                if (hasOnlinePaySelected()) {
                     state.selected = [];
                 }
 
@@ -1410,7 +1364,7 @@
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
             if (!state.comboEnabled && state.selected.length > 1) state.selected = [state.selected[state.selected.length - 1]];
 
-            if (hasOnlinePaySelected() || hasThirdPartySelected()) {
+            if (hasOnlinePaySelected()) {
                 if (state.selected.length > 1) state.selected = [state.selected[state.selected.length - 1]];
                 const only = state.selected[0] || null;
                 if (only) only.amount = payable;
@@ -1451,7 +1405,7 @@
             Object.keys(PAYMENT_METHODS).forEach(key => {
                 const group = PAYMENT_METHODS[key];
                 if (!group || !group.items || group.items.length === 0) return;
-                const hiddenCls = (HIDE_THIRD_PARTY && key === 'thirdParty') ? ' hide-third-party' : '';
+                const hiddenCls = '';
                 const cards = group.items.map(item => {
                     const selected = state.selected.some(x => x.id === item.id) ? 'selected' : '';
                     const cls = 'method-card' + (item.single ? ' method-single' : '') + (selected ? ' selected' : '');
@@ -1498,49 +1452,9 @@
                 rightContent.innerHTML = `
                     <div class="qr-box" style="border-style: solid; background: #fff;">
                         <div class="qr-title" style="color: var(--neutral-900);">请选择左侧收款方式</div>
-                        <div class="qr-hint">支持单一收款方式，或开启组合收款（不含线上支付/第三方渠道）</div>
+                        <div class="qr-hint">支持单一收款方式，或开启组合收款（不含线上支付）</div>
                     </div>
                 `;
-                return;
-            }
-
-            if (hasThirdPartySelected()) {
-                const method = lines.find(x => x.type === 'thirdParty');
-                const title = method ? method.label : '第三方渠道收款';
-                rightContent.innerHTML = `
-                    <div class="qr-box" style="border-style: solid; background: #fff;">
-                        <div class="qr-title">${title}</div>
-                        <div class="total-label" style="margin-top:-4px;">请录入券码或扫码核销</div>
-                        <div class="coupon-row" style="width:100%; max-width: 520px;">
-                            <div class="coupon-input-wrap">
-                                <input class="coupon-input" id="couponInput" placeholder="请输入券码" value="${escapeHtmlAttr(state.thirdPartyCoupon || '')}">
-                                <button class="coupon-btn secondary" id="scanBtn" type="button">
-                                    ${getScanIconSvg()}
-                                    扫码核销
-                                </button>
-                            </div>
-                            <button class="coupon-btn" id="couponSearchBtn" type="button">查询</button>
-                        </div>
-                        <div class="coupon-tip">可手动输入券码，或扫码核销后自动填充</div>
-                    </div>
-                `;
-                const couponInput = document.getElementById('couponInput');
-                couponInput?.addEventListener('input', () => {
-                    state.thirdPartyCoupon = String(couponInput.value || '').trim();
-                });
-                document.getElementById('scanBtn')?.addEventListener('click', () => {
-                    const mock = 'MT' + Math.floor(Math.random() * 100000000);
-                    state.thirdPartyCoupon = mock;
-                    if (couponInput) couponInput.value = mock;
-                    showToast('已填充券码（模拟扫码）');
-                });
-                document.getElementById('couponSearchBtn')?.addEventListener('click', () => {
-                    if (!state.thirdPartyCoupon) {
-                        showToast('请输入券码');
-                        return;
-                    }
-                    showToast('查询成功（模拟）');
-                });
                 return;
             }
 
@@ -1635,36 +1549,6 @@
             return null;
         }
 
-        function openThirdPartyModal(item) {
-            if (HIDE_THIRD_PARTY) return;
-            const discount = clampNumber(state.discountAmount, 0, Number.MAX_SAFE_INTEGER);
-            const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
-            const newPayable = payable + discount;
-            thirdPartyModalBody.innerHTML = `
-                <div style="margin-bottom:8px;">当前收银台存在使用卡项/券/等优惠，确定使用第三方渠道收款方式，订单将会做以下修改：</div>
-                <div>· 清空当前订单【优惠金额 ${formatMoney(discount)} 元】</div>
-                <div>· 订单收款金额将更新为 ${formatMoney(newPayable)} 元</div>
-            `;
-            thirdPartyModal.classList.add('show');
-        }
-
-        function closeThirdPartyModal() {
-            thirdPartyModal.classList.remove('show');
-        }
-
-        function applyThirdPartySelection() {
-            if (HIDE_THIRD_PARTY) return;
-            const item = state.thirdPartyPending;
-            state.thirdPartyPending = null;
-            if (!item) return;
-            state.payableAmount = clampNumber(state.payableAmount + state.discountAmount, 0, Number.MAX_SAFE_INTEGER);
-            state.discountAmount = 0;
-            state.selected = [{ id: item.id, type: 'thirdParty', label: item.title, amount: state.payableAmount }];
-            state.comboEnabled = false;
-            state.thirdPartyCoupon = '';
-            renderAll();
-        }
-
         function escapeHtml(value) {
             return String(value ?? '')
                 .replace(/&/g, '&amp;')
@@ -1694,6 +1578,14 @@
                     </svg>
                 `;
             }
+            if (groupKey === 'memberAccount') {
+                return `
+                    <svg ${common}>
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                        <circle cx="12" cy="7" r="3"></circle>
+                    </svg>
+                `;
+            }
             if (groupKey === 'onlinePay') {
                 return `
                     <svg ${common}>
@@ -1702,14 +1594,6 @@
                         <path d="M14 8h2v2h-2z"></path>
                         <path d="M8 14h2v2H8z"></path>
                         <path d="M14 14h2v2h-2z"></path>
-                    </svg>
-                `;
-            }
-            if (groupKey === 'thirdParty') {
-                return `
-                    <svg ${common}>
-                        <path d="M5 7a2 2 0 0 1 2-2h4a2 2 0 0 0 2 2h4a2 2 0 0 1 2 2v2a2 2 0 0 0-2 2v2a2 2 0 0 1-2 2h-4a2 2 0 0 0-2-2H7a2 2 0 0 1-2-2v-2a2 2 0 0 0 2-2V9a2 2 0 0 1-2-2z"></path>
-                        <path d="M12 8v8"></path>
                     </svg>
                 `;
             }
@@ -1735,19 +1619,6 @@
             return '';
         }
 
-        function getScanIconSvg() {
-            const stroke = 'currentColor';
-            return `
-                <svg viewBox="0 0 24 24" fill="none" stroke="${stroke}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">
-                    <path d="M7 4H5a1 1 0 0 0-1 1v2"></path>
-                    <path d="M17 4h2a1 1 0 0 1 1 1v2"></path>
-                    <path d="M7 20H5a1 1 0 0 1-1-1v-2"></path>
-                    <path d="M17 20h2a1 1 0 0 0 1-1v-2"></path>
-                    <path d="M7 12h10"></path>
-                </svg>
-            `;
-        }
-
         function getPayLockKey() {
             return 'pay_lock_' + String(state.orderId || '');
         }
@@ -1771,14 +1642,6 @@
 
         function buildPayPayload() {
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
-            if (hasThirdPartySelected()) {
-                return {
-                    orderId: state.orderId,
-                    payableAmount: payable,
-                    discountAmount: clampNumber(state.discountAmount, 0, Number.MAX_SAFE_INTEGER),
-                    channels: [{ type: 'thirdParty', methodId: state.selected[0].id, amount: payable, couponCode: state.thirdPartyCoupon }]
-                };
-            }
             if (hasOnlinePaySelected()) {
                 return {
                     orderId: state.orderId,
@@ -1823,21 +1686,13 @@
             const payId = 'pay_' + Date.now() + '_' + Math.floor(Math.random() * 10000);
             const now = Date.now();
             const hasOnline = (payload.channels || []).some(x => x.type === 'onlinePay');
-            const hasThird = (payload.channels || []).some(x => x.type === 'thirdParty');
             const hasNormal = (payload.channels || []).some(x => x.type === 'normal');
 
             if (hasOnline && (payload.channels || []).length > 1) {
                 return { ok: false, code: 'CHANNEL_CONFLICT', message: '线上支付不支持组合收款' };
             }
-            if (hasThird && (payload.channels || []).length > 1) {
-                return { ok: false, code: 'CHANNEL_CONFLICT', message: '第三方渠道收款不支持组合收款' };
-            }
-            if (hasNormal && (hasOnline || hasThird)) {
+            if (hasNormal && hasOnline) {
                 return { ok: false, code: 'CHANNEL_CONFLICT', message: '支付方式组合异常' };
-            }
-            if (hasThird) {
-                const c = String((payload.channels || [])[0]?.couponCode || '').trim();
-                if (!c) return { ok: false, code: 'COUPON_REQUIRED', message: '请输入券码' };
             }
             if ((payload.channels || []).some(x => x.methodId === 'pos')) {
                 return { ok: false, code: 'CHANNEL_MAINTENANCE', message: '渠道维护中，请更换支付方式' };
@@ -1989,11 +1844,6 @@
                 return;
             }
 
-            if (hasThirdPartySelected() && !String(state.thirdPartyCoupon || '').trim()) {
-                showToast('请输入券码');
-                return;
-            }
-
             const payload = buildPayPayload();
             if (!payload || !Array.isArray(payload.channels) || payload.channels.length === 0) {
                 showToast('支付参数异常');
@@ -2002,13 +1852,7 @@
 
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
             const types = new Set(payload.channels.map(x => x.type));
-            if (hasThirdPartySelected()) {
-                const ok = payload.channels.length === 1 && types.size === 1 && types.has('thirdParty');
-                if (!ok) {
-                    showToast('第三方渠道收款不支持组合收款');
-                    return;
-                }
-            } else if (hasOnlinePaySelected()) {
+            if (hasOnlinePaySelected()) {
                 const ok = payload.channels.length === 1 && types.size === 1 && types.has('onlinePay');
                 if (!ok) {
                     showToast('线上支付不支持组合收款');
@@ -2144,21 +1988,6 @@
         });
 
         confirmBtn.addEventListener('click', startPayFlow);
-
-        thirdPartyCancel.addEventListener('click', () => {
-            state.thirdPartyPending = null;
-            closeThirdPartyModal();
-        });
-        thirdPartyConfirm.addEventListener('click', () => {
-            closeThirdPartyModal();
-            applyThirdPartySelection();
-        });
-        thirdPartyModal.addEventListener('click', (e) => {
-            if (e.target === thirdPartyModal) {
-                state.thirdPartyPending = null;
-                closeThirdPartyModal();
-            }
-        });
 
         window.addEventListener('storage', (e) => {
             const k = String(e?.key || '');

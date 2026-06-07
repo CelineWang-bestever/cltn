@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户销售分析 - 回蓝美容</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500;600;700&display=swap">
+<style>
+:root {
+--primary: #0D9488;
+--primary-dark: #0B7B70;
+--primary-light: rgba(13,148,136,0.08);
+--primary-lighter: rgba(13,148,136,0.04);
+--bg: #F8FAFA;
+--white: #FFFFFF;
+--text-primary: #1A2332;
+--text-secondary: #64748B;
+--text-light: #94A3B8;
+--border: #E2E8F0;
+--border-light: #F1F5F9;
+--success: #10B981;
+--success-light: rgba(16,185,129,0.1);
+--warning: #F59E0B;
+--warning-light: rgba(245,158,11,0.1);
+--danger: #EF4444;
+--danger-light: rgba(239,68,68,0.1);
+--shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+--shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+--shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+--radius: 12px;
+--radius-sm: 8px;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Inter','Noto Sans SC',sans-serif; background:var(--bg); color:var(--text-primary); min-height:100vh; }
+
+.sidebar { position:fixed; left:0; top:0; bottom:0; width:220px; background:var(--white); border-right:1px solid var(--border); z-index:100; display:flex; flex-direction:column; }
+.sidebar-logo { padding:20px; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:10px; }
+.sidebar-logo-icon { width:36px; height:36px; background:linear-gradient(135deg,var(--primary),#06B6D4); border-radius:10px; display:flex; align-items:center; justify-content:center; color:white; font-size:18px; }
+.sidebar-logo-text { font-size:16px; font-weight:700; color:var(--text-primary); }
+.sidebar-nav { flex:1; padding:16px 12px; overflow-y:auto; }
+.nav-group { margin-bottom:24px; }
+.nav-group-title { font-size:11px; font-weight:600; color:var(--text-light); text-transform:uppercase; letter-spacing:0.5px; padding:0 8px; margin-bottom:8px; }
+.nav-item { display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:var(--radius-sm); cursor:pointer; font-size:14px; color:var(--text-secondary); transition:all 0.2s; text-decoration:none; }
+.nav-item:hover { background:var(--primary-lighter); color:var(--primary); }
+.nav-item.active { background:var(--primary-light); color:var(--primary); font-weight:600; }
+.nav-item svg { width:18px; height:18px; flex-shrink:0; }
+.main { margin-left:220px; min-height:100vh; }
+.topbar { background:var(--white); border-bottom:1px solid var(--border); padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:50; }
+.topbar-left { display:flex; align-items:center; gap:16px; }
+.breadcrumb { display:flex; align-items:center; gap:8px; font-size:14px; color:var(--text-secondary); }
+.breadcrumb a { color:var(--text-light); text-decoration:none; }
+.breadcrumb a:hover { color:var(--primary); }
+.breadcrumb span { color:var(--text-primary); font-weight:600; }
+.topbar-actions { display:flex; align-items:center; gap:12px; }
+.btn { padding:8px 16px; border-radius:var(--radius-sm); font-size:13px; font-weight:500; cursor:pointer; transition:all 0.2s; display:inline-flex; align-items:center; gap:6px; border:1px solid var(--border); background:var(--white); color:var(--text-secondary); }
+.btn:hover { border-color:var(--primary); color:var(--primary); }
+.btn-primary { background:var(--primary); color:white; border-color:var(--primary); }
+.btn-primary:hover { background:var(--primary-dark); }
+.content { padding:24px; }
+.page-header { margin-bottom:24px; }
+.page-title { font-size:20px; font-weight:700; margin-bottom:4px; }
+.page-desc { font-size:13px; color:var(--text-secondary); }
+
+.filter-bar {
+background:var(--white);
+border-radius:var(--radius);
+padding:16px 20px;
+margin-bottom:24px;
+box-shadow:var(--shadow-sm);
+display:flex;
+align-items:center;
+gap:12px;
+}
+.filter-group { display:flex; flex-direction:column; gap:4px; min-width:140px; }
+.filter-label { font-size:12px; font-weight:500; color:var(--text-secondary); }
+.filter-select {
+height:36px;
+padding:0 12px;
+border:1px solid var(--border);
+border-radius:6px;
+font-size:13px;
+color:var(--text-primary);
+background:var(--white);
+outline:none;
+transition:border-color 0.2s;
+width:140px;
+}
+.filter-select:focus { border-color:var(--primary); }
+.filter-search { display:flex; flex-direction:column; gap:4px; flex:1; min-width:240px; }
+.filter-search input {
+width:100%;
+height:36px;
+padding:0 12px 0 36px;
+border:1px solid var(--border);
+border-radius:6px;
+font-size:13px;
+outline:none;
+background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%2394A3B8' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat 12px center;
+transition:border-color 0.2s;
+}
+.filter-search input:focus { border-color:var(--primary); }
+.filter-actions { display:flex; gap:8px; align-items:flex-end; }
+
+.stats-row { display:grid; grid-template-columns:repeat(7,1fr); gap:16px; margin-bottom:24px; }
+.stat-card { background:var(--white); border-radius:var(--radius); padding:20px; box-shadow:var(--shadow-sm); }
+.stat-card-label { font-size:12px; color:var(--text-secondary); margin-bottom:8px; }
+.stat-card-value { font-size:28px; font-weight:700; color:var(--text-primary); }
+.stat-card-sub { font-size:12px; color:var(--text-light); margin-top:4px; }
+
+
+
+.table-card { background:var(--white); border-radius:var(--radius); box-shadow:var(--shadow-sm); overflow:hidden; }
+.table-header { padding:16px 20px; display:flex; align-items:center; justify-content:space-between; border-bottom:1px solid var(--border-light); }
+.table-title { font-size:15px; font-weight:600; }
+.table-count { font-size:12px; color:var(--text-secondary); }
+.table-scroll { overflow-x:auto; }
+table { width:100%; border-collapse:collapse; min-width:1400px; }
+thead th { padding:12px 14px; font-size:12px; font-weight:600; color:var(--text-secondary); background:var(--border-light); text-align:left; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:1; }
+thead th.num { text-align:right; }
+tbody td { padding:12px 14px; font-size:13px; border-bottom:1px solid var(--border-light); white-space:nowrap; }
+tbody td.num { text-align:right; font-family:'Inter',monospace; font-weight:500; }
+tbody tr { transition:background 0.15s; }
+tbody tr:hover { background:var(--primary-lighter); }
+
+.customer-name { display:flex; align-items:center; gap:10px; }
+.customer-avatar { width:32px; height:32px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; color:white; flex-shrink:0; }
+.customer-info { display:flex; flex-direction:column; }
+.customer-name-text { font-weight:600; font-size:13px; }
+.customer-phone { font-size:11px; color:var(--text-light); }
+
+.tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:500; }
+.tag-active { background:var(--success-light); color:var(--success); }
+.tag-silent { background:var(--warning-light); color:var(--warning); }
+.tag-churn { background:var(--danger-light); color:var(--danger); }
+.tag-new { background:var(--primary-light); color:var(--primary); }
+
+.highlight { color:var(--primary); font-weight:600; }
+
+.table-footer { padding:12px 20px; display:flex; align-items:center; justify-content:space-between; border-top:1px solid var(--border-light); font-size:12px; color:var(--text-secondary); }
+.pagination { display:flex; align-items:center; gap:4px; }
+.page-btn { width:32px; height:32px; border-radius:6px; border:1px solid var(--border); background:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:13px; transition:all 0.2s; }
+.page-btn:hover { border-color:var(--primary); color:var(--primary); }
+.page-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
+
+.detail-panel { display:none; position:fixed; top:0; right:0; bottom:0; width:520px; background:var(--white); box-shadow:-8px 0 24px rgba(0,0,0,0.12); z-index:200; overflow-y:auto; animation:slideIn 0.3s ease; }
+.detail-panel.active { display:block; }
+@keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
+.detail-header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--white); z-index:1; }
+.detail-close { width:32px; height:32px; border-radius:8px; border:none; background:var(--border-light); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.2s; }
+.detail-close:hover { background:var(--border); }
+.detail-profile { padding:24px; text-align:center; border-bottom:1px solid var(--border); }
+.detail-avatar { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:white; margin:0 auto 12px; }
+.detail-name { font-size:18px; font-weight:700; margin-bottom:4px; }
+.detail-meta { font-size:13px; color:var(--text-secondary); }
+.detail-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:20px 24px; border-bottom:1px solid var(--border); }
+.detail-stat { text-align:center; }
+.detail-stat-value { font-size:20px; font-weight:700; }
+.detail-stat-label { font-size:11px; color:var(--text-secondary); margin-top:2px; }
+.detail-section { padding:20px 24px; border-bottom:1px solid var(--border); }
+.detail-section-title { font-size:14px; font-weight:600; margin-bottom:16px; }
+.detail-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-light); }
+.detail-row:last-child { border-bottom:none; }
+.detail-row-label { font-size:13px; color:var(--text-secondary); }
+.detail-row-value { font-size:13px; font-weight:600; }
+.overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:150; }
+.overlay.active { display:block; }
+
+.star { color:#F59E0B; font-size:12px; }
+.star.empty { color:var(--border); }
+.days-warn { color:var(--warning); }
+.days-danger { color:var(--danger); }
+.days-ok { color:var(--success); }
+
+.filter-summary { background:var(--primary-light); border:1px solid rgba(13,148,136,0.15); border-radius:var(--radius-sm); padding:10px 16px; margin-bottom:16px; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-secondary); }
+.filter-summary-label { background:var(--primary); color:white; padding:2px 10px; border-radius:4px; font-size:12px; font-weight:600; margin-right:6px; }
+.filter-summary-item { color:var(--text-secondary); }
+.filter-summary-item strong { color:var(--primary); font-weight:600; }
+.filter-summary-divider { color:var(--border); margin:0 4px; }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <div class="sidebar-logo">
+        <div class="sidebar-logo-icon">H</div>
+        <div class="sidebar-logo-text">回蓝美容</div>
+    </div>
+    <div class="sidebar-nav">
+        <div class="nav-group">
+            <div class="nav-group-title">经营分析</div>
+            <a class="nav-item" href="data-overview.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                业绩汇总
+            </a>
+            <a class="nav-item" href="staff-performance.html">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+                员工业绩
+            </a>
+            <a class="nav-item active">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                客户销售分析
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="main">
+    <div class="topbar">
+        <div class="topbar-left">
+            <div class="breadcrumb">
+                <a href="data-overview.html">经营分析</a>
+                <span>/</span>
+                <span>客户销售分析</span>
+            </div>
+        </div>
+        <div class="topbar-actions">
+            <button class="btn" onclick="exportData()">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                导出报表
+            </button>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="page-header">
+            <div class="page-title">客户销售分析</div>
+            <div class="page-desc">按客户维度分析销售业绩、卡项消费、产品购买及服务消耗数据</div>
+        </div>
+
+        <div class="stats-row">
+            <div class="stat-card">
+                <div class="stat-card-label">客户总数</div>
+                <div class="stat-card-value">1,286</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">会员数</div>
+                <div class="stat-card-value">456</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">活跃会员</div>
+                <div class="stat-card-value">328</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">有效会员</div>
+                <div class="stat-card-value">312</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">沉睡会员</div>
+                <div class="stat-card-value">144</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">累计消费</div>
+                <div class="stat-card-value">¥1,862,000</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-card-label">人均消费</div>
+                <div class="stat-card-value">¥426</div>
+            </div>
+        </div>
+
+        <div class="filter-bar">
+            <div class="filter-search">
+                <input type="text" id="searchInput" placeholder="搜索客户姓名 / 手机号" oninput="filterTable()">
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">时间范围</span>
+                <div style="display:flex;gap:8px;align-items:center;">
+                    <input type="date" class="filter-select" id="filterStartDate" style="width:130px;">
+                    <span style="color:var(--text-light);font-size:12px;">至</span>
+                    <input type="date" class="filter-select" id="filterEndDate" style="width:130px;">
+                </div>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">客户星级</span>
+                <select class="filter-select" id="filterStar" onchange="filterTable()">
+                    <option>全部星级</option>
+                    <option>一星</option>
+                    <option>二星</option>
+                    <option>三星</option>
+                    <option>四星</option>
+                    <option>五星</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">责任美容师</span>
+                <select class="filter-select" id="filterStaff" onchange="filterTable()">
+                    <option>全部美容师</option>
+                    <option>王小美</option>
+                    <option>李婷婷</option>
+                    <option>张丽丽</option>
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button class="btn btn-primary" onclick="filterTable()">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
+                    筛选
+                </button>
+                <button class="btn" onclick="resetFilter()">重置</button>
+            </div>
+        </div>
+
+        <div class="filter-summary" id="filterSummary" style="display:none">
+            <span class="filter-summary-label">筛选结果</span>
+            <span class="filter-summary-item">客户 <strong id="summaryCount">0</strong> 位</span>
+            <span class="filter-summary-divider">|</span>
+            <span class="filter-summary-item">现金业绩 <strong id="summarySalesPerf">¥0</strong></span>
+            <span class="filter-summary-divider">|</span>
+            <span class="filter-summary-item">消耗业绩 <strong id="summaryConsumePerf">¥0</strong></span>
+            <span class="filter-summary-divider">|</span>
+            <span class="filter-summary-item">累计消费 <strong id="summaryTotalConsume">¥0</strong></span>
+        </div>
+
+        <div class="table-card">
+            <div class="table-header">
+                <div class="table-title">客户销售明细</div>
+                <div class="table-count" id="tableCount">共 1,286 位客户</div>
+            </div>
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>客户姓名</th>
+                            <th>手机号</th>
+                            <th>客户类型</th>
+                            <th>客户星级</th>
+                            <th>责任美容师</th>
+                            <th class="num">累计消费</th>
+                            <th class="num">销售业绩</th>
+                            <th class="num">卡项销售</th>
+                            <th class="num">护理销售</th>
+                            <th class="num">产品销售</th>
+                            <th class="num">消耗业绩</th>
+                            <th class="num">疗程消耗</th>
+                            <th class="num">产品消耗</th>
+                            <th class="num">到店次数</th>
+                            <th class="num">消费次数</th>
+                            <th class="num">有效卡张数</th>
+                            <th class="num">最近到店</th>
+                            <th class="num">未到店天数</th>
+                            <th class="num">客单价</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tableBody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-footer">
+                <span id="showingText">显示 1-20 / 共 1,286 条</span>
+                <div class="pagination">
+                    <button class="page-btn">‹</button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">...</button>
+                    <button class="page-btn">65</button>
+                    <button class="page-btn">›</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay" onclick="closeDetail()"></div>
+<div class="detail-panel" id="detailPanel">
+    <div class="detail-header">
+        <span style="font-size:16px;font-weight:600;">客户详情</span>
+        <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div id="detailContent"></div>
+</div>
+
+<script>
+const customerData = [
+    { name:'王美丽', phone:'138****5621', type:'会员', star:3, staff:'王小美', avatar:'王', color:'#0D9488', totalConsume:398, salesPerf:0, cardSales:0, careSales:0, productSales:0, consumePerf:398, courseConsume:0, productConsume:398, visitCount:3, validCards:1, lastVisit:'2026-05-20', avgSpend:133, balance:2800, points:320, monthlyRecords:[{month:'2026-05',salesPerf:0,consumePerf:398}] },
+    { name:'张雅琴', phone:'139****3847', type:'会员', star:5, staff:'李婷婷', avatar:'张', color:'#5BA876', totalConsume:20560, salesPerf:15800, cardSales:12000, careSales:9000, productSales:3800, consumePerf:8560, courseConsume:5200, productConsume:3360, visitCount:25, validCards:3, lastVisit:'2026-05-24', avgSpend:476, balance:8600, points:1580, monthlyRecords:[{month:'2026-05',salesPerf:5800,consumePerf:3200},{month:'2026-04',salesPerf:4200,consumePerf:2800},{month:'2026-03',salesPerf:3600,consumePerf:1800},{month:'2026-02',salesPerf:1400,consumePerf:560},{month:'2026-01',salesPerf:800,consumePerf:200}] },
+    { name:'李思雨', phone:'136****9012', type:'会员', star:5, staff:'张丽丽', avatar:'李', color:'#F59E0B', totalConsume:43800, salesPerf:28600, cardSales:20000, careSales:14000, productSales:8600, consumePerf:15200, courseConsume:8800, productConsume:6400, visitCount:45, validCards:4, lastVisit:'2026-05-25', avgSpend:475, balance:12400, points:2860, monthlyRecords:[{month:'2026-05',salesPerf:6800,consumePerf:4200},{month:'2026-04',salesPerf:8200,consumePerf:3800},{month:'2026-03',salesPerf:7600,consumePerf:3600},{month:'2026-02',salesPerf:4200,consumePerf:2400},{month:'2026-01',salesPerf:1800,consumePerf:1200}] },
+    { name:'赵雅琪', phone:'135****4567', type:'体验客', star:1, staff:'王小美', avatar:'赵', color:'#EF4444', totalConsume:680, salesPerf:680, cardSales:0, careSales:0, productSales:680, consumePerf:298, courseConsume:0, productConsume:298, visitCount:2, validCards:0, lastVisit:'2026-05-22', avgSpend:149, balance:0, points:68, monthlyRecords:[{month:'2026-05',salesPerf:680,consumePerf:298}] },
+    { name:'陈婷婷', phone:'158****7834', type:'会员', star:3, staff:'李婷婷', avatar:'陈', color:'#8B5CF6', totalConsume:31000, salesPerf:18200, cardSales:15000, careSales:10000, productSales:3200, consumePerf:12800, courseConsume:7600, productConsume:5200, visitCount:35, validCards:2, lastVisit:'2026-03-15', avgSpend:457, balance:3200, points:1820, monthlyRecords:[{month:'2026-03',salesPerf:6200,consumePerf:4600},{month:'2026-02',salesPerf:7000,consumePerf:5200},{month:'2026-01',salesPerf:5000,consumePerf:3000}] },
+    { name:'刘美华', phone:'137****2345', type:'会员', star:5, staff:'张丽丽', avatar:'刘', color:'#EC4899', totalConsume:64400, salesPerf:42000, cardSales:30000, careSales:20000, productSales:12000, consumePerf:22400, courseConsume:12600, productConsume:9800, visitCount:62, validCards:5, lastVisit:'2026-05-26', avgSpend:467, balance:18000, points:4200, monthlyRecords:[{month:'2026-05',salesPerf:9800,consumePerf:5600},{month:'2026-04',salesPerf:11200,consumePerf:5200},{month:'2026-03',salesPerf:10600,consumePerf:5400},{month:'2026-02',salesPerf:7200,consumePerf:3800},{month:'2026-01',salesPerf:3200,consumePerf:2400}] },
+    { name:'周佳琪', phone:'159****6789', type:'新客', star:1, staff:'王小美', avatar:'周', color:'#14B8A6', totalConsume:398, salesPerf:398, cardSales:0, careSales:0, productSales:398, consumePerf:0, courseConsume:0, productConsume:0, visitCount:1, validCards:0, lastVisit:'2026-05-26', avgSpend:398, balance:0, points:40, monthlyRecords:[{month:'2026-05',salesPerf:398,consumePerf:0}] },
+    { name:'吴晓芳', phone:'186****1234', type:'会员', star:4, staff:'李婷婷', avatar:'吴', color:'#F97316', totalConsume:38000, salesPerf:23400, cardSales:18000, careSales:12000, productSales:5400, consumePerf:14600, courseConsume:8200, productConsume:6400, visitCount:45, validCards:3, lastVisit:'2026-05-23', avgSpend:417, balance:9800, points:2340, monthlyRecords:[{month:'2026-05',salesPerf:5600,consumePerf:3400},{month:'2026-04',salesPerf:6800,consumePerf:3800},{month:'2026-03',salesPerf:5400,consumePerf:3200},{month:'2026-02',salesPerf:3800,consumePerf:2800},{month:'2026-01',salesPerf:1800,consumePerf:1400}] },
+    { name:'孙丽华', phone:'133****5678', type:'会员', star:2, staff:'张丽丽', avatar:'孙', color:'#6366F1', totalConsume:21000, salesPerf:12600, cardSales:10000, careSales:6000, productSales:2600, consumePerf:8400, courseConsume:4800, productConsume:3600, visitCount:28, validCards:1, lastVisit:'2026-01-10', avgSpend:382, balance:2400, points:1260, monthlyRecords:[{month:'2026-01',salesPerf:5600,consumePerf:3600}] },
+    { name:'黄雅芬', phone:'150****9012', type:'会员', star:5, staff:'王小美', avatar:'黄', color:'#A855F7', totalConsume:54500, salesPerf:35600, cardSales:25000, careSales:16000, productSales:10600, consumePerf:18900, courseConsume:10800, productConsume:8100, visitCount:56, validCards:4, lastVisit:'2026-05-25', avgSpend:450, balance:14200, points:3560, monthlyRecords:[{month:'2026-05',salesPerf:8600,consumePerf:5200},{month:'2026-04',salesPerf:9200,consumePerf:4600},{month:'2026-03',salesPerf:8800,consumePerf:4400},{month:'2026-02',salesPerf:6200,consumePerf:3200},{month:'2026-01',salesPerf:2800,consumePerf:1500}] },
+    { name:'林小薇', phone:'177****3456', type:'新客', star:1, staff:'李婷婷', avatar:'林', color:'#06B6D4', totalConsume:580, salesPerf:580, cardSales:0, careSales:0, productSales:580, consumePerf:198, courseConsume:0, productConsume:198, visitCount:1, validCards:0, lastVisit:'2026-05-24', avgSpend:580, balance:0, points:58, monthlyRecords:[{month:'2026-05',salesPerf:580,consumePerf:198}] },
+    { name:'杨美玲', phone:'131****7890', type:'会员', star:2, staff:'张丽丽', avatar:'杨', color:'#84CC16', totalConsume:27000, salesPerf:16800, cardSales:12000, careSales:8000, productSales:4800, consumePerf:10200, courseConsume:5800, productConsume:4400, visitCount:32, validCards:2, lastVisit:'2026-02-28', avgSpend:392, balance:4600, points:1680, monthlyRecords:[{month:'2026-02',salesPerf:7200,consumePerf:4400},{month:'2026-01',salesPerf:5600,consumePerf:3800}] },
+    { name:'徐秀英', phone:'188****2345', type:'会员', star:4, staff:'王小美', avatar:'徐', color:'#D946EF', totalConsume:45700, salesPerf:28900, cardSales:22000, careSales:14000, productSales:6900, consumePerf:16800, courseConsume:9600, productConsume:7200, visitCount:52, validCards:3, lastVisit:'2026-05-26', avgSpend:442, balance:11200, points:2890, monthlyRecords:[{month:'2026-05',salesPerf:7200,consumePerf:4600},{month:'2026-04',salesPerf:8600,consumePerf:4200},{month:'2026-03',salesPerf:6800,consumePerf:3800},{month:'2026-02',salesPerf:4200,consumePerf:2800},{month:'2026-01',salesPerf:2100,consumePerf:1400}] },
+    { name:'马雅婷', phone:'155****6789', type:'体验客', star:1, staff:'李婷婷', avatar:'马', color:'#F43F5E', totalConsume:298, salesPerf:298, cardSales:0, careSales:0, productSales:298, consumePerf:198, courseConsume:0, productConsume:198, visitCount:1, validCards:0, lastVisit:'2026-05-25', avgSpend:298, balance:0, points:30, monthlyRecords:[{month:'2026-05',salesPerf:298,consumePerf:198}] },
+    { name:'郑丽华', phone:'132****0123', type:'会员', star:3, staff:'张丽丽', avatar:'郑', color:'#0EA5E9', totalConsume:31000, salesPerf:19800, cardSales:15000, careSales:10000, productSales:4800, consumePerf:11200, courseConsume:6400, productConsume:4800, visitCount:38, validCards:2, lastVisit:'2026-05-21', avgSpend:373, balance:7200, points:1980, monthlyRecords:[{month:'2026-05',salesPerf:4800,consumePerf:2800},{month:'2026-04',salesPerf:5200,consumePerf:2600},{month:'2026-03',salesPerf:4600,consumePerf:2400},{month:'2026-02',salesPerf:3200,consumePerf:2200},{month:'2026-01',salesPerf:2000,consumePerf:1200}] },
+    { name:'何美芳', phone:'189****4567', type:'会员', star:5, staff:'王小美', avatar:'何', color:'#22C55E', totalConsume:50000, salesPerf:32400, cardSales:24000, careSales:16000, productSales:8400, consumePerf:17600, courseConsume:10000, productConsume:7600, visitCount:54, validCards:4, lastVisit:'2026-05-24', avgSpend:440, balance:13600, points:3240, monthlyRecords:[{month:'2026-05',salesPerf:8200,consumePerf:4800},{month:'2026-04',salesPerf:8600,consumePerf:4400},{month:'2026-03',salesPerf:7800,consumePerf:4200},{month:'2026-02',salesPerf:5200,consumePerf:2800},{month:'2026-01',salesPerf:2600,consumePerf:1400}] },
+    { name:'高小燕', phone:'134****8901', type:'新客', star:1, staff:'李婷婷', avatar:'高', color:'#EAB308', totalConsume:880, salesPerf:880, cardSales:0, careSales:0, productSales:880, consumePerf:598, courseConsume:0, productConsume:598, visitCount:2, validCards:0, lastVisit:'2026-04-10', avgSpend:299, balance:0, points:88, monthlyRecords:[{month:'2026-04',salesPerf:880,consumePerf:598}] },
+    { name:'梁雅雯', phone:'156****2345', type:'会员', star:3, staff:'张丽丽', avatar:'梁', color:'#7C3AED', totalConsume:37200, salesPerf:21600, cardSales:16000, careSales:11000, productSales:5600, consumePerf:15600, courseConsume:7000, productConsume:8600, visitCount:40, validCards:2, lastVisit:'2026-05-22', avgSpend:443, balance:8400, points:2160, monthlyRecords:[{month:'2026-05',salesPerf:5400,consumePerf:4200},{month:'2026-04',salesPerf:6200,consumePerf:3800},{month:'2026-03',salesPerf:5600,consumePerf:3600},{month:'2026-02',salesPerf:2800,consumePerf:2600},{month:'2026-01',salesPerf:1600,consumePerf:1400}] },
+    { name:'冯美琪', phone:'178****6789', type:'会员', star:5, staff:'王小美', avatar:'冯', color:'#16A34A', totalConsume:59000, salesPerf:38200, cardSales:28000, careSales:18000, productSales:10200, consumePerf:20800, courseConsume:11800, productConsume:9000, visitCount:60, validCards:5, lastVisit:'2026-05-26', avgSpend:462, balance:15600, points:3820, monthlyRecords:[{month:'2026-05',salesPerf:9600,consumePerf:5400},{month:'2026-04',salesPerf:10400,consumePerf:5200},{month:'2026-03',salesPerf:9200,consumePerf:5000},{month:'2026-02',salesPerf:6200,consumePerf:3200},{month:'2026-01',salesPerf:2800,consumePerf:2000}] },
+    { name:'曹丽华', phone:'130****0123', type:'会员', star:1, staff:'李婷婷', avatar:'曹', color:'#DC2626', totalConsume:16000, salesPerf:9800, cardSales:8000, careSales:5000, productSales:1800, consumePerf:6200, courseConsume:3600, productConsume:2600, visitCount:22, validCards:1, lastVisit:'2025-12-20', avgSpend:388, balance:1200, points:980, monthlyRecords:[{month:'2025-12',salesPerf:4800,consumePerf:2600}] },
+];
+
+function getStars(star) {
+    let html = '';
+    for (let i = 1; i <= 5; i++) {
+        html += i <= star ? '<span class="star">★</span>' : '<span class="star empty">★</span>';
+    }
+    return html;
+}
+
+function getDaysClass(days) {
+    if (days <= 7) return 'days-ok';
+    if (days <= 30) return 'days-warn';
+    return 'days-danger';
+}
+
+function getTypeTag(type) {
+    if (type === '会员') return '<span class="tag" style="background:rgba(13,148,136,0.1);color:#0D9488">会员</span>';
+    if (type === '体验客') return '<span class="tag" style="background:rgba(245,158,11,0.1);color:#F59E0B">体验客</span>';
+    return '<span class="tag tag-new">新客</span>';
+}
+
+function renderTable(data, startDate, endDate) {
+    const tbody = document.getElementById('tableBody');
+    const summaryEl = document.getElementById('filterSummary');
+    const hasFilter = startDate || endDate || 
+        document.getElementById('searchInput').value || 
+        document.getElementById('filterStar').value !== '全部星级' || 
+        document.getElementById('filterStaff').value !== '全部美容师';
+    
+    if (hasFilter) {
+        let totalSalesPerf = 0;
+        let totalConsumePerf = 0;
+        data.forEach(c => {
+            let salesPerf = c.salesPerf;
+            let consumePerf = c.consumePerf;
+            if (startDate || endDate) {
+                const start = startDate ? new Date(startDate) : new Date('2000-01-01');
+                const end = endDate ? new Date(endDate) : new Date('2099-12-31');
+                const matchedRecords = c.monthlyRecords.filter(r => {
+                    const recordDate = new Date(r.month + '-01');
+                    return recordDate >= start && recordDate <= end;
+                });
+                salesPerf = matchedRecords.reduce((sum, r) => sum + r.salesPerf, 0);
+                consumePerf = matchedRecords.reduce((sum, r) => sum + r.consumePerf, 0);
+            }
+            totalSalesPerf += salesPerf;
+            totalConsumePerf += consumePerf;
+        });
+        document.getElementById('summaryCount').textContent = data.length;
+        document.getElementById('summarySalesPerf').textContent = '¥' + totalSalesPerf.toLocaleString();
+        document.getElementById('summaryConsumePerf').textContent = '¥' + totalConsumePerf.toLocaleString();
+        document.getElementById('summaryTotalConsume').textContent = '¥' + (totalSalesPerf + totalConsumePerf).toLocaleString();
+        summaryEl.style.display = 'flex';
+    } else {
+        summaryEl.style.display = 'none';
+    }
+    
+    tbody.innerHTML = data.map((c, i) => {
+        const days = Math.floor((new Date('2026-05-26') - new Date(c.lastVisit)) / (1000*60*60*24));
+        
+        let displaySalesPerf = c.salesPerf;
+        let displayConsumePerf = c.consumePerf;
+        let displayTotalConsume = c.totalConsume;
+        if (startDate || endDate) {
+            const start = startDate ? new Date(startDate) : new Date('2000-01-01');
+            const end = endDate ? new Date(endDate) : new Date('2099-12-31');
+            const matchedRecords = c.monthlyRecords.filter(r => {
+                const recordDate = new Date(r.month + '-01');
+                return recordDate >= start && recordDate <= end;
+            });
+            displaySalesPerf = matchedRecords.reduce((sum, r) => sum + r.salesPerf, 0);
+            displayConsumePerf = matchedRecords.reduce((sum, r) => sum + r.consumePerf, 0);
+            displayTotalConsume = displaySalesPerf + displayConsumePerf;
+        }
+        
+        return `
+        <tr onclick="showDetail(${customerData.indexOf(c)})" style="cursor:pointer">
+            <td>
+                <div class="customer-name-text">${c.name}</div>
+            </td>
+            <td>${c.phone}</td>
+            <td>${getTypeTag(c.type)}</td>
+            <td>${getStars(c.star)}</td>
+            <td>${c.staff}</td>
+            <td class="num highlight">¥${displayTotalConsume.toLocaleString()}</td>
+            <td class="num">¥${displaySalesPerf.toLocaleString()}</td>
+            <td class="num">¥${c.cardSales.toLocaleString()}</td>
+            <td class="num">¥${c.careSales.toLocaleString()}</td>
+            <td class="num">¥${c.productSales.toLocaleString()}</td>
+            <td class="num">¥${displayConsumePerf.toLocaleString()}</td>
+            <td class="num">¥${c.courseConsume.toLocaleString()}</td>
+            <td class="num">¥${c.productConsume.toLocaleString()}</td>
+            <td class="num">${c.visitCount}次</td>
+            <td class="num">${c.visitCount}次</td>
+            <td class="num">${c.validCards}张</td>
+            <td class="num">${c.lastVisit}</td>
+            <td class="num"><span class="${getDaysClass(days)}">${days}天</span></td>
+            <td class="num">¥${c.avgSpend}</td>
+        </tr>`;
+    }).join('');
+    document.getElementById('tableCount').textContent = `共 ${data.length} 位客户`;
+    document.getElementById('showingText').textContent = `显示 1-${data.length} / 共 ${data.length} 条`;
+}
+
+function filterTable() {
+    const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const startDate = document.getElementById('filterStartDate').value;
+    const endDate = document.getElementById('filterEndDate').value;
+    const star = document.getElementById('filterStar').value;
+    const staff = document.getElementById('filterStaff').value;
+    let filtered = customerData.filter(c => {
+        const matchKeyword = !keyword || c.name.includes(keyword) || c.phone.includes(keyword);
+        const matchStar = star === '全部星级' || (star === '一星' && c.star===1) || (star === '二星' && c.star===2) || (star === '三星' && c.star===3) || (star === '四星' && c.star===4) || (star === '五星' && c.star===5);
+        const matchStaff = staff === '全部美容师' || c.staff === staff;
+        
+        let matchDateRange = true;
+        if (startDate || endDate) {
+            const start = startDate ? new Date(startDate) : new Date('2000-01-01');
+            const end = endDate ? new Date(endDate) : new Date('2099-12-31');
+            const matchedRecords = c.monthlyRecords.filter(r => {
+                const recordDate = new Date(r.month + '-01');
+                return recordDate >= start && recordDate <= end;
+            });
+            const periodSalesPerf = matchedRecords.reduce((sum, r) => sum + r.salesPerf, 0);
+            const periodConsumePerf = matchedRecords.reduce((sum, r) => sum + r.consumePerf, 0);
+            matchDateRange = periodSalesPerf > 0 || periodConsumePerf > 0;
+        }
+        
+        return matchKeyword && matchDateRange && matchStar && matchStaff;
+    });
+    renderTable(filtered, startDate, endDate);
+}
+
+function resetFilter() {
+    document.getElementById('searchInput').value = '';
+    document.getElementById('filterStartDate').value = '';
+    document.getElementById('filterEndDate').value = '';
+    document.getElementById('filterStar').value = '全部星级';
+    document.getElementById('filterStaff').value = '全部美容师';
+    renderTable(customerData, '', '');
+}
+
+function showDetail(index) {
+    const c = customerData[index];
+    const days = Math.floor((new Date('2026-05-26') - new Date(c.lastVisit)) / (1000*60*60*24));
+    const content = document.getElementById('detailContent');
+    content.innerHTML = `
+        <div class="detail-profile">
+            <div class="detail-avatar" style="background:${c.color}">${c.avatar}</div>
+            <div class="detail-name">${c.name} ${getStars(c.star)}</div>
+            <div class="detail-meta">${c.phone} · ${c.type} · ${c.staff}</div>
+        </div>
+        <div class="detail-stats">
+            <div class="detail-stat">
+                <div class="detail-stat-value" style="color:${c.color}">¥${c.totalConsume.toLocaleString()}</div>
+                <div class="detail-stat-label">累计消费</div>
+            </div>
+            <div class="detail-stat">
+                <div class="detail-stat-value">${c.visitCount}</div>
+                <div class="detail-stat-label">消费次数</div>
+            </div>
+            <div class="detail-stat">
+                <div class="detail-stat-value">${c.validCards}张</div>
+                <div class="detail-stat-label">有效卡张数</div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">销售明细</div>
+            <div class="detail-row"><span class="detail-row-label">销售业绩</span><span class="detail-row-value highlight">¥${c.salesPerf.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">卡项销售</span><span class="detail-row-value">¥${c.cardSales.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">护理销售</span><span class="detail-row-value">¥${c.careSales.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">产品销售</span><span class="detail-row-value">¥${c.productSales.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">卡项余额</span><span class="detail-row-value">¥${c.balance.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">积分余额</span><span class="detail-row-value">${c.points} 积分</span></div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">消耗明细</div>
+            <div class="detail-row"><span class="detail-row-label">消耗业绩</span><span class="detail-row-value">¥${c.consumePerf.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">疗程消耗</span><span class="detail-row-value">¥${c.courseConsume.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">产品消耗</span><span class="detail-row-value">¥${c.productConsume.toLocaleString()}</span></div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">到店分析</div>
+            <div class="detail-row"><span class="detail-row-label">累计消费</span><span class="detail-row-value">¥${c.totalConsume.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">消费次数</span><span class="detail-row-value">${c.visitCount} 次</span></div>
+            <div class="detail-row"><span class="detail-row-label">客单价</span><span class="detail-row-value">¥${c.avgSpend}</span></div>
+            <div class="detail-row"><span class="detail-row-label">最近到店</span><span class="detail-row-value">${c.lastVisit}</span></div>
+            <div class="detail-row"><span class="detail-row-label">未到店天数</span><span class="detail-row-value ${getDaysClass(days)}">${days} 天</span></div>
+        </div>
+    `;
+    document.getElementById('detailPanel').classList.add('active');
+    document.getElementById('overlay').classList.add('active');
+}
+
+function closeDetail() {
+    document.getElementById('detailPanel').classList.remove('active');
+    document.getElementById('overlay').classList.remove('active');
+}
+
+function exportData() { alert('导出报表功能开发中...'); }
+
+renderTable(customerData, '', '');
+</script>
+</body>
+</html>
