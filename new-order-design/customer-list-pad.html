@@ -52,7 +52,7 @@
             background: #fff;
             border-radius: 16px;
             box-shadow: 0 20px 60px rgba(0,0,0,0.25);
-            width: 600px;
+            width: 700px;
             max-height: 85vh;
             display: flex;
             flex-direction: column;
@@ -445,51 +445,94 @@
             color: #9ca3af;
             text-align: center;
         }
+        .px-4 {
+            padding-left: 0.2rem !important;
+            padding-right: 0.2rem !important;
+        }
+        .w-48 {
+            width: 7.3rem !important;
+        }
+        .w-44 {
+            width: 9.2rem !important;
+        }
+        .sortable-th {
+            cursor: pointer;
+            user-select: none;
+        }
+        .sortable-th:hover {
+            color: #111827;
+        }
+        .last-visit-date {
+            font-size: 12px;
+            line-height: 1.2;
+            color: #6b7280;
+        }
+        .last-visit-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 2px 8px;
+            font-size: 10px;
+            line-height: 1.2;
+            font-weight: 600;
+            border-radius: 9999px;
+            border: 1px solid transparent;
+            white-space: nowrap;
+        }
+        .last-visit-badge.is-recent {
+            background: #ecfdf5;
+            color: #047857;
+            border-color: #a7f3d0;
+        }
+        .last-visit-badge.is-normal {
+            background: #fceef1;
+            color: #c05777;
+            border-color: rgba(241, 163, 184, 0.5);
+        }
+        .last-visit-badge.is-stale {
+            background: #fff7ed;
+            color: #c2410c;
+            border-color: #fed7aa;
+        }
+        .last-visit-badge.is-critical {
+            background: #fef2f2;
+            color: #b91c1c;
+            border-color: #fecaca;
+        }
     </style>
 </head>
 <body class="bg-bg-gray h-screen flex flex-col overflow-hidden">
-<!-- 1. 顶部状态栏 (模拟平板/移动端系统栏) -->
-<div class="h-10 bg-gray-100 flex items-center justify-between px-6 text-sm text-gray-600 border-b border-gray-200">
-<div class="flex items-center space-x-4">
-<span class="font-bold">23:04</span>
-<span>6月2日 周二</span>
-</div>
-<div class="flex items-center space-x-4">
-<iconify-icon class="text-lg" icon="mdi:wifi"></iconify-icon>
-<div class="flex items-center space-x-1">
-<span>24%</span>
-<iconify-icon class="text-lg rotate-90" icon="mdi:battery-20"></iconify-icon>
-</div>
-<div class="flex items-center space-x-2 ml-4">
-<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
-<span class="font-medium text-gray-800">roger</span>
-<span class="bg-gray-200 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
-</div>
-</div>
-</div>
-<!-- 2. 品牌与店铺信息栏 -->
-<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-100">
-<div class="flex items-center space-x-8">
+<!-- 1. 顶部状态栏 (合并品牌信息 & 系统状态) -->
+<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-200">
+<div class="flex items-center space-x-6">
 <div class="text-xl font-bold tracking-wider text-gray-800 flex items-center">
 <span class="text-brand mr-1">CHLITINA</span>
-<span>克麗緹娜</span>
+<span class="text-brand">克丽缇娜</span>
 </div>
 <div class="relative group cursor-pointer flex items-center space-x-1 border border-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-50">
 <span>测试店1</span>
 <iconify-icon icon="mdi:chevron-down"></iconify-icon>
 </div>
 </div>
-<div class="flex items-center space-x-4">
-<button class="p-2 text-gray-400 hover:text-brand transition-colors">
-<iconify-icon class="text-xl" icon="mdi:bell-outline"></iconify-icon>
+<div class="flex items-center space-x-5">
+<button class="p-1.5 text-gray-400 hover:text-brand transition-colors">
+<iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
 </button>
+<span class="text-sm font-medium text-gray-500">23:04</span>
+<span class="text-sm text-gray-400">6月2日 周二</span>
+<iconify-icon class="text-base text-gray-400" icon="mdi:wifi"></iconify-icon>
+<span class="text-sm text-gray-400">24%</span>
+<div class="flex items-center space-x-2 ml-2">
+<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+<span class="text-sm font-medium text-gray-700">roger</span>
+<span class="bg-gray-100 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
+</div>
 </div>
 </div>
 <div class="flex-1 flex overflow-hidden">
 <!-- 3. 左侧导航栏 -->
 <div class="w-24 bg-white border-r border-gray-100 flex flex-col items-center py-4 space-y-2">
 <nav class="flex-1 w-full space-y-1">
-<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="home-page.html">
 <iconify-icon class="text-2xl mb-1" icon="mdi:home"></iconify-icon>
 <span class="text-xs">首页</span>
 </a>
@@ -639,32 +682,32 @@
 </div>
 </div>
 <!-- 客户列表表格 -->
-<div class="flex-1 overflow-auto custom-scrollbar p-6">
-<div class="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100">
-<table class="w-full text-left border-collapse min-w-[1400px]">
+<div class="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar p-6" style="padding: 0.5rem;">
+<div class="bg-white rounded-xl shadow-sm overflow-x-auto custom-scrollbar border border-gray-100">
+<table class="w-full text-left border-collapse min-w-[1200px]">
 <thead class="bg-gray-50 text-gray-500 text-sm font-medium border-b border-gray-100">
 <tr>
-<th class="py-4 px-6 sticky-left shadow-right z-30">顾客信息</th>
-<th class="py-4 px-4">次卡资产 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
-<th class="py-4 px-4">金额卡资产 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
-<th class="py-4 px-4">钱包余额 <iconify-icon class="ml-1 align-middle" icon="mdi:sort-variant"></iconify-icon></th>
-<th class="py-4 px-4">欠款 <iconify-icon class="ml-1 align-middle text-brand" icon="mdi:sort-variant"></iconify-icon></th>
-<th class="py-4 px-4">累计消费</th>
-<th class="py-4 px-4">到店次数</th>
-<th class="py-4 px-4">上次消费</th>
-<th class="py-4 px-4">责任美容师</th>
+<th class="py-4 px-3 w-48 sticky-left shadow-right z-30 sortable-th" data-sort-key="customer" aria-sort="none">顾客信息 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 sortable-th" data-sort-key="timescard" aria-sort="none">次卡资产 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-2 w-44 sortable-th" data-sort-key="moneycard" aria-sort="none">金额卡资产 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 sortable-th" data-sort-key="wallet" aria-sort="none">钱包余额 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 sortable-th" data-sort-key="debt" aria-sort="none">欠款 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 sortable-th" data-sort-key="totalSpend" aria-sort="none">累计消费 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 w-44 sortable-th" data-sort-key="visitCount" aria-sort="none">到店次数 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 sortable-th" data-sort-key="lastConsume" aria-sort="none">上次消费 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
+<th class="py-4 px-4 w-48 sortable-th" data-sort-key="beautician" aria-sort="none">责任美容师 <iconify-icon class="ml-1 align-middle text-gray-300 sort-icon" icon="mdi:sort-variant"></iconify-icon></th>
 <th class="py-4 px-6 sticky-right shadow-left z-30 text-center">操作</th>
 </tr>
 </thead>
 <tbody class="text-sm divide-y divide-gray-50">
 <!-- 数据行 1 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
-<div class="space-y-1">
-<div class="font-bold text-gray-800 text-base">王美玲</div>
-<div class="text-gray-500">13812345678</div>
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
+<button type="button" class="w-full text-left space-y-1 bg-transparent border-0 p-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-brand/20 rounded-sm" onclick="handleDetail('付小姐')">
+<div class="font-bold text-gray-800 text-base hover:text-brand transition-colors">付小姐</div>
+<div class="text-gray-500 truncate">13812345678</div>
 <span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
-</div>
+</button>
 </td>
 <td class="py-4 px-4">
 <div class="space-y-1">
@@ -673,7 +716,7 @@
 <div class="text-gray-800">¥39,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡5张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -689,10 +732,11 @@
 <div class="text-gray-600">34次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：23次</div>
-<div class="text-xs text-orange-500">末次到店：2026-05-11 21天没来</div>
+<div class="last-visit-date">末次到店：2026-05-11</div>
+<span class="last-visit-badge" data-last-visit-badge>21天没来</span>
 </div>
 </td>
 <td class="py-4 px-4">
@@ -702,20 +746,20 @@
 <div class="text-brand font-medium">¥3,231.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">牛宁宁</td>
+<td class="py-4 px-4 w-48 text-gray-600">牛宁宁</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
-<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('王美玲')">详情</button>
-<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('王美玲')">开单</button>
+<button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('付小姐')">详情</button>
+<button class="w-full py-1 text-xs bg-brand text-white rounded hover:bg-opacity-90 shadow-sm" onclick="handleBill('付小姐')">开单</button>
 </div>
 </td>
 </tr>
 <!-- 数据行 2 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
 <div class="space-y-1">
 <div class="font-bold text-gray-800 text-base">李晓红</div>
-<div class="text-gray-500">15290031234</div>
+<div class="text-gray-500 truncate">15290031234</div>
 <span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-500 text-[10px] rounded border border-blue-100">新客</span>
 </div>
 </td>
@@ -726,7 +770,7 @@
 <div class="text-gray-800">¥5,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡0张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -742,10 +786,11 @@
 <div class="text-gray-600">2次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：2次</div>
-<div class="text-xs text-green-500">末次到店：2026-06-01 1天前</div>
+<div class="last-visit-date">末次到店：2026-06-01</div>
+<span class="last-visit-badge" data-last-visit-badge>1天前</span>
 </div>
 </td>
 <td class="py-4 px-4">
@@ -755,7 +800,7 @@
 <div class="text-brand font-medium">¥2,500.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">周宇</td>
+<td class="py-4 px-4 w-48 text-gray-600">周宇</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
 <button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('李晓红')">详情</button>
@@ -765,10 +810,10 @@
 </tr>
 <!-- 数据行 3 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
 <div class="space-y-1">
 <div class="font-bold text-gray-800 text-base">张丽华</div>
-<div class="text-gray-500">13988887777</div>
+<div class="text-gray-500 truncate">13988887777</div>
 <span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
 </div>
 </td>
@@ -779,7 +824,7 @@
 <div class="text-gray-800">¥12,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡3张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -795,10 +840,11 @@
 <div class="text-gray-600">15次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：12次</div>
-<div class="text-xs text-orange-500">末次到店：2026-05-25 8天没来</div>
+<div class="last-visit-date">末次到店：2026-05-25</div>
+<span class="last-visit-badge" data-last-visit-badge>8天没来</span>
 </div>
 </td>
 <td class="py-4 px-4">
@@ -808,7 +854,7 @@
 <div class="text-brand font-medium">¥1,800.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">刘嵇</td>
+<td class="py-4 px-4 w-48 text-gray-600">刘嵇</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
 <button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('张丽华')">详情</button>
@@ -818,10 +864,10 @@
 </tr>
 <!-- 数据行 4 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
 <div class="space-y-1">
 <div class="font-bold text-gray-800 text-base">陈思思</div>
-<div class="text-gray-500">18611112222</div>
+<div class="text-gray-500 truncate">18611112222</div>
 <span class="inline-block px-2 py-0.5 bg-orange-50 text-orange-500 text-[10px] rounded border border-orange-100">体验客</span>
 </div>
 </td>
@@ -832,7 +878,7 @@
 <div class="text-gray-800">¥0.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡0张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -848,20 +894,21 @@
 <div class="text-gray-600">1次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：1次</div>
-<div class="text-xs text-orange-500">末次到店：2026-05-30 3天没来</div>
+<div class="last-visit-date">末次到店：2025-05-14</div>
+<span class="last-visit-badge" data-last-visit-badge>1年没来</span>
 </div>
 </td>
 <td class="py-4 px-4">
 <div class="space-y-1">
-<div class="text-gray-600">05/30 14:00</div>
+<div class="text-gray-600">2025/05/14</div>
 <div class="text-gray-800">张琳</div>
 <div class="text-brand font-medium">¥198.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">张琳</td>
+<td class="py-4 px-4 w-48 text-gray-600">张琳</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
 <button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('陈思思')">详情</button>
@@ -871,10 +918,10 @@
 </tr>
 <!-- 数据行 5 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
 <div class="space-y-1">
 <div class="font-bold text-gray-800 text-base">赵敏</div>
-<div class="text-gray-500">13700009999</div>
+<div class="text-gray-500 truncate">13700009999</div>
 <span class="inline-block px-2 py-0.5 bg-brand-light text-brand text-[10px] rounded border border-brand/20">会员</span>
 </div>
 </td>
@@ -885,7 +932,7 @@
 <div class="text-gray-800">¥56,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡2张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -901,10 +948,11 @@
 <div class="text-gray-600">50次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：45次</div>
-<div class="text-xs text-red-500">末次到店：2026-05-05 28天没来</div>
+<div class="last-visit-date">末次到店：2026-05-05</div>
+<span class="last-visit-badge" data-last-visit-badge>28天没来</span>
 </div>
 </td>
 <td class="py-4 px-4">
@@ -914,7 +962,7 @@
 <div class="text-brand font-medium">¥5,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">陈静</td>
+<td class="py-4 px-4 w-48 text-gray-600">陈静</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
 <button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('赵敏')">详情</button>
@@ -924,10 +972,10 @@
 </tr>
 <!-- 数据行 6 -->
 <tr class="table-row-hover transition-colors">
-<td class="py-4 px-6 sticky-left shadow-right z-20">
+<td class="py-4 px-3 w-48 sticky-left shadow-right z-20">
 <div class="space-y-1">
 <div class="font-bold text-gray-800 text-base">孙悦</div>
-<div class="text-gray-500">15066665555</div>
+<div class="text-gray-500 truncate">15066665555</div>
 <span class="inline-block px-2 py-0.5 bg-blue-50 text-blue-500 text-[10px] rounded border border-blue-100">新客</span>
 </div>
 </td>
@@ -938,7 +986,7 @@
 <div class="text-gray-800">¥3,000.00</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-2 w-44">
 <div class="space-y-1">
 <div class="text-gray-800 font-medium">持卡1张</div>
 <div class="text-gray-400 text-xs">金额卡余额（含赠金）：</div>
@@ -954,10 +1002,11 @@
 <div class="text-gray-600">3次</div>
 </div>
 </td>
-<td class="py-4 px-4">
+<td class="py-4 px-4 w-44">
 <div class="space-y-1">
 <div class="text-gray-600">总计到店：3次</div>
-<div class="text-xs text-green-500">末次到店：2026-06-02 今天</div>
+<div class="last-visit-date">末次到店：2026-06-02</div>
+<span class="last-visit-badge" data-last-visit-badge>今天</span>
 </div>
 </td>
 <td class="py-4 px-4">
@@ -967,7 +1016,7 @@
 <div class="text-brand font-medium">¥1,200.00</div>
 </div>
 </td>
-<td class="py-4 px-4 text-gray-600">王芳</td>
+<td class="py-4 px-4 w-48 text-gray-600">王芳</td>
 <td class="py-4 px-6 sticky-right shadow-left z-20 text-center">
 <div class="flex flex-col space-y-1">
 <button class="w-full py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200" onclick="handleDetail('孙悦')">详情</button>
@@ -1129,7 +1178,7 @@
 <div class="form-row">
 <div class="form-label">家庭地址</div>
 <div class="form-control">
-<input placeholder="请输入" style="width:120%;" type="text"/>
+<input placeholder="请输入" type="text"/>
 </div>
 </div>
 </form>
@@ -1171,10 +1220,38 @@
         }
 
         function handleDetail(name) {
+            if (name === '付小姐') {
+                window.location.href = './customer-detail-pad.html';
+                return;
+            }
             alert('查看客户详情：' + name);
         }
 
         function handleBill(name) {
+            if (name === '付小姐') {
+                const memberInfo = {
+                    name: '付小姐',
+                    phone: '131****7967',
+                    level: '会员',
+                    memberNo: 'M001',
+                    points: '888',
+                    walletBalance: '888.00',
+                    cardBalance: '5,500.00',
+                    debt: '2,228.00'
+                };
+
+                const storageData = {
+                    member: memberInfo,
+                    timestamp: Date.now()
+                };
+
+                try {
+                    localStorage.setItem('createOrderFromDetail', JSON.stringify(storageData));
+                } catch (e) {}
+
+                window.location.href = './create-order-pad.html';
+                return;
+            }
             alert('为客户 ' + name + ' 创建新的消费订单');
         }
 
@@ -1320,6 +1397,247 @@
             renderBodyOptions(['VIP客户','高潜客户','敏感肌肤','干性肌肤','油性肌肤','痘痘肌','孕期护理','抗衰需求','美白需求','定期护理','老客推荐','新客体验']);
             searchInput.focus();
         }
+
+        function parseMoneyNumber(text) {
+            const raw = String(text || '');
+            let m = raw.match(/¥\s*([0-9,]+(?:\.\d+)?)/);
+            if (m) {
+                const n0 = parseFloat(String(m[1] || '').replace(/,/g, ''));
+                return Number.isFinite(n0) ? n0 : NaN;
+            }
+            m = raw.match(/-?\d[\d,]*(?:\.\d+)?/);
+            if (!m) return NaN;
+            const n = parseFloat(String(m[0] || '').replace(/,/g, ''));
+            return Number.isFinite(n) ? n : NaN;
+        }
+
+        function parseCardCount(text) {
+            const raw = String(text || '');
+            const m = raw.match(/持卡\s*(\d+)\s*张/);
+            if (!m) return NaN;
+            const n = parseInt(m[1], 10);
+            return Number.isFinite(n) ? n : NaN;
+        }
+
+        function parseVisitCount(text) {
+            const raw = String(text || '');
+            const m = raw.match(/总计到店：\s*(\d+)\s*次/);
+            if (!m) return NaN;
+            const n = parseInt(m[1], 10);
+            return Number.isFinite(n) ? n : NaN;
+        }
+
+        function parseLastConsumeTs(text) {
+            const raw = String(text || '').trim();
+            const nowYear = new Date().getFullYear();
+            let m = raw.match(/^(\d{2})\/(\d{2})\s+(\d{2}):(\d{2})$/);
+            if (m) return new Date(nowYear, parseInt(m[1], 10) - 1, parseInt(m[2], 10), parseInt(m[3], 10), parseInt(m[4], 10)).getTime();
+            m = raw.match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+            if (m) return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)).getTime();
+            m = raw.match(/^(\d{4})-(\d{2})-(\d{2})$/);
+            if (m) return new Date(parseInt(m[1], 10), parseInt(m[2], 10) - 1, parseInt(m[3], 10)).getTime();
+            return NaN;
+        }
+
+        function getCellText(row, idx) {
+            const cell = row && row.children && row.children[idx];
+            return cell ? (cell.textContent || '').trim() : '';
+        }
+
+        function getCellFirstDivText(row, idx) {
+            const cell = row && row.children && row.children[idx];
+            if (!(cell instanceof Element)) return '';
+            const div = cell.querySelector('div');
+            return div ? (div.textContent || '').trim() : (cell.textContent || '').trim();
+        }
+
+        function getCustomerName(row) {
+            const cell = row && row.children && row.children[0];
+            if (!(cell instanceof Element)) return '';
+            const nameEl = cell.querySelector('.font-bold');
+            return (nameEl ? nameEl.textContent : cell.textContent || '').trim();
+        }
+
+        function getAssetValue(row, idx) {
+            const cell = row && row.children && row.children[idx];
+            if (!(cell instanceof Element)) return { money: NaN, count: NaN };
+            const money = parseMoneyNumber(cell.textContent || '');
+            const count = parseCardCount(cell.textContent || '');
+            return { money, count };
+        }
+
+        function getLastConsumeValue(row) {
+            const cell = row && row.children && row.children[7];
+            if (!(cell instanceof Element)) return { ts: NaN, amt: NaN };
+            const parts = Array.from(cell.querySelectorAll('div')).map(d => (d.textContent || '').trim()).filter(Boolean);
+            const dateText = parts[0] || '';
+            const amtText = parts[2] || parts[parts.length - 1] || '';
+            return { ts: parseLastConsumeTs(dateText), amt: parseMoneyNumber(amtText) };
+        }
+
+        function makeComparator(key, dir) {
+            const asc = dir === 'asc';
+            return function (a, b) {
+                let va, vb, ta, tb;
+                if (key === 'customer') {
+                    va = getCustomerName(a);
+                    vb = getCustomerName(b);
+                    ta = String(va || '');
+                    tb = String(vb || '');
+                    const cmp = ta.localeCompare(tb, 'zh-CN');
+                    if (cmp !== 0) return asc ? cmp : -cmp;
+                } else if (key === 'timescard') {
+                    const aa = getAssetValue(a, 1);
+                    const bb = getAssetValue(b, 1);
+                    va = Number.isFinite(aa.money) ? aa.money : (Number.isFinite(aa.count) ? aa.count : Number.NEGATIVE_INFINITY);
+                    vb = Number.isFinite(bb.money) ? bb.money : (Number.isFinite(bb.count) ? bb.count : Number.NEGATIVE_INFINITY);
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'moneycard') {
+                    const aa = getAssetValue(a, 2);
+                    const bb = getAssetValue(b, 2);
+                    va = Number.isFinite(aa.money) ? aa.money : (Number.isFinite(aa.count) ? aa.count : Number.NEGATIVE_INFINITY);
+                    vb = Number.isFinite(bb.money) ? bb.money : (Number.isFinite(bb.count) ? bb.count : Number.NEGATIVE_INFINITY);
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'wallet') {
+                    va = parseMoneyNumber(getCellText(a, 3));
+                    vb = parseMoneyNumber(getCellText(b, 3));
+                    va = Number.isFinite(va) ? va : Number.NEGATIVE_INFINITY;
+                    vb = Number.isFinite(vb) ? vb : Number.NEGATIVE_INFINITY;
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'debt') {
+                    va = parseMoneyNumber(getCellText(a, 4));
+                    vb = parseMoneyNumber(getCellText(b, 4));
+                    va = Number.isFinite(va) ? va : Number.NEGATIVE_INFINITY;
+                    vb = Number.isFinite(vb) ? vb : Number.NEGATIVE_INFINITY;
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'totalSpend') {
+                    va = parseMoneyNumber(getCellText(a, 5));
+                    vb = parseMoneyNumber(getCellText(b, 5));
+                    va = Number.isFinite(va) ? va : Number.NEGATIVE_INFINITY;
+                    vb = Number.isFinite(vb) ? vb : Number.NEGATIVE_INFINITY;
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'visitCount') {
+                    va = parseVisitCount(getCellText(a, 6));
+                    vb = parseVisitCount(getCellText(b, 6));
+                    va = Number.isFinite(va) ? va : Number.NEGATIVE_INFINITY;
+                    vb = Number.isFinite(vb) ? vb : Number.NEGATIVE_INFINITY;
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                } else if (key === 'lastConsume') {
+                    const aa = getLastConsumeValue(a);
+                    const bb = getLastConsumeValue(b);
+                    va = Number.isFinite(aa.ts) ? aa.ts : Number.NEGATIVE_INFINITY;
+                    vb = Number.isFinite(bb.ts) ? bb.ts : Number.NEGATIVE_INFINITY;
+                    if (va !== vb) return asc ? (va - vb) : (vb - va);
+                    ta = Number.isFinite(aa.amt) ? aa.amt : Number.NEGATIVE_INFINITY;
+                    tb = Number.isFinite(bb.amt) ? bb.amt : Number.NEGATIVE_INFINITY;
+                    if (ta !== tb) return asc ? (ta - tb) : (tb - ta);
+                } else if (key === 'beautician') {
+                    va = getCellText(a, 8);
+                    vb = getCellText(b, 8);
+                    ta = String(va || '');
+                    tb = String(vb || '');
+                    const cmp = ta.localeCompare(tb, 'zh-CN');
+                    if (cmp !== 0) return asc ? cmp : -cmp;
+                }
+
+                const ia = parseInt(a.dataset.origIdx || '0', 10) || 0;
+                const ib = parseInt(b.dataset.origIdx || '0', 10) || 0;
+                return ia - ib;
+            };
+        }
+
+        function setSortHeaderState(activeKey, dir) {
+            const ths = Array.from(document.querySelectorAll('th[data-sort-key]'));
+            ths.forEach(th => {
+                const k = th.getAttribute('data-sort-key') || '';
+                const icon = th.querySelector('.sort-icon');
+                const active = k === activeKey;
+                th.setAttribute('aria-sort', active ? (dir === 'asc' ? 'ascending' : 'descending') : 'none');
+                if (icon) {
+                    icon.setAttribute('icon', active ? (dir === 'asc' ? 'mdi:sort-ascending' : 'mdi:sort-descending') : 'mdi:sort-variant');
+                    icon.classList.remove('text-brand');
+                    icon.classList.add('text-gray-300');
+                    if (active) {
+                        icon.classList.remove('text-gray-300');
+                        icon.classList.add('text-brand');
+                    }
+                }
+            });
+        }
+
+        function initCustomerTableSorting() {
+            const tbody = document.querySelector('table tbody');
+            if (!tbody) return;
+
+            Array.from(tbody.querySelectorAll('tr')).forEach((tr, idx) => {
+                if (!tr.dataset.origIdx) tr.dataset.origIdx = String(idx);
+            });
+
+            let activeKey = '';
+            let dir = 'asc';
+
+            const ths = Array.from(document.querySelectorAll('th[data-sort-key]'));
+            ths.forEach(th => {
+                th.addEventListener('click', function () {
+                    const key = th.getAttribute('data-sort-key') || '';
+                    if (!key) return;
+                    dir = (activeKey === key) ? (dir === 'asc' ? 'desc' : 'asc') : 'asc';
+                    activeKey = key;
+
+                    const rows = Array.from(tbody.querySelectorAll('tr'));
+                    rows.sort(makeComparator(activeKey, dir));
+                    rows.forEach(r => tbody.appendChild(r));
+
+                    setSortHeaderState(activeKey, dir);
+                });
+            });
+
+            setSortHeaderState('', 'asc');
+        }
+
+        function getLastVisitBadgeDays(text) {
+            const raw = String(text || '').trim();
+            if (!raw) return NaN;
+            if (raw.includes('今天')) return 0;
+            if (raw.includes('年')) {
+                const m = raw.match(/(\d+)\s*年/);
+                const years = m ? parseInt(m[1], 10) : 1;
+                return Number.isFinite(years) ? years * 365 : 365;
+            }
+            const m = raw.match(/(\d+)\s*天/);
+            if (!m) return NaN;
+            const n = parseInt(m[1], 10);
+            return Number.isFinite(n) ? n : NaN;
+        }
+
+        function applyLastVisitBadges() {
+            const badges = Array.from(document.querySelectorAll('[data-last-visit-badge]'));
+            badges.forEach(badge => {
+                const text = (badge.textContent || '').trim();
+                const days = getLastVisitBadgeDays(text);
+                badge.classList.remove('is-recent', 'is-normal', 'is-stale', 'is-critical');
+                if (!Number.isFinite(days)) {
+                    badge.classList.add('is-normal');
+                    return;
+                }
+                if (days <= 7) {
+                    badge.classList.add('is-recent');
+                    return;
+                }
+                if (days <= 30) {
+                    badge.classList.add('is-normal');
+                    return;
+                }
+                if (days <= 365) {
+                    badge.classList.add('is-stale');
+                    return;
+                }
+                badge.classList.add('is-critical');
+            });
+        }
+
+        initCustomerTableSorting();
+        applyLastVisitBadges();
     </script>
 </body>
 </html>

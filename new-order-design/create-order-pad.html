@@ -4,11 +4,56 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>克丽缇娜 - 开单</title>
+    <title>CLTN - New Order</title>
     <link rel="stylesheet" href="create-order-pad.css">
+<!-- Tailwind CSS -->
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<!-- Iconify -->
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: '#E87C9A',
+                }
+            }
+        }
+    }
+</script>
 </head>
 
 <body class="create-order-pad-page">
+<!-- 顶部状态栏 -->
+<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-200">
+<div class="flex items-center space-x-6">
+<a href="javascript:void(0)" class="text-brand hover:text-brand/70 transition-colors -ml-1" onclick="history.length > 1 ? history.back() : (window.location.href='home-page.html')">
+<iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
+</a>
+<div class="text-xl font-bold tracking-wider text-gray-800 flex items-center">
+<span class="text-brand mr-1">CHLITINA</span>
+<span class="text-brand">克丽缇娜</span>
+</div>
+<div class="relative group cursor-pointer flex items-center space-x-1 border border-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-50">
+<span>测试店1</span>
+<iconify-icon icon="mdi:chevron-down"></iconify-icon>
+</div>
+</div>
+<div class="flex items-center space-x-5">
+<button class="p-1.5 text-gray-400 hover:text-brand transition-colors">
+<iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
+</button>
+<span class="text-sm font-medium text-gray-500">23:04</span>
+<span class="text-sm text-gray-400">6月2日 周二</span>
+<iconify-icon class="text-base text-gray-400" icon="mdi:wifi"></iconify-icon>
+<span class="text-sm text-gray-400">24%</span>
+<div class="flex items-center space-x-2 ml-2">
+<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+<span class="text-sm font-medium text-gray-700">roger</span>
+<span class="bg-gray-100 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
+</div>
+</div>
+</div>
     <div class="app-container">
         <!-- ══════════ 左侧操作入口区 (Sidebar) ══════════ -->
         <aside class="action-sidebar">
@@ -20,7 +65,7 @@
 
                 <!-- ── 客户选择区域 ── -->
             <div class="customer-section">
-                <div class="section-label">选择会员</div>
+                <div class="section-label">选择顾客</div>
                 <div class="customer-actions">
                     <!-- 选择会员按钮（置顶） -->
                     <button class="customer-btn member btn-outline" onclick="openMemberModal()">
@@ -56,7 +101,6 @@
 
                 <!-- ── 商品添加区域 ── -->
             <div class="action-section">
-                <div class="section-label">选择商品</div>
                 <div class="action-grid">
                     <!-- 客户权益 - 票券/权益卡图标 -->
                     <div class="action-card benefit member-only-btn btn-primary" style="display: none;" onclick="openBenefitModal()">
@@ -69,11 +113,13 @@
                             <path d="M8 12H11" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">客户权益</span>
+                            <span class="customer-btn-title">已有权益</span>
                             <span class="customer-btn-desc">消耗/升卡/充值</span>
                         </div>
                     </div>
-
+                </div>
+                <div class="section-label">选择商品</div>
+                <div class="action-grid">
                     <!-- 添加单次护理 - 爱心图标 -->
                     <div class="action-card service btn-primary" onclick="openAddServiceModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
@@ -97,11 +143,11 @@
                             <path d="M8 21H16" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">产品</span>
+                            <span class="customer-btn-title">居家产品</span>
                         </div>
                     </div>
 
-                    <!-- 添加疗程卡 - 方案/文档图标 -->
+                    <!-- 添加次卡 - 方案/文档图标 -->
                     <div class="action-card package member-only-btn btn-primary" style="display: none;" onclick="openAddCourseModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -112,7 +158,7 @@
                             <path d="M9 9H9.01" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">疗程卡</span>
+                            <span class="customer-btn-title">次卡</span>
                         </div>
                     </div>
 
@@ -202,7 +248,7 @@
                                 </svg>
                                 取单
                             </button>
-                            <button class="btn-exit" onclick="showToast('退出开单')">退出</button>
+                            <button class="btn-exit" onclick="history.length > 1 ? history.back() : (window.location.href='home-page.html')">退出</button>
                         </div>
                     </div>
                         <!-- ── 已选商品区域 (订单明细表格) ── -->
@@ -230,8 +276,8 @@
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                     </svg>
                                 </div>
-                                <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程卡</p>
+                                <p class="empty-state-text">暂无已选次卡</p>
+                                <p class="empty-state-hint">从左侧添加次卡</p>
                             </div>
                             <table class="items-table" id="service-table">
                                 <thead>
@@ -318,10 +364,10 @@
                             </table>
                         </div>
 
-                                <!-- ·· 疗程 ·· -->
+                                <!-- ·· 次卡 ·· -->
                         <div class="category-section" id="courseCategorySection" style="display: none;">
                             <div class="category-header">
-                                <h3 class="category-title">疗程</h3>
+                                <h3 class="category-title">次卡</h3>
                             </div>
                             <div class="empty-state" id="course-empty" style="display: none;">
                                 <div class="empty-state-icon">
@@ -329,14 +375,14 @@
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                     </svg>
                                 </div>
-                                <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程卡</p>
+                                <p class="empty-state-text">暂无已选次卡</p>
+                                <p class="empty-state-hint">从左侧添加次卡</p>
                             </div>
                             <table class="items-table" id="course-table">
                                 <thead>
                                     <tr>
                                         <th class="col-gift-flag">赠</th>
-                                        <th class="col-name">疗程名称</th>
+                                        <th class="col-name">次卡名称</th>
                                         <th class="col-original">售卖价格</th>
                                         <th class="col-qty">购买数量</th>
                                         <th class="col-card">使用卡项</th>
@@ -578,12 +624,12 @@
     </div>
 
     
-    <!-- ══════ 弹窗: 添加单次疗程 ══════ -->
+    <!-- ══════ 弹窗: 添加单次护理 ══════ -->
 <!-- 添加服务弹窗 -->
     <div class="add-service-modal-overlay" id="addServiceModalOverlay">
         <div class="add-service-modal">
             <div class="add-service-modal-header">
-                <span class="add-service-modal-title">添加单次疗程</span>
+                <span class="add-service-modal-title">添加单次护理</span>
                 <div class="add-service-modal-close" id="addServiceModalClose">×</div>
             </div>
             <div class="add-service-modal-body">
@@ -604,7 +650,7 @@
                 <!-- 已选商品区域 -->
                 <div class="add-service-selected-section">
                     <div class="add-service-selected-header">
-                        <span class="add-service-selected-title">已选疗程</span>
+                        <span class="add-service-selected-title">已选单次护理</span>
                         <div class="add-service-selected-actions">
                             <button class="add-service-btn clear" id="addServiceClearBtn">清空</button>
                             <button class="add-service-btn confirm" id="addServiceConfirmBtn">确定</button>
@@ -764,12 +810,12 @@
     </div>
 
     
-    <!-- ══════ 弹窗: 添加疗程卡 ══════ -->
-<!-- 添加疗程卡弹窗 -->
+    <!-- ══════ 弹窗: 添加次卡 ══════ -->
+<!-- 添加次卡弹窗 -->
     <div class="add-course-modal-overlay" id="addCourseModalOverlay">
         <div class="add-course-modal">
             <div class="add-course-modal-header">
-                <span class="add-course-modal-title">添加疗程卡</span>
+                <span class="add-course-modal-title">添加次卡</span>
                 <div class="add-course-modal-close" id="addCourseModalClose">×</div>
             </div>
             <div class="add-course-modal-body">
@@ -777,8 +823,8 @@
                 <div class="add-course-search-section">
                     <div class="add-course-search-left">
                         <input type="text" class="add-course-search-input" id="addCourseSearchInput"
-                            placeholder="搜索疗程名称">
-                        <button class="add-course-custom-btn primary">自定义疗程卡</button>
+                            placeholder="搜索次卡名称">
+                        <button class="add-course-custom-btn primary">自定义次卡</button>
                     </div>
                     <div class="add-course-recent-search">
                         <span class="add-course-recent-label">最近搜索</span>
@@ -788,7 +834,7 @@
 
                 <!-- 待选区域 - 左右布局 -->
                 <div class="add-course-content-section">
-                    <!-- 左侧：疗程卡列表 -->
+                    <!-- 左侧：次卡列表 -->
                     <div class="add-course-left-panel">
                         <div class="add-course-tabs">
                             <div class="add-course-tab-item active" data-category="all">全部</div>
@@ -800,7 +846,7 @@
 
                     <!-- 右侧：选中卡片明细 -->
                     <div class="add-course-right-panel" id="addCourseRightPanel">
-                        <div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>
+                        <div class="add-course-empty-hint">请选择左侧次卡查看详情</div>
                     </div>
                 </div>
             </div>

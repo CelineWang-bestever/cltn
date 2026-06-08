@@ -1113,9 +1113,9 @@ function searchMembers(query) {
     renderMemberList(filtered);
 }
 
-// 检查已选商品中是否有疗程或产品
+// 检查已选商品中是否有单次护理或产品
 function hasServiceOrProduct() {
-    // 在促销方案页面，不需要检查疗程和产品
+    // 在促销方案页面，不需要检查单次护理和产品
     return false;
 }
 
@@ -2951,7 +2951,7 @@ function updateOrderAndPaymentVisibility() {
 
     if (!selectedItemsArea || !orderFormPanel || !paymentBar) return;
 
-    // 检查是否有任何已选商品（升卡、充卡、疗程卡、普通商品、产品等）
+    // 检查是否有任何已选商品（升卡、充卡、次卡、普通商品、产品等）
     var hasContent = hasAnySelectedItemsContent();
 
     if (hasContent) {
@@ -4999,8 +4999,8 @@ let selectedServices = [];
 // 最近搜索列表
 let recentSearches = JSON.parse(localStorage.getItem('addServiceRecentSearches') || '[]');
 
-// ========== 添加疗程卡弹窗相关 ==========
-// 模拟疗程卡数据
+// ========== 添加次卡弹窗相关 ==========
+// 模拟次卡数据
 const courseCards = [
     {
         id: 1,
@@ -5146,13 +5146,13 @@ const amountCardCards = [
     },
 ];
 
-// 疗程卡最近搜索列表
+// 次卡最近搜索列表
 let courseRecentSearches = JSON.parse(localStorage.getItem('addCourseRecentSearches') || '[]');
 let amountCardRecentSearches = JSON.parse(localStorage.getItem('addAmountCardRecentSearches') || '[]');
-// 当前选中的疗程卡
+// 当前选中的次卡
 let selectedCourseCard = null;
 let selectedAmountCard = null;
-// 已选择的疗程卡列表（用于页面展示）
+// 已选择的次卡列表（用于页面展示）
 let selectedCourseCards = [];
 let selectedAmountCards = [];
 let courseDetailMode = 'edit';
@@ -5190,9 +5190,9 @@ function bindAddCourseTabEvents() {
 
 function setAddCourseModalKind(kind) {
     addCourseModalKind = kind || 'course';
-    if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加疗程卡';
-    if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索疗程卡名称';
-    if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义疗程卡';
+    if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加次卡';
+    if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索次卡名称';
+    if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义次卡';
 
     if (addCourseTabsEl) {
         if (addCourseModalKind === 'amountCard') {
@@ -5204,7 +5204,7 @@ function setAddCourseModalKind(kind) {
     }
 }
 
-// 打开添加疗程卡弹窗
+// 打开添加次卡弹窗
 function openAddCourseModal(kind = 'course') {
     if (!guardAddEntryForCardOpConflict()) return;
     setAddCourseModalKind(kind);
@@ -5218,7 +5218,7 @@ function openAddCourseModal(kind = 'course') {
     renderCourseDetail();
 }
 
-// 关闭添加疗程卡弹窗
+// 关闭添加次卡弹窗
 function closeAddCourseModal() {
     addCourseModalOverlay.classList.remove('show');
     editingCustomCourseId = null;
@@ -5228,7 +5228,7 @@ function closeAddCourseModal() {
     setAddCourseModalKind('course');
 }
 
-// 渲染疗程卡最近搜索
+// 渲染次卡最近搜索
 function renderCourseRecentSearches() {
     const maxRecent = 8;
     const recentItems = (addCourseModalKind === 'amountCard' ? amountCardRecentSearches : courseRecentSearches).slice(0, maxRecent);
@@ -5257,7 +5257,7 @@ function searchAmountCardByRecent(keyword) {
     renderCourseCardList('amountCard', keyword);
 }
 
-// 渲染疗程卡列表
+// 渲染次卡列表
 function renderCourseCardList(category = 'all', keyword = '') {
     if (addCourseModalKind === 'amountCard') {
         let filtered = amountCardCards;
@@ -5298,11 +5298,11 @@ function renderCourseCardList(category = 'all', keyword = '') {
     `).join('');
 
     if (filtered.length === 0) {
-        addCourseCardList.innerHTML = '<div class="course-empty-hint">暂无匹配的疗程卡</div>';
+        addCourseCardList.innerHTML = '<div class="course-empty-hint">暂无匹配的次卡</div>';
     }
 }
 
-// 选择疗程卡
+// 选择次卡
 function selectCourseCard(cardId) {
     const card = courseCards.find(c => c.id === cardId);
     if (card) {
@@ -5345,7 +5345,7 @@ function setCourseDetailMode(mode) {
 
 
 
-// 渲染疗程卡明细
+// 渲染次卡明细
 function renderCourseDetail() {
     if (addCourseModalKind === 'amountCard') {
         if (!selectedAmountCard) {
@@ -5484,7 +5484,7 @@ function renderCourseDetail() {
     }
 
     if (!selectedCourseCard) {
-        addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>';
+        addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧次卡查看详情</div>';
         applyBenefitTableVisibilityForAddCourseModal();
         return;
     }
@@ -7668,10 +7668,10 @@ function confirmCustomCourseSelection() {
     if (existingIndex > -1) {
         selectedCourseCards[existingIndex] = courseCardData;
         editingCustomCourseId = null;
-        showToast('已更新疗程卡：' + name);
+        showToast('已更新次卡：' + name);
     } else {
         selectedCourseCards.push(courseCardData);
-        showToast('已添加疗程卡：' + name);
+        showToast('已添加次卡：' + name);
     }
     clearCustomCourseDraft();
     closeAddCourseModal();
@@ -7681,7 +7681,7 @@ function confirmCustomCourseSelection() {
 // 确认疗程选择
 function confirmCourseSelection() {
     if (!selectedCourseCard) {
-        showToast('请先选择疗程卡');
+        showToast('请先选择次卡');
         return;
     }
 
@@ -7720,7 +7720,7 @@ function confirmCourseSelection() {
         return;
     }
 
-    // 创建疗程卡数据对象
+    // 创建次卡数据对象
     const courseCardData = {
         id: Date.now(),
         cardId: selectedCourseCard.id,
@@ -7744,7 +7744,7 @@ function confirmCourseSelection() {
     };
 
     selectedCourseCards.push(courseCardData);
-    showToast('已添加疗程卡：' + selectedCourseCard.name);
+    showToast('已添加次卡：' + selectedCourseCard.name);
 
     // 关闭弹窗
     closeAddCourseModal();
@@ -7753,13 +7753,13 @@ function confirmCourseSelection() {
     renderSelectedCourseTable();
 }
 
-// 渲染已选疗程卡到页面
+// 渲染已选次卡到页面
 function renderSelectedCourseCards() {
     const selectedItemsArea = document.querySelector('.selected-items-area');
     const emptyState = document.getElementById('main-empty-state');
 
     if (selectedCourseCards.length === 0) {
-        // 移除所有疗程卡元素
+        // 移除所有次卡元素
         selectedItemsArea.querySelectorAll('.course-card-section').forEach(el => el.remove());
         if (emptyState) {
             emptyState.style.display = hasAnySelectedItemsContent() ? 'none' : 'flex';
@@ -7774,10 +7774,10 @@ function renderSelectedCourseCards() {
         emptyState.style.display = 'none';
     }
 
-    // 移除现有的疗程卡区域
+    // 移除现有的次卡区域
     selectedItemsArea.querySelectorAll('.course-card-section').forEach(el => el.remove());
 
-    // 渲染每个疗程卡
+    // 渲染每个次卡
     selectedCourseCards.forEach((card, index) => {
         const cardSection = document.createElement('div');
         cardSection.className = 'course-card-section';
@@ -8154,7 +8154,7 @@ addServiceConfirmBtn?.addEventListener('click', function () {
     showToast(`已添加 ${count} 个疗程`);
 });
 
-// 添加疗程卡到表格
+// 添加次卡到表格
 function addServicesToTable(services) {
     const tableBody = document.getElementById('service-table-body');
     if (!tableBody) return;
@@ -10567,6 +10567,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 // 清除localStorage
                 localStorage.removeItem('createOrderFromDetail');
+                try {
+                    localStorage.removeItem('createOrderEntry');
+                } catch (e) {}
                 return;
             } else {
                 // 数据过期，删除
@@ -10578,6 +10581,30 @@ document.addEventListener('DOMContentLoaded', function () {
         try {
             localStorage.removeItem('createOrderFromDetail');
         } catch (e) {}
+    }
+
+    // 检查是否从首页进入（散客/会员收银）
+    try {
+        const entryRaw = localStorage.getItem('createOrderEntry');
+        if (entryRaw) {
+            const entry = JSON.parse(entryRaw);
+            const isFresh = entry && entry.timestamp && (Date.now() - entry.timestamp < 1800000);
+            if (isFresh && entry.mode === 'guest') {
+                localStorage.removeItem('createOrderEntry');
+                switchToGuestCashier();
+                return;
+            }
+            if (isFresh && entry.mode === 'member') {
+                localStorage.removeItem('createOrderEntry');
+                openMemberModal();
+                return;
+            }
+            localStorage.removeItem('createOrderEntry');
+        }
+    } catch (e) {
+        try {
+            localStorage.removeItem('createOrderEntry');
+        } catch (e2) {}
     }
 
     openMemberModal();

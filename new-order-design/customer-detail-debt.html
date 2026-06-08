@@ -5,6 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>欠款详情 - 克丽缇娜</title>
     <link rel="stylesheet" href="../chlitina-brand.css">
+<!-- Tailwind CSS -->
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<!-- Iconify -->
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    brand: '#E87C9A',
+                }
+            }
+        }
+    }
+</script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -23,39 +38,7 @@
         .page-body {
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .header {
-            height: 56px;
-            background: #FFFFFF;
-            border-bottom: 1px solid var(--border-color);
-            display: flex;
-            align-items: center;
-            padding: 0 20px;
-            flex-shrink: 0;
-        }
-
-        .header-back {
-            width: 36px;
-            height: 36px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            border-radius: 8px;
-            transition: background-color 0.2s;
-        }
-        .header-back:hover { background-color: var(--bg-secondary); }
-        .header-back svg { width: 20px; height: 20px; color: var(--text-secondary); }
-
-        .header-title {
             flex: 1;
-            text-align: center;
-            font-size: 17px;
-            font-weight: 600;
-            color: var(--text-primary);
-            margin-right: 36px;
         }
 
         .main-content {
@@ -470,16 +453,37 @@
     </style>
 </head>
 <body>
+<!-- 顶部状态栏 -->
+<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-200">
+<div class="flex items-center space-x-6">
+<a href="customer-detail-pad.html" class="text-brand hover:text-brand/70 transition-colors -ml-1">
+<iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
+</a>
+<div class="text-xl font-bold tracking-wider text-gray-800 flex items-center">
+<span class="text-brand mr-1">CHLITINA</span>
+<span class="text-brand">克丽缇娜</span>
+</div>
+<div class="relative group cursor-pointer flex items-center space-x-1 border border-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-50">
+<span>测试店1</span>
+<iconify-icon icon="mdi:chevron-down"></iconify-icon>
+</div>
+</div>
+<div class="flex items-center space-x-5">
+<button class="p-1.5 text-gray-400 hover:text-brand transition-colors">
+<iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
+</button>
+<span class="text-sm font-medium text-gray-500">23:04</span>
+<span class="text-sm text-gray-400">6月2日 周二</span>
+<iconify-icon class="text-base text-gray-400" icon="mdi:wifi"></iconify-icon>
+<span class="text-sm text-gray-400">24%</span>
+<div class="flex items-center space-x-2 ml-2">
+<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+<span class="text-sm font-medium text-gray-700">roger</span>
+<span class="bg-gray-100 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
+</div>
+</div>
+</div>
     <div class="page-body">
-        <!-- 顶部导航栏 -->
-        <header class="header">
-            <div class="header-back" onclick="goBack()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M15 19l-7-7 7-7"/>
-                </svg>
-            </div>
-            <div class="header-title">欠款详情</div>
-        </header>
 
         <!-- 主内容区 -->
         <main class="main-content">
@@ -623,10 +627,6 @@
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
             return `${year}-${month}-${day}T${hours}:${minutes}`;
-        }
-
-        function goBack() {
-            window.history.back();
         }
 
         function openDrawer() {

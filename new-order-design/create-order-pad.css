@@ -51,7 +51,7 @@ body {
 /* ========== 整体布局 ========== */
 .app-container {
     display: flex;
-    height: 100vh;
+    height: calc(100vh - 56px);
     overflow: hidden;
 }
 
@@ -1278,7 +1278,7 @@ body {
     padding: 0 24px 20px;
 }
 
-/* 疗程卡区域样式 */
+/* 次卡区域样式 */
 .course-card-section {
     background: white;
     border: 1px solid var(--neutral-200);
@@ -6301,7 +6301,7 @@ body {
     flex-direction: column;
 }
 
-/* ========== 添加疗程卡弹窗 ========== */
+/* ========== 添加次卡弹窗 ========== */
 .add-course-modal-overlay {
     position: fixed;
     top: 0;
@@ -6591,7 +6591,7 @@ body {
     font-size: 14px;
 }
 
-/* 疗程明细头部 */
+/* 次卡明细头部 */
 .course-detail-header {
     display: flex;
     gap: 16px;
@@ -6767,7 +6767,7 @@ body {
     
 }
 
-/* 疗程明细表格 */
+/* 次卡明细表格 */
 .course-detail-tables {
     display: flex;
     flex-direction: column;

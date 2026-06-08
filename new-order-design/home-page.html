@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>CHLITINA 克丽缇娜 - 首页</title>
+<script src="https://modao.cc/agent-py/static/source/js/tailwindcss.js"></script>
+<script src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+<script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: '#F1A3B8',
+                        'brand-light': '#FCEEF1',
+                        'bg-gray': '#F7F8FA',
+                        'card-pink': '#FDE8EE',
+                        'card-orange': '#FDE8E0',
+                        'card-blue': '#E0F0FD',
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: #ddd; border-radius: 3px; }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover { background: #ccc; }
+        .card-btn {
+            transition: all 0.2s ease;
+        }
+        .card-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(241,163,184,0.25);
+        }
+        .expand-section {
+            overflow: hidden;
+            max-height: 0;
+            transition: max-height 0.35s ease-in-out, opacity 0.3s ease-in-out;
+            opacity: 0;
+        }
+        .expand-section.open {
+            max-height: 200px;
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-bg-gray h-screen flex flex-col overflow-hidden">
+<!-- 1. 顶部状态栏 (合并品牌信息 & 系统状态) -->
+<div class="h-14 bg-white flex items-center justify-between px-6 border-b border-gray-200">
+<div class="flex items-center space-x-6">
+<div class="text-xl font-bold tracking-wider text-gray-800 flex items-center">
+<span class="text-brand mr-1">CHLITINA</span>
+<span class="text-brand">克丽缇娜</span>
+</div>
+<div class="relative group cursor-pointer flex items-center space-x-1 border border-gray-200 px-3 py-1 rounded-full text-sm hover:bg-gray-50">
+<span>测试店1</span>
+<iconify-icon icon="mdi:chevron-down"></iconify-icon>
+</div>
+</div>
+<div class="flex items-center space-x-5">
+<button class="p-1.5 text-gray-400 hover:text-brand transition-colors">
+<iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
+</button>
+<span class="text-sm font-medium text-gray-500">10:26</span>
+<span class="text-sm text-gray-400">5月15日 周五</span>
+<iconify-icon class="text-base text-gray-400" icon="mdi:wifi"></iconify-icon>
+<span class="text-sm text-gray-400">69%</span>
+<div class="flex items-center space-x-2 ml-2">
+<img alt="User Avatar" class="w-6 h-6 rounded-full" src="https://modao.cc/agent-py/media/generated_images/2026-06-07/7a722456b0714332918846fc4368e530.jpg"/>
+<span class="text-sm font-medium text-gray-700">roger</span>
+<span class="bg-gray-100 px-2 py-0.5 rounded text-xs text-gray-500">店总</span>
+</div>
+</div>
+</div>
+<div class="flex-1 flex overflow-hidden">
+<!-- 3. 左侧导航栏（首页选中态） -->
+<div class="w-24 bg-white border-r border-gray-100 flex flex-col items-center py-4 space-y-2">
+<nav class="flex-1 w-full space-y-1">
+<!-- 首页 - 选中态 -->
+<a class="flex flex-col items-center py-3 bg-brand text-white shadow-lg shadow-brand/30 transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:home"></iconify-icon>
+<span class="text-xs font-medium">首页</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:calendar-clock"></iconify-icon>
+<span class="text-xs">预约</span>
+</a>
+<!-- 客户 - 未选中，跳转到客户列表 -->
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="customer-list-pad.html">
+<iconify-icon class="text-2xl mb-1" icon="mdi:account-group"></iconify-icon>
+<span class="text-xs">客户</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:credit-card"></iconify-icon>
+<span class="text-xs">收银</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:chart-bar"></iconify-icon>
+<span class="text-xs">报表</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:cog"></iconify-icon>
+<span class="text-xs">设置</span>
+</a>
+<div class="border-t border-gray-50 my-2 mx-4"></div>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:shopping"></iconify-icon>
+<span class="text-xs scale-90">店销展厅</span>
+</a>
+<a class="flex flex-col items-center py-3 text-gray-400 hover:text-brand transition-all" href="#">
+<iconify-icon class="text-2xl mb-1" icon="mdi:shopping-search"></iconify-icon>
+<span class="text-xs scale-90 text-center">HomeSpa</span>
+</a>
+</nav>
+<div class="text-[10px] text-gray-300 pb-2">V2.1.4</div>
+</div>
+<!-- 4. 主内容区域 - 左右两栏布局 -->
+<div class="flex-1 overflow-y-auto custom-scrollbar p-6">
+<div class="flex gap-6">
+<!-- 左侧内容区（65%） -->
+<div class="w-[75%] space-y-6">
+<!-- 重要公告栏 -->
+<div class="bg-amber-50 border border-amber-100 rounded-xl px-5 py-4 flex items-center justify-between">
+<div class="flex items-center space-x-3">
+<iconify-icon class="text-xl text-amber-500" icon="mdi:bell-ring"></iconify-icon>
+<span class="text-sm text-gray-700">重要公告：报名总部数字化运营门店达标要求如下：美团+点评双平台月度...</span>
+</div>
+<button class="text-sm text-brand font-medium flex items-center space-x-1" id="announcementToggle" onclick="toggleAnnouncement()">
+<span id="announcementText">展开</span>
+<iconify-icon icon="mdi:chevron-down" id="announcementIcon"></iconify-icon>
+</button>
+</div>
+<div class="expand-section" id="announcementDetail">
+<div class="bg-amber-50/50 border border-amber-100 rounded-xl px-5 py-4 -mt-4">
+<p class="text-sm text-gray-600 leading-relaxed">
+美团和点评双平台月度综合评分需达到4.8分以上，好评数量不少于50条，差评率控制在2%以内。同时门店需完成总部指定的数字化培训课程，并提交月度运营数据报告。达标门店可获得总部流量扶持及专属营销资源。
+</p>
+</div>
+</div>
+<!-- 服务预约模块 -->
+<div>
+<h3 class="text-base font-semibold text-gray-800 mb-4">服务预约</h3>
+<div class="grid grid-cols-4 gap-3">
+<div class="bg-card-pink rounded-xl p-5 cursor-pointer card-btn" onclick="alert('今日预约 - 当日行程安排')">
+<div class="flex flex-col items-start">
+<div class="w-12 h-12 rounded-full bg-brand flex items-center justify-center mb-3">
+<iconify-icon class="text-xl text-white" icon="mdi:calendar-check"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">今日预约</div>
+<div class="text-sm text-gray-500 mt-1">当日行程安排</div>
+</div>
+</div>
+<div class="bg-card-pink rounded-xl p-5 cursor-pointer card-btn" onclick="alert('新增预约 - 预约信息登记')">
+<div class="flex flex-col items-start">
+<div class="w-12 h-12 rounded-full bg-brand flex items-center justify-center mb-3">
+<iconify-icon class="text-xl text-white" icon="mdi:calendar-plus"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">新增预约</div>
+<div class="text-sm text-gray-500 mt-1">预约信息登记</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 开单收银模块 -->
+<div>
+<h3 class="text-base font-semibold text-gray-800 mb-4">开单收银</h3>
+<div class="grid grid-cols-4 gap-3">
+<div class="bg-card-orange rounded-xl p-3 cursor-pointer card-btn" onclick="goCreateOrder('guest')">
+<div class="flex flex-col items-start">
+<div class="w-9 h-9 rounded-full bg-brand flex items-center justify-center mb-2">
+<iconify-icon class="text-base text-white" icon="mdi:receipt-text"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">散客收银</div>
+<div class="text-sm text-gray-500 mt-1">消费开单</div>
+</div>
+</div>
+<div class="bg-card-orange rounded-xl p-3 cursor-pointer card-btn" onclick="goCreateOrder('member')">
+<div class="flex flex-col items-start">
+<div class="w-9 h-9 rounded-full bg-brand flex items-center justify-center mb-2">
+<iconify-icon class="text-base text-white" icon="mdi:card-account-details"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">会员收银</div>
+<div class="text-sm text-gray-500 mt-1">会员开单及权益消耗</div>
+</div>
+</div>
+<div class="bg-card-orange rounded-xl p-3 cursor-pointer card-btn" onclick="alert('核销 - 服务凭证验证')">
+<div class="flex flex-col items-start">
+<div class="w-9 h-9 rounded-full bg-brand flex items-center justify-center mb-2">
+<iconify-icon class="text-base text-white" icon="mdi:stamp"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">核销</div>
+<div class="text-sm text-gray-500 mt-1">服务凭证验证</div>
+</div>
+</div>
+<div class="bg-card-orange rounded-xl p-3 cursor-pointer card-btn" onclick="alert('取单 - 单据快速领取')">
+<div class="flex flex-col items-start">
+<div class="w-9 h-9 rounded-full bg-brand flex items-center justify-center mb-2">
+<iconify-icon class="text-base text-white" icon="mdi:file-document-outline"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">取单</div>
+<div class="text-sm text-gray-500 mt-1">单据快速领取</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 客户服务模块 -->
+<div>
+<h3 class="text-base font-semibold text-gray-800 mb-4">客户服务</h3>
+<div class="grid grid-cols-4 gap-3">
+<div class="bg-card-blue rounded-xl p-5 cursor-pointer card-btn" onclick="alert('服务日志 - 服务过程记录')">
+<div class="flex flex-col items-start">
+<div class="w-12 h-12 rounded-full bg-[#7EC8E3] flex items-center justify-center mb-3">
+<iconify-icon class="text-xl text-white" icon="mdi:file-document-edit"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">服务日志</div>
+<div class="text-sm text-gray-500 mt-1">服务过程记录</div>
+</div>
+</div>
+<div class="bg-card-blue rounded-xl p-5 cursor-pointer card-btn" onclick="alert('物品寄存 - 随身物品保管')">
+<div class="flex flex-col items-start">
+<div class="w-12 h-12 rounded-full bg-[#7EC8E3] flex items-center justify-center mb-3">
+<iconify-icon class="text-xl text-white" icon="mdi:locker"></iconify-icon>
+</div>
+<div class="text-base font-semibold text-gray-800">物品寄存</div>
+<div class="text-sm text-gray-500 mt-1">随身物品保管</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 常用数据模块 -->
+<div>
+<h3 class="text-base font-semibold text-gray-800 mb-4">常用数据</h3>
+<div class="grid grid-cols-4 gap-3">
+<div class="bg-white border border-gray-200 rounded-xl p-3 cursor-pointer card-btn" onclick="alert('今日台账')">
+<div class="flex items-center justify-center">
+<div class="w-9 h-9 rounded-full bg-[#F1A3B8] flex items-center justify-center mr-3">
+<iconify-icon class="text-base text-white" icon="mdi:book-open-page-variant-outline"></iconify-icon>
+</div>
+<span class="text-base font-semibold text-gray-800">今日台账</span>
+</div>
+</div>
+<div class="bg-white border border-gray-200 rounded-xl p-3 cursor-pointer card-btn" onclick="alert('今日服务')">
+<div class="flex items-center justify-center">
+<div class="w-9 h-9 rounded-full bg-[#F1A3B8] flex items-center justify-center mr-3">
+<iconify-icon class="text-base text-white" icon="mdi:calendar-check-outline"></iconify-icon>
+</div>
+<span class="text-base font-semibold text-gray-800">今日服务</span>
+</div>
+</div>
+<div class="bg-white border border-gray-200 rounded-xl p-3 cursor-pointer card-btn" onclick="alert('日志分析')">
+<div class="flex items-center justify-center">
+<div class="w-9 h-9 rounded-full bg-[#7EC8E3] flex items-center justify-center mr-3">
+<iconify-icon class="text-base text-white" icon="mdi:file-chart-outline"></iconify-icon>
+</div>
+<span class="text-base font-semibold text-gray-800">日志分析</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 右侧推荐区（35%） -->
+<div class="w-[25%] space-y-4">
+<!-- 推荐卡片1：门店风采 -->
+<div class="bg-white border border-gray-100 rounded-xl overflow-hidden">
+<img alt="Recommended store image" class="w-full h-36 object-cover" src="https://modao.cc/agent-py/media/generated_images/2026-06-07/7685754ef906431a88a4a25c948b8d50.jpg"/>
+<div class="p-4">
+<h4 class="text-base font-semibold text-gray-800">门店推荐</h4>
+<p class="text-sm text-gray-500 mt-1">本月热销项目：深层清洁护理、水光焕肤</p>
+<div class="flex items-center justify-between mt-3">
+<span class="text-xs text-gray-400">点击查看详情 &gt;</span>
+</div>
+</div>
+</div>
+<!-- 推荐卡片2：快捷入口 -->
+<!-- <div class="bg-white border border-gray-100 rounded-xl p-4">
+<h4 class="text-sm font-semibold text-gray-800 mb-3">快捷操作</h4>
+<div class="grid grid-cols-2 gap-3">
+<div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100" onclick="alert('快速开单')">
+<iconify-icon class="text-xl text-brand" icon="mdi:flash"></iconify-icon>
+<span class="text-xs text-gray-600 mt-1">快速开单</span>
+</div>
+<div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100" onclick="alert('客户回访')">
+<iconify-icon class="text-xl text-blue-400" icon="mdi:phone"></iconify-icon>
+<span class="text-xs text-gray-600 mt-1">客户回访</span>
+</div>
+<div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100" onclick="alert('今日排班')">
+<iconify-icon class="text-xl text-orange-400" icon="mdi:calendar-text"></iconify-icon>
+<span class="text-xs text-gray-600 mt-1">今日排班</span>
+</div>
+<div class="flex flex-col items-center p-3 bg-gray-50 rounded-lg cursor-pointer hover:bg-gray-100" onclick="alert('库存查看')">
+<iconify-icon class="text-xl text-green-400" icon="mdi:package-variant"></iconify-icon>
+<span class="text-xs text-gray-600 mt-1">库存查看</span>
+</div>
+</div>
+</div> -->
+<!-- 推荐卡片3：动态通知 -->
+<div class="bg-white border border-gray-100 rounded-xl p-4">
+<h4 class="text-sm font-semibold text-gray-800 mb-3">最新动态</h4>
+<div class="space-y-3">
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 rounded-full bg-brand mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs text-gray-600">王美玲已完成深层清洁护理服务</p>
+<p class="text-[10px] text-gray-400 mt-0.5">5分钟前</p>
+</div>
+</div>
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 rounded-full bg-blue-400 mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs text-gray-600">新增预约：李婷 - 水光焕肤 15:00</p>
+<p class="text-[10px] text-gray-400 mt-0.5">18分钟前</p>
+</div>
+</div>
+<div class="flex items-start space-x-2">
+<div class="w-2 h-2 rounded-full bg-green-400 mt-1.5 flex-shrink-0"></div>
+<div>
+<p class="text-xs text-gray-600">本月业绩目标完成率达 82%</p>
+<p class="text-[10px] text-gray-400 mt-0.5">1小时前</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- 底部间距 -->
+<div class="h-4"></div>
+<script>
+        function toggleAnnouncement() {
+            const section = document.getElementById('announcementDetail');
+            const text = document.getElementById('announcementText');
+            const icon = document.getElementById('announcementIcon');
+            if (section.classList.contains('open')) {
+                section.classList.remove('open');
+                text.innerText = '展开';
+                icon.setAttribute('icon', 'mdi:chevron-down');
+            } else {
+                section.classList.add('open');
+                text.innerText = '收起';
+                icon.setAttribute('icon', 'mdi:chevron-up');
+            }
+        }
+
+        function goCreateOrder(mode) {
+            const payload = {
+                source: 'home-page',
+                mode: mode === 'guest' ? 'guest' : 'member',
+                timestamp: Date.now()
+            };
+            try {
+                localStorage.setItem('createOrderEntry', JSON.stringify(payload));
+            } catch (e) {}
+            window.location.href = './create-order-pad.html';
+        }
+    </script>
+</div></body>
+</html>

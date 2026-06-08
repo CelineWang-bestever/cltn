@@ -62,7 +62,36 @@ document.addEventListener('DOMContentLoaded', function () {
         btns.forEach(function (btn) {
             var t = (btn.textContent || '').replace(/\s/g, '');
             if (t.indexOf('开单') !== -1 || t.indexOf('单') !== -1) {
-                btn.addEventListener('click', function () { window.location.href = 'create-order-pad.html'; });
+                btn.addEventListener('click', function () {
+                    var nameEl = document.querySelector('.sidebar-customer-name');
+                    var phoneEl = document.querySelector('.sidebar-phone');
+                    var name = nameEl ? (nameEl.textContent || '').trim() : '';
+                    var phone = phoneEl ? (phoneEl.textContent || '').trim() : '';
+
+                    var memberInfo = {
+                        name: name || '付小姐',
+                        phone: phone || '131****7967',
+                        level: '会员',
+                        memberNo: 'M001',
+                        points: '888',
+                        walletBalance: '888.00',
+                        cardBalance: '5,500.00',
+                        debt: '2,228.00'
+                    };
+
+                    var storageData = {
+                        member: memberInfo,
+                        timestamp: Date.now()
+                    };
+
+                    try {
+                        localStorage.setItem('createOrderFromDetail', JSON.stringify(storageData));
+                    } catch (err) {
+                        console.warn('Failed to save to localStorage:', err);
+                    }
+
+                    window.location.href = 'create-order-pad.html';
+                });
             } else if (t.indexOf('测肤') !== -1 || (t.indexOf('测') !== -1 && t.indexOf('肤') !== -1)) {
                 btn.addEventListener('click', function () { if (typeof window.openSkinTest === 'function') window.openSkinTest(); });
             }

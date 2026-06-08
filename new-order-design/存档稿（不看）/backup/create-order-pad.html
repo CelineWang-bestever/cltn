@@ -1283,7 +1283,7 @@
             padding: 0 12px 20px;
         }
 
-        /* 疗程卡区域样式 */
+        /* 次卡区域样式 */
         .course-card-section {
             background: white;
             border: 1px solid var(--neutral-200);
@@ -6086,7 +6086,7 @@
             flex-direction: column;
         }
 
-        /* ========== 添加疗程卡弹窗 ========== */
+        /* ========== 添加次卡弹窗 ========== */
         .add-course-modal-overlay {
             position: fixed;
             top: 0;
@@ -7260,7 +7260,7 @@
                         </div>
                     </div>
 
-                    <!-- 添加疗程卡 - 方案/文档图标 -->
+                    <!-- 添加次卡 - 方案/文档图标 -->
                     <div class="action-card package member-only-btn btn-primary" style="display: none;" onclick="openAddCourseModal()">
                         <svg viewBox="0 0 24 24" class="customer-btn-icon" fill="none" stroke="currentColor"
                             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
@@ -7271,7 +7271,7 @@
                             <path d="M9 9H9.01" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">添加疗程卡</span>
+                            <span class="customer-btn-title">添加次卡</span>
                         </div>
                     </div>
 
@@ -7385,8 +7385,8 @@
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                     </svg>
                                 </div>
-                                <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程卡</p>
+                                <p class="empty-state-text">暂无已选单次护理</p>
+                                <p class="empty-state-hint">从左侧添加次卡</p>
                             </div>
                             <table class="items-table" id="service-table">
                                 <thead>
@@ -7473,10 +7473,10 @@
                             </table>
                         </div>
 
-                        <!-- 疗程区域 -->
+                        <!-- 次卡区域 -->
                         <div class="category-section" id="courseCategorySection" style="display: none;">
                             <div class="category-header">
-                                <h3 class="category-title">疗程</h3>
+                                <h3 class="category-title">次卡</h3>
                             </div>
                             <div class="empty-state" id="course-empty" style="display: none;">
                                 <div class="empty-state-icon">
@@ -7484,14 +7484,14 @@
                                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                                     </svg>
                                 </div>
-                                <p class="empty-state-text">暂无已选疗程</p>
-                                <p class="empty-state-hint">从左侧添加疗程卡</p>
+                                <p class="empty-state-text">暂无已选次卡</p>
+                                <p class="empty-state-hint">从左侧添加次卡</p>
                             </div>
                             <table class="items-table" id="course-table">
                                 <thead>
                                     <tr>
                                         <th class="col-gift-flag">赠</th>
-                                        <th class="col-name">疗程名称</th>
+                                        <th class="col-name">次卡名称</th>
                                         <th class="col-original">售卖价格</th>
                                         <th class="col-qty">购买数量</th>
                                         <th class="col-card">使用卡项</th>
@@ -7730,7 +7730,7 @@
     <div class="add-service-modal-overlay" id="addServiceModalOverlay">
         <div class="add-service-modal">
             <div class="add-service-modal-header">
-                <span class="add-service-modal-title">添加单次疗程</span>
+                <span class="add-service-modal-title">添加单次护理</span>
                 <div class="add-service-modal-close" id="addServiceModalClose">×</div>
             </div>
             <div class="add-service-modal-body">
@@ -7751,7 +7751,7 @@
                 <!-- 已选商品区域 -->
                 <div class="add-service-selected-section">
                     <div class="add-service-selected-header">
-                        <span class="add-service-selected-title">已选疗程</span>
+                        <span class="add-service-selected-title">已选单次护理</span>
                         <div class="add-service-selected-actions">
                             <button class="add-service-btn clear" id="addServiceClearBtn">清空</button>
                             <button class="add-service-btn confirm" id="addServiceConfirmBtn">确定</button>
@@ -7906,11 +7906,11 @@
         </div>
     </div>
 
-    <!-- 添加疗程卡弹窗 -->
+    <!-- 添加次卡弹窗 -->
     <div class="add-course-modal-overlay" id="addCourseModalOverlay">
         <div class="add-course-modal">
             <div class="add-course-modal-header">
-                <span class="add-course-modal-title">添加疗程卡</span>
+                <span class="add-course-modal-title">添加次卡</span>
                 <div class="add-course-modal-close" id="addCourseModalClose">×</div>
             </div>
             <div class="add-course-modal-body">
@@ -7918,8 +7918,8 @@
                 <div class="add-course-search-section">
                     <div class="add-course-search-left">
                         <input type="text" class="add-course-search-input" id="addCourseSearchInput"
-                            placeholder="搜索疗程名称">
-                        <button class="add-course-custom-btn primary">自定义疗程卡</button>
+                            placeholder="搜索次卡名称">
+                        <button class="add-course-custom-btn primary">自定义次卡</button>
                     </div>
                     <div class="add-course-recent-search">
                         <span class="add-course-recent-label">最近搜索</span>
@@ -7929,7 +7929,7 @@
 
                 <!-- 待选区域 - 左右布局 -->
                 <div class="add-course-content-section">
-                    <!-- 左侧：疗程卡列表 -->
+                    <!-- 左侧：次卡列表 -->
                     <div class="add-course-left-panel">
                         <div class="add-course-tabs">
                             <div class="add-course-tab-item active" data-category="all">全部</div>
@@ -7941,7 +7941,7 @@
 
                     <!-- 右侧：选中卡片明细 -->
                     <div class="add-course-right-panel" id="addCourseRightPanel">
-                        <div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>
+                        <div class="add-course-empty-hint">请选择左侧次卡查看详情</div>
                     </div>
                 </div>
             </div>
@@ -9167,11 +9167,11 @@
                 if (hasServiceOrProduct()) {
                     window.confirmCallback = function () {
                         clearAllItems();
-                        showToast('已清空已选商品，可以继续添加疗程卡');
+                        showToast('已清空已选商品，可以继续添加次卡');
                     };
                     showConfirmModal(
                         '确认添加促销方案',
-                        '促销方案不可以和疗程/产品/金额卡一起开单，继续操作将清空已选商品，确定继续？'
+                        '促销方案不可以和次卡//产品/金额卡一起开单，继续操作将清空已选商品，确定继续？'
                     );
                     return;
                 }
@@ -11017,7 +11017,7 @@
 
             if (!selectedItemsArea || !orderFormPanel || !paymentBar) return;
 
-            // 检查是否有任何已选商品（升卡、充卡、疗程卡、普通商品、产品等）
+            // 检查是否有任何已选商品（升卡、充卡、次卡、普通商品、产品等）
             var hasContent = hasAnySelectedItemsContent();
 
             if (hasContent) {
@@ -13091,8 +13091,8 @@
         // 最近搜索列表
         let recentSearches = JSON.parse(localStorage.getItem('addServiceRecentSearches') || '[]');
 
-        // ========== 添加疗程卡弹窗相关 ==========
-        // 模拟疗程卡数据
+        // ========== 添加次卡弹窗相关 ==========
+        // 模拟次卡数据
         const courseCards = [
             {
                 id: 1,
@@ -13238,13 +13238,13 @@
             },
         ];
 
-        // 疗程卡最近搜索列表
+        // 次卡最近搜索列表
         let courseRecentSearches = JSON.parse(localStorage.getItem('addCourseRecentSearches') || '[]');
         let amountCardRecentSearches = JSON.parse(localStorage.getItem('addAmountCardRecentSearches') || '[]');
-        // 当前选中的疗程卡
+        // 当前选中的次卡
         let selectedCourseCard = null;
         let selectedAmountCard = null;
-        // 已选择的疗程卡列表（用于页面展示）
+        // 已选择的次卡列表（用于页面展示）
         let selectedCourseCards = [];
         let selectedAmountCards = [];
         let courseDetailMode = 'edit';
@@ -13282,9 +13282,9 @@
 
         function setAddCourseModalKind(kind) {
             addCourseModalKind = kind || 'course';
-            if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加疗程卡';
-            if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索疗程卡名称';
-            if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义疗程卡';
+            if (addCourseModalTitleEl) addCourseModalTitleEl.textContent = addCourseModalKind === 'amountCard' ? '添加金额卡' : '添加次卡';
+            if (addCourseSearchInput) addCourseSearchInput.placeholder = addCourseModalKind === 'amountCard' ? '搜索金额卡名称' : '搜索次卡名称';
+            if (addCourseCustomBtn) addCourseCustomBtn.textContent = addCourseModalKind === 'amountCard' ? '自定义金额卡' : '自定义次卡';
 
             if (addCourseTabsEl) {
                 if (addCourseModalKind === 'amountCard') {
@@ -13296,7 +13296,7 @@
             }
         }
 
-        // 打开添加疗程卡弹窗
+        // 打开添加次卡弹窗
         function openAddCourseModal(kind = 'course') {
             if (!guardAddEntryForCardOpConflict()) return;
             setAddCourseModalKind(kind);
@@ -13310,7 +13310,7 @@
             renderCourseDetail();
         }
 
-        // 关闭添加疗程卡弹窗
+        // 关闭添加次卡弹窗
         function closeAddCourseModal() {
             addCourseModalOverlay.classList.remove('show');
             editingCustomCourseId = null;
@@ -13320,7 +13320,7 @@
             setAddCourseModalKind('course');
         }
 
-        // 渲染疗程卡最近搜索
+        // 渲染次卡最近搜索
         function renderCourseRecentSearches() {
             const maxRecent = 8;
             const recentItems = (addCourseModalKind === 'amountCard' ? amountCardRecentSearches : courseRecentSearches).slice(0, maxRecent);
@@ -13349,7 +13349,7 @@
             renderCourseCardList('amountCard', keyword);
         }
 
-        // 渲染疗程卡列表
+        // 渲染次卡列表
         function renderCourseCardList(category = 'all', keyword = '') {
             if (addCourseModalKind === 'amountCard') {
                 let filtered = amountCardCards;
@@ -13390,11 +13390,11 @@
             `).join('');
 
             if (filtered.length === 0) {
-                addCourseCardList.innerHTML = '<div class="course-empty-hint">暂无匹配的疗程卡</div>';
+                addCourseCardList.innerHTML = '<div class="course-empty-hint">暂无匹配的次卡</div>';
             }
         }
 
-        // 选择疗程卡
+        // 选择次卡
         function selectCourseCard(cardId) {
             const card = courseCards.find(c => c.id === cardId);
             if (card) {
@@ -13435,7 +13435,7 @@
             renderCourseDetail();
         }
 
-        // 更新选中疗程卡的价格
+        // 更新选中次卡的价格
         function updateSelectedCardPrice(value) {
             const price = parseFloat(value);
             if (selectedCourseCard && !isNaN(price) && price >= 0) {
@@ -13443,7 +13443,7 @@
             }
         }
 
-        // 渲染疗程卡明细
+        // 渲染次卡明细
         function renderCourseDetail() {
             if (addCourseModalKind === 'amountCard') {
                 if (!selectedAmountCard) {
@@ -13582,7 +13582,7 @@
             }
 
             if (!selectedCourseCard) {
-                addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧疗程卡查看详情</div>';
+                addCourseRightPanel.innerHTML = '<div class="add-course-empty-hint">请选择左侧次卡查看详情</div>';
                 applyBenefitTableVisibilityForAddCourseModal();
                 return;
             }
@@ -15785,10 +15785,10 @@
             if (existingIndex > -1) {
                 selectedCourseCards[existingIndex] = courseCardData;
                 editingCustomCourseId = null;
-                showToast('已更新疗程卡：' + name);
+                showToast('已更新次卡：' + name);
             } else {
                 selectedCourseCards.push(courseCardData);
-                showToast('已添加疗程卡：' + name);
+                showToast('已添加次卡：' + name);
             }
             clearCustomCourseDraft();
             closeAddCourseModal();
@@ -15798,7 +15798,7 @@
         // 确认疗程选择
         function confirmCourseSelection() {
             if (!selectedCourseCard) {
-                showToast('请先选择疗程卡');
+                showToast('请先选择次卡');
                 return;
             }
 
@@ -15837,7 +15837,7 @@
                 return;
             }
 
-            // 创建疗程卡数据对象
+            // 创建次卡数据对象
             const courseCardData = {
                 id: Date.now(),
                 cardId: selectedCourseCard.id,
@@ -15861,7 +15861,7 @@
             };
 
             selectedCourseCards.push(courseCardData);
-            showToast('已添加疗程卡：' + selectedCourseCard.name);
+            showToast('已添加次卡：' + selectedCourseCard.name);
 
             // 关闭弹窗
             closeAddCourseModal();
@@ -15870,13 +15870,13 @@
             renderSelectedCourseTable();
         }
 
-        // 渲染已选疗程卡到页面
+        // 渲染已选次卡到页面
         function renderSelectedCourseCards() {
             const selectedItemsArea = document.querySelector('.selected-items-area');
             const emptyState = document.getElementById('main-empty-state');
 
             if (selectedCourseCards.length === 0) {
-                // 移除所有疗程卡元素
+                // 移除所有次卡元素
                 selectedItemsArea.querySelectorAll('.course-card-section').forEach(el => el.remove());
                 if (emptyState) {
                     emptyState.style.display = hasAnySelectedItemsContent() ? 'none' : 'flex';
@@ -15891,10 +15891,10 @@
                 emptyState.style.display = 'none';
             }
 
-            // 移除现有的疗程卡区域
+            // 移除现有的次卡区域
             selectedItemsArea.querySelectorAll('.course-card-section').forEach(el => el.remove());
 
-            // 渲染每个疗程卡
+            // 渲染每个次卡
             selectedCourseCards.forEach((card, index) => {
                 const cardSection = document.createElement('div');
                 cardSection.className = 'course-card-section';
@@ -16037,21 +16037,21 @@
             updateOrderAndPaymentVisibility();
         }
 
-        // 更新疗程卡数据
+        // 更新次卡数据
         function updateCourseCard(index, field, value) {
             if (selectedCourseCards[index]) {
                 selectedCourseCards[index][field] = value;
-                console.log('更新疗程卡:', selectedCourseCards[index]);
+                console.log('更新次卡:', selectedCourseCards[index]);
             }
         }
 
-        // 删除疗程卡
+        // 删除次卡
         function removeCourseCard(index) {
             if (selectedCourseCards[index]) {
                 const cardName = selectedCourseCards[index].name;
                 selectedCourseCards.splice(index, 1);
                 renderSelectedCourseCards();
-                showToast('已删除疗程卡：' + cardName);
+                showToast('已删除次卡：' + cardName);
             }
         }
 
@@ -16283,7 +16283,7 @@
             showToast(`已添加 ${count} 个疗程`);
         });
 
-        // 添加疗程卡到表格
+        // 添加次卡到表格
         function addServicesToTable(services) {
             const tableBody = document.getElementById('service-table-body');
             if (!tableBody) return;
