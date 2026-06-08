@@ -57,13 +57,7 @@
     <div class="app-container">
         <!-- ══════════ 左侧操作入口区 (Sidebar) ══════════ -->
         <aside class="action-sidebar">
-            <div class="sidebar-header">
-                <!-- 客户信息卡片 -->
-                <div class="sidebar-customer-card" id="sidebarCustomerCard" style="display: none;">
-                </div>
-            </div>
-
-                <!-- ── 客户选择区域 ── -->
+            <!-- ── 客户选择区域 ── -->
             <div class="customer-section">
                 <div class="section-label">选择顾客</div>
                 <div class="customer-actions">
@@ -90,17 +84,16 @@
                             <path d="M17 18c0-3.87-3.13-7-7-7S3 14.13 3 18" />
                         </svg>
                         <div class="customer-btn-text">
-                            <span class="customer-btn-title">散客</span>
+                            <span class="customer-btn-title">散客开单</span>
                         </div>
                     </button>
                 </div>
             </div>
+            
 
-            <!-- 分隔线 -->
-            <div class="section-divider"></div>
-
-                <!-- ── 商品添加区域 ── -->
+            <!-- ── 商品添加区域 ── -->
             <div class="action-section">
+                <div class="section-label member-only-btn" style="display: none;">已有权益</div>
                 <div class="action-grid">
                     <!-- 客户权益 - 票券/权益卡图标 -->
                     <div class="action-card benefit member-only-btn btn-primary" style="display: none;" onclick="openBenefitModal()">
@@ -623,6 +616,34 @@
         </div>
     </div>
 
+    <div class="remark-modal-overlay deposit-confirm-modal-overlay" id="homeDepositConfirmModalOverlay">
+        <div class="remark-modal deposit-confirm-modal">
+            <div class="remark-modal-header">
+                <span class="remark-modal-title">居家产品寄存确认</span>
+                <div class="remark-modal-close" id="homeDepositConfirmModalClose">×</div>
+            </div>
+            <div class="remark-modal-body">
+                <div class="deposit-confirm-table-wrap">
+                    <table class="items-table deposit-confirm-table">
+                        <thead>
+                            <tr>
+                                <th class="col-name">商品名称</th>
+                                <th class="col-qty">购买数量</th>
+                                <th class="col-consume">拿走数量</th>
+                                <th class="col-qty">寄存数量</th>
+                            </tr>
+                        </thead>
+                        <tbody id="homeDepositConfirmTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="remark-modal-footer">
+                <button class="remark-modal-btn cancel" id="homeDepositConfirmCancelBtn">取消</button>
+                <button class="remark-modal-btn confirm" id="homeDepositConfirmOkBtn">确认</button>
+            </div>
+        </div>
+    </div>
+
     
     <!-- ══════ 弹窗: 添加单次护理 ══════ -->
 <!-- 添加服务弹窗 -->
@@ -883,6 +904,44 @@
             </div>
             <div class="remark-modal-footer">
                 <button class="remark-modal-btn confirm" id="amountCardRuleModalOk">我知道了</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════ 弹窗: 升卡-卡项选择（含明细） ══════ -->
+    <div class="add-course-modal-overlay upgrade-card-picker-modal-overlay" id="upgradeCardPickerModalOverlay">
+        <div class="add-course-modal upgrade-card-picker-modal">
+            <div class="add-course-modal-header">
+                <span class="add-course-modal-title" id="upgradeCardPickerModalTitle">选择卡项</span>
+                <div class="add-course-modal-close" id="upgradeCardPickerModalClose">×</div>
+            </div>
+            <div class="add-course-modal-body">
+                <div class="add-course-search-section">
+                    <div class="add-course-search-left upgrade-card-picker-search-left">
+                        <input type="text" class="add-course-search-input" id="upgradeCardPickerSearchInput" placeholder="搜索卡项名称">
+                        <button class="add-course-custom-btn primary" id="upgradeCardPickerCustomCourseBtn">自定义次卡</button>
+                        <button class="add-course-custom-btn primary" id="upgradeCardPickerCustomAmountBtn">自定义金额卡</button>
+                    </div>
+                    <div class="add-course-recent-search">
+                        <span class="add-course-recent-label">最近搜索</span>
+                        <div class="add-course-recent-list" id="upgradeCardPickerRecentList"></div>
+                    </div>
+                </div>
+
+                <div class="add-course-content-section">
+                    <div class="add-course-left-panel upgrade-card-picker-left-panel">
+                        <div class="add-course-tabs" id="upgradeCardPickerTabs">
+                            <div class="add-course-tab-item active" data-category="all">全部</div>
+                            <div class="add-course-tab-item" data-category="course">次卡</div>
+                            <div class="add-course-tab-item" data-category="amount">金额卡</div>
+                        </div>
+                        <div class="add-course-card-list" id="upgradeCardPickerCardList"></div>
+                    </div>
+
+                    <div class="add-course-right-panel" id="upgradeCardPickerRightPanel">
+                        <div class="add-course-empty-hint">请选择左侧卡项查看详情</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

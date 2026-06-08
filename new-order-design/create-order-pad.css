@@ -697,6 +697,37 @@ body {
     border-top: 1px solid var(--neutral-200);
 }
 
+.deposit-confirm-modal {
+    width: 760px;
+    max-width: calc(100vw - 40px);
+}
+
+.deposit-confirm-table-wrap {
+    border: 1px solid var(--neutral-200);
+    border-radius: var(--radius-md);
+    overflow: auto;
+    max-height: 420px;
+}
+
+.deposit-confirm-table {
+    width: 100%;
+}
+
+.deposit-confirm-table th,
+.deposit-confirm-table td {
+    vertical-align: middle;
+}
+
+.deposit-confirm-take-input {
+    width: 90px;
+    text-align: center;
+}
+
+.deposit-confirm-store-qty {
+    font-weight: 600;
+    color: var(--neutral-700);
+}
+
 .beautician-modal-overlay {
     position: fixed;
     inset: 0;
@@ -2036,6 +2067,7 @@ body {
 .items-table th.col-consume {
     width: 90px;
     text-align: center;
+    color: var(--error-500);
 }
 
 .items-table th.col-beautician {
@@ -2204,6 +2236,30 @@ body {
     color: var(--neutral-800);
 }
 
+.items-table td.col-name .item-name-block {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.items-table td.col-name .item-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
+.items-table td.col-name .item-code {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--neutral-500);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+}
+
 .items-table td.col-name .amount-card-name-link {
     display: inline-block;
     max-width: 220px;
@@ -2224,6 +2280,14 @@ body {
 .items-table td.col-qty,
 .items-table td.col-consume {
     text-align: center;
+}
+
+.items-table td.col-consume,
+.items-table td.col-consume input,
+.items-table td.col-consume .table-input,
+.items-table td.col-consume .table-stepper-value,
+.items-table td.col-consume .table-stepper-btn {
+    color: var(--error-500) !important;
 }
 
 .items-table td.col-original,
@@ -6431,6 +6495,62 @@ body {
 
 .add-course-custom-btn.primary:hover {
     background: var(--primary-dark);
+}
+
+.add-course-custom-btn.secondary {
+    background: var(--neutral-100);
+    color: var(--neutral-700);
+    border: 1px solid var(--neutral-300);
+}
+
+.add-course-custom-btn.secondary:hover {
+    background: var(--neutral-200);
+    color: var(--neutral-800);
+}
+
+.upgrade-card-picker-search-left {
+    flex-wrap: wrap;
+}
+
+.upgrade-card-picker-left-panel {
+    width: 320px;
+}
+
+.upgrade-card-picker-subtabs {
+    display: flex;
+    gap: 8px;
+    padding: 10px 10px;
+    border-bottom: 1px solid var(--neutral-200);
+    background: var(--neutral-50);
+}
+
+.upgrade-card-picker-subtab {
+    padding: 6px 10px;
+    border-radius: var(--radius-sm);
+    font-size: 12px;
+    color: var(--neutral-600);
+    cursor: pointer;
+    background: var(--neutral-100);
+    transition: all 0.2s;
+    white-space: nowrap;
+}
+
+.upgrade-card-picker-subtab:hover {
+    background: var(--neutral-200);
+    color: var(--neutral-800);
+}
+
+.upgrade-card-picker-subtab.active {
+    background: var(--primary-50);
+    color: var(--primary-600);
+    font-weight: 500;
+}
+
+.upgrade-card-picker-section-title {
+    padding: 8px 10px 4px;
+    font-size: 12px;
+    color: var(--neutral-500);
+    font-weight: 600;
 }
 
 .add-course-recent-search {

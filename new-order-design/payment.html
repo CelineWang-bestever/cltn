@@ -725,6 +725,28 @@
             text-align: center;
         }
 
+        .scan-video-wrap {
+            width: 100%;
+            border: 1px solid var(--neutral-200);
+            border-radius: 14px;
+            overflow: hidden;
+            background: #000;
+            position: relative;
+        }
+
+        .scan-video {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scan-tip {
+            margin-top: 10px;
+            font-size: 12px;
+            color: var(--neutral-600);
+            text-align: center;
+        }
+
         .right-bottom {
             border-top: 1px solid var(--neutral-100);
             padding: 14px 18px;
@@ -1035,6 +1057,21 @@
         </div>
     </div>
 
+    <div class="modal-overlay" id="scanCouponModal">
+        <div class="modal">
+            <div class="modal-header">扫码核销</div>
+            <div class="modal-body">
+                <div class="scan-video-wrap">
+                    <video class="scan-video" id="scanVideo" autoplay playsinline muted></video>
+                </div>
+                <div class="scan-tip">将二维码置于取景框内，识别后会自动填充券码</div>
+            </div>
+            <div class="modal-actions">
+                <button class="modal-btn" id="scanCancelBtn">取消</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         const PAYMENT_METHODS = {
             normal: {
@@ -1061,6 +1098,14 @@
                 items: [
                     { id: 'onlinePay', type: 'onlinePay', title: '线上支付', subtitle: '二维码收款', single: true }
                 ]
+            },
+            thirdParty: {
+                group: '第三方渠道收款',
+                items: [
+                    { id: 'dy', type: 'thirdParty', title: '抖音', subtitle: '券码核销', single: true },
+                    { id: 'mt', type: 'thirdParty', title: '美团/点评', subtitle: '券码核销', single: true },
+                    { id: 'offline', type: 'thirdParty', title: '线下', subtitle: '券码核销', single: true }
+                ]
             }
         };
 
@@ -1077,6 +1122,7 @@
             discountAmount: 0,
             comboEnabled: false,
             selected: [],
+            thirdPartyCoupon: '',
             pay: {
                 inFlight: false,
                 payId: '',
@@ -1108,6 +1154,18 @@
         const statusDot = document.getElementById('statusDot');
         const statusText = document.getElementById('statusText');
         const statusActions = document.getElementById('statusActions');
+
+        const scanCouponModal = document.getElementById('scanCouponModal');
+        const scanVideo = document.getElementById('scanVideo');
+        const scanCancelBtn = document.getElementById('scanCancelBtn');
+
+        const scanState = {
+            stream: null,
+            detector: null,
+            running: false,
+            raf: 0,
+            startedAt: 0
+        };
 
         function showToast(msg) {
             toastEl.textContent = msg;
@@ -1310,8 +1368,13 @@
             return state.selected.some(x => x.type === 'onlinePay');
         }
 
+        function hasThirdPartySelected() {
+            return state.selected.some(x => x.type === 'thirdParty');
+        }
+
         function canEnableComboForCurrentSelection() {
             if (hasOnlinePaySelected()) return false;
+            if (hasThirdPartySelected()) return false;
             return true;
         }
 
@@ -1324,6 +1387,7 @@
 
             state.selected = [{ id: 'cash', type: 'normal', label, amount: payable }];
             state.comboEnabled = false;
+            state.thirdPartyCoupon = '';
             normalizeAmounts();
         }
 
@@ -1331,7 +1395,7 @@
             const desired = !!next;
             if (desired) {
                 if (!canEnableComboForCurrentSelection()) {
-                    showToast('线上支付不支持组合收款');
+                    showToast('线上支付与第三方渠道收款不支持组合收款');
                     state.comboEnabled = false;
                     renderAll();
                     return;
@@ -1362,6 +1426,13 @@
         function addOrToggleMethod(item) {
             if (!item) return;
 
+            if (item.type === 'thirdParty') {
+                state.comboEnabled = false;
+                state.selected = [{ id: item.id, type: 'thirdParty', label: item.title, amount: clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER) }];
+                renderAll();
+                return;
+            }
+
             if (item.type === 'onlinePay') {
                 state.comboEnabled = false;
                 state.selected = [{ id: item.id, type: 'onlinePay', label: item.title, amount: clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER) }];
@@ -1373,6 +1444,7 @@
                 if (!state.comboEnabled) {
                     const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
                     state.selected = [{ id: item.id, type: 'normal', label: item.title + (item.subtitle ? `（${item.subtitle}）` : ''), amount: payable }];
+                    state.thirdPartyCoupon = '';
                     normalizeAmounts();
                     renderAll();
                     return;
@@ -1403,7 +1475,7 @@
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
             if (!state.comboEnabled && state.selected.length > 1) state.selected = [state.selected[state.selected.length - 1]];
 
-            if (hasOnlinePaySelected()) {
+            if (hasOnlinePaySelected() || hasThirdPartySelected()) {
                 if (state.selected.length > 1) state.selected = [state.selected[state.selected.length - 1]];
                 const only = state.selected[0] || null;
                 if (only) only.amount = payable;
@@ -1491,9 +1563,38 @@
                 rightContent.innerHTML = `
                     <div class="qr-box" style="border-style: solid; background: #fff;">
                         <div class="qr-title" style="color: var(--neutral-900);">请选择左侧收款方式</div>
-                        <div class="qr-hint">支持单一收款方式，或开启组合收款（不含线上支付）</div>
+                        <div class="qr-hint">支持单一收款方式，或开启组合收款（不含线上支付/第三方渠道收款）</div>
                     </div>
                 `;
+                return;
+            }
+
+            if (hasThirdPartySelected()) {
+                const method = lines.find(x => x.type === 'thirdParty');
+                const title = method ? method.label : '第三方渠道收款';
+                rightContent.innerHTML = `
+                    <div class="qr-box" style="border-style: solid; background: #fff; min-height: 180px;">
+                        <div class="qr-title">${escapeHtml(title)}</div>
+                        <div class="qr-hint">请录入券码或扫码核销</div>
+                        <div class="pay-line" style="width:100%; max-width: 520px;">
+                            <div class="pay-line-label" style="flex:0 0 120px;">券码</div>
+                            <div class="pay-input-wrap" style="padding: 0 0 0 10px;">
+                                <input class="pay-input" id="couponInput" placeholder="请输入券码" value="${escapeHtmlAttr(state.thirdPartyCoupon || '')}">
+                                <button class="coupon-btn secondary" id="scanBtn" type="button">
+                                    扫码核销
+                                </button>
+                            </div>
+                        </div>
+                        <div class="coupon-tip">可手动输入券码，或扫码核销后自动填充</div>
+                    </div>
+                `;
+                const couponInput = document.getElementById('couponInput');
+                couponInput?.addEventListener('input', () => {
+                    state.thirdPartyCoupon = String(couponInput.value || '').trim();
+                });
+                document.getElementById('scanBtn')?.addEventListener('click', () => {
+                    openScanCouponModal();
+                });
                 return;
             }
 
@@ -1636,6 +1737,16 @@
                     </svg>
                 `;
             }
+            if (groupKey === 'thirdParty') {
+                return `
+                    <svg ${common}>
+                        <path d="M4 7h16"></path>
+                        <path d="M6 7v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7"></path>
+                        <path d="M9 11h6"></path>
+                        <path d="M9 15h6"></path>
+                    </svg>
+                `;
+            }
             return `
                 <svg ${common}>
                     <circle cx="12" cy="12" r="7"></circle>
@@ -1681,6 +1792,15 @@
 
         function buildPayPayload() {
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
+            if (hasThirdPartySelected()) {
+                const only = state.selected.find(x => x.type === 'thirdParty') || state.selected[0] || null;
+                return {
+                    orderId: state.orderId,
+                    payableAmount: payable,
+                    discountAmount: clampNumber(state.discountAmount, 0, Number.MAX_SAFE_INTEGER),
+                    channels: [{ type: 'thirdParty', methodId: only ? only.id : '', amount: payable, couponCode: String(state.thirdPartyCoupon || '').trim() }]
+                };
+            }
             if (hasOnlinePaySelected()) {
                 return {
                     orderId: state.orderId,
@@ -1891,7 +2011,18 @@
 
             const payable = clampNumber(state.payableAmount, 0, Number.MAX_SAFE_INTEGER);
             const types = new Set(payload.channels.map(x => x.type));
-            if (hasOnlinePaySelected()) {
+            if (hasThirdPartySelected()) {
+                const ok = payload.channels.length === 1 && types.size === 1 && types.has('thirdParty');
+                if (!ok) {
+                    showToast('第三方渠道收款不支持组合收款');
+                    return;
+                }
+                const code = String(payload.channels[0]?.couponCode || '').trim();
+                if (!code) {
+                    showToast('请输入券码');
+                    return;
+                }
+            } else if (hasOnlinePaySelected()) {
                 const ok = payload.channels.length === 1 && types.size === 1 && types.has('onlinePay');
                 if (!ok) {
                     showToast('线上支付不支持组合收款');
@@ -2024,6 +2155,75 @@
 
         comboSwitch.addEventListener('click', () => {
             setComboEnabled(!state.comboEnabled);
+        });
+
+        function closeScanCouponModal() {
+            scanCouponModal?.classList.remove('show');
+            scanState.running = false;
+            if (scanState.raf) cancelAnimationFrame(scanState.raf);
+            scanState.raf = 0;
+            if (scanState.stream) {
+                scanState.stream.getTracks().forEach(t => t.stop());
+            }
+            scanState.stream = null;
+            scanState.detector = null;
+        }
+
+        async function openScanCouponModal() {
+            if (!scanCouponModal || !scanVideo) return;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                showToast('当前设备不支持摄像头扫码，请手动输入券码');
+                return;
+            }
+            if (!('BarcodeDetector' in window)) {
+                showToast('当前浏览器不支持二维码识别，请手动输入券码');
+                return;
+            }
+            try {
+                const detector = new BarcodeDetector({ formats: ['qr_code'] });
+                const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' }, audio: false });
+                scanState.stream = stream;
+                scanState.detector = detector;
+                scanState.running = true;
+                scanState.startedAt = Date.now();
+                scanVideo.srcObject = stream;
+                scanCouponModal.classList.add('show');
+
+                const loop = async () => {
+                    if (!scanState.running) return;
+                    const elapsed = Date.now() - scanState.startedAt;
+                    if (elapsed > 30 * 1000) {
+                        showToast('扫码超时，请手动输入券码');
+                        closeScanCouponModal();
+                        return;
+                    }
+                    try {
+                        const codes = await detector.detect(scanVideo);
+                        if (Array.isArray(codes) && codes.length > 0) {
+                            const raw = String(codes[0]?.rawValue || '').trim();
+                            if (raw) {
+                                state.thirdPartyCoupon = raw;
+                                const input = document.getElementById('couponInput');
+                                if (input instanceof HTMLInputElement) input.value = raw;
+                                showToast('已填充券码');
+                                closeScanCouponModal();
+                                renderAll();
+                                return;
+                            }
+                        }
+                    } catch (e) { }
+                    scanState.raf = requestAnimationFrame(loop);
+                };
+                scanState.raf = requestAnimationFrame(loop);
+            } catch (e) {
+                showToast('无法打开摄像头，请检查权限');
+                closeScanCouponModal();
+            }
+        }
+
+        scanCancelBtn?.addEventListener('click', closeScanCouponModal);
+        scanCouponModal?.addEventListener('click', (e) => {
+            if (e.target === scanCouponModal) closeScanCouponModal();
         });
 
         confirmBtn.addEventListener('click', startPayFlow);
