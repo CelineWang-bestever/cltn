@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>业绩汇总 - 回蓝 · 美业收银系统</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
         *{margin:0;padding:0;box-sizing:border-box}
         :root{
@@ -23,6 +24,18 @@
             --shadow-md:0 4px 12px rgba(44,40,37,0.08);
             --shadow-lg:0 8px 24px rgba(44,40,37,0.12);
             --radius:10px;--radius-lg:14px;--radius-sm:6px;
+        }
+        :root{
+            --primary:#E87C9A;--primary-light:#F1A3B8;--primary-dark:#B75A70;--primary-bg:rgba(232,124,154,0.08);
+            --bg:#f7f8fa;--bg-card:#FFFFFF;--bg-hover:#FFF7FA;
+            --border:#E5E7EB;--border-light:#F3F4F6;
+            --text-primary:#111827;--text-secondary:#374151;--text-muted:#6B7280;
+            --success:#10B981;--success-bg:rgba(16,185,129,0.1);
+            --warning:#F59E0B;--warning-bg:rgba(245,158,11,0.1);
+            --error:#EF4444;--error-bg:rgba(239,68,68,0.1);
+            --info:#3B82F6;--info-bg:rgba(59,130,246,0.1);
+            --pink:#E87C9A;--pink-bg:rgba(232,124,154,0.1);
+            --teal:#98D8C8;--teal-bg:rgba(152,216,200,0.12);
         }
         body{font-family:'Noto Sans SC','DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.5;overflow:hidden;height:100vh}
         ::-webkit-scrollbar{width:4px}
@@ -67,7 +80,7 @@
         .date-range input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
         .date-separator{color:var(--text-muted);font-size:12px;margin:0 2px}
         .filter-right{display:flex;align-items:center;gap:10px}
-        .export-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;color:var(--primary);background:var(--primary-bg);border:1px solid rgba(13,148,136,0.2);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
+        .export-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;color:var(--primary);background:var(--primary-bg);border:1px solid rgba(232,124,154,0.2);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
         .export-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
 
         .overview-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
@@ -106,7 +119,13 @@
         .metric-label{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
         .metric-value{font-size:20px;font-weight:700;color:var(--text-primary);font-family:'DM Sans',sans-serif}
         .metric-value.zero{color:var(--text-muted)}
-        .info-icon{width:14px;height:14px;border-radius:50%;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text-muted);cursor:pointer}
+        .metric-badge{display:inline-flex;align-items:center;height:18px;padding:0 8px;border-radius:999px;border:1px solid rgba(232,124,154,0.24);background:rgba(232,124,154,0.08);color:var(--primary-dark);font-size:11px;font-weight:600;line-height:18px}
+        .metric-tip-btn{width:18px;height:18px;border-radius:6px;border:1px solid var(--border-light);background:var(--bg);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-muted);padding:0;transition:all .15s}
+        .metric-tip-btn iconify-icon{font-size:14px}
+        .metric-tip-btn:hover{border-color:rgba(232,124,154,0.28);color:var(--primary);background:rgba(232,124,154,0.06)}
+        .metric-tip-btn:active{transform:scale(.98)}
+        .metric-tooltip{position:fixed;z-index:300;max-width:280px;background:rgba(255,255,255,0.96);backdrop-filter:saturate(180%) blur(8px);border:1px solid var(--border-light);box-shadow:var(--shadow-md);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;color:var(--text-secondary);opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .12s ease, transform .12s ease}
+        .metric-tooltip.show{opacity:1;transform:translateY(0);pointer-events:auto}
 
         .metric-item.clickable{cursor:pointer;border-radius:8px;padding:0 8px;margin:-4px -8px;transition:all .15s}
         .metric-item.clickable:hover{background:var(--primary-bg)}
@@ -120,7 +139,6 @@
         .cash-detail-panel.show{max-height:600px;opacity:1;margin-top:14px}
         .cash-detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-light)}
         .cash-detail-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text-primary)}
-        .cash-detail-date{font-size:12px;color:var(--text-muted);background:var(--bg);padding:4px 10px;border-radius:6px}
         .cash-detail-close{width:28px;height:28px;border-radius:6px;border:none;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);transition:all .15s}
         .cash-detail-close:hover{background:var(--error-bg);color:var(--error)}
         .cash-detail-summary{display:flex;align-items:center;gap:20px;padding:14px 20px;background:var(--primary-bg);border-bottom:1px solid var(--border-light)}
@@ -131,6 +149,10 @@
         .cash-detail-table{width:100%;border-collapse:collapse;font-size:13px}
         .cash-detail-table thead{position:sticky;top:0;z-index:1}
         .cash-detail-table th{padding:10px 16px;text-align:left;font-weight:500;color:var(--text-secondary);background:var(--bg);border-bottom:1px solid var(--border-light);white-space:nowrap}
+        .cash-detail-table th.sortable{cursor:pointer;user-select:none}
+        .cash-detail-table th.sortable.active{color:var(--primary)}
+        .cash-detail-table th .sort-indicator{display:inline-block;min-width:12px;margin-left:6px;color:var(--text-light);font-size:11px}
+        .cash-detail-table th.sortable.active .sort-indicator{color:var(--primary)}
         .cash-detail-table td{padding:10px 16px;color:var(--text-primary);border-bottom:1px solid var(--border-light);white-space:nowrap}
         .cash-detail-table tbody tr:hover{background:var(--bg-hover)}
         .cash-detail-table .type-tag{display:inline-block;padding:2px 8px;border-radius:4px;font-size:11px;font-weight:500}
@@ -148,72 +170,63 @@
         .type-tag.new-member-tag{background:var(--purple-bg);color:var(--purple)}
         .pay-tag{background:var(--bg-hover);color:var(--text-secondary);font-weight:500}
         .cash-detail-table .amount-cell{font-weight:600;font-family:'DM Sans',sans-serif;color:var(--primary)}
+        .cash-detail-table .amount-cell-neutral{font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text-primary)}
 
         @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .animate-in{animation:fadeInUp .4s ease forwards}
+
+        .chl-layout{display:flex;flex-direction:column;height:100vh}
+        .chl-topbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #e5e7eb;z-index:10;flex-shrink:0}
+        .chl-topbar-left{display:flex;align-items:center;gap:24px}
+        .chl-back{display:flex;align-items:center;color:#E87C9A;text-decoration:none}
+        .chl-back:hover{opacity:.75}
+        .chl-brand{display:flex;align-items:center;font-size:20px;font-weight:800;letter-spacing:1px;color:#111827}
+        .chl-brand span{color:#E87C9A}
+        .chl-store{display:flex;align-items:center;gap:6px;border:1px solid #e5e7eb;padding:6px 12px;border-radius:9999px;font-size:14px;color:#374151;background:#fff;cursor:pointer}
+        .chl-store:hover{background:#f9fafb}
+        .chl-topbar-right{display:flex;align-items:center;gap:18px;color:#6b7280}
+        .chl-icon-btn{border:none;background:transparent;cursor:pointer;color:#9ca3af;padding:6px;border-radius:10px}
+        .chl-icon-btn:hover{color:#E87C9A;background:#f9fafb}
+        .chl-meta{font-size:14px;color:#9ca3af}
+        .chl-meta-strong{font-size:14px;font-weight:600;color:#6b7280}
+        .chl-user{display:flex;align-items:center;gap:10px}
+        .chl-user img{width:24px;height:24px;border-radius:9999px;object-fit:cover}
+        .chl-user-name{font-size:14px;font-weight:600;color:#374151}
+        .chl-user-role{background:#f3f4f6;padding:2px 8px;border-radius:6px;font-size:12px;color:#6b7280}
+        .chl-page-scroll{flex:1;min-height:0;overflow:auto}
     </style>
 </head>
 <body>
-    <div class="app">
-        <div class="top-bar">
-            <div class="top-bar-left">
-                <div class="logo">
-                    <div class="logo-icon">回</div>
-                    <span>回蓝</span>
+    <div class="chl-layout">
+        <div class="chl-topbar">
+            <div class="chl-topbar-left">
+                <a class="chl-back" href="../new-order-design/customer-list-pad.html" aria-label="返回">
+                    <iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
+                </a>
+                <div class="chl-brand">
+                    <span>CHLITINA</span>&nbsp;克丽缇娜
                 </div>
-                <div class="store-info">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/><circle cx="12" cy="10" r="3"/></svg>
-                    <span>慧来客月光码头店</span>
-                    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                <div class="chl-store">
+                    <span>测试店1</span>
+                    <iconify-icon icon="mdi:chevron-down"></iconify-icon>
                 </div>
             </div>
-            <div class="top-bar-right">
-                <button class="top-btn active">日趋势</button>
-                <button class="top-btn">月趋势</button>
-                <button class="top-btn">
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-                    2026-05-25
+            <div class="chl-topbar-right">
+                <button class="chl-icon-btn" type="button" aria-label="通知">
+                    <iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
                 </button>
-                <div class="user-info">
-                    <div class="user-avatar">管</div>
-                    <span class="user-name">管理员</span>
+                <span class="chl-meta-strong">23:04</span>
+                <span class="chl-meta">6月2日 周二</span>
+                <iconify-icon class="text-base" icon="mdi:wifi"></iconify-icon>
+                <span class="chl-meta">24%</span>
+                <div class="chl-user">
+                    <img alt="User Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+                    <span class="chl-user-name">roger</span>
+                    <span class="chl-user-role">店总</span>
                 </div>
             </div>
         </div>
-        <div class="main-area">
-            <div class="left-nav">
-                <div class="nav-group">
-                    <div class="nav-group-title">报表</div>
-                    <div class="nav-item active">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
-                        数据概览
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='performance-report.html'">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>
-                        业绩汇总
-                    </div>
-                    <div class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        客户销售分析
-                    </div>
-                    <div class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-                        经营损益表
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='staff-performance.html'">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
-                        员工业绩
-                    </div>
-                    <div class="nav-item">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
-                        目标设置
-                    </div>
-                    <div class="nav-item" onclick="window.location.href='expense-bookkeeping.html'">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                        费用支出
-                    </div>
-                </div>
-            </div>
+        <div class="chl-page-scroll">
             <div class="content-area">
                 <div class="page-header">
                     <div>
@@ -230,11 +243,9 @@
                             <button class="table-tab" data-view="yearly">年</button>
                         </div>
                         <div class="date-range" id="dateFilterSingle">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                             <input type="date" id="singleDate" value="2026-05-27">
                         </div>
                         <div class="date-range" id="dateFilterRange" style="display:none">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
                             <input type="date" id="startDate" value="2026-05-01">
                             <span class="date-separator">至</span>
                             <input type="date" id="endDate" value="2026-05-27">
@@ -245,121 +256,137 @@
                 <div class="section-grid animate-in">
                     <div class="section-card" id="businessCard">
                         <div class="section-header">
-                            <div class="section-icon performance">💰</div>
                             <span class="section-title">经营分析</span>
                         </div>
                         <div class="section-body" style="grid-template-columns:repeat(4,1fr)">
                             <div class="metric-item clickable" data-detail="cashPerformance" onclick="toggleDetail('cashPerformance')">
-                                <div class="metric-label">现金业绩 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">现金业绩 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，客户实际付款总金额，统计时减去退款金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥2,840</div>
                             </div>
                             <div class="metric-item clickable" data-detail="productCash" onclick="toggleDetail('productCash')">
-                                <div class="metric-label">产品现金 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">产品现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，产品类产生的现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥1,200</div>
                             </div>
                             <div class="metric-item clickable" data-detail="careCash" onclick="toggleDetail('careCash')">
-                                <div class="metric-label">护理现金 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">护理现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，护理类产生的现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥840</div>
                             </div>
                             <div class="metric-item clickable" data-detail="cardCash" onclick="toggleDetail('cardCash')">
-                                <div class="metric-label">卡项现金 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">卡项现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项销售产生的现金收入（含开卡/充值/升级等）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥800</div>
                             </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="newCustomerCashPerformance" onclick="toggleDetail('newCustomerCashPerformance')">
+                                <div class="metric-label">新客现金业绩 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的现金收入总额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newCustomerCashPerformanceValue">¥920</div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="newCustomerProductCash" onclick="toggleDetail('newCustomerProductCash')">
+                                <div class="metric-label">新客产品现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的产品现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newCustomerProductCashValue">¥320</div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="newCustomerCareCash" onclick="toggleDetail('newCustomerCareCash')">
+                                <div class="metric-label">新客护理现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的护理现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newCustomerCareCashValue">¥280</div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="newCustomerCardCash" onclick="toggleDetail('newCustomerCardCash')">
+                                <div class="metric-label">新客卡项现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的卡项现金收入（含开卡/充值/升级等）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newCustomerCardCashValue">¥320</div>
+                            </div>
                             <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="consume" onclick="toggleDetail('consume')">
-                                <div class="metric-label">消耗业绩 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">消耗业绩 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，客户消耗总金额，统计时减去退款金额及客户消耗回退金额；不含赠送权益的消耗" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥4,650</div>
                             </div>
                             <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="courseConsume" onclick="toggleDetail('courseConsume')">
-                                <div class="metric-label">疗程消耗 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">护理消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中护理类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥2,350</div>
                             </div>
                             <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="productConsume" onclick="toggleDetail('productConsume')">
-                                <div class="metric-label">产品消耗 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">产品消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中产品类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥2,300</div>
                             </div>
                             <div class="metric-item" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px">
-                                <div class="metric-label">客单价</div>
-                                <div class="metric-value">¥355</div>
-                            </div>
-                            <div class="metric-item" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px">
-                                <div class="metric-label">服务项次数</div>
-                                <div class="metric-value">10</div>
+                                <div class="metric-label">客单价 <button class="metric-tip-btn" type="button" data-tip="统计时间内，总现金业绩平均每单成交金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                                <div class="metric-value" id="avgOrderValue">¥355</div>
                             </div>
                         </div>
                     </div>
                     <div class="section-card">
                         <div class="section-header">
-                            <div class="section-icon member">👤</div>
-                            <span class="section-title">会员分析</span>
+                            <span class="section-title">客户分析</span>
                         </div>
                         <div class="section-body">
                             <div class="metric-item clickable" data-detail="newCustomer" onclick="toggleDetail('newCustomer')">
-                                <div class="metric-label">新增新客人数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">2</div>
+                                <div class="metric-label">新增新客人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内新增的新客数量（没有消费过）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newCustomerValue">2</div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="experienceCustomer" onclick="toggleDetail('experienceCustomer')">
+                                <div class="metric-label">新增体验客人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内新增的体验客数量（产生消费，但交易记录中不包含卡项）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="experienceCustomerValue">3</div>
                             </div>
                             <div class="metric-item clickable" data-detail="newMember" onclick="toggleDetail('newMember')">
-                                <div class="metric-label">新增会员人数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">0</div>
+                                <div class="metric-label">新增会员人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内新增的会员数量（产生消费，且交易记录中包含卡项）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="newMemberValue">0</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="customerFlow" onclick="toggleDetail('customerFlow')">
-                                <div class="metric-label">客流量 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">21</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="visitFrequency" id="visitFrequencyItem" onclick="toggleDetail('visitFrequency')">
-                                <div class="metric-label">到店频次 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="visitFrequencyValue">1.3次</div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="customerFlow" onclick="toggleDetail('customerFlow')">
+                                <div class="metric-label">客流量 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的人次（同一客户按日去重跨天累加，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="customerFlowValue">21</div>
                             </div>
                             <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="memberDeal" onclick="toggleDetail('memberDeal')">
-                                <div class="metric-label">会员成交人数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">到店客户数 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的客户数（同一客户统计时间内去重，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value" id="memberDealValue">18</div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="totalMember" onclick="toggleDetail('totalMember')">
-                                <div class="metric-label">总活跃会员人数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="totalMemberValue">156</div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="serviceCount" onclick="toggleDetail('serviceCount')">
+                                <div class="metric-label">服务项次数 <button class="metric-tip-btn" type="button" data-tip="统计时间内，提供给客户的服务项次数总计（可展开订单明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="serviceCountValue">10</div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="memberAsset" onclick="toggleDetail('memberAsset')">
-                                <div class="metric-label">会员资产总额 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">¥52,800</div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="arrears" onclick="toggleDetail('arrears')">
+                                <div class="metric-label">累计欠款 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（客户欠款合计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="arrearsValue">¥12,800</div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="section-card">
-                        <div class="section-header">
-                            <div class="section-icon appointment">📅</div>
-                            <span class="section-title">预约到店</span>
-                        </div>
-                        <div class="section-body">
-                            <div class="metric-item clickable" data-detail="appointmentBooking" onclick="toggleDetail('appointmentBooking')">
-                                <div class="metric-label">预约人数 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">12</div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="amountCardAsset" onclick="toggleDetail('amountCardAsset')">
+                                <div class="metric-label">金额卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（金额卡余额资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="amountCardAssetValue">¥32,800</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="appointmentArrived" onclick="toggleDetail('appointmentArrived')">
-                                <div class="metric-label">实际到店 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">8</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-label">到店率</div>
-                                <div class="metric-value">67%</div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="serviceCardAsset" onclick="toggleDetail('serviceCardAsset')">
+                                <div class="metric-label">次卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（次卡剩余价值资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="serviceCardAssetValue">¥20,000</div>
                             </div>
                         </div>
                     </div>
                     <div class="section-card">
                         <div class="section-header">
-                            <div class="section-icon verify">✅</div>
                             <span class="section-title">平台核销</span>
                         </div>
                         <div class="section-body">
                             <div class="metric-item clickable" data-detail="platformMeituan" onclick="toggleDetail('platformMeituan')">
-                                <div class="metric-label">美团/大众点评核销 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">美团/大众点评核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，美团/大众点评渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">3</div>
                             </div>
                             <div class="metric-item clickable" data-detail="platformDouyin" onclick="toggleDetail('platformDouyin')">
-                                <div class="metric-label">抖音核销 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">抖音核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，抖音渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">1</div>
                             </div>
                             <div class="metric-item clickable" data-detail="platformAmount" onclick="toggleDetail('platformAmount')">
-                                <div class="metric-label">核销金额 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-label">核销金额 <button class="metric-tip-btn" type="button" data-tip="统计时间内，平台核销金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥1,280</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="section-card">
+                        <div class="section-header">
+                            <span class="section-title">预约到店</span>
+                        </div>
+                        <div class="section-body">
+                            <div class="metric-item clickable" data-detail="appointmentBooking" onclick="toggleDetail('appointmentBooking')">
+                                <div class="metric-label">预约人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内产生的预约人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value">12</div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="appointmentArrived" onclick="toggleDetail('appointmentArrived')">
+                                <div class="metric-label">实际到店 <button class="metric-tip-btn" type="button" data-tip="统计时间内实际到店的人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value">8</div>
+                            </div>
+                            <div class="metric-item">
+                                <div class="metric-label">到店率 <button class="metric-tip-btn" type="button" data-tip="实际到店 / 预约人数（不展开明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                                <div class="metric-value" id="appointmentRateValue">67%</div>
                             </div>
                         </div>
                     </div>
@@ -371,7 +398,6 @@
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
                             <span id="detailPanelTitle">现金业绩明细</span>
                         </div>
-                        <div class="cash-detail-date" id="cashDetailDate">2026-05-26</div>
                         <button class="cash-detail-close" onclick="toggleDetail(null)">
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
                         </button>
@@ -386,13 +412,15 @@
                         <table class="cash-detail-table">
                             <thead id="detailTableHead">
                                 <tr>
-                                    <th>订单编号</th>
                                     <th>客户姓名</th>
-                                    <th>项目</th>
+                                    <th>手机号</th>
+                                    <th>客户类型</th>
+                                    <th>商品信息</th>
+                                    <th>订单金额</th>
                                     <th>责任美容师</th>
-                                    <th>收款方式</th>
-                                    <th>金额</th>
+                                    <th>支付方式</th>
                                     <th>下单时间</th>
+                                    <th>订单编号</th>
                                 </tr>
                             </thead>
                             <tbody id="cashDetailBody">
@@ -408,22 +436,28 @@
         const sectionData = {
             daily: {
                 appointment: { booking: 12, arrived: 8, rate: '67%' },
-                member: { newCustomer: 2, newMember: 0, customerFlow: 21, visitFrequency: '1.3次', memberDeal: 18, totalMember: 156, memberAsset: 52800 },
+                member: { newCustomer: 2, experienceCustomer: 3, newMember: 0, customerFlow: 21, memberDeal: 18, serviceCount: 10 },
                 platform: { meituan: 3, douyin: 1, amount: 1280 },
-                business: { cashPerformance: 2840, productCash: 1200, careCash: 840, cardCash: 800, consume: 4650, coursePerformance: 2350, courseConsume: 2350, productConsume: 2300, avgOrder: 355, serviceCount: 10 }
+                business: { cashPerformance: 2840, productCash: 1200, careCash: 840, cardCash: 800, newCustomerCashPerformance: 920, newCustomerProductCash: 320, newCustomerCareCash: 280, newCustomerCardCash: 320, consume: 4650, coursePerformance: 2350, courseConsume: 2350, productConsume: 2300, avgOrder: 355 }
             },
             monthly: {
                 appointment: { booking: 156, arrived: 114, rate: '73%' },
-                member: { newCustomer: 18, newMember: 5, customerFlow: 198, visitFrequency: '2.7次', memberDeal: 142, totalMember: 156, memberAsset: 52800 },
+                member: { newCustomer: 18, experienceCustomer: 34, newMember: 5, customerFlow: 198, memberDeal: 142, serviceCount: 134 },
                 platform: { meituan: 32, douyin: 15, amount: 14800 },
-                business: { cashPerformance: 46598, productCash: 16100, careCash: 17940, cardCash: 12558, consume: 66050, coursePerformance: 43500, courseConsume: 43500, productConsume: 22550, avgOrder: 398, serviceCount: 134 }
+                business: { cashPerformance: 46598, productCash: 16100, careCash: 17940, cardCash: 12558, newCustomerCashPerformance: 15400, newCustomerProductCash: 5200, newCustomerCareCash: 4300, newCustomerCardCash: 5900, consume: 66050, coursePerformance: 43500, courseConsume: 43500, productConsume: 22550, avgOrder: 398 }
             },
             yearly: {
                 appointment: { booking: 1890, arrived: 1380, rate: '73%' },
-                member: { newCustomer: 215, newMember: 68, customerFlow: 2380, visitFrequency: '21.2次', memberDeal: 126, totalMember: 156, memberAsset: 52800 },
+                member: { newCustomer: 215, experienceCustomer: 480, newMember: 68, customerFlow: 2380, memberDeal: 126, serviceCount: 1680 },
                 platform: { meituan: 385, douyin: 186, amount: 178000 },
-                business: { cashPerformance: 710898, productCash: 238000, careCash: 268000, cardCash: 204898, consume: 820350, coursePerformance: 545000, courseConsume: 545000, productConsume: 275350, avgOrder: 412, serviceCount: 1680 }
+                business: { cashPerformance: 710898, productCash: 238000, careCash: 268000, cardCash: 204898, newCustomerCashPerformance: 218000, newCustomerProductCash: 76000, newCustomerCareCash: 68000, newCustomerCardCash: 74000, consume: 820350, coursePerformance: 545000, courseConsume: 545000, productConsume: 275350, avgOrder: 412 }
             }
+        };
+
+        const constantData = {
+            arrears: 12800,
+            amountCardAsset: 32800,
+            serviceCardAsset: 20000
         };
 
         const detailConfig = {
@@ -431,17 +465,23 @@
             productCash: { title: '产品现金明细', summaryLabel: '产品现金合计', type: 'business' },
             careCash: { title: '护理现金明细', summaryLabel: '护理现金合计', type: 'business' },
             cardCash: { title: '卡项现金明细', summaryLabel: '卡项现金合计', type: 'business' },
+            newCustomerCashPerformance: { title: '新客现金业绩明细', summaryLabel: '新客现金业绩合计', type: 'business' },
+            newCustomerProductCash: { title: '新客产品现金明细', summaryLabel: '新客产品现金合计', type: 'business' },
+            newCustomerCareCash: { title: '新客护理现金明细', summaryLabel: '新客护理现金合计', type: 'business' },
+            newCustomerCardCash: { title: '新客卡项现金明细', summaryLabel: '新客卡项现金合计', type: 'business' },
             consume: { title: '消耗业绩明细', summaryLabel: '消耗业绩合计', type: 'business' },
             coursePerformance: { title: '疗程业绩明细', summaryLabel: '疗程业绩合计', type: 'business' },
-            courseConsume: { title: '疗程消耗明细', summaryLabel: '疗程消耗合计', type: 'business' },
+            courseConsume: { title: '护理消耗明细', summaryLabel: '护理消耗合计', type: 'business' },
             productConsume: { title: '产品消耗明细', summaryLabel: '产品消耗合计', type: 'business' },
-            newCustomer: { title: '新增新客明细', summaryLabel: '新增新客合计', type: 'member' },
-            newMember: { title: '新增会员明细', summaryLabel: '新增会员合计', type: 'member' },
+            newCustomer: { title: '新增新客明细', summaryLabel: '新增新客人数', type: 'member' },
+            experienceCustomer: { title: '新增体验客明细', summaryLabel: '新增体验客人数', type: 'member' },
+            newMember: { title: '新增会员明细', summaryLabel: '新增会员人数', type: 'member' },
             customerFlow: { title: '客流量明细', summaryLabel: '客流量合计', type: 'member' },
-            visitFrequency: { title: '到店频次明细', summaryLabel: '到店频次合计', type: 'member' },
-            memberDeal: { title: '会员成交人数明细', summaryLabel: '会员成交人数', type: 'member' },
-            totalMember: { title: '总活跃会员人数明细', summaryLabel: '总活跃会员人数', type: 'member' },
-            memberAsset: { title: '会员资产明细', summaryLabel: '会员资产合计', type: 'member' },
+            memberDeal: { title: '到店客户数明细', summaryLabel: '到店客户数', type: 'member' },
+            serviceCount: { title: '服务项次数明细', summaryLabel: '服务项次数合计', type: 'service' },
+            arrears: { title: '欠款明细', summaryLabel: '欠款合计', type: 'constant' },
+            amountCardAsset: { title: '金额卡资产明细', summaryLabel: '金额卡资产总额', type: 'constant' },
+            serviceCardAsset: { title: '次卡资产明细', summaryLabel: '次卡资产总额', type: 'constant' },
             appointmentBooking: { title: '预约明细', summaryLabel: '预约人数', type: 'appointment' },
             appointmentArrived: { title: '到店明细', summaryLabel: '实际到店', type: 'appointment' },
             platformMeituan: { title: '美团/大众点评核销明细', summaryLabel: '美团/大众点评核销', type: 'platform' },
@@ -452,141 +492,191 @@
         const businessDetailData = {
             cashPerformance: {
                 daily: [
-                    { orderId: 'ORD20260526001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-05-26 10:30' },
-                    { orderId: 'ORD20260526002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-05-26 11:15' },
-                    { orderId: 'ORD20260526003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-05-26 14:00' },
-                    { orderId: 'ORD20260526004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-26 15:20' },
-                    { orderId: 'ORD20260526005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-26 16:45' }
+                    { orderId: 'ORD20260526001', customer: '张小美', phone: '13812345678', customerType: '会员', productInfo: '萃丽焕颜化妆水*2, 深层补水护理*1', beautician: '林悦', payMethod: '现金 ￥100.00, 支付宝 ￥380.00', amount: 480, time: '2026-06-10 10:30' },
+                    { orderId: 'ORD20260526002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-10 11:15' },
+                    { orderId: 'ORD20260526003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-10 14:00' },
+                    { orderId: 'ORD20260526004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-10 15:20' },
+                    { orderId: 'ORD20260526005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-10 16:45' }
                 ],
                 monthly: [
-                    { orderId: 'ORD20260501001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-05-01 10:30' },
-                    { orderId: 'ORD20260503002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-05-03 11:15' },
-                    { orderId: 'ORD20260505003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-05-05 14:00' },
-                    { orderId: 'ORD20260508004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-08 15:20' },
-                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-10 16:45' },
-                    { orderId: 'ORD20260512006', customer: '赵敏', project: '肩颈疏通护理', beautician: '可欣', payMethod: '支付宝', amount: 420, time: '2026-05-12 09:30' },
-                    { orderId: 'ORD20260515007', customer: '孙丽', project: '美白精华液', beautician: '林悦', payMethod: '微信', amount: 760, time: '2026-05-15 13:00' },
-                    { orderId: 'ORD20260518008', customer: '周琳', project: '季卡升级', beautician: '苏瑶', payMethod: '银行卡', amount: 1200, time: '2026-05-18 10:00' }
+                    { orderId: 'ORD20260501001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260503002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-02 11:15' },
+                    { orderId: 'ORD20260505003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-03 14:00' },
+                    { orderId: 'ORD20260508004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-04 15:20' },
+                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-05 16:45' },
+                    { orderId: 'ORD20260512006', customer: '赵敏', project: '肩颈疏通护理', beautician: '可欣', payMethod: '支付宝', amount: 420, time: '2026-06-06 09:30' },
+                    { orderId: 'ORD20260515007', customer: '孙丽', project: '美白精华液', beautician: '林悦', payMethod: '微信', amount: 760, time: '2026-06-07 13:00' },
+                    { orderId: 'ORD20260518008', customer: '周琳', project: '季卡升级', beautician: '苏瑶', payMethod: '银行卡', amount: 1200, time: '2026-06-08 10:00' }
                 ],
                 yearly: [
-                    { orderId: 'ORD20260105001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-01-05 10:30' },
-                    { orderId: 'ORD20260212002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-02-12 11:15' },
-                    { orderId: 'ORD20260320003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-03-20 14:00' },
-                    { orderId: 'ORD20260401004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-04-01 15:20' },
-                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-10 16:45' }
+                    { orderId: 'ORD20260105001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260212002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-03 11:15' },
+                    { orderId: 'ORD20260320003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-05 14:00' },
+                    { orderId: 'ORD20260401004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-07 15:20' },
+                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-09 16:45' }
                 ]
             },
             productCash: {
                 daily: [
-                    { orderId: 'ORD20260526002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-05-26 11:15' },
-                    { orderId: 'ORD20260526005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-26 16:45' }
+                    { orderId: 'ORD20260526002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-10 11:15' },
+                    { orderId: 'ORD20260526005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-10 16:45' }
                 ],
                 monthly: [
-                    { orderId: 'ORD20260503002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-05-03 11:15' },
-                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-10 16:45' },
-                    { orderId: 'ORD20260515007', customer: '孙丽', project: '美白精华液', beautician: '林悦', payMethod: '微信', amount: 760, time: '2026-05-15 13:00' }
+                    { orderId: 'ORD20260503002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-02 11:15' },
+                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-05 16:45' },
+                    { orderId: 'ORD20260515007', customer: '孙丽', project: '美白精华液', beautician: '林悦', payMethod: '微信', amount: 760, time: '2026-06-07 13:00' }
                 ],
                 yearly: [
-                    { orderId: 'ORD20260212002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-02-12 11:15' },
-                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-05-10 16:45' }
+                    { orderId: 'ORD20260212002', customer: '李晓丽', project: '玻尿酸精华', beautician: '苏瑶', payMethod: '支付宝', amount: 680, time: '2026-06-03 11:15' },
+                    { orderId: 'ORD20260510005', customer: '刘婷', project: '修复面膜套装', beautician: '苏瑶', payMethod: '微信', amount: 520, time: '2026-06-09 16:45' }
                 ]
             },
             careCash: {
                 daily: [
-                    { orderId: 'ORD20260526001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-05-26 10:30' },
-                    { orderId: 'ORD20260526004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-26 15:20' }
+                    { orderId: 'ORD20260526001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-06-10 10:30' },
+                    { orderId: 'ORD20260526004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-10 15:20' }
                 ],
                 monthly: [
-                    { orderId: 'ORD20260501001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-05-01 10:30' },
-                    { orderId: 'ORD20260508004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-08 15:20' },
-                    { orderId: 'ORD20260512006', customer: '赵敏', project: '肩颈疏通护理', beautician: '可欣', payMethod: '支付宝', amount: 420, time: '2026-05-12 09:30' }
+                    { orderId: 'ORD20260501001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260508004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-04 15:20' },
+                    { orderId: 'ORD20260512006', customer: '赵敏', project: '肩颈疏通护理', beautician: '可欣', payMethod: '支付宝', amount: 420, time: '2026-06-06 09:30' }
                 ],
                 yearly: [
-                    { orderId: 'ORD20260105001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-01-05 10:30' },
-                    { orderId: 'ORD20260401004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-04-01 15:20' }
+                    { orderId: 'ORD20260105001', customer: '张小美', project: '水光针护理', beautician: '林悦', payMethod: '微信', amount: 480, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260401004', customer: '陈雅', project: '面部清洁护理', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-07 15:20' }
                 ]
             },
             cardCash: {
                 daily: [
-                    { orderId: 'ORD20260526003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-05-26 14:00' }
+                    { orderId: 'ORD20260526003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-10 14:00' }
                 ],
                 monthly: [
-                    { orderId: 'ORD20260505003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-05-05 14:00' },
-                    { orderId: 'ORD20260518008', customer: '周琳', project: '季卡升级', beautician: '苏瑶', payMethod: '银行卡', amount: 1200, time: '2026-05-18 10:00' }
+                    { orderId: 'ORD20260505003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-03 14:00' },
+                    { orderId: 'ORD20260518008', customer: '周琳', project: '季卡升级', beautician: '苏瑶', payMethod: '银行卡', amount: 1200, time: '2026-06-08 10:00' }
                 ],
                 yearly: [
-                    { orderId: 'ORD20260320003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-03-20 14:00' }
+                    { orderId: 'ORD20260320003', customer: '王芳', project: '年度会员卡', beautician: '林悦', payMethod: '银行卡', amount: 800, time: '2026-06-05 14:00' }
+                ]
+            },
+            newCustomerCashPerformance: {
+                daily: [
+                    { orderId: 'NC20260526001', customer: '周佳琪', project: '新客体验套餐', beautician: '王小美', payMethod: '微信', amount: 398, time: '2026-06-10 12:10' },
+                    { orderId: 'NC20260526002', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 268, time: '2026-06-10 13:40' },
+                    { orderId: 'NC20260526003', customer: '黄静', project: '新客卡项开卡', beautician: '林悦', payMethod: '银行卡', amount: 254, time: '2026-06-10 16:05' }
+                ],
+                monthly: [
+                    { orderId: 'NC20260502001', customer: '周佳琪', project: '新客体验套餐', beautician: '王小美', payMethod: '微信', amount: 398, time: '2026-06-02 12:10' },
+                    { orderId: 'NC20260508002', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 268, time: '2026-06-04 13:40' },
+                    { orderId: 'NC20260515003', customer: '黄静', project: '新客补水护理', beautician: '林悦', payMethod: '微信', amount: 360, time: '2026-06-07 16:05' }
+                ],
+                yearly: [
+                    { orderId: 'NC20260112001', customer: '周佳琪', project: '新客体验套餐', beautician: '王小美', payMethod: '微信', amount: 398, time: '2026-06-02 12:10' },
+                    { orderId: 'NC20260308002', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 268, time: '2026-06-06 13:40' },
+                    { orderId: 'NC20260515003', customer: '黄静', project: '新客补水护理', beautician: '林悦', payMethod: '微信', amount: 360, time: '2026-06-08 16:05' }
+                ]
+            },
+            newCustomerProductCash: {
+                daily: [
+                    { orderId: 'NCP20260526001', customer: '周佳琪', project: '新客精华套装', beautician: '王小美', payMethod: '微信', amount: 320, time: '2026-06-10 12:15' }
+                ],
+                monthly: [
+                    { orderId: 'NCP20260502001', customer: '周佳琪', project: '新客精华套装', beautician: '王小美', payMethod: '微信', amount: 320, time: '2026-06-02 12:15' }
+                ],
+                yearly: [
+                    { orderId: 'NCP20260112001', customer: '周佳琪', project: '新客精华套装', beautician: '王小美', payMethod: '微信', amount: 320, time: '2026-06-02 12:15' }
+                ]
+            },
+            newCustomerCareCash: {
+                daily: [
+                    { orderId: 'NCC20260526001', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 280, time: '2026-06-10 13:40' }
+                ],
+                monthly: [
+                    { orderId: 'NCC20260508001', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 280, time: '2026-06-04 13:40' }
+                ],
+                yearly: [
+                    { orderId: 'NCC20260308001', customer: '林小薇', project: '新客清洁体验', beautician: '李婷婷', payMethod: '支付宝', amount: 280, time: '2026-06-06 13:40' }
+                ]
+            },
+            newCustomerCardCash: {
+                daily: [
+                    { orderId: 'NCARD20260526001', customer: '黄静', project: '新客卡项开卡', beautician: '林悦', payMethod: '银行卡', amount: 320, time: '2026-06-10 16:05' }
+                ],
+                monthly: [
+                    { orderId: 'NCARD20260515001', customer: '黄静', project: '新客卡项开卡', beautician: '林悦', payMethod: '银行卡', amount: 320, time: '2026-06-07 16:05' }
+                ],
+                yearly: [
+                    { orderId: 'NCARD20260515001', customer: '黄静', project: '新客卡项开卡', beautician: '林悦', payMethod: '银行卡', amount: 320, time: '2026-06-08 16:05' }
                 ]
             },
             consume: {
                 daily: [
-                    { orderId: 'CON20260526001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-26 10:30' },
-                    { orderId: 'CON20260526002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-05-26 11:15' },
-                    { orderId: 'CON20260526003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-05-26 15:20' },
-                    { orderId: 'CON20260526004', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 480, time: '2026-05-26 16:45' },
-                    { orderId: 'CON20260526005', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '微信', amount: 420, time: '2026-05-26 17:30' }
+                    { orderId: 'CON20260526001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-10 10:30' },
+                    { orderId: 'CON20260526002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-10 11:15' },
+                    { orderId: 'CON20260526003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-06-10 15:20' },
+                    { orderId: 'CON20260526004', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 480, time: '2026-06-10 16:45' },
+                    { orderId: 'CON20260526005', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '微信', amount: 420, time: '2026-06-10 17:30' }
                 ],
                 monthly: [
-                    { orderId: 'CON20260501001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-01 10:30' },
-                    { orderId: 'CON20260503002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-05-03 11:15' },
-                    { orderId: 'CON20260508003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-05-08 15:20' },
-                    { orderId: 'CON20260510004', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 480, time: '2026-05-10 16:45' },
-                    { orderId: 'CON20260512005', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '微信', amount: 420, time: '2026-05-12 09:30' },
-                    { orderId: 'CON20260515006', customer: '孙丽', project: '美白导入消耗', beautician: '林悦', payMethod: '银行卡', amount: 560, time: '2026-05-15 13:00' }
+                    { orderId: 'CON20260501001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CON20260503002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-02 11:15' },
+                    { orderId: 'CON20260508003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-06-04 15:20' },
+                    { orderId: 'CON20260510004', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 480, time: '2026-06-05 16:45' },
+                    { orderId: 'CON20260512005', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '微信', amount: 420, time: '2026-06-06 09:30' },
+                    { orderId: 'CON20260515006', customer: '孙丽', project: '美白导入消耗', beautician: '林悦', payMethod: '银行卡', amount: 560, time: '2026-06-07 13:00' }
                 ],
                 yearly: [
-                    { orderId: 'CON20260105001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-01-05 10:30' },
-                    { orderId: 'CON20260212002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-02-12 11:15' },
-                    { orderId: 'CON20260401003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-04-01 15:20' }
+                    { orderId: 'CON20260105001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CON20260212002', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-03 11:15' },
+                    { orderId: 'CON20260401003', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '微信', amount: 360, time: '2026-06-07 15:20' }
                 ]
             },
             coursePerformance: {
                 daily: [
-                    { orderId: 'CP20260526001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-26 10:30' },
-                    { orderId: 'CP20260526002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-26 15:20' },
-                    { orderId: 'CP20260526003', customer: '赵敏', project: '肩颈疏通疗程', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-05-26 17:30' }
+                    { orderId: 'CP20260526001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-10 10:30' },
+                    { orderId: 'CP20260526002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-10 15:20' },
+                    { orderId: 'CP20260526003', customer: '赵敏', project: '肩颈疏通疗程', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-06-10 17:30' }
                 ],
                 monthly: [
-                    { orderId: 'CP20260501001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-01 10:30' },
-                    { orderId: 'CP20260508002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-08 15:20' },
-                    { orderId: 'CP20260512003', customer: '赵敏', project: '肩颈疏通疗程', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-05-12 09:30' },
-                    { orderId: 'CP20260515004', customer: '孙丽', project: '美白导入疗程', beautician: '林悦', payMethod: '支付宝', amount: 560, time: '2026-05-15 13:00' }
+                    { orderId: 'CP20260501001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CP20260508002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-04 15:20' },
+                    { orderId: 'CP20260512003', customer: '赵敏', project: '肩颈疏通疗程', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-06-06 09:30' },
+                    { orderId: 'CP20260515004', customer: '孙丽', project: '美白导入疗程', beautician: '林悦', payMethod: '支付宝', amount: 560, time: '2026-06-07 13:00' }
                 ],
                 yearly: [
-                    { orderId: 'CP20260105001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-01-05 10:30' },
-                    { orderId: 'CP20260401002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-04-01 15:20' }
+                    { orderId: 'CP20260105001', customer: '张小美', project: '水光针疗程', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CP20260401002', customer: '陈雅', project: '面部清洁疗程', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-07 15:20' }
                 ]
             },
             courseConsume: {
                 daily: [
-                    { orderId: 'CC20260526001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-26 10:30' },
-                    { orderId: 'CC20260526002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-26 15:20' },
-                    { orderId: 'CC20260526003', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-05-26 17:30' }
+                    { orderId: 'CC20260526001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-10 10:30' },
+                    { orderId: 'CC20260526002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-10 15:20' },
+                    { orderId: 'CC20260526003', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-06-10 17:30' }
                 ],
                 monthly: [
-                    { orderId: 'CC20260501001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-05-01 10:30' },
-                    { orderId: 'CC20260508002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-05-08 15:20' },
-                    { orderId: 'CC20260512003', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-05-12 09:30' },
-                    { orderId: 'CC20260515004', customer: '孙丽', project: '美白导入疗程（第4次）', beautician: '林悦', payMethod: '支付宝', amount: 560, time: '2026-05-15 13:00' }
+                    { orderId: 'CC20260501001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CC20260508002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-04 15:20' },
+                    { orderId: 'CC20260512003', customer: '赵敏', project: '肩颈疏通疗程（第2次）', beautician: '可欣', payMethod: '银行卡', amount: 420, time: '2026-06-06 09:30' },
+                    { orderId: 'CC20260515004', customer: '孙丽', project: '美白导入疗程（第4次）', beautician: '林悦', payMethod: '支付宝', amount: 560, time: '2026-06-07 13:00' }
                 ],
                 yearly: [
-                    { orderId: 'CC20260105001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-01-05 10:30' },
-                    { orderId: 'CC20260401002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-04-01 15:20' }
+                    { orderId: 'CC20260105001', customer: '张小美', project: '水光针疗程（第3次）', beautician: '林悦', payMethod: '微信', amount: 680, time: '2026-06-01 10:30' },
+                    { orderId: 'CC20260401002', customer: '陈雅', project: '面部清洁疗程（第1次）', beautician: '诗涵', payMethod: '现金', amount: 360, time: '2026-06-07 15:20' }
                 ]
             },
             productConsume: {
                 daily: [
-                    { orderId: 'PC20260526001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-05-26 11:15' },
-                    { orderId: 'PC20260526002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-05-26 16:45' }
+                    { orderId: 'PC20260526001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-10 11:15' },
+                    { orderId: 'PC20260526002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-06-10 16:45' }
                 ],
                 monthly: [
-                    { orderId: 'PC20260503001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-05-03 11:15' },
-                    { orderId: 'PC20260510002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-05-10 16:45' },
-                    { orderId: 'PC20260515003', customer: '孙丽', project: '美白精华消耗', beautician: '林悦', payMethod: '支付宝', amount: 760, time: '2026-05-15 13:00' }
+                    { orderId: 'PC20260503001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-02 11:15' },
+                    { orderId: 'PC20260510002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-06-05 16:45' },
+                    { orderId: 'PC20260515003', customer: '孙丽', project: '美白精华消耗', beautician: '林悦', payMethod: '支付宝', amount: 760, time: '2026-06-07 13:00' }
                 ],
                 yearly: [
-                    { orderId: 'PC20260212001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-02-12 11:15' },
-                    { orderId: 'PC20260510002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-05-10 16:45' }
+                    { orderId: 'PC20260212001', customer: '李晓丽', project: '玻尿酸精华消耗', beautician: '苏瑶', payMethod: '支付宝', amount: 520, time: '2026-06-03 11:15' },
+                    { orderId: 'PC20260510002', customer: '刘婷', project: '修复面膜消耗', beautician: '苏瑶', payMethod: '微信', amount: 480, time: '2026-06-09 16:45' }
                 ]
             }
         };
@@ -610,85 +700,102 @@
             },
             customerFlow: {
                 daily: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-05-26 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-05-26 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-05-26 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-05-26 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-05-26 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-06-10 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', flowType: '非0护理客流', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-06-10 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-06-10 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-06-10 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-06-10 16:45' }
                 ],
                 monthly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-05-01 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-05-03 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-05-05 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-05-08 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-05-10 16:45' },
-                    { name: '赵敏', phone: '133****2345', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥9,420', beautician: '可欣', visitTime: '2026-05-12 09:30' },
-                    { name: '孙丽', phone: '131****6789', customerType: '会员', lastVisit: '2026-05-15', totalSpend: '¥7,760', beautician: '林悦', visitTime: '2026-05-15 13:00' },
-                    { name: '周琳', phone: '132****0123', customerType: '会员', lastVisit: '2026-05-18', totalSpend: '¥11,200', beautician: '苏瑶', visitTime: '2026-05-18 10:00' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-06-01 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', flowType: '非0护理客流', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-06-02 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-06-03 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-06-04 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-06-05 16:45' },
+                    { name: '赵敏', phone: '133****2345', customerType: '会员', flowType: '非0护理客流', lastVisit: '2026-05-26', totalSpend: '¥9,420', beautician: '可欣', visitTime: '2026-06-06 09:30' },
+                    { name: '孙丽', phone: '131****6789', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-15', totalSpend: '¥7,760', beautician: '林悦', visitTime: '2026-06-07 13:00' },
+                    { name: '周琳', phone: '132****0123', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-18', totalSpend: '¥11,200', beautician: '苏瑶', visitTime: '2026-06-08 10:00' }
                 ],
                 yearly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-01-05 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-02-12 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-03-20 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-04-01 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-05-10 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥12,680', beautician: '林悦', visitTime: '2026-06-01 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', flowType: '非0护理客流', lastVisit: '2026-05-26', totalSpend: '¥8,920', beautician: '苏瑶', visitTime: '2026-06-03 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥15,800', beautician: '林悦', visitTime: '2026-06-05 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', flowType: '0护理客流', lastVisit: '2026-05-26', totalSpend: '¥6,360', beautician: '诗涵', visitTime: '2026-06-07 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', flowType: '产品客流', lastVisit: '2026-05-26', totalSpend: '¥5,520', beautician: '苏瑶', visitTime: '2026-06-09 16:45' }
                 ]
             },
             customerVisits: {
                 daily: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-05-26 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-05-26 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-05-26 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-05-26 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-05-26 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-06-10 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-06-10 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-06-10 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-06-10 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-06-10 16:45' }
                 ],
                 monthly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-05-01 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-05-03 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-05-05 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-05-08 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-05-10 16:45' },
-                    { name: '赵敏', phone: '133****2345', customerType: '会员', project: '肩颈疏通护理', beautician: '可欣', serviceTime: '2026-05-12 09:30' },
-                    { name: '孙丽', phone: '131****6789', customerType: '会员', project: '美白精华液', beautician: '林悦', serviceTime: '2026-05-15 13:00' },
-                    { name: '周琳', phone: '132****0123', customerType: '会员', project: '季卡升级', beautician: '苏瑶', serviceTime: '2026-05-18 10:00' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-06-01 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-06-02 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-06-03 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-06-04 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-06-05 16:45' },
+                    { name: '赵敏', phone: '133****2345', customerType: '会员', project: '肩颈疏通护理', beautician: '可欣', serviceTime: '2026-06-06 09:30' },
+                    { name: '孙丽', phone: '131****6789', customerType: '会员', project: '美白精华液', beautician: '林悦', serviceTime: '2026-06-07 13:00' },
+                    { name: '周琳', phone: '132****0123', customerType: '会员', project: '季卡升级', beautician: '苏瑶', serviceTime: '2026-06-08 10:00' }
                 ],
                 yearly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-01-05 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-02-12 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-03-20 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-04-01 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-05-10 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', project: '水光针护理', beautician: '林悦', serviceTime: '2026-06-01 10:30' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', project: '玻尿酸精华', beautician: '苏瑶', serviceTime: '2026-06-03 11:15' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', project: '年度会员卡', beautician: '林悦', serviceTime: '2026-06-05 14:00' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', project: '面部清洁护理', beautician: '诗涵', serviceTime: '2026-06-07 15:20' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', project: '修复面膜套装', beautician: '苏瑶', serviceTime: '2026-06-09 16:45' }
                 ]
             },
             newCustomer: {
                 daily: [
-                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥420', beautician: '可欣', source: '美团' },
-                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥360', beautician: '诗涵', source: '抖音' }
+                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '美团', createdAt: '2026-06-10 09:12' },
+                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '抖音', createdAt: '2026-06-10 10:40' }
                 ],
                 monthly: [
-                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥420', beautician: '可欣', source: '美团' },
-                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥360', beautician: '诗涵', source: '抖音' },
-                    { name: '韩雪', phone: '177****2345', customerType: '非会员', lastVisit: '2026-05-10', totalSpend: '¥580', beautician: '林悦', source: '路过' },
-                    { name: '冯丽', phone: '188****6789', customerType: '非会员', lastVisit: '2026-05-05', totalSpend: '¥280', beautician: '苏瑶', source: '朋友推荐' }
+                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '美团', createdAt: '2026-06-01 09:12' },
+                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '抖音', createdAt: '2026-06-03 10:40' },
+                    { name: '韩雪', phone: '177****2345', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '路过', createdAt: '2026-06-07 14:05' },
+                    { name: '冯丽', phone: '188****6789', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '朋友推荐', createdAt: '2026-06-09 16:18' }
                 ],
                 yearly: [
-                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥420', beautician: '可欣', source: '美团' },
-                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥360', beautician: '诗涵', source: '抖音' }
+                    { name: '赵敏', phone: '133****2345', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '美团', createdAt: '2026-06-02 11:30' },
+                    { name: '钱慧', phone: '155****8901', customerType: '非会员', lastVisit: '-', totalSpend: '¥0', beautician: '-', source: '抖音', createdAt: '2026-06-06 09:55' }
+                ]
+            },
+            experienceCustomer: {
+                daily: [
+                    { name: '张小美', phone: '138****6721', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥480', beautician: '林悦', source: '线下', createdAt: '2026-06-10 09:20' },
+                    { name: '陈雅', phone: '137****4567', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥360', beautician: '诗涵', source: '线下', createdAt: '2026-06-10 10:05' },
+                    { name: '刘婷', phone: '135****7890', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥520', beautician: '苏瑶', source: '抖音', createdAt: '2026-06-10 16:10' }
+                ],
+                monthly: [
+                    { name: '张小美', phone: '138****6721', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥1,160', beautician: '林悦', source: '线下', createdAt: '2026-06-01 09:20' },
+                    { name: '陈雅', phone: '137****4567', customerType: '非会员', lastVisit: '2026-05-08', totalSpend: '¥360', beautician: '诗涵', source: '线下', createdAt: '2026-06-04 10:05' },
+                    { name: '刘婷', phone: '135****7890', customerType: '非会员', lastVisit: '2026-05-10', totalSpend: '¥520', beautician: '苏瑶', source: '抖音', createdAt: '2026-06-05 16:10' }
+                ],
+                yearly: [
+                    { name: '张小美', phone: '138****6721', customerType: '非会员', lastVisit: '2026-05-26', totalSpend: '¥2,320', beautician: '林悦', source: '线下', createdAt: '2026-06-01 09:20' },
+                    { name: '陈雅', phone: '137****4567', customerType: '非会员', lastVisit: '2026-04-01', totalSpend: '¥360', beautician: '诗涵', source: '线下', createdAt: '2026-06-07 10:05' },
+                    { name: '刘婷', phone: '135****7890', customerType: '非会员', lastVisit: '2026-05-10', totalSpend: '¥520', beautician: '苏瑶', source: '抖音', createdAt: '2026-06-09 16:10' }
                 ]
             },
             newMember: {
                 daily: [],
                 monthly: [
-                    { name: '吴静', phone: '158****3456', customerType: '会员', lastVisit: '2026-05-10', totalSpend: '¥4,680', beautician: '诗涵', joinTime: '2026-05-10 14:30' },
-                    { name: '郑雪', phone: '159****7891', customerType: '会员', lastVisit: '2026-05-22', totalSpend: '¥3,960', beautician: '可欣', joinTime: '2026-05-22 16:00' },
-                    { name: '冯丽', phone: '188****6789', customerType: '会员', lastVisit: '2026-05-05', totalSpend: '¥5,280', beautician: '苏瑶', joinTime: '2026-05-05 11:20' },
-                    { name: '韩雪', phone: '177****2345', customerType: '会员', lastVisit: '2026-05-15', totalSpend: '¥6,800', beautician: '林悦', joinTime: '2026-05-15 09:30' },
-                    { name: '曹颖', phone: '166****9012', customerType: '会员', lastVisit: '2026-05-20', totalSpend: '¥3,200', beautician: '可欣', joinTime: '2026-05-20 15:45' }
+                    { name: '吴静', phone: '158****3456', customerType: '会员', lastVisit: '2026-05-10', totalSpend: '¥4,680', beautician: '诗涵', source: '线下', createdAt: '2026-06-05 10:12' },
+                    { name: '郑雪', phone: '159****7891', customerType: '会员', lastVisit: '2026-05-22', totalSpend: '¥3,960', beautician: '可欣', source: '朋友推荐', createdAt: '2026-06-09 13:08' },
+                    { name: '冯丽', phone: '188****6789', customerType: '会员', lastVisit: '2026-05-05', totalSpend: '¥5,280', beautician: '苏瑶', source: '抖音', createdAt: '2026-06-03 09:55' },
+                    { name: '韩雪', phone: '177****2345', customerType: '会员', lastVisit: '2026-05-15', totalSpend: '¥6,800', beautician: '林悦', source: '美团', createdAt: '2026-06-07 08:40' },
+                    { name: '曹颖', phone: '166****9012', customerType: '会员', lastVisit: '2026-05-20', totalSpend: '¥3,200', beautician: '可欣', source: '线下', createdAt: '2026-06-08 11:20' }
                 ],
                 yearly: [
-                    { name: '吴静', phone: '158****3456', customerType: '会员', lastVisit: '2026-05-10', totalSpend: '¥4,680', beautician: '诗涵', joinTime: '2026-05-10 14:30' },
-                    { name: '郑雪', phone: '159****7891', customerType: '会员', lastVisit: '2026-05-22', totalSpend: '¥3,960', beautician: '可欣', joinTime: '2026-05-22 16:00' },
-                    { name: '冯丽', phone: '188****6789', customerType: '会员', lastVisit: '2026-05-05', totalSpend: '¥5,280', beautician: '苏瑶', joinTime: '2026-05-05 11:20' }
+                    { name: '吴静', phone: '158****3456', customerType: '会员', lastVisit: '2026-05-10', totalSpend: '¥4,680', beautician: '诗涵', source: '线下', createdAt: '2026-06-02 10:12' },
+                    { name: '郑雪', phone: '159****7891', customerType: '会员', lastVisit: '2026-05-22', totalSpend: '¥3,960', beautician: '可欣', source: '朋友推荐', createdAt: '2026-06-06 13:08' },
+                    { name: '冯丽', phone: '188****6789', customerType: '会员', lastVisit: '2026-05-05', totalSpend: '¥5,280', beautician: '苏瑶', source: '抖音', createdAt: '2026-06-01 09:55' }
                 ]
             },
             visitFrequency: {
@@ -730,41 +837,50 @@
                     { name: '黄蓉', phone: '187****5678', customerType: '会员', memberType: '卡项会员', joinDate: '2024-09-08', totalSpend: '¥6,800', beautician: '苏瑶', totalVisits: '42次' }
                 ]
             },
+            arrears: {
+                all: [
+                    { name: '王芳', phone: '136****9012', customerType: '会员', currentArrears: '¥3,600', paidAmount: '¥1,200', historicalArrears: '¥4,800', lastVisit: '2026-05-26', beautician: '林悦' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', currentArrears: '¥2,800', paidAmount: '¥800', historicalArrears: '¥3,600', lastVisit: '2026-05-26', beautician: '诗涵' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', currentArrears: '¥1,500', paidAmount: '¥0', historicalArrears: '¥1,500', lastVisit: '2026-05-10', beautician: '苏瑶' },
+                    { name: '赵敏', phone: '133****2345', customerType: '会员', currentArrears: '¥2,400', paidAmount: '¥1,600', historicalArrears: '¥4,000', lastVisit: '2026-05-12', beautician: '可欣' },
+                    { name: '孙丽', phone: '131****6789', customerType: '会员', currentArrears: '¥2,500', paidAmount: '¥500', historicalArrears: '¥3,000', lastVisit: '2026-05-15', beautician: '林悦' }
+                ]
+            },
             memberDeal: {
                 daily: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', dealItem: '水光针护理', dealAmount: '¥480', payMethod: '微信', beautician: '林悦', dealTime: '2026-05-26 10:30' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', dealItem: '年度会员卡', dealAmount: '¥800', payMethod: '银行卡', beautician: '林悦', dealTime: '2026-05-26 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', dealItem: '面部清洁护理', dealAmount: '¥360', payMethod: '现金', beautician: '诗涵', dealTime: '2026-05-26 15:20' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', tradeCount: '2', totalSpend: '¥12,680', beautician: '林悦' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', tradeCount: '1', totalSpend: '¥15,800', beautician: '林悦' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', tradeCount: '1', totalSpend: '¥6,360', beautician: '诗涵' }
                 ],
                 monthly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', dealItem: '水光针护理', dealAmount: '¥480', payMethod: '微信', beautician: '林悦', dealTime: '2026-05-01 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', dealItem: '玻尿酸精华', dealAmount: '¥680', payMethod: '支付宝', beautician: '苏瑶', dealTime: '2026-05-03 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', dealItem: '年度会员卡', dealAmount: '¥800', payMethod: '银行卡', beautician: '林悦', dealTime: '2026-05-05 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', dealItem: '面部清洁护理', dealAmount: '¥360', payMethod: '现金', beautician: '诗涵', dealTime: '2026-05-08 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', dealItem: '修复面膜套装', dealAmount: '¥520', payMethod: '微信', beautician: '苏瑶', dealTime: '2026-05-10 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', tradeCount: '3', totalSpend: '¥12,680', beautician: '林悦' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', tradeCount: '2', totalSpend: '¥8,920', beautician: '苏瑶' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', tradeCount: '4', totalSpend: '¥15,800', beautician: '林悦' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', tradeCount: '2', totalSpend: '¥6,360', beautician: '诗涵' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', tradeCount: '2', totalSpend: '¥5,520', beautician: '苏瑶' }
                 ],
                 yearly: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', dealItem: '水光针护理', dealAmount: '¥480', payMethod: '微信', beautician: '林悦', dealTime: '2026-01-05 10:30' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', dealItem: '玻尿酸精华', dealAmount: '¥680', payMethod: '支付宝', beautician: '苏瑶', dealTime: '2026-02-12 11:15' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', dealItem: '年度会员卡', dealAmount: '¥800', payMethod: '银行卡', beautician: '林悦', dealTime: '2026-03-20 14:00' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', dealItem: '面部清洁护理', dealAmount: '¥360', payMethod: '现金', beautician: '诗涵', dealTime: '2026-04-15 15:20' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', dealItem: '修复面膜套装', dealAmount: '¥520', payMethod: '微信', beautician: '苏瑶', dealTime: '2026-05-10 16:45' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', tradeCount: '18', totalSpend: '¥12,680', beautician: '林悦' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', tradeCount: '14', totalSpend: '¥8,920', beautician: '苏瑶' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', tradeCount: '22', totalSpend: '¥15,800', beautician: '林悦' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', tradeCount: '10', totalSpend: '¥6,360', beautician: '诗涵' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', tradeCount: '12', totalSpend: '¥5,520', beautician: '苏瑶' }
                 ]
             },
             memberAsset: {
                 all: [
-                    { name: '张小美', phone: '138****6721', customerType: '会员', cardBalance: '¥3,200', courseRemain: '3次', productCredit: '¥580', beautician: '林悦', totalAsset: '¥3,780' },
-                    { name: '李晓丽', phone: '139****3845', customerType: '会员', cardBalance: '¥0', courseRemain: '-', productCredit: '¥0', beautician: '苏瑶', totalAsset: '¥0' },
-                    { name: '王芳', phone: '136****9012', customerType: '会员', cardBalance: '¥8,500', courseRemain: '8次', productCredit: '¥1,200', beautician: '林悦', totalAsset: '¥9,700' },
-                    { name: '陈雅', phone: '137****4567', customerType: '会员', cardBalance: '¥2,100', courseRemain: '5次', productCredit: '¥320', beautician: '诗涵', totalAsset: '¥2,420' },
-                    { name: '刘婷', phone: '135****7890', customerType: '会员', cardBalance: '¥0', courseRemain: '-', productCredit: '¥0', beautician: '苏瑶', totalAsset: '¥0' },
-                    { name: '赵敏', phone: '133****2345', customerType: '会员', cardBalance: '¥4,600', courseRemain: '4次', productCredit: '¥780', beautician: '可欣', totalAsset: '¥5,380' },
-                    { name: '孙丽', phone: '131****6789', customerType: '会员', cardBalance: '¥0', courseRemain: '-', productCredit: '¥0', beautician: '林悦', totalAsset: '¥0' },
-                    { name: '周琳', phone: '132****0123', customerType: '会员', cardBalance: '¥6,800', courseRemain: '6次', productCredit: '¥950', beautician: '苏瑶', totalAsset: '¥7,750' },
-                    { name: '吴静', phone: '158****3456', customerType: '会员', cardBalance: '¥1,200', courseRemain: '2次', productCredit: '¥180', beautician: '诗涵', totalAsset: '¥1,380' },
-                    { name: '郑雪', phone: '159****7891', customerType: '会员', cardBalance: '¥680', courseRemain: '1次', productCredit: '¥0', beautician: '可欣', totalAsset: '¥680' },
-                    { name: '何梅', phone: '186****1234', customerType: '会员', cardBalance: '¥5,200', courseRemain: '5次', productCredit: '¥860', beautician: '林悦', totalAsset: '¥6,060' },
-                    { name: '黄蓉', phone: '187****5678', customerType: '会员', cardBalance: '¥3,800', courseRemain: '3次', productCredit: '¥630', beautician: '苏瑶', totalAsset: '¥4,430' }
+                    { name: '张小美', phone: '138****6721', customerType: '会员', lastVisit: '2026-05-26', cardBalance: '¥3,200', serviceCardValue: '¥2,100', courseRemain: '3次', giftedRemain: '1次', productCredit: '¥580', beautician: '林悦', totalAsset: '¥3,780' },
+                    { name: '李晓丽', phone: '139****3845', customerType: '会员', lastVisit: '2026-05-26', cardBalance: '¥0', serviceCardValue: '-', courseRemain: '-', giftedRemain: '-', productCredit: '¥0', beautician: '苏瑶', totalAsset: '¥0' },
+                    { name: '王芳', phone: '136****9012', customerType: '会员', lastVisit: '2026-05-26', cardBalance: '¥8,500', serviceCardValue: '¥6,800', courseRemain: '8次', giftedRemain: '2次', productCredit: '¥1,200', beautician: '林悦', totalAsset: '¥9,700' },
+                    { name: '陈雅', phone: '137****4567', customerType: '会员', lastVisit: '2026-05-26', cardBalance: '¥2,100', serviceCardValue: '¥1,600', courseRemain: '5次', giftedRemain: '-', productCredit: '¥320', beautician: '诗涵', totalAsset: '¥2,420' },
+                    { name: '刘婷', phone: '135****7890', customerType: '会员', lastVisit: '2026-05-10', cardBalance: '¥0', serviceCardValue: '-', courseRemain: '-', giftedRemain: '-', productCredit: '¥0', beautician: '苏瑶', totalAsset: '¥0' },
+                    { name: '赵敏', phone: '133****2345', customerType: '会员', lastVisit: '2026-05-12', cardBalance: '¥4,600', serviceCardValue: '¥3,200', courseRemain: '4次', giftedRemain: '1次', productCredit: '¥780', beautician: '可欣', totalAsset: '¥5,380' },
+                    { name: '孙丽', phone: '131****6789', customerType: '会员', lastVisit: '2026-05-15', cardBalance: '¥0', serviceCardValue: '¥900', courseRemain: '2次', giftedRemain: '-', productCredit: '¥0', beautician: '林悦', totalAsset: '¥0' },
+                    { name: '周琳', phone: '132****0123', customerType: '会员', lastVisit: '2026-05-18', cardBalance: '¥6,800', serviceCardValue: '¥4,500', courseRemain: '6次', giftedRemain: '1次', productCredit: '¥950', beautician: '苏瑶', totalAsset: '¥7,750' },
+                    { name: '吴静', phone: '158****3456', customerType: '会员', lastVisit: '2026-04-10', cardBalance: '¥1,200', serviceCardValue: '¥780', courseRemain: '2次', giftedRemain: '-', productCredit: '¥180', beautician: '诗涵', totalAsset: '¥1,380' },
+                    { name: '郑雪', phone: '159****7891', customerType: '会员', lastVisit: '2026-03-22', cardBalance: '¥680', serviceCardValue: '¥320', courseRemain: '1次', giftedRemain: '-', productCredit: '¥0', beautician: '可欣', totalAsset: '¥680' },
+                    { name: '何梅', phone: '186****1234', customerType: '会员', lastVisit: '2025-11-15', cardBalance: '¥5,200', serviceCardValue: '¥3,600', courseRemain: '5次', giftedRemain: '2次', productCredit: '¥860', beautician: '林悦', totalAsset: '¥6,060' },
+                    { name: '黄蓉', phone: '187****5678', customerType: '会员', lastVisit: '2025-10-08', cardBalance: '¥3,800', serviceCardValue: '¥2,400', courseRemain: '3次', giftedRemain: '1次', productCredit: '¥630', beautician: '苏瑶', totalAsset: '¥4,430' }
                 ]
             },
             activeMember: {
@@ -802,55 +918,79 @@
             }
         };
 
+        const serviceDetailData = {
+            serviceCount: {
+                daily: [
+                    { orderId: 'ORD20260526001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-10 10:30' },
+                    { orderId: 'ORD20260526004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-10 15:20' },
+                    { orderId: 'ORD20260526006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-10 17:10' },
+                    { orderId: 'ORD20260526007', name: '周琳', phone: '132****0123', customerType: '会员', serviceItem: '补水护理', beautician: '苏瑶', count: 1, time: '2026-06-10 18:00' }
+                ],
+                monthly: [
+                    { orderId: 'ORD20260501001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260508004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-04 15:20' },
+                    { orderId: 'ORD20260512006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-06 09:30' },
+                    { orderId: 'ORD20260514008', name: '孙丽', phone: '131****6789', customerType: '会员', serviceItem: '美白护理套餐', beautician: '林悦', count: 1, time: '2026-06-07 14:20' },
+                    { orderId: 'ORD20260518009', name: '周琳', phone: '132****0123', customerType: '会员', serviceItem: '补水护理', beautician: '苏瑶', count: 1, time: '2026-06-08 17:40' }
+                ],
+                yearly: [
+                    { orderId: 'ORD20260105001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260212002', name: '李晓丽', phone: '139****3845', customerType: '会员', serviceItem: '深层清洁护理', beautician: '苏瑶', count: 1, time: '2026-06-03 11:15' },
+                    { orderId: 'ORD20260320003', name: '王芳', phone: '136****9012', customerType: '会员', serviceItem: '抖音限时体验', beautician: '林悦', count: 1, time: '2026-06-05 14:00' },
+                    { orderId: 'ORD20260401004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-07 15:20' }
+                ]
+            }
+        };
+
         const appointmentDetailData = {
             appointmentBooking: {
                 daily: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-26 10:00', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-26 11:00', status: 'arrived' },
-                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-26 14:00', status: 'arrived' },
-                    { name: '陈雅', phone: '137****4567', project: '面部清洁护理', beautician: '诗涵', appointmentTime: '2026-05-26 15:00', status: 'arrived' },
-                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-26 16:30', status: 'arrived' },
-                    { name: '赵敏', phone: '133****2345', project: '肩颈疏通护理', beautician: '可欣', appointmentTime: '2026-05-26 17:00', status: 'arrived' },
-                    { name: '孙丽', phone: '131****6789', project: '美白精华液', beautician: '林悦', appointmentTime: '2026-05-26 13:00', status: 'arrived' },
-                    { name: '周琳', phone: '132****0123', project: '季卡升级', beautician: '苏瑶', appointmentTime: '2026-05-26 09:30', status: 'arrived' },
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-26 10:00', actualArrival: '2026-06-10 10:05', status: 'arrived' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-26 11:00', actualArrival: '2026-06-10 11:10', status: 'arrived' },
+                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-26 14:00', actualArrival: '2026-06-10 13:55', status: 'arrived' },
+                    { name: '陈雅', phone: '137****4567', project: '面部清洁护理', beautician: '诗涵', appointmentTime: '2026-05-26 15:00', actualArrival: '2026-06-10 15:15', status: 'arrived' },
+                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-26 16:30', actualArrival: '2026-06-10 16:30', status: 'arrived' },
+                    { name: '赵敏', phone: '133****2345', project: '肩颈疏通护理', beautician: '可欣', appointmentTime: '2026-05-26 17:00', actualArrival: '2026-06-10 17:05', status: 'arrived' },
+                    { name: '孙丽', phone: '131****6789', project: '美白精华液', beautician: '林悦', appointmentTime: '2026-05-26 13:00', actualArrival: '2026-06-10 13:10', status: 'arrived' },
+                    { name: '周琳', phone: '132****0123', project: '季卡升级', beautician: '苏瑶', appointmentTime: '2026-05-26 09:30', actualArrival: '2026-06-10 09:25', status: 'arrived' },
                     { name: '吴静', phone: '158****3456', project: '深层清洁', beautician: '诗涵', appointmentTime: '2026-05-26 10:30', status: 'no-show' },
                     { name: '郑雪', phone: '159****7891', project: '补水护理', beautician: '可欣', appointmentTime: '2026-05-26 14:30', status: 'no-show' },
                     { name: '何梅', phone: '186****1234', project: '面部按摩', beautician: '林悦', appointmentTime: '2026-05-26 16:00', status: 'cancelled' },
                     { name: '黄蓉', phone: '187****5678', project: '祛痘护理', beautician: '苏瑶', appointmentTime: '2026-05-26 17:30', status: 'cancelled' }
                 ],
                 monthly: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-01 10:00', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-03 11:00', status: 'arrived' },
-                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-05 14:00', status: 'arrived' },
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-01 10:00', actualArrival: '2026-06-01 10:05', status: 'arrived' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-03 11:00', actualArrival: '2026-06-03 11:10', status: 'arrived' },
+                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-05 14:00', actualArrival: '2026-06-05 14:00', status: 'arrived' },
                     { name: '陈雅', phone: '137****4567', project: '面部清洁护理', beautician: '诗涵', appointmentTime: '2026-05-08 15:00', status: 'no-show' },
-                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-10 16:30', status: 'arrived' }
+                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-10 16:30', actualArrival: '2026-06-08 16:35', status: 'arrived' }
                 ],
                 yearly: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-01-05 10:00', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-02-12 11:00', status: 'arrived' },
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-01-05 10:00', actualArrival: '2026-06-01 10:05', status: 'arrived' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-02-12 11:00', actualArrival: '2026-06-03 11:10', status: 'arrived' },
                     { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-03-20 14:00', status: 'no-show' }
                 ]
             },
             appointmentArrived: {
                 daily: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-26 10:00', actualArrival: '2026-05-26 10:05', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-26 11:00', actualArrival: '2026-05-26 11:10', status: 'arrived' },
-                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-26 14:00', actualArrival: '2026-05-26 13:55', status: 'arrived' },
-                    { name: '陈雅', phone: '137****4567', project: '面部清洁护理', beautician: '诗涵', appointmentTime: '2026-05-26 15:00', actualArrival: '2026-05-26 15:15', status: 'arrived' },
-                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-26 16:30', actualArrival: '2026-05-26 16:30', status: 'arrived' },
-                    { name: '赵敏', phone: '133****2345', project: '肩颈疏通护理', beautician: '可欣', appointmentTime: '2026-05-26 17:00', actualArrival: '2026-05-26 17:05', status: 'arrived' },
-                    { name: '孙丽', phone: '131****6789', project: '美白精华液', beautician: '林悦', appointmentTime: '2026-05-26 13:00', actualArrival: '2026-05-26 13:10', status: 'arrived' },
-                    { name: '周琳', phone: '132****0123', project: '季卡升级', beautician: '苏瑶', appointmentTime: '2026-05-26 09:30', actualArrival: '2026-05-26 09:25', status: 'arrived' }
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-26 10:00', actualArrival: '2026-06-10 10:05', status: 'checked_out' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-26 11:00', actualArrival: '2026-06-10 11:10', status: 'arrived' },
+                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-26 14:00', actualArrival: '2026-06-10 13:55', status: 'checked_out' },
+                    { name: '陈雅', phone: '137****4567', project: '面部清洁护理', beautician: '诗涵', appointmentTime: '2026-05-26 15:00', actualArrival: '2026-06-10 15:15', status: 'arrived' },
+                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-26 16:30', actualArrival: '2026-06-10 16:30', status: 'arrived' },
+                    { name: '赵敏', phone: '133****2345', project: '肩颈疏通护理', beautician: '可欣', appointmentTime: '2026-05-26 17:00', actualArrival: '2026-06-10 17:05', status: 'checked_out' },
+                    { name: '孙丽', phone: '131****6789', project: '美白精华液', beautician: '林悦', appointmentTime: '2026-05-26 13:00', actualArrival: '2026-06-10 13:10', status: 'arrived' },
+                    { name: '周琳', phone: '132****0123', project: '季卡升级', beautician: '苏瑶', appointmentTime: '2026-05-26 09:30', actualArrival: '2026-06-10 09:25', status: 'checked_out' }
                 ],
                 monthly: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-01 10:00', actualArrival: '2026-05-01 10:05', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-03 11:00', actualArrival: '2026-05-03 11:10', status: 'arrived' },
-                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-05 14:00', actualArrival: '2026-05-05 14:00', status: 'arrived' },
-                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-10 16:30', actualArrival: '2026-05-10 16:35', status: 'arrived' }
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-05-01 10:00', actualArrival: '2026-06-01 10:05', status: 'checked_out' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-05-03 11:00', actualArrival: '2026-06-03 11:10', status: 'arrived' },
+                    { name: '王芳', phone: '136****9012', project: '年度会员卡', beautician: '林悦', appointmentTime: '2026-05-05 14:00', actualArrival: '2026-06-05 14:00', status: 'checked_out' },
+                    { name: '刘婷', phone: '135****7890', project: '修复面膜套装', beautician: '苏瑶', appointmentTime: '2026-05-10 16:30', actualArrival: '2026-06-08 16:35', status: 'arrived' }
                 ],
                 yearly: [
-                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-01-05 10:00', actualArrival: '2026-01-05 10:05', status: 'arrived' },
-                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-02-12 11:00', actualArrival: '2026-02-12 11:10', status: 'arrived' }
+                    { name: '张小美', phone: '138****6721', project: '水光针护理', beautician: '林悦', appointmentTime: '2026-01-05 10:00', actualArrival: '2026-06-01 10:05', status: 'checked_out' },
+                    { name: '李晓丽', phone: '139****3845', project: '玻尿酸精华', beautician: '苏瑶', appointmentTime: '2026-02-12 11:00', actualArrival: '2026-06-03 11:10', status: 'arrived' }
                 ]
             }
         };
@@ -858,60 +998,60 @@
         const platformDetailData = {
             platformMeituan: {
                 daily: [
-                    { couponCode: 'MT87263541', orderTime: '2026-05-25 18:30', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-05-26 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260526001' },
-                    { couponCode: 'DP93847261', orderTime: '2026-05-25 20:15', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-05-26 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260526002' },
-                    { couponCode: 'MT72618493', orderTime: '2026-05-26 09:00', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-05-26 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260526003' }
+                    { couponCode: 'MT87263541', orderTime: '2026-06-09 18:30', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-10 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260526001' },
+                    { couponCode: 'DP93847261', orderTime: '2026-06-09 20:15', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-10 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260526002' },
+                    { couponCode: 'MT72618493', orderTime: '2026-06-10 09:00', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-10 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260526003' }
                 ],
                 monthly: [
-                    { couponCode: 'MT87263501', orderTime: '2026-04-28 14:20', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-05-01 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260501001' },
-                    { couponCode: 'DP93847102', orderTime: '2026-04-30 19:45', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-05-03 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260503002' },
-                    { couponCode: 'MT72618303', orderTime: '2026-05-06 11:30', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-05-08 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260508003' },
-                    { couponCode: 'DP93847004', orderTime: '2026-05-10 15:00', channel: '大众点评', userName: '周琳', userPhone: '132****0123', productName: '美白护理套餐', amount: 458, status: '已核销', couponName: '美白护理券', verifyTime: '2026-05-12 11:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'MT20260512004' },
-                    { couponCode: 'MT72618205', orderTime: '2026-05-13 21:10', channel: '美团', userName: '吴静', userPhone: '158****3456', productName: '肩颈疏通体验', amount: 168, status: '已退款', couponName: '肩颈疏通券', verifyTime: '-', verifier: '-', beautician: '-', orderId: 'MT20260515005' }
+                    { couponCode: 'MT87263501', orderTime: '2026-06-01 08:20', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-01 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260501001' },
+                    { couponCode: 'DP93847102', orderTime: '2026-06-02 09:45', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-02 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260503002' },
+                    { couponCode: 'MT72618303', orderTime: '2026-06-04 11:30', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-04 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260508003' },
+                    { couponCode: 'DP93847004', orderTime: '2026-06-05 09:00', channel: '大众点评', userName: '周琳', userPhone: '132****0123', productName: '美白护理套餐', amount: 458, status: '已核销', couponName: '美白护理券', verifyTime: '2026-06-05 11:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'MT20260512004' },
+                    { couponCode: 'MT72618205', orderTime: '2026-06-06 11:10', channel: '美团', userName: '吴静', userPhone: '158****3456', productName: '肩颈疏通体验', amount: 168, status: '已退款', couponName: '肩颈疏通券', verifyTime: '2026-06-06 15:30', verifier: '前台小王', beautician: '诗涵', orderId: 'MT20260515005' }
                 ],
                 yearly: [
-                    { couponCode: 'MT87263001', orderTime: '2026-01-03 16:40', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-01-05 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260105001' },
-                    { couponCode: 'DP93847002', orderTime: '2026-02-09 17:55', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-02-12 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260212002' },
-                    { couponCode: 'MT72618003', orderTime: '2026-03-17 13:20', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-03-20 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260320003' }
+                    { couponCode: 'MT87263001', orderTime: '2026-06-01 08:40', channel: '美团', userName: '赵敏', userPhone: '133****2345', productName: '新客体验套餐', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-01 10:30', verifier: '前台小王', beautician: '可欣', orderId: 'MT20260105001' },
+                    { couponCode: 'DP93847002', orderTime: '2026-06-03 09:55', channel: '大众点评', userName: '钱慧', userPhone: '155****8901', productName: '深层清洁护理', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-03 14:00', verifier: '前台小李', beautician: '诗涵', orderId: 'MT20260212002' },
+                    { couponCode: 'MT72618003', orderTime: '2026-06-05 13:20', channel: '美团', userName: '孙丽', userPhone: '131****6789', productName: '补水保湿套餐', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-05 16:00', verifier: '前台小王', beautician: '林悦', orderId: 'MT20260320003' }
                 ]
             },
             platformDouyin: {
                 daily: [
-                    { couponCode: 'DY58293746', orderTime: '2026-05-25 22:00', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-05-26 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260526001' }
+                    { couponCode: 'DY58293746', orderTime: '2026-06-09 22:00', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-10 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260526001' }
                 ],
                 monthly: [
-                    { couponCode: 'DY58293601', orderTime: '2026-05-03 20:30', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-05-05 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260505001' },
-                    { couponCode: 'DY58293702', orderTime: '2026-05-08 19:15', channel: '抖音', userName: '陈雅', userPhone: '137****4567', productName: '抖音团购清洁', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-05-10 10:30', verifier: '前台小王', beautician: '诗涵', orderId: 'DY20260510002' },
-                    { couponCode: 'DY58293803', orderTime: '2026-05-16 23:45', channel: '抖音', userName: '王芳', userPhone: '136****9012', productName: '抖音限时体验', amount: 198, status: '待使用', couponName: '限时体验券', verifyTime: '-', verifier: '-', beautician: '-', orderId: 'DY20260518003' }
+                    { couponCode: 'DY58293601', orderTime: '2026-06-03 09:30', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-03 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260505001' },
+                    { couponCode: 'DY58293702', orderTime: '2026-06-05 08:15', channel: '抖音', userName: '陈雅', userPhone: '137****4567', productName: '抖音团购清洁', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-06-05 10:30', verifier: '前台小王', beautician: '诗涵', orderId: 'DY20260510002' },
+                    { couponCode: 'DY58293803', orderTime: '2026-06-07 09:45', channel: '抖音', userName: '王芳', userPhone: '136****9012', productName: '抖音限时体验', amount: 198, status: '待使用', couponName: '限时体验券', verifyTime: '2026-06-07 14:00', verifier: '前台小李', beautician: '林悦', orderId: 'DY20260518003' }
                 ],
                 yearly: [
-                    { couponCode: 'DY58293001', orderTime: '2026-01-12 21:00', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-01-15 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260115001' },
-                    { couponCode: 'DY58293702', orderTime: '2026-03-17 20:45', channel: '抖音', userName: '陈雅', userPhone: '137****4567', productName: '抖音团购清洁', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-03-20 10:30', verifier: '前台小王', beautician: '诗涵', orderId: 'DY20260320002' }
+                    { couponCode: 'DY58293001', orderTime: '2026-06-02 09:00', channel: '抖音', userName: '刘婷', userPhone: '135****7890', productName: '抖音专享护理套餐', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-02 15:00', verifier: '前台小李', beautician: '苏瑶', orderId: 'DY20260115001' },
+                    { couponCode: 'DY58293702', orderTime: '2026-06-05 08:45', channel: '抖音', userName: '陈雅', userPhone: '137****4567', productName: '抖音团购清洁', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-06-05 10:30', verifier: '前台小王', beautician: '诗涵', orderId: 'DY20260320002' }
                 ]
             },
             platformAmount: {
                 daily: [
-                    { orderId: 'MT20260526001', customer: '赵敏', project: '新客体验套餐', platform: '美团', amount: 198, verifyTime: '2026-05-26 10:30' },
-                    { orderId: 'MT20260526002', customer: '钱慧', project: '深层清洁护理', platform: '大众点评', amount: 398, verifyTime: '2026-05-26 14:00' },
-                    { orderId: 'MT20260526003', customer: '孙丽', project: '补水保湿套餐', platform: '美团', amount: 298, verifyTime: '2026-05-26 16:00' },
-                    { orderId: 'DY20260526001', customer: '刘婷', project: '抖音专享护理套餐', platform: '抖音', amount: 386, verifyTime: '2026-05-26 15:00' }
+                    { orderId: 'MT20260526001', couponCode: 'MT87263541', orderTime: '2026-06-09 18:30', customer: '赵敏', userPhone: '133****2345', project: '新客体验套餐', platform: '美团', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-10 10:30', verifier: '前台小王', beautician: '可欣' },
+                    { orderId: 'MT20260526002', couponCode: 'DP93847261', orderTime: '2026-06-09 20:15', customer: '钱慧', userPhone: '155****8901', project: '深层清洁护理', platform: '大众点评', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-10 14:00', verifier: '前台小李', beautician: '诗涵' },
+                    { orderId: 'MT20260526003', couponCode: 'MT72618493', orderTime: '2026-06-10 09:00', customer: '孙丽', userPhone: '131****6789', project: '补水保湿套餐', platform: '美团', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-10 16:00', verifier: '前台小王', beautician: '林悦' },
+                    { orderId: 'DY20260526001', couponCode: 'DY58293746', orderTime: '2026-06-09 22:00', customer: '刘婷', userPhone: '135****7890', project: '抖音专享护理套餐', platform: '抖音', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-10 15:00', verifier: '前台小李', beautician: '苏瑶' }
                 ],
                 monthly: [
-                    { orderId: 'MT20260501001', customer: '赵敏', project: '新客体验套餐', platform: '美团', amount: 198, verifyTime: '2026-05-01 10:30' },
-                    { orderId: 'MT20260503002', customer: '钱慧', project: '深层清洁护理', platform: '大众点评', amount: 398, verifyTime: '2026-05-03 14:00' },
-                    { orderId: 'MT20260508003', customer: '孙丽', project: '补水保湿套餐', platform: '美团', amount: 298, verifyTime: '2026-05-08 16:00' },
-                    { orderId: 'MT20260512004', customer: '周琳', project: '美白护理套餐', platform: '大众点评', amount: 458, verifyTime: '2026-05-12 11:00' },
-                    { orderId: 'MT20260515005', customer: '吴静', project: '肩颈疏通体验', platform: '美团', amount: 168, verifyTime: '2026-05-15 15:30' },
-                    { orderId: 'DY20260505001', customer: '刘婷', project: '抖音专享护理套餐', platform: '抖音', amount: 386, verifyTime: '2026-05-05 15:00' },
-                    { orderId: 'DY20260510002', customer: '陈雅', project: '抖音团购清洁', platform: '抖音', amount: 268, verifyTime: '2026-05-10 10:30' },
-                    { orderId: 'DY20260518003', customer: '王芳', project: '抖音限时体验', platform: '抖音', amount: 198, verifyTime: '2026-05-18 14:00' }
+                    { orderId: 'MT20260501001', couponCode: 'MT87263501', orderTime: '2026-06-01 08:20', customer: '赵敏', userPhone: '133****2345', project: '新客体验套餐', platform: '美团', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-01 10:30', verifier: '前台小王', beautician: '可欣' },
+                    { orderId: 'MT20260503002', couponCode: 'DP93847102', orderTime: '2026-06-02 09:45', customer: '钱慧', userPhone: '155****8901', project: '深层清洁护理', platform: '大众点评', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-02 14:00', verifier: '前台小李', beautician: '诗涵' },
+                    { orderId: 'MT20260508003', couponCode: 'MT72618303', orderTime: '2026-06-04 11:30', customer: '孙丽', userPhone: '131****6789', project: '补水保湿套餐', platform: '美团', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-04 16:00', verifier: '前台小王', beautician: '林悦' },
+                    { orderId: 'MT20260512004', couponCode: 'DP93847004', orderTime: '2026-06-05 09:00', customer: '周琳', userPhone: '132****0123', project: '美白护理套餐', platform: '大众点评', amount: 458, status: '已核销', couponName: '美白护理券', verifyTime: '2026-06-05 11:00', verifier: '前台小李', beautician: '苏瑶' },
+                    { orderId: 'MT20260515005', couponCode: 'MT72618205', orderTime: '2026-06-06 11:10', customer: '吴静', userPhone: '158****3456', project: '肩颈疏通体验', platform: '美团', amount: 168, status: '已退款', couponName: '肩颈疏通券', verifyTime: '2026-06-06 15:30', verifier: '前台小王', beautician: '诗涵' },
+                    { orderId: 'DY20260505001', couponCode: 'DY58293601', orderTime: '2026-06-03 09:30', customer: '刘婷', userPhone: '135****7890', project: '抖音专享护理套餐', platform: '抖音', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-03 15:00', verifier: '前台小李', beautician: '苏瑶' },
+                    { orderId: 'DY20260510002', couponCode: 'DY58293702', orderTime: '2026-06-05 08:15', customer: '陈雅', userPhone: '137****4567', project: '抖音团购清洁', platform: '抖音', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-06-05 10:30', verifier: '前台小王', beautician: '诗涵' },
+                    { orderId: 'DY20260518003', couponCode: 'DY58293803', orderTime: '2026-06-07 09:45', customer: '王芳', userPhone: '136****9012', project: '抖音限时体验', platform: '抖音', amount: 198, status: '待使用', couponName: '限时体验券', verifyTime: '2026-06-07 14:00', verifier: '前台小李', beautician: '林悦' }
                 ],
                 yearly: [
-                    { orderId: 'MT20260105001', customer: '赵敏', project: '新客体验套餐', platform: '美团', amount: 198, verifyTime: '2026-01-05 10:30' },
-                    { orderId: 'MT20260212002', customer: '钱慧', project: '深层清洁护理', platform: '大众点评', amount: 398, verifyTime: '2026-02-12 14:00' },
-                    { orderId: 'MT20260320003', customer: '孙丽', project: '补水保湿套餐', platform: '美团', amount: 298, verifyTime: '2026-03-20 16:00' },
-                    { orderId: 'DY20260115001', customer: '刘婷', project: '抖音专享护理套餐', platform: '抖音', amount: 386, verifyTime: '2026-01-15 15:00' },
-                    { orderId: 'DY20260320002', customer: '陈雅', project: '抖音团购清洁', platform: '抖音', amount: 268, verifyTime: '2026-03-20 10:30' }
+                    { orderId: 'MT20260105001', couponCode: 'MT87263001', orderTime: '2026-06-01 08:40', customer: '赵敏', userPhone: '133****2345', project: '新客体验套餐', platform: '美团', amount: 198, status: '已核销', couponName: '新客体验券', verifyTime: '2026-06-01 10:30', verifier: '前台小王', beautician: '可欣' },
+                    { orderId: 'MT20260212002', couponCode: 'DP93847002', orderTime: '2026-06-03 09:55', customer: '钱慧', userPhone: '155****8901', project: '深层清洁护理', platform: '大众点评', amount: 398, status: '已核销', couponName: '深层清洁券', verifyTime: '2026-06-03 14:00', verifier: '前台小李', beautician: '诗涵' },
+                    { orderId: 'MT20260320003', couponCode: 'MT72618003', orderTime: '2026-06-05 13:20', customer: '孙丽', userPhone: '131****6789', project: '补水保湿套餐', platform: '美团', amount: 298, status: '已核销', couponName: '补水保湿券', verifyTime: '2026-06-05 16:00', verifier: '前台小王', beautician: '林悦' },
+                    { orderId: 'DY20260115001', couponCode: 'DY58293001', orderTime: '2026-06-02 09:00', customer: '刘婷', userPhone: '135****7890', project: '抖音专享护理套餐', platform: '抖音', amount: 386, status: '已核销', couponName: '抖音专享券', verifyTime: '2026-06-02 15:00', verifier: '前台小李', beautician: '苏瑶' },
+                    { orderId: 'DY20260320002', couponCode: 'DY58293702', orderTime: '2026-06-05 08:45', customer: '陈雅', userPhone: '137****4567', project: '抖音团购清洁', platform: '抖音', amount: 268, status: '已核销', couponName: '团购清洁券', verifyTime: '2026-06-05 10:30', verifier: '前台小王', beautician: '诗涵' }
                 ]
             }
         };
@@ -924,12 +1064,47 @@
         let currentView = 'daily';
         let activeDetailType = null;
 
-        document.getElementById('visitFrequencyItem').style.display = 'none';
-
         const customerTypeTagMap = {
             '会员': 'member-tag',
-            '非会员': 'new-customer-tag'
+            '非会员': 'new-customer-tag',
+            '新客': 'new-customer-tag',
+            '体验客': 'valid-tag'
         };
+
+        const customerProfileMap = {
+            '张小美': { phone: '138****6721', customerType: '会员' },
+            '李晓丽': { phone: '139****3845', customerType: '会员' },
+            '王芳': { phone: '136****9012', customerType: '会员' },
+            '陈雅': { phone: '137****4567', customerType: '会员' },
+            '刘婷': { phone: '135****7890', customerType: '会员' },
+            '赵敏': { phone: '133****2345', customerType: '会员' },
+            '孙丽': { phone: '131****6789', customerType: '会员' },
+            '周琳': { phone: '132****0123', customerType: '会员' },
+            '周佳琪': { phone: '139****5621', customerType: '新客' },
+            '林小薇': { phone: '137****8842', customerType: '体验客' },
+            '黄静': { phone: '136****4528', customerType: '会员' },
+            '钱慧': { phone: '155****8901', customerType: '新客' },
+            '吴静': { phone: '158****3456', customerType: '会员' }
+        };
+
+        const appointmentStatusMap = {
+            pending: { label: '待到店', className: 'valid-tag' },
+            arrived: { label: '已到店', className: 'active-tag' },
+            checked_out: { label: '已收银', className: 'member-tag' },
+            cancelled: { label: '已取消', className: 'new-customer-tag' },
+            timeout: { label: '已超时', className: 'sleep-tag' },
+            'no-show': { label: '已超时', className: 'sleep-tag' },
+            '待到店': { label: '待到店', className: 'valid-tag' },
+            '已到店': { label: '已到店', className: 'active-tag' },
+            '已收银': { label: '已收银', className: 'member-tag' },
+            '已取消': { label: '已取消', className: 'new-customer-tag' },
+            '已超时': { label: '已超时', className: 'sleep-tag' }
+        };
+
+        const memberDealNamePool = [
+            '周佳琪', '林小薇', '黄静', '钱慧', '吴静', '郑雪', '韩雪', '冯丽', '曹颖', '杨兰',
+            '朱婷', '许芳', '蒋琳', '宋怡', '沈悦', '梁静', '罗倩', '何敏', '潘洁', '邓颖'
+        ];
 
         const memberStatusTagMap = {
             'active': 'active-tag',
@@ -937,45 +1112,143 @@
             'sleep': 'sleep-tag'
         };
 
+        function getAppointmentStatusMeta(status) {
+            return appointmentStatusMap[status] || { label: status || '-', className: 'new-customer-tag' };
+        }
+
+        function buildExpandedMemberDealRows(rows, targetCount) {
+            const list = rows.map(row => ({ ...row }));
+            const seeds = list.length ? list : [{ name: '客户', phone: '139****0000', customerType: '会员', tradeCount: '1', totalSpend: '¥0', beautician: '-' }];
+            let cursor = 0;
+
+            while (list.length < targetCount) {
+                const seed = seeds[cursor % seeds.length];
+                const poolName = memberDealNamePool[cursor % memberDealNamePool.length];
+                const serial = list.length + 1;
+                list.push({
+                    ...seed,
+                    name: `${poolName}${cursor >= memberDealNamePool.length ? serial : ''}`,
+                    phone: `13${String((serial % 90) + 10)}****${String(1000 + (serial % 9000)).slice(-4)}`,
+                    tradeCount: String((cursor % 4) + 1)
+                });
+                cursor += 1;
+            }
+
+            return list;
+        }
+
+        const tooltipEl = document.createElement('div');
+        tooltipEl.className = 'metric-tooltip';
+        document.body.appendChild(tooltipEl);
+
+        function hideMetricTooltip() {
+            tooltipEl.classList.remove('show');
+        }
+
+        function showMetricTooltip(anchorEl, text) {
+            tooltipEl.textContent = text;
+            tooltipEl.style.left = '0px';
+            tooltipEl.style.top = '0px';
+            tooltipEl.classList.add('show');
+
+            const rect = anchorEl.getBoundingClientRect();
+            const ttRect = tooltipEl.getBoundingClientRect();
+
+            const padding = 10;
+            let left = rect.left + rect.width / 2 - ttRect.width / 2;
+            left = Math.max(padding, Math.min(left, window.innerWidth - ttRect.width - padding));
+
+            let top = rect.bottom + 8;
+            if (top + ttRect.height + padding > window.innerHeight) {
+                top = rect.top - ttRect.height - 8;
+            }
+            top = Math.max(padding, Math.min(top, window.innerHeight - ttRect.height - padding));
+
+            tooltipEl.style.left = `${left}px`;
+            tooltipEl.style.top = `${top}px`;
+        }
+
+        document.addEventListener('click', function() {
+            hideMetricTooltip();
+        });
+
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') hideMetricTooltip();
+        });
+
+        document.querySelectorAll('.metric-tip-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                const tip = this.getAttribute('data-tip') || '';
+                if (!tip) return;
+
+                const isOpen = tooltipEl.classList.contains('show') && tooltipEl.textContent === tip;
+                if (isOpen) {
+                    hideMetricTooltip();
+                    return;
+                }
+                showMetricTooltip(this, tip);
+            });
+        });
+
         function updateSectionCards(view) {
             const data = sectionData[view] || sectionData.daily;
 
-            const businessValues = document.querySelectorAll('.section-card')[0].querySelectorAll('.metric-value');
-            businessValues[0].textContent = '¥' + data.business.cashPerformance.toLocaleString();
-            businessValues[1].textContent = '¥' + data.business.productCash.toLocaleString();
-            businessValues[2].textContent = '¥' + data.business.careCash.toLocaleString();
-            businessValues[3].textContent = '¥' + data.business.cardCash.toLocaleString();
-            businessValues[4].textContent = '¥' + data.business.consume.toLocaleString();
-            businessValues[5].textContent = '¥' + data.business.courseConsume.toLocaleString();
-            businessValues[6].textContent = '¥' + data.business.productConsume.toLocaleString();
-            businessValues[7].textContent = '¥' + data.business.avgOrder;
-            businessValues[8].textContent = data.business.serviceCount;
+            const setDetailValue = (detail, text) => {
+                const el = document.querySelector(`[data-detail="${detail}"] .metric-value`);
+                if (el) el.textContent = text;
+            };
 
-            const memberValues = document.querySelectorAll('.section-card')[1].querySelectorAll('.metric-value');
-            memberValues[0].textContent = data.member.newCustomer;
-            memberValues[1].textContent = data.member.newMember;
-            memberValues[1].className = data.member.newMember === 0 ? 'metric-value zero' : 'metric-value';
-            memberValues[2].textContent = data.member.customerFlow;
+            setDetailValue('cashPerformance', '¥' + data.business.cashPerformance.toLocaleString());
+            setDetailValue('productCash', '¥' + data.business.productCash.toLocaleString());
+            setDetailValue('careCash', '¥' + data.business.careCash.toLocaleString());
+            setDetailValue('cardCash', '¥' + data.business.cardCash.toLocaleString());
+            setDetailValue('newCustomerCashPerformance', '¥' + data.business.newCustomerCashPerformance.toLocaleString());
+            setDetailValue('newCustomerProductCash', '¥' + data.business.newCustomerProductCash.toLocaleString());
+            setDetailValue('newCustomerCareCash', '¥' + data.business.newCustomerCareCash.toLocaleString());
+            setDetailValue('newCustomerCardCash', '¥' + data.business.newCustomerCardCash.toLocaleString());
+            setDetailValue('consume', '¥' + data.business.consume.toLocaleString());
+            setDetailValue('courseConsume', '¥' + data.business.courseConsume.toLocaleString());
+            setDetailValue('productConsume', '¥' + data.business.productConsume.toLocaleString());
 
-            const visitFreqItem = document.getElementById('visitFrequencyItem');
-            const visitFreqValue = document.getElementById('visitFrequencyValue');
-            if (view === 'daily') {
-                visitFreqItem.style.display = 'none';
-            } else {
-                visitFreqItem.style.display = '';
-                visitFreqValue.textContent = data.member.visitFrequency;
+            const avgOrderEl = document.getElementById('avgOrderValue');
+            if (avgOrderEl) avgOrderEl.textContent = '¥' + data.business.avgOrder;
+
+            const newCustomerEl = document.getElementById('newCustomerValue');
+            if (newCustomerEl) newCustomerEl.textContent = data.member.newCustomer;
+            const experienceCustomerEl = document.getElementById('experienceCustomerValue');
+            if (experienceCustomerEl) experienceCustomerEl.textContent = data.member.experienceCustomer;
+            const newMemberEl = document.getElementById('newMemberValue');
+            if (newMemberEl) {
+                newMemberEl.textContent = data.member.newMember;
+                newMemberEl.className = data.member.newMember === 0 ? 'metric-value zero' : 'metric-value';
             }
+            const customerFlowEl = document.getElementById('customerFlowValue');
+            if (customerFlowEl) customerFlowEl.textContent = data.member.customerFlow;
 
-            document.getElementById('memberDealValue').textContent = data.member.memberDeal;
-            document.getElementById('totalMemberValue').textContent = data.member.totalMember;
+            const memberDealEl = document.getElementById('memberDealValue');
+            if (memberDealEl) memberDealEl.textContent = data.member.memberDeal;
 
-            document.querySelectorAll('.section-card')[2].querySelectorAll('.metric-value')[0].textContent = data.appointment.booking;
-            document.querySelectorAll('.section-card')[2].querySelectorAll('.metric-value')[1].textContent = data.appointment.arrived;
-            document.querySelectorAll('.section-card')[2].querySelectorAll('.metric-value')[2].textContent = data.appointment.rate;
+            const serviceCountEl = document.getElementById('serviceCountValue');
+            if (serviceCountEl) serviceCountEl.textContent = data.member.serviceCount;
 
-            document.querySelectorAll('.section-card')[3].querySelectorAll('.metric-value')[0].textContent = data.platform.meituan;
-            document.querySelectorAll('.section-card')[3].querySelectorAll('.metric-value')[1].textContent = data.platform.douyin;
-            document.querySelectorAll('.section-card')[3].querySelectorAll('.metric-value')[2].textContent = '¥' + data.platform.amount.toLocaleString();
+            const arrearsEl = document.getElementById('arrearsValue');
+            if (arrearsEl) arrearsEl.textContent = '¥' + constantData.arrears.toLocaleString();
+
+            const amountCardAssetEl = document.getElementById('amountCardAssetValue');
+            if (amountCardAssetEl) amountCardAssetEl.textContent = '¥' + constantData.amountCardAsset.toLocaleString();
+
+            const serviceCardAssetEl = document.getElementById('serviceCardAssetValue');
+            if (serviceCardAssetEl) serviceCardAssetEl.textContent = '¥' + constantData.serviceCardAsset.toLocaleString();
+
+            setDetailValue('appointmentBooking', data.appointment.booking + '');
+            setDetailValue('appointmentArrived', data.appointment.arrived + '');
+            const rateEl = document.getElementById('appointmentRateValue');
+            if (rateEl) rateEl.textContent = data.appointment.rate;
+
+            setDetailValue('platformMeituan', data.platform.meituan + '');
+            setDetailValue('platformDouyin', data.platform.douyin + '');
+            setDetailValue('platformAmount', '¥' + data.platform.amount.toLocaleString());
 
             if (activeDetailType) {
                 renderDetail(activeDetailType, view);
@@ -987,13 +1260,6 @@
             const thead = document.getElementById('detailTableHead');
             const tbody = document.getElementById('cashDetailBody');
 
-            let dateText = '';
-            if (view === 'daily') {
-                dateText = document.getElementById('singleDate').value;
-            } else {
-                dateText = startDateInput.value + ' 至 ' + endDateInput.value;
-            }
-            document.getElementById('cashDetailDate').textContent = dateText;
             document.getElementById('detailPanelTitle').textContent = config.title;
             document.getElementById('detailSummaryLabel').textContent = config.summaryLabel;
 
@@ -1003,20 +1269,46 @@
                 const totalValue = businessData.business[type];
                 document.getElementById('cashTotalValue').textContent = '¥' + totalValue.toLocaleString();
 
-                thead.innerHTML = '<tr><th>订单编号</th><th>客户姓名</th><th>项目</th><th>责任美容师</th><th>收款方式</th><th>金额</th><th>下单时间</th></tr>';
+                const safeText = (v) => (v === undefined || v === null || v === '' ? '-' : String(v));
+                const formatCurrency = (value) => {
+                    const num = Number(value);
+                    if (Number.isFinite(num)) {
+                        return '￥' + num.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    }
+                    return safeText(value);
+                };
+                const getProductInfoText = (row) => {
+                    const v = row && (row.productInfo || row.goodsInfo || row.project || row.itemName);
+                    if (v !== undefined && v !== null && v !== '') return String(v);
+                    if (row && row.project) return `${row.project}*1`;
+                    return '-';
+                };
+                const getPayMethodText = (row) => {
+                    const v = row && (row.payMethodText || row.payMethodDisplay || row.payMethod);
+                    if (typeof v === 'string' && v.includes('￥')) return v;
+                    if (typeof v === 'string' && v.includes('¥')) return v.replaceAll('¥', '￥');
+                    const amountValue = row && (row.orderAmount ?? row.amount);
+                    if (typeof v === 'string' && v.trim() !== '') return `${v} ${formatCurrency(amountValue)}`;
+                    if (amountValue !== undefined && amountValue !== null && amountValue !== '') return `线上支付 ${formatCurrency(amountValue)}`;
+                    return '-';
+                };
+
+                thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>商品信息</th><th>订单金额</th><th>责任美容师</th><th>支付方式</th><th>下单时间</th><th>订单编号</th></tr>';
 
                 if (data.length === 0) {
-                    tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                 } else {
                     tbody.innerHTML = data.map(row => `
                         <tr>
-                            <td>${row.orderId}</td>
-                            <td>${row.customer}</td>
-                            <td>${row.project}</td>
-                            <td>${row.beautician}</td>
-                            <td><span class="type-tag pay-tag">${row.payMethod}</span></td>
-                            <td class="amount-cell">¥${row.amount.toLocaleString()}</td>
-                            <td>${row.time}</td>
+                            <td>${safeText(row.customer || row.customerName || row.name)}</td>
+                            <td>${safeText((customerProfileMap[row.customer || row.customerName || row.name] || {}).phone || row.phone)}</td>
+                            <td>${safeText((customerProfileMap[row.customer || row.customerName || row.name] || {}).customerType || row.customerType)}</td>
+                            <td>${getProductInfoText(row)}</td>
+                            <td class="amount-cell">${formatCurrency(row.orderAmount ?? row.amount)}</td>
+                            <td>${safeText(row.beautician)}</td>
+                            <td>${getPayMethodText(row)}</td>
+                            <td>${safeText(row.time)}</td>
+                            <td>${safeText(row.orderId)}</td>
                         </tr>
                     `).join('');
                 }
@@ -1025,9 +1317,9 @@
                     const data = (appointmentDetailData.appointmentBooking && appointmentDetailData.appointmentBooking[view]) || [];
                     const apptData = sectionData[view] || sectionData.daily;
                     document.getElementById('cashTotalValue').textContent = apptData.appointment.booking + '人';
-                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>预约项目</th><th>责任美容师</th><th>预约时间</th><th>状态</th></tr>';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>预约项目</th><th>责任美容师</th><th>预约时间</th><th>状态</th><th>实际到店</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
@@ -1036,7 +1328,8 @@
                                 <td>${row.project}</td>
                                 <td>${row.beautician}</td>
                                 <td>${row.appointmentTime}</td>
-                                <td><span class="type-tag ${row.status === 'arrived' ? 'active-tag' : row.status === 'no-show' ? 'sleep-tag' : 'new-customer-tag'}">${row.status === 'arrived' ? '已到店' : row.status === 'no-show' ? '爽约' : '已取消'}</span></td>
+                                <td><span class="type-tag ${getAppointmentStatusMeta(row.status).className}">${getAppointmentStatusMeta(row.status).label}</span></td>
+                                <td>${row.actualArrival || '-'}</td>
                             </tr>
                         `).join('');
                     }
@@ -1044,9 +1337,9 @@
                     const data = (appointmentDetailData.appointmentArrived && appointmentDetailData.appointmentArrived[view]) || [];
                     const apptData = sectionData[view] || sectionData.daily;
                     document.getElementById('cashTotalValue').textContent = apptData.appointment.arrived + '人';
-                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>预约项目</th><th>责任美容师</th><th>预约时间</th><th>实际到店</th></tr>';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>预约项目</th><th>责任美容师</th><th>预约时间</th><th>状态</th><th>实际到店</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
@@ -1055,6 +1348,7 @@
                                 <td>${row.project}</td>
                                 <td>${row.beautician}</td>
                                 <td>${row.appointmentTime}</td>
+                                <td><span class="type-tag ${getAppointmentStatusMeta(row.status).className}">${getAppointmentStatusMeta(row.status).label}</span></td>
                                 <td>${row.actualArrival}</td>
                             </tr>
                         `).join('');
@@ -1117,18 +1411,25 @@
                     const data = (platformDetailData.platformAmount && platformDetailData.platformAmount[view]) || [];
                     const platData = sectionData[view] || sectionData.daily;
                     document.getElementById('cashTotalValue').textContent = '¥' + platData.platform.amount.toLocaleString();
-                    thead.innerHTML = '<tr><th>订单编号</th><th>客户姓名</th><th>团购项目</th><th>平台来源</th><th>核销金额</th><th>核销时间</th></tr>';
+                    thead.innerHTML = '<tr><th>券码</th><th>下单时间</th><th>核销渠道</th><th>用户姓名</th><th>用户手机</th><th>商品名称</th><th>核销金额</th><th>状态</th><th>券名称</th><th>核销时间</th><th>核销人</th><th>美容师</th><th>店务通订单号</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="13" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
-                                <td>${row.orderId}</td>
-                                <td>${row.customer}</td>
-                                <td>${row.project}</td>
+                                <td>${row.couponCode || '-'}</td>
+                                <td>${row.orderTime || '-'}</td>
                                 <td><span class="type-tag ${row.platform === '美团' ? 'consume' : row.platform === '大众点评' ? 'course-perf' : 'course'}">${row.platform}</span></td>
+                                <td>${row.customer || row.userName || '-'}</td>
+                                <td>${row.userPhone || '-'}</td>
+                                <td>${row.project || row.productName || '-'}</td>
                                 <td class="amount-cell">¥${row.amount}</td>
+                                <td><span class="type-tag ${(row.status || '已核销') === '已核销' ? 'active-tag' : (row.status || '') === '已退款' ? 'sleep-tag' : 'new-customer-tag'}">${row.status || '已核销'}</span></td>
+                                <td>${row.couponName || '-'}</td>
                                 <td>${row.verifyTime}</td>
+                                <td>${row.verifier || '-'}</td>
+                                <td>${row.beautician || '-'}</td>
+                                <td>${row.orderId}</td>
                             </tr>
                         `).join('');
                     }
@@ -1140,27 +1441,47 @@
                     const data = memberDetailData.customerFlow[view] || [];
                     const totalValue = memberData.member[type];
                     document.getElementById('cashTotalValue').textContent = totalValue + '人';
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>到店时间</th></tr>';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>客流类型</th><th>到店时间</th><th>责任美容师</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
                                 <td>${row.name}</td>
                                 <td>${row.phone}</td>
                                 <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
-                                <td>${row.lastVisit}</td>
-                                <td class="amount-cell">${row.totalSpend}</td>
-                                <td>${row.beautician}</td>
+                                <td>${row.flowType || '-'}</td>
                                 <td>${row.visitTime}</td>
+                                <td>${row.beautician}</td>
                             </tr>
                         `).join('');
                     }
                 } else if (type === 'newCustomer') {
                     const data = memberDetailData.newCustomer[view] || [];
-                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>来源渠道</th></tr>';
+                    document.getElementById('cashTotalValue').textContent = (memberData.member.newCustomer || 0) + '人';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>来源渠道</th><th>创建时间</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                    } else {
+                        tbody.innerHTML = data.map(row => `
+                            <tr>
+                                <td>${row.name}</td>
+                                <td>${row.phone}</td>
+                                <td><span class="type-tag new-customer-tag">新客</span></td>
+                                <td>${row.lastVisit}</td>
+                                <td class="amount-cell">${row.totalSpend}</td>
+                                <td>${row.beautician}</td>
+                                <td>${row.source}</td>
+                                <td>${row.createdAt || '-'}</td>
+                            </tr>
+                        `).join('');
+                    }
+                } else if (type === 'experienceCustomer') {
+                    const data = memberDetailData.experienceCustomer[view] || [];
+                    document.getElementById('cashTotalValue').textContent = (memberData.member.experienceCustomer || 0) + '人';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>来源渠道</th><th>创建时间</th></tr>';
+                    if (data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
@@ -1171,14 +1492,16 @@
                                 <td class="amount-cell">${row.totalSpend}</td>
                                 <td>${row.beautician}</td>
                                 <td>${row.source}</td>
+                                <td>${row.createdAt || '-'}</td>
                             </tr>
                         `).join('');
                     }
                 } else if (type === 'newMember') {
                     const data = memberDetailData.newMember[view] || [];
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>入会时间</th></tr>';
+                    document.getElementById('cashTotalValue').textContent = (memberData.member.newMember || 0) + '人';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>最近到店</th><th>累计消费</th><th>责任美容师</th><th>来源渠道</th><th>创建时间</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
@@ -1188,88 +1511,102 @@
                                 <td>${row.lastVisit}</td>
                                 <td class="amount-cell">${row.totalSpend}</td>
                                 <td>${row.beautician}</td>
-                                <td>${row.joinTime}</td>
+                                <td>${row.source || '-'}</td>
+                                <td>${row.createdAt || '-'}</td>
                             </tr>
                         `).join('');
                     }
-                } else if (type === 'visitFrequency') {
-                    const data = memberDetailData.visitFrequency[view] || [];
+                } else if (type === 'serviceCount') {
+                    const data = (serviceDetailData.serviceCount && serviceDetailData.serviceCount[view]) || [];
                     const memberData = sectionData[view] || sectionData.daily;
-                    document.getElementById('cashTotalValue').textContent = memberData.member.visitFrequency + '次';
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>到店频次</th><th>平均间隔</th><th>责任美容师</th><th>最近到店</th></tr>';
+                    document.getElementById('cashTotalValue').textContent = memberData.member.serviceCount + '次';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>服务项目</th><th>数量</th><th>美容师</th><th>服务时间</th></tr>';
                     if (data.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
-                                <td>${row.name}</td>
-                                <td>${row.phone}</td>
-                                <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
-                                <td>${row.totalVisits}</td>
-                                <td>${row.avgInterval}</td>
+                                <td>${row.name || row.customer || '-'}</td>
+                                <td>${row.phone || '-'}</td>
+                                <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType || '-'}</span></td>
+                                <td>${row.serviceItem}</td>
+                                <td>${row.count}</td>
                                 <td>${row.beautician}</td>
-                                <td>${row.lastVisit}</td>
+                                <td>${row.time}</td>
                             </tr>
                         `).join('');
                     }
                 } else if (type === 'memberDeal') {
-                    const data = memberDetailData.memberDeal[view] || [];
+                    const rawData = memberDetailData.memberDeal[view] || [];
                     const memberData = sectionData[view] || sectionData.daily;
-                    document.getElementById('cashTotalValue').textContent = memberData.member.memberDeal + '人';
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>成交项目</th><th>成交金额</th><th>收款方式</th><th>责任美容师</th><th>成交时间</th></tr>';
+                    const totalValue = memberData.member.memberDeal || 0;
+                    const data = buildExpandedMemberDealRows(rawData, totalValue);
+                    document.getElementById('cashTotalValue').textContent = totalValue + '人';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>交易次数</th><th>累计消费</th><th>责任美容师</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
                                 <td>${row.name}</td>
                                 <td>${row.phone}</td>
                                 <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
-                                <td>${row.dealItem}</td>
-                                <td class="amount-cell">${row.dealAmount}</td>
-                                <td>${row.payMethod}</td>
+                                <td>${row.tradeCount || '-'}</td>
+                                <td class="amount-cell">${row.totalSpend || '-'}</td>
                                 <td>${row.beautician}</td>
-                                <td>${row.dealTime}</td>
                             </tr>
                         `).join('');
                     }
-                } else if (type === 'totalMember') {
-                    const data = memberDetailData.totalMember.all;
-                    document.getElementById('cashTotalValue').textContent = '156人';
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>入会日期</th><th>累计消费</th><th>责任美容师</th><th>累计到店</th></tr>';
-                    tbody.innerHTML = data.map(row => `
-                        <tr>
-                            <td>${row.name}</td>
-                            <td>${row.phone}</td>
-                            <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
-                            <td>${row.joinDate}</td>
-                            <td class="amount-cell">${row.totalSpend}</td>
-                            <td>${row.beautician}</td>
-                            <td>${row.totalVisits}</td>
-                        </tr>
-                    `).join('');
-                } else if (type === 'memberAsset') {
-                    const data = memberDetailData.memberAsset.all;
-                    const totalAsset = data.reduce((sum, row) => {
-                        const val = parseFloat(row.totalAsset.replace('¥', '').replace(',', '')) || 0;
-                        return sum + val;
-                    }, 0);
-                    document.getElementById('cashTotalValue').textContent = '¥' + totalAsset.toLocaleString();
-                    thead.innerHTML = '<tr><th>会员姓名</th><th>手机号</th><th>客户类型</th><th>卡项余额</th><th>疗程余次</th><th>产品储值</th><th>责任美容师</th><th>总资产</th></tr>';
+                } else if (type === 'amountCardAsset') {
+                    const data = memberDetailData.memberAsset.all || [];
+                    document.getElementById('cashTotalValue').textContent = '¥' + constantData.amountCardAsset.toLocaleString();
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>金额卡余额</th><th>责任美容师</th><th>最近到店</th></tr>';
                     tbody.innerHTML = data.map(row => `
                         <tr>
                             <td>${row.name}</td>
                             <td>${row.phone}</td>
                             <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
                             <td class="amount-cell">${row.cardBalance}</td>
-                            <td>${row.courseRemain}</td>
-                            <td class="amount-cell">${row.productCredit}</td>
                             <td>${row.beautician}</td>
-                            <td class="amount-cell">${row.totalAsset}</td>
+                            <td>${row.lastVisit || '-'}</td>
+                        </tr>
+                    `).join('');
+                } else if (type === 'serviceCardAsset') {
+                    const data = memberDetailData.memberAsset.all || [];
+                    document.getElementById('cashTotalValue').textContent = '¥' + constantData.serviceCardAsset.toLocaleString();
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>次卡剩余价值</th><th>次卡余次</th><th>赠送余次</th><th>责任美容师</th><th>最近到店</th></tr>';
+                    tbody.innerHTML = data.map(row => `
+                        <tr>
+                            <td>${row.name}</td>
+                            <td>${row.phone}</td>
+                            <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
+                            <td class="amount-cell">${row.serviceCardValue || '-'}</td>
+                            <td>${row.courseRemain}</td>
+                            <td>${row.giftedRemain || '-'}</td>
+                            <td>${row.beautician}</td>
+                            <td>${row.lastVisit || '-'}</td>
+                        </tr>
+                    `).join('');
+                } else if (type === 'arrears') {
+                    const data = memberDetailData.arrears.all || [];
+                    document.getElementById('cashTotalValue').textContent = '¥' + constantData.arrears.toLocaleString();
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>当前欠款金额</th><th>已还款金额</th><th>历史欠款总金额</th><th>最近到店</th><th>责任美容师</th></tr>';
+                    tbody.innerHTML = data.map(row => `
+                        <tr>
+                            <td>${row.name}</td>
+                            <td>${row.phone}</td>
+                            <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType}</span></td>
+                            <td class="amount-cell">${row.currentArrears || row.arrears || '-'}</td>
+                            <td class="amount-cell-neutral">${row.paidAmount || '-'}</td>
+                            <td class="amount-cell-neutral">${row.historicalArrears || '-'}</td>
+                            <td>${row.lastVisit}</td>
+                            <td>${row.beautician}</td>
                         </tr>
                     `).join('');
                 }
             }
+
+            enableDetailTableSorting();
         }
 
         function toggleDetail(type) {
@@ -1296,41 +1633,190 @@
             renderDetail(type, currentView);
         }
 
+        function getSortableCellValue(text) {
+            const raw = (text || '').replace(/\s+/g, ' ').trim();
+            const normalizedDate = raw.replace(/\//g, '-');
+            if (/^\d{4}-\d{2}-\d{2}( \d{2}:\d{2})?$/.test(normalizedDate)) {
+                return { type: 'date', value: Date.parse(normalizedDate.replace(' ', 'T')) || 0 };
+            }
+
+            const numericText = raw
+                .replace(/[￥¥,\s]/g, '')
+                .replace(/次|人|天|%/g, '');
+            if (/^-?\d+(\.\d+)?$/.test(numericText)) {
+                return { type: 'number', value: Number(numericText) };
+            }
+
+            return { type: 'text', value: raw };
+        }
+
+        function enableDetailTableSorting() {
+            const thead = document.getElementById('detailTableHead');
+            const tbody = document.getElementById('cashDetailBody');
+            if (!thead || !tbody) return;
+
+            const headers = Array.from(thead.querySelectorAll('th'));
+            const bodyRows = Array.from(tbody.querySelectorAll('tr'));
+            if (!headers.length || !bodyRows.length) return;
+            if (bodyRows[0].children.length !== headers.length) return;
+
+            const originalRows = bodyRows.map((row, index) => ({ index, row: row.cloneNode(true) }));
+
+            const renderRows = (rows) => {
+                tbody.innerHTML = '';
+                rows.forEach(item => tbody.appendChild(item.row.cloneNode(true)));
+            };
+
+            const setHeaderState = (activeIndex, state) => {
+                headers.forEach((th, index) => {
+                    th.classList.add('sortable');
+                    th.classList.toggle('active', index === activeIndex && state !== 'default');
+                    th.dataset.sortState = index === activeIndex ? state : 'default';
+                    let indicator = th.querySelector('.sort-indicator');
+                    if (!indicator) {
+                        indicator = document.createElement('span');
+                        indicator.className = 'sort-indicator';
+                        th.appendChild(indicator);
+                    }
+                    indicator.textContent = index === activeIndex
+                        ? (state === 'asc' ? '↑' : state === 'desc' ? '↓' : '↕')
+                        : '↕';
+                });
+            };
+
+            setHeaderState(-1, 'default');
+
+            headers.forEach((th, columnIndex) => {
+                th.onclick = () => {
+                    const currentState = th.dataset.sortState || 'default';
+                    const nextState = currentState === 'default' ? 'asc' : currentState === 'asc' ? 'desc' : 'default';
+
+                    if (nextState === 'default') {
+                        renderRows(originalRows);
+                        setHeaderState(-1, 'default');
+                        return;
+                    }
+
+                    const sortedRows = originalRows.slice().sort((a, b) => {
+                        const aText = a.row.children[columnIndex] ? a.row.children[columnIndex].textContent : '';
+                        const bText = b.row.children[columnIndex] ? b.row.children[columnIndex].textContent : '';
+                        const aValue = getSortableCellValue(aText);
+                        const bValue = getSortableCellValue(bText);
+
+                        let compareResult = 0;
+                        if (aValue.type === bValue.type && (aValue.type === 'number' || aValue.type === 'date')) {
+                            compareResult = aValue.value - bValue.value;
+                        } else {
+                            compareResult = String(aValue.value).localeCompare(String(bValue.value), 'zh-Hans-CN', { numeric: true, sensitivity: 'base' });
+                        }
+
+                        if (compareResult === 0) return a.index - b.index;
+                        return nextState === 'asc' ? compareResult : -compareResult;
+                    });
+
+                    renderRows(sortedRows);
+                    setHeaderState(columnIndex, nextState);
+                };
+            });
+        }
+
+        function pad2(n) { return String(n).padStart(2, '0'); }
+        function toISODate(d) {
+            return d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+        }
+        function getTodayISO() {
+            const now = new Date();
+            return toISODate(new Date(now.getFullYear(), now.getMonth(), now.getDate()));
+        }
+        function getMonthRangeISO(d) {
+            const start = new Date(d.getFullYear(), d.getMonth(), 1);
+            const end = new Date(d.getFullYear(), d.getMonth() + 1, 0);
+            return { start: toISODate(start), end: toISODate(end) };
+        }
+        function getYearRangeISO(d) {
+            const start = new Date(d.getFullYear(), 0, 1);
+            const end = new Date(d.getFullYear(), 11, 31);
+            return { start: toISODate(start), end: toISODate(end) };
+        }
+        function setActiveTab(view) {
+            document.querySelectorAll('.table-tab').forEach(t => t.classList.toggle('active', t.dataset.view === view));
+        }
+        function setDateMode(view) {
+            if (view === 'daily') {
+                singleFilter.style.display = 'flex';
+                singleFilter.style.height = '40px';
+                rangeFilter.style.display = 'none';
+            } else {
+                singleFilter.style.display = 'none';
+                rangeFilter.style.display = 'flex';
+                rangeFilter.style.height = '40px';
+            }
+        }
+        function normalizeRangeInputs() {
+            const s = startDateInput.value;
+            const e = endDateInput.value;
+            if (s && e && s > e) {
+                startDateInput.value = e;
+                endDateInput.value = s;
+            }
+        }
+        function applyPreset(view) {
+            const todayISO = getTodayISO();
+            const today = new Date(todayISO + 'T00:00:00');
+
+            currentView = view;
+            setActiveTab(view);
+            setDateMode(view);
+
+            if (view === 'daily') {
+                document.getElementById('singleDate').value = todayISO;
+            } else if (view === 'monthly') {
+                const r = getMonthRangeISO(today);
+                startDateInput.value = r.start;
+                endDateInput.value = r.end;
+            } else if (view === 'yearly') {
+                const r = getYearRangeISO(today);
+                startDateInput.value = r.start;
+                endDateInput.value = r.end;
+            }
+            normalizeRangeInputs();
+            updateSectionCards(currentView);
+        }
+
         document.querySelectorAll('.table-tab').forEach(tab => {
             tab.addEventListener('click', function() {
-                document.querySelectorAll('.table-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                currentView = this.dataset.view;
-
-                if (currentView === 'daily') {
-                    singleFilter.style.display = 'flex';
-                    rangeFilter.style.display = 'none';
-                } else if (currentView === 'monthly') {
-                    singleFilter.style.display = 'none';
-                    rangeFilter.style.display = 'flex';
-                    startDateInput.value = '2026-01-01';
-                    endDateInput.value = '2026-12-31';
-                } else if (currentView === 'yearly') {
-                    singleFilter.style.display = 'none';
-                    rangeFilter.style.display = 'flex';
-                    startDateInput.value = '2024-01-01';
-                    endDateInput.value = '2026-12-31';
-                }
-                updateSectionCards(currentView);
+                applyPreset(this.dataset.view);
             });
         });
 
         document.getElementById('singleDate').addEventListener('change', function() {
-            console.log('已选择日期:', this.value);
+            currentView = 'daily';
+            setActiveTab('daily');
+            setDateMode('daily');
+            updateSectionCards(currentView);
         });
 
         startDateInput.addEventListener('change', function() {
-            console.log('开始日期:', this.value);
+            setDateMode(currentView === 'daily' ? 'monthly' : currentView);
+            if (currentView === 'daily') {
+                currentView = 'monthly';
+                setActiveTab('monthly');
+            }
+            normalizeRangeInputs();
+            updateSectionCards(currentView);
         });
 
         endDateInput.addEventListener('change', function() {
-            console.log('结束日期:', this.value);
+            setDateMode(currentView === 'daily' ? 'monthly' : currentView);
+            if (currentView === 'daily') {
+                currentView = 'monthly';
+                setActiveTab('monthly');
+            }
+            normalizeRangeInputs();
+            updateSectionCards(currentView);
         });
+
+        applyPreset('daily');
     </script>
 </body>
 </html>

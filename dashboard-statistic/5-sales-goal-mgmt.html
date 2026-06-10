@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>门店目标管理</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
         :root {
             --primary: #0D9488;
@@ -44,6 +46,20 @@
             --transition-fast: all 0.15s ease;
             --transition-normal: all 0.25s ease;
             --transition-slow: all 0.35s ease;
+        }
+        :root {
+            --primary: #E87C9A;
+            --primary-dark: #B75A70;
+            --primary-50: #FFF1F5;
+            --primary-100: #FFE4EC;
+            --primary-200: #FFC7D9;
+            --primary-300: #FFA0BE;
+            --primary-400: #F1A3B8;
+            --primary-500: #E87C9A;
+            --primary-600: #D66B85;
+            --primary-700: #B75A70;
+            --bg-secondary: #f7f8fa;
+            --bg-tertiary: #FFF1F5;
         }
 
         * {
@@ -2156,22 +2172,62 @@
             margin-top: 4px;
         }
 
+        body{height:100vh;overflow:hidden}
+        .chl-layout{display:flex;flex-direction:column;height:100vh}
+        .chl-topbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--neutral-200);z-index:200;flex-shrink:0}
+        .chl-topbar-left{display:flex;align-items:center;gap:24px}
+        .chl-back{display:flex;align-items:center;color:#E87C9A;text-decoration:none}
+        .chl-back:hover{opacity:.75}
+        .chl-brand{display:flex;align-items:center;font-size:20px;font-weight:800;letter-spacing:1px;color:var(--neutral-900)}
+        .chl-brand span{color:#E87C9A}
+        .chl-store{display:flex;align-items:center;gap:6px;border:1px solid var(--neutral-200);padding:6px 12px;border-radius:9999px;font-size:14px;color:var(--neutral-700);background:#fff;cursor:pointer}
+        .chl-store:hover{background:var(--neutral-50)}
+        .chl-topbar-right{display:flex;align-items:center;gap:18px;color:var(--neutral-500)}
+        .chl-icon-btn{border:none;background:transparent;cursor:pointer;color:var(--neutral-400);padding:6px;border-radius:10px}
+        .chl-icon-btn:hover{color:#E87C9A;background:var(--neutral-50)}
+        .chl-meta{font-size:14px;color:var(--neutral-400)}
+        .chl-meta-strong{font-size:14px;font-weight:600;color:var(--neutral-500)}
+        .chl-user{display:flex;align-items:center;gap:10px}
+        .chl-user img{width:24px;height:24px;border-radius:9999px;object-fit:cover}
+        .chl-user-name{font-size:14px;font-weight:600;color:var(--neutral-700)}
+        .chl-user-role{background:var(--neutral-100);padding:2px 8px;border-radius:6px;font-size:12px;color:var(--neutral-500)}
+        .chl-page-scroll{flex:1;min-height:0;overflow:auto}
+
     </style>
 </head>
 <body>
-    <div class="page-container">
-        <header class="page-header">
-            <div class="header-content">
-                <h1 class="page-title">目标管理</h1>
-                <button class="mobile-menu-toggle" id="mobileMenuToggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
+    <div class="chl-layout">
+        <div class="chl-topbar">
+            <div class="chl-topbar-left">
+                <a class="chl-back" href="../new-order-design/customer-list-pad.html" aria-label="返回">
+                    <iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
+                </a>
+                <div class="chl-brand">
+                    <span>CHLITINA</span>&nbsp;克丽缇娜
+                </div>
+                <div class="chl-store">
+                    <span>测试店1</span>
+                    <iconify-icon icon="mdi:chevron-down"></iconify-icon>
+                </div>
             </div>
-        </header>
-
-        <main class="page-main">
+            <div class="chl-topbar-right">
+                <button class="chl-icon-btn" type="button" aria-label="通知">
+                    <iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
+                </button>
+                <span class="chl-meta-strong">23:04</span>
+                <span class="chl-meta">6月2日 周二</span>
+                <iconify-icon class="text-base" icon="mdi:wifi"></iconify-icon>
+                <span class="chl-meta">24%</span>
+                <div class="chl-user">
+                    <img alt="User Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+                    <span class="chl-user-name">roger</span>
+                    <span class="chl-user-role">店总</span>
+                </div>
+            </div>
+        </div>
+        <div class="chl-page-scroll">
+            <div class="page-container">
+                <main class="page-main">
             <div class="year-selector">
                 <button class="year-btn" id="prevYearBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
@@ -3494,5 +3550,7 @@
         }
     });
     </script>
+        </div>
+    </div>
 </body>
 </html>
