@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>报表中心 - 克丽缇娜</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#E87C9A;
+            --primary-light:#F1A3B8;
+            --primary-dark:#B75A70;
+            --primary-soft:#FCEEF3;
+            --bg:#F7F8FA;
+            --card:#FFFFFF;
+            --border:#E5E7EB;
+            --border-soft:#F1F3F5;
+            --text:#111827;
+            --text-secondary:#6B7280;
+            --text-light:#9CA3AF;
+            --shadow:0 6px 18px rgba(17,24,39,0.06);
+        }
+        body{
+            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+            background:var(--bg);
+            color:var(--text);
+            height:100vh;
+            overflow:hidden;
+        }
+        a{text-decoration:none;color:inherit}
+        button{font:inherit}
+        .page{
+            height:100vh;
+            display:flex;
+            flex-direction:column;
+            background:var(--bg);
+        }
+        .topbar{
+            height:56px;
+            background:#fff;
+            border-bottom:1px solid var(--border);
+            display:flex;
+            align-items:center;
+            justify-content:space-between;
+            padding:0 18px 0 14px;
+            flex-shrink:0;
+        }
+        .topbar-left,.topbar-right{display:flex;align-items:center}
+        .topbar-left{gap:10px}
+        .brand{
+            display:flex;align-items:center;gap:6px;font-size:18px;font-weight:700;letter-spacing:.4px;color:#4B5563;
+        }
+        .brand-word{color:var(--primary)}
+        .store-chip{
+            display:inline-flex;align-items:center;gap:6px;
+            padding:5px 10px;border:1px solid var(--border);border-radius:999px;background:#fff;
+            font-size:13px;color:#4B5563;
+        }
+        .topbar-right{gap:14px;color:var(--text-light)}
+        .icon-btn{
+            width:30px;height:30px;border:none;border-radius:999px;background:#fff;color:var(--text-secondary);
+            display:inline-flex;align-items:center;justify-content:center;cursor:pointer;
+        }
+        .icon-btn:hover{background:var(--primary-soft);color:var(--primary)}
+        .top-meta{font-size:13px;color:var(--text-secondary);font-weight:600}
+        .top-sub-meta{font-size:12px;color:var(--text-light)}
+        .top-user{
+            display:flex;align-items:center;gap:8px;padding-left:14px;border-left:1px solid var(--border);
+        }
+        .avatar{
+            width:28px;height:28px;border-radius:999px;background:linear-gradient(135deg,var(--primary-light),var(--primary));
+            display:flex;align-items:center;justify-content:center;color:#fff;font-size:12px;font-weight:700;
+        }
+        .user-text{display:flex;flex-direction:column;gap:1px}
+        .user-name{font-size:13px;font-weight:600;color:#374151;line-height:1}
+        .user-role{font-size:11px;color:var(--text-light);line-height:1}
+        .layout{
+            flex:1;min-height:0;display:flex;overflow:hidden;
+        }
+        .sidebar{
+            width:96px;background:#fff;border-right:1px solid var(--border-soft);
+            display:flex;flex-direction:column;align-items:center;padding:14px 0 10px;flex-shrink:0;
+        }
+        .nav{
+            width:100%;display:flex;flex-direction:column;gap:6px;flex:1;padding:0 12px;
+        }
+        .nav-item{
+            width:100%;border-radius:18px;padding:10px 0 9px;color:#9CA3AF;
+            display:flex;flex-direction:column;align-items:center;gap:6px;transition:all .18s ease;
+        }
+        .nav-item:hover{color:var(--primary);background:var(--primary-soft)}
+        .nav-item.active{
+            color:#fff;background:linear-gradient(180deg,var(--primary-light),var(--primary));
+            box-shadow:0 10px 20px rgba(232,124,154,0.26);
+        }
+        .nav-label{font-size:12px;line-height:1.1}
+        .nav-label.small{font-size:11px;text-align:center;line-height:1.2}
+        .divider{
+            width:44px;height:1px;background:var(--border-soft);margin:4px auto 2px;
+        }
+        .version{font-size:10px;color:#C7CDD5;padding-top:8px}
+        .content{
+            flex:1;min-width:0;overflow:auto;padding:22px 28px 28px;
+        }
+        .section{
+            background:var(--card);border:1px solid var(--border-soft);border-radius:18px;
+            padding:18px 18px 16px;box-shadow:var(--shadow);
+        }
+        .section + .section{margin-top:18px}
+        .section-title{
+            font-size:14px;font-weight:700;color:#1F2937;margin-bottom:16px;
+        }
+        .report-grid{
+            display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:18px 6px;
+        }
+        .report-card{
+            width:100%;min-height:92px;border:none;background:transparent;padding:0 10px 0 8px;
+            display:flex;flex-direction:column;align-items:flex-start;gap:10px;border-radius:14px;
+            text-align:left;cursor:pointer;transition:transform .18s ease, background .18s ease, box-shadow .18s ease;
+        }
+        .report-card:hover{
+            background:#FFF8FA;transform:translateY(-1px);box-shadow:0 8px 18px rgba(232,124,154,0.10);
+        }
+        .report-card.static{
+            cursor:default;
+        }
+        .report-card.static:hover{
+            background:#FFF8FA;transform:none;box-shadow:none;
+        }
+        .report-icon{
+            width:42px;height:42px;border-radius:14px;background:linear-gradient(180deg,var(--primary-light),var(--primary));
+            color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 6px 16px rgba(232,124,154,0.18);
+        }
+        .report-name{
+            font-size:13px;font-weight:600;color:#4B5563;line-height:1.35;
+        }
+        .report-card:hover .report-name{color:#374151}
+        .placeholder-note{
+            margin-top:8px;font-size:12px;color:var(--text-light);
+        }
+        .content-inner{max-width:1180px}
+        svg{display:block}
+    </style>
+</head>
+<body>
+    <div class="page">
+        <header class="topbar">
+            <div class="topbar-left">
+                <div class="brand">
+                    <span class="brand-word">CHLITINA</span>
+                    <span>克丽缇娜</span>
+                </div>
+                <div class="store-chip">
+                    <span>测试店1</span>
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </div>
+            </div>
+            <div class="topbar-right">
+                <button class="icon-btn" type="button" aria-label="搜索">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path d="M20 20l-3.5-3.5"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" type="button" aria-label="通知">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M18 8a6 6 0 10-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                        <path d="M13.73 21a2 2 0 01-3.46 0"></path>
+                    </svg>
+                </button>
+                <button class="icon-btn" type="button" aria-label="日历">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="3"></rect>
+                        <path d="M16 2v4M8 2v4M3 10h18"></path>
+                    </svg>
+                </button>
+                <span class="top-meta">22:08</span>
+                <span class="top-sub-meta">6月10日 周三</span>
+                <span class="top-sub-meta">70%</span>
+                <div class="top-user">
+                    <div class="avatar">R</div>
+                    <div class="user-text">
+                        <span class="user-name">roger</span>
+                        <span class="user-role">店总</span>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="layout">
+            <aside class="sidebar">
+                <nav class="nav">
+                    <a class="nav-item" href="../new-order-design/home-page.html">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M3 10.5L12 3l9 7.5"></path>
+                            <path d="M5 9.5V20h14V9.5"></path>
+                        </svg>
+                        <span class="nav-label">首页</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="5" width="16" height="15" rx="3"></rect>
+                            <path d="M8 3v4M16 3v4M8 11h8M8 15h5"></path>
+                        </svg>
+                        <span class="nav-label">预约</span>
+                    </a>
+                    <a class="nav-item" href="../new-order-design/customer-list-pad.html">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="8" r="3.5"></circle>
+                            <path d="M5 19a7 7 0 0114 0"></path>
+                        </svg>
+                        <span class="nav-label">客户</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="4" y="6" width="16" height="12" rx="2"></rect>
+                            <path d="M4 10h16"></path>
+                        </svg>
+                        <span class="nav-label">收银</span>
+                    </a>
+                    <a class="nav-item active" href="report-entry-pad.html" aria-current="page">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M5 19V9"></path>
+                            <path d="M12 19V5"></path>
+                            <path d="M19 19v-7"></path>
+                        </svg>
+                        <span class="nav-label">报表</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3"></circle>
+                            <path d="M19.4 15a1.6 1.6 0 00.32 1.76l.06.06a2 2 0 01-2.83 2.83l-.06-.06a1.6 1.6 0 00-1.76-.32 1.6 1.6 0 00-.97 1.46V21a2 2 0 01-4 0v-.09a1.6 1.6 0 00-.97-1.46 1.6 1.6 0 00-1.76.32l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.6 1.6 0 004.6 15a1.6 1.6 0 00-1.46-.97H3a2 2 0 010-4h.14A1.6 1.6 0 004.6 9a1.6 1.6 0 00-.32-1.76l-.06-.06a2 2 0 112.83-2.83l.06.06A1.6 1.6 0 008.87 4.6H9a1.6 1.6 0 001.46-.97V3a2 2 0 014 0v.14A1.6 1.6 0 0015.93 4.6a1.6 1.6 0 001.76-.32l.06-.06a2 2 0 112.83 2.83l-.06.06A1.6 1.6 0 0019.4 9c.37.6.93.97 1.54.97H21a2 2 0 010 4h-.06c-.61 0-1.17.37-1.54.97z"></path>
+                        </svg>
+                        <span class="nav-label">设置</span>
+                    </a>
+                    <div class="divider"></div>
+                    <a class="nav-item" href="#">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M6 6h15l-1.5 8.5H8z"></path>
+                            <path d="M6 6L4.5 3H2"></path>
+                            <circle cx="9" cy="20" r="1.5"></circle>
+                            <circle cx="18" cy="20" r="1.5"></circle>
+                        </svg>
+                        <span class="nav-label small">店销商品展厅</span>
+                    </a>
+                    <a class="nav-item" href="#">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M7 7h10v10H7z"></path>
+                            <path d="M3 12h4M17 12h4M12 3v4M12 17v4"></path>
+                        </svg>
+                        <span class="nav-label small">homespa商品展厅</span>
+                    </a>
+                </nav>
+                <div class="version">V2.1.4</div>
+            </aside>
+
+            <main class="content">
+                <div class="content-inner">
+                    <section class="section">
+                        <h2 class="section-title">订单报表</h2>
+                        <div class="report-grid">
+                            <div class="report-card static">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="4" y="5" width="16" height="12" rx="2"></rect>
+                                        <path d="M8 9h8M8 13h5"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">平台核销</div>
+                            </div>
+                            <div class="report-card static">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M7 7h10v10H7z"></path>
+                                        <path d="M12 7v10M7 12h10"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">云店实物订单</div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="section">
+                        <h2 class="section-title">分析报表</h2>
+                        <div class="report-grid">
+                            <a class="report-card" href="1-dashboard-overview.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M5 19V9"></path>
+                                        <path d="M12 19V5"></path>
+                                        <path d="M19 19v-7"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">经营总览</div>
+                            </a>
+                            <a class="report-card" href="3-dashboard-customer-statistics.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="9" cy="8" r="3"></circle>
+                                        <path d="M4 19a5 5 0 0110 0"></path>
+                                        <path d="M17 11a3 3 0 100-6"></path>
+                                        <path d="M20 19a4 4 0 00-4-4"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">客户分析</div>
+                            </a>
+                            <a class="report-card" href="4-dashboard-staff-statistics.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M6 18V8"></path>
+                                        <path d="M12 18V5"></path>
+                                        <path d="M18 18v-9"></path>
+                                        <path d="M4 18h16"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">员工业绩分析</div>
+                            </a>
+                            <a class="report-card" href="5-sales-goal-mgmt.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="12" cy="12" r="8"></circle>
+                                        <path d="M12 8v4l3 2"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">销售目标</div>
+                            </a>
+                            <a class="report-card" href="6-profit-loss-table.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M4 19h16"></path>
+                                        <path d="M7 15l3-3 3 2 4-5"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">经营损益报表</div>
+                            </a>
+                            <a class="report-card" href="6-expense-bookkeeping.html">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="5" y="4" width="14" height="16" rx="2"></rect>
+                                        <path d="M9 9h6M9 13h6M9 17h4"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">支出记账</div>
+                            </a>
+                            <div class="report-card static">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="4" y="5" width="16" height="14" rx="2"></rect>
+                                        <path d="M8 15l2-3 2 2 4-5"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">O2O数据看板</div>
+                            </div>
+                            <div class="report-card static">
+                                <div class="report-icon">
+                                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="5" y="4" width="14" height="16" rx="2"></rect>
+                                        <path d="M8 8h8M8 12h8M8 16h5"></path>
+                                    </svg>
+                                </div>
+                                <div class="report-name">服务日志</div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,685 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>业绩汇总表 - 回蓝 · 美业收银系统</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#0D9488;--primary-light:#14B8A6;--primary-dark:#0F766E;--primary-bg:rgba(13,148,136,0.08);
+            --bg:#F0FDFA;--bg-card:#FFFFFF;--bg-hover:#ECFDF5;--bg-dark:#1A2E2B;
+            --border:#CCFBF1;--border-light:#D5F5F0;
+            --text-primary:#2C2825;--text-secondary:#7A7268;--text-muted:#B0A89E;
+            --success:#5BA876;--success-bg:rgba(91,168,118,0.1);
+            --warning:#E8A838;--warning-bg:rgba(232,168,56,0.1);
+            --error:#D45B5B;--error-bg:rgba(212,91,91,0.1);
+            --info:#5B8FD4;--info-bg:rgba(91,143,212,0.1);
+            --purple:#8B6DB5;--purple-bg:rgba(139,109,181,0.1);
+            --pink:#D4728F;--pink-bg:rgba(212,114,143,0.1);
+            --teal:#5BA8A0;--teal-bg:rgba(91,168,160,0.1);
+            --gold:#D4A838;--gold-bg:rgba(212,168,56,0.1);
+            --shadow-sm:0 1px 3px rgba(44,40,37,0.06);
+            --shadow-md:0 4px 12px rgba(44,40,37,0.08);
+            --shadow-lg:0 8px 24px rgba(44,40,37,0.12);
+            --radius:10px;--radius-lg:14px;--radius-sm:6px;
+        }
+        :root{
+            --primary:#E87C9A;--primary-light:#F1A3B8;--primary-dark:#B75A70;--primary-bg:rgba(232,124,154,0.08);
+            --bg:#f7f8fa;--bg-card:#FFFFFF;--bg-hover:#FFF7FA;
+            --border:#E5E7EB;--border-light:#F3F4F6;
+            --text-primary:#111827;--text-secondary:#374151;--text-muted:#6B7280;
+            --success:#10B981;--success-bg:rgba(16,185,129,0.1);
+            --warning:#F59E0B;--warning-bg:rgba(245,158,11,0.1);
+            --error:#EF4444;--error-bg:rgba(239,68,68,0.1);
+            --info:#3B82F6;--info-bg:rgba(59,130,246,0.1);
+            --pink:#E87C9A;--pink-bg:rgba(232,124,154,0.1);
+            --teal:#98D8C8;--teal-bg:rgba(152,216,200,0.12);
+            --gold:#D4AF37;--gold-bg:rgba(212,175,55,0.14);
+            --purple:#8B5CF6;--purple-bg:rgba(139,92,246,0.1);
+        }
+        body{font-family:'Noto Sans SC','DM Sans',-apple-system,BlinkMacSystemFont,sans-serif;background:var(--bg);color:var(--text-primary);line-height:1.5;overflow:hidden;height:100vh}
+        ::-webkit-scrollbar{width:4px}
+        ::-webkit-scrollbar-track{background:transparent}
+        ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+        .app{display:flex;flex-direction:column;height:100vh}
+        .top-bar{background:var(--bg-dark);color:#fff;padding:0 20px;height:52px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;z-index:100}
+        .top-bar-left{display:flex;align-items:center;gap:16px}
+        .logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;letter-spacing:1px}
+        .logo-icon{width:30px;height:30px;background:linear-gradient(135deg,var(--primary),var(--primary-light));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+        .store-info{display:flex;align-items:center;gap:6px;font-size:13px;color:rgba(255,255,255,0.6);padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:6px;cursor:pointer}
+        .top-bar-right{display:flex;align-items:center;gap:12px}
+        .top-btn{display:flex;align-items:center;gap:6px;padding:7px 14px;font-size:13px;color:rgba(255,255,255,0.8);background:rgba(255,255,255,0.08);border:none;border-radius:6px;cursor:pointer;transition:all .2s}
+        .top-btn:hover{background:rgba(255,255,255,0.15);color:#fff}
+        .top-btn.active{background:var(--primary);color:#fff}
+        .user-info{display:flex;align-items:center;gap:8px;padding:6px 12px;background:rgba(255,255,255,0.08);border-radius:6px;cursor:pointer}
+        .user-avatar{width:28px;height:28px;border-radius:50%;background:linear-gradient(135deg,var(--primary),var(--primary-light));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600}
+        .user-name{font-size:13px}
+        .main-area{display:flex;flex:1;overflow:hidden}
+        .left-nav{width:220px;background:var(--bg-card);border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto}
+        .nav-group{padding:12px 0}
+        .nav-group-title{padding:6px 20px;font-size:11px;color:var(--text-muted);font-weight:500;letter-spacing:1px;text-transform:uppercase}
+        .nav-item{display:flex;align-items:center;gap:10px;padding:10px 20px;font-size:13px;color:var(--text-secondary);cursor:pointer;transition:all .15s;border-left:3px solid transparent;position:relative}
+        .nav-item:hover{background:var(--bg-hover);color:var(--text-primary)}
+        .nav-item.active{background:var(--primary-bg);color:var(--primary);border-left-color:var(--primary);font-weight:600}
+        .nav-item svg{width:18px;height:18px;flex-shrink:0;opacity:.7}
+        .nav-item.active svg{opacity:1}
+        .content-area{flex:1;overflow-y:auto;padding:24px 28px}
+        .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .page-title{font-size:22px;font-weight:700;color:var(--text-primary)}
+        .page-title-sub{font-size:13px;color:var(--text-muted);margin-top:2px}
+
+        .filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .filter-left{display:flex;align-items:center;gap:12px}
+        .table-tabs{display:flex;gap:0;background:var(--bg);border-radius:20px;padding:3px}
+        .table-tab{padding:6px 16px;font-size:12px;color:var(--text-secondary);background:transparent;border:none;border-radius:16px;cursor:pointer;transition:all .2s;font-family:inherit;font-weight:500}
+        .table-tab:hover{color:var(--text-primary)}
+        .table-tab.active{background:var(--primary);color:#fff}
+
+        .date-nav{display:flex;align-items:center;gap:4px;padding:4px 8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px}
+        .date-nav-btn{width:28px;height:28px;display:flex;align-items:center;justify-content:center;background:none;border:none;border-radius:6px;cursor:pointer;color:var(--text-secondary);font-size:14px;transition:all .15s}
+        .date-nav-btn:hover{background:var(--primary-bg);color:var(--primary)}
+        .date-nav-label{font-size:13px;font-weight:600;color:var(--text-primary);min-width:120px;text-align:center;padding:0 8px;font-family:'DM Sans','Noto Sans SC',sans-serif}
+
+        .custom-range{display:flex;align-items:center;gap:8px;padding:4px 8px;background:var(--bg-card);border:1px solid var(--border);border-radius:8px}
+        .custom-range input[type="date"]{border:1px solid var(--border-light);background:var(--bg);font-size:12px;color:var(--text-secondary);font-family:inherit;cursor:pointer;outline:none;padding:4px 8px;border-radius:6px}
+        .custom-range input[type="date"]::-webkit-calendar-picker-indicator{cursor:pointer;opacity:.7}
+        .custom-range input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1}
+        .custom-range .sep{color:var(--text-muted);font-size:12px}
+        .custom-range .confirm-btn{padding:5px 14px;font-size:12px;color:#fff;background:var(--primary);border:none;border-radius:6px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
+        .custom-range .confirm-btn:hover{background:var(--primary-dark)}
+
+        .filter-right{display:flex;align-items:center;gap:10px}
+        .export-btn{display:flex;align-items:center;gap:6px;padding:8px 16px;font-size:13px;color:var(--primary);background:var(--primary-bg);border:1px solid rgba(232,124,154,0.2);border-radius:8px;cursor:pointer;font-family:inherit;font-weight:500;transition:all .15s}
+        .export-btn:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+        .table-section{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
+        .table-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-light)}
+        .table-title{font-size:15px;font-weight:600;color:var(--text-primary)}
+        .table-wrapper{overflow-x:auto;padding:0 0 8px 0}
+        .data-table{width:100%;min-width:1200px;border-collapse:separate;border-spacing:0;font-size:13px}
+        .data-table thead th{text-align:center;padding:10px 10px;background:#F8FAFB;color:var(--text-secondary);font-weight:600;font-size:11px;border-bottom:1px solid var(--border-light);white-space:nowrap;letter-spacing:.3px;vertical-align:middle}
+        .data-table thead tr:first-child th{border-bottom:1px solid rgba(0,0,0,.06)}
+        .data-table thead tr:last-child th{font-size:11px;padding:8px 8px}
+        .data-table thead th.col-date{background:#F8FAFB;color:var(--text-primary);border-right:2px solid var(--border-light)}
+        .data-table thead th.group-cash{background:var(--primary);color:#fff;font-weight:700;font-size:12px}
+        .data-table thead th.group-consume{background:var(--success);color:#fff;font-weight:700;font-size:12px}
+        .data-table thead th.group-flow{background:var(--info);color:#fff;font-weight:700;font-size:12px}
+        .data-table thead th.group-member{background:var(--purple);color:#fff;font-weight:700;font-size:12px}
+        .data-table thead th.col-normal{background:#F8FAFB;color:var(--text-secondary);border-left:2px solid var(--border-light)}
+        .data-table thead th.sub-total{background:rgba(0,0,0,.03);color:var(--text-primary);font-weight:700;border-right:3px solid var(--border-light)}
+        .data-table thead th.sub-cash{background:var(--primary-bg);color:var(--primary-dark);font-weight:600}
+        .data-table thead th.sub-consume{background:rgba(91,168,118,.07);color:#2D6B3F;font-weight:600}
+        .data-table thead th.sub-flow{background:rgba(91,143,212,.07);color:#2D5B8F;font-weight:600}
+        .data-table thead th.sub-member{background:rgba(139,109,181,.07);color:#5B3D8B;font-weight:600}
+        .data-table td{padding:10px 10px;border-bottom:1px solid var(--border-light);color:var(--text-primary);white-space:nowrap;font-family:'DM Sans',sans-serif;font-size:13px}
+        .data-table tbody tr:last-child td{border-bottom:none}
+        .data-table tbody tr:hover td{background:var(--bg-hover)}
+        .data-table .num{text-align:right;font-weight:600}
+        .data-table .total-row{background:#F8FAFB}
+        .data-table .total-row td{font-weight:700;color:var(--text-primary);border-top:2px solid var(--border-light)}
+        .data-table .section-row{background:#F8FAFB}
+        .data-table .section-row td{font-weight:700;color:var(--text-primary);font-size:12px;padding:8px 12px;border-bottom:1px solid var(--border-light)}
+        .data-table .highlight{color:var(--primary);font-weight:700}
+        .data-table .subtle{color:var(--text-muted)}
+        .data-table .target-row{background:rgba(232,124,154,0.06)}
+        .data-table .target-row td{color:var(--primary-dark);font-weight:700;font-size:13px;padding:12px 10px}
+        .data-table .target-row:first-of-type td{border-bottom:1px solid rgba(232,124,154,0.15);border-top:2px solid var(--primary)}
+        .data-table .target-label{background:var(--primary);color:#fff;padding:5px 14px;border-radius:16px;font-size:11px;font-weight:700;margin-right:8px;display:inline-block;min-width:48px;text-align:center;letter-spacing:.5px;box-shadow:0 2px 4px rgba(232,124,154,0.3)}
+        .data-table .target-label.green{background:var(--success)}
+        .data-table .target-row.consume-bg{background:rgba(91,168,118,0.06)}
+        .data-table .rate-up{color:var(--success);font-weight:700}
+        .data-table .rate-down{color:var(--error);font-weight:700}
+        .data-table .rate-warn{color:var(--warning);font-weight:700}
+
+        .progress-row{background:rgba(232,124,154,0.03)}
+        .progress-row td{padding:10px 12px!important;border-bottom:1px solid rgba(232,124,154,0.1)}
+        .progress-container{display:flex;flex-direction:column;gap:10px;align-items:stretch}
+        .progress-block{flex:1;min-width:0}
+        .progress-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
+        .progress-title{font-size:12px;font-weight:700;display:flex;align-items:center;gap:6px}
+        .progress-title .dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+        .progress-title .dot.cash{background:var(--primary)}
+        .progress-title .dot.consume{background:var(--success)}
+        .progress-title .dot.over{background:var(--gold)}
+        .progress-gap{font-size:11px;font-weight:700;padding:2px 8px;border-radius:10px;white-space:nowrap}
+        .progress-gap.lack{background:rgba(232,168,56,0.12);color:var(--warning)}
+        .progress-gap.done{background:rgba(91,168,118,0.12);color:var(--success)}
+        .progress-bar-wrap{height:14px;background:var(--bg);border-radius:7px;overflow:hidden;position:relative}
+        .progress-bar-fill{height:100%;border-radius:7px;transition:width .6s ease;position:relative;min-width:2px}
+        .progress-bar-fill.cash-bar{background:linear-gradient(90deg,var(--primary),var(--primary-light))}
+        .progress-bar-fill.cash-bar.over{background:linear-gradient(90deg,var(--gold),#E8C040)}
+        .progress-bar-fill.consume-bar{background:linear-gradient(90deg,var(--success),#7BC890)}
+        .progress-bar-fill.consume-bar.over{background:linear-gradient(90deg,var(--gold),#E8C040)}
+        .progress-footer{display:flex;align-items:center;justify-content:space-between;margin-top:4px}
+        .progress-current{font-size:11px;color:var(--text-secondary);font-family:'DM Sans',sans-serif}
+        .progress-current b{color:var(--text-primary);font-weight:700}
+        .progress-rate{font-size:12px;font-weight:700;font-family:'DM Sans',sans-serif}
+        .progress-rate.over{color:var(--gold)}
+
+        @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+        .animate-in{animation:fadeInUp .4s ease forwards}
+
+        .chl-layout{display:flex;flex-direction:column;height:100vh}
+        .chl-topbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #e5e7eb;z-index:10;flex-shrink:0}
+        .chl-topbar-left{display:flex;align-items:center;gap:24px}
+        .chl-back{display:flex;align-items:center;color:#E87C9A;text-decoration:none}
+        .chl-back:hover{opacity:.75}
+        .chl-brand{display:flex;align-items:center;font-size:20px;font-weight:800;letter-spacing:1px;color:#111827}
+        .chl-brand span{color:#E87C9A}
+        .chl-store{display:flex;align-items:center;gap:6px;border:1px solid #e5e7eb;padding:6px 12px;border-radius:9999px;font-size:14px;color:#374151;background:#fff;cursor:pointer}
+        .chl-store:hover{background:#f9fafb}
+        .chl-topbar-right{display:flex;align-items:center;gap:18px;color:#6b7280}
+        .chl-icon-btn{border:none;background:transparent;cursor:pointer;color:#9ca3af;padding:6px;border-radius:10px}
+        .chl-icon-btn:hover{color:#E87C9A;background:#f9fafb}
+        .chl-meta{font-size:14px;color:#9ca3af}
+        .chl-meta-strong{font-size:14px;font-weight:600;color:#6b7280}
+        .chl-user{display:flex;align-items:center;gap:10px}
+        .chl-user img{width:24px;height:24px;border-radius:9999px;object-fit:cover}
+        .chl-user-name{font-size:14px;font-weight:600;color:#374151}
+        .chl-user-role{background:#f3f4f6;padding:2px 8px;border-radius:6px;font-size:12px;color:#6b7280}
+        .chl-page-scroll{flex:1;min-height:0;overflow:auto}
+    </style>
+</head>
+<body>
+    <div class="chl-layout">
+        <div class="chl-topbar">
+            <div class="chl-topbar-left">
+                <a class="chl-back" href="../new-order-design/customer-list-pad.html" aria-label="返回">
+                    <iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
+                </a>
+                <div class="chl-brand">
+                    <span>CHLITINA</span>&nbsp;克丽缇娜
+                </div>
+                <div class="chl-store">
+                    <span>测试店1</span>
+                    <iconify-icon icon="mdi:chevron-down"></iconify-icon>
+                </div>
+            </div>
+            <div class="chl-topbar-right">
+                <button class="chl-icon-btn" type="button" aria-label="通知">
+                    <iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
+                </button>
+                <span class="chl-meta-strong">23:04</span>
+                <span class="chl-meta">6月2日 周二</span>
+                <iconify-icon class="text-base" icon="mdi:wifi"></iconify-icon>
+                <span class="chl-meta">24%</span>
+                <div class="chl-user">
+                    <img alt="User Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+                    <span class="chl-user-name">roger</span>
+                    <span class="chl-user-role">店总</span>
+                </div>
+            </div>
+        </div>
+        <div class="chl-page-scroll">
+            <div class="content-area">
+                <div class="page-header">
+                    <div>
+                        <div class="page-title">业绩汇总表</div>
+                        <div class="page-title-sub">门店业绩数据明细报表</div>
+                    </div>
+                </div>
+
+                <div class="filter-bar">
+                    <div class="filter-left">
+                        <div class="table-tabs" id="viewTabs">
+                            <button class="table-tab active" data-view="monthly">月</button>
+                            <button class="table-tab" data-view="yearly">年</button>
+                            <button class="table-tab" data-view="custom">自定义</button>
+                        </div>
+                        <div class="date-nav" id="dateNav">
+                            <button class="date-nav-btn" id="navPrev">◀</button>
+                            <span class="date-nav-label" id="navLabel">2026年5月</span>
+                            <button class="date-nav-btn" id="navNext">▶</button>
+                        </div>
+                        <div class="custom-range" id="customRange" style="display:none">
+                            <input type="date" id="customStart" value="2026-04-15">
+                            <span class="sep">至</span>
+                            <input type="date" id="customEnd" value="2026-05-15">
+                            <button class="confirm-btn" id="customConfirm">确定</button>
+                        </div>
+                    </div>
+                    <div class="filter-right">
+                        <button class="export-btn">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+                            导出报表
+                        </button>
+                    </div>
+                </div>
+
+                <div class="table-section animate-in">
+                    <div class="table-header">
+                        <div class="table-title">业绩汇总表</div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table" id="reportTable"></table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const WEEKDAYS = ['周日','周一','周二','周三','周四','周五','周六'];
+        const COLS = 14;
+
+        let currentView = 'monthly';
+        let currentDate = new Date(2026, 4, 26);
+
+        function formatNum(n) {
+            return n.toLocaleString('zh-CN');
+        }
+
+        function updateNavLabel() {
+            const label = document.getElementById('navLabel');
+            if (currentView === 'monthly') {
+                label.textContent = currentDate.getFullYear() + '年' + (currentDate.getMonth()+1) + '月';
+            } else if (currentView === 'yearly') {
+                label.textContent = currentDate.getFullYear() + '年';
+            }
+        }
+
+        function navPrev() {
+            if (currentView === 'monthly') {
+                currentDate.setMonth(currentDate.getMonth() - 1);
+            } else if (currentView === 'yearly') {
+                currentDate.setFullYear(currentDate.getFullYear() - 1);
+            }
+            updateNavLabel();
+            renderTable();
+        }
+
+        function navNext() {
+            if (currentView === 'monthly') {
+                currentDate.setMonth(currentDate.getMonth() + 1);
+            } else if (currentView === 'yearly') {
+                currentDate.setFullYear(currentDate.getFullYear() + 1);
+            }
+            updateNavLabel();
+            renderTable();
+        }
+
+        function switchView(view) {
+            currentView = view;
+            const dateNav = document.getElementById('dateNav');
+            const customRange = document.getElementById('customRange');
+
+            document.querySelectorAll('.table-tab').forEach(t => t.classList.remove('active'));
+            document.querySelector('.table-tab[data-view="'+view+'"]').classList.add('active');
+
+            if (view === 'custom') {
+                dateNav.style.display = 'none';
+                customRange.style.display = 'flex';
+            } else {
+                dateNav.style.display = 'flex';
+                customRange.style.display = 'none';
+                updateNavLabel();
+            }
+            renderTable();
+        }
+
+        function buildDayRow(dateStr, cash, prodCash, careCash, cardCash, consume, courseCons, prodCons, zeroCare, nonZeroCare, prodFlow, totalFlow, trialMem, dealMem) {
+            return '<tr><td>' + dateStr + '</td>' +
+                '<td class="num highlight">¥' + formatNum(cash) + '</td>' +
+                '<td class="num">¥' + formatNum(prodCash) + '</td>' +
+                '<td class="num">¥' + formatNum(careCash) + '</td>' +
+                '<td class="num">¥' + formatNum(cardCash) + '</td>' +
+                '<td class="num highlight">¥' + formatNum(consume) + '</td>' +
+                '<td class="num">¥' + formatNum(courseCons) + '</td>' +
+                '<td class="num">¥' + formatNum(prodCons) + '</td>' +
+                '<td class="num">' + zeroCare + '</td>' +
+                '<td class="num">' + nonZeroCare + '</td>' +
+                '<td class="num">' + prodFlow + '</td>' +
+                '<td class="num">' + totalFlow + '</td>' +
+                '<td class="num">' + trialMem + '</td>' +
+                '<td class="num">' + dealMem + '</td></tr>';
+        }
+
+        function buildTotalRow(label, cash, prodCash, careCash, cardCash, consume, courseCons, prodCons, zeroCare, nonZeroCare, prodFlow, totalFlow, trialMem, dealMem) {
+            return '<tr class="total-row"><td>' + label + '</td>' +
+                '<td class="num">¥' + formatNum(cash) + '</td>' +
+                '<td class="num">¥' + formatNum(prodCash) + '</td>' +
+                '<td class="num">¥' + formatNum(careCash) + '</td>' +
+                '<td class="num">¥' + formatNum(cardCash) + '</td>' +
+                '<td class="num">¥' + formatNum(consume) + '</td>' +
+                '<td class="num">¥' + formatNum(courseCons) + '</td>' +
+                '<td class="num">¥' + formatNum(prodCons) + '</td>' +
+                '<td class="num">' + zeroCare + '</td>' +
+                '<td class="num">' + nonZeroCare + '</td>' +
+                '<td class="num">' + prodFlow + '</td>' +
+                '<td class="num">' + totalFlow + '</td>' +
+                '<td class="num">' + trialMem + '</td>' +
+                '<td class="num">' + dealMem + '</td></tr>';
+        }
+
+        function buildSectionRow(text) {
+            return '<tr class="section-row"><td colspan="' + COLS + '">' + text + '</td></tr>';
+        }
+
+        function buildTargetWithProgress(label, cashTarget, consumeTarget, cashCurrent, consumeCurrent) {
+            const cashRate = (cashCurrent/cashTarget*100).toFixed(1);
+            const consumeRate = (consumeCurrent/consumeTarget*100).toFixed(1);
+            const cashPct = Math.min((cashCurrent/cashTarget)*100, 100);
+            const consumePct = Math.min((consumeCurrent/consumeTarget)*100, 100);
+            const cashOver = cashCurrent >= cashTarget;
+            const consumeOver = consumeCurrent >= consumeTarget;
+            const cashGap = cashTarget - cashCurrent;
+            const consumeGap = consumeTarget - consumeCurrent;
+
+            let html = '<tr class="target-row"><td><span class="target-label">' + label + '</span></td>' +
+                '<td class="num">¥' + formatNum(cashTarget) + '</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num">¥' + formatNum(consumeTarget) + '</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td></tr>';
+
+            html += '<tr class="progress-row"><td style="padding:10px 12px!important"><span class="target-label" style="font-size:10px">标准进度</span></td><td colspan="' + (COLS - 1) + '">' +
+                '<div class="progress-container">' +
+                '<div class="progress-block">' +
+                '<div class="progress-header">' +
+                '<span class="progress-title"><span class="dot ' + (cashOver ? 'over' : 'cash') + '"></span>现金业绩</span>' +
+                (cashOver
+                    ? '<span class="progress-gap done">已达标 ✓</span>'
+                    : '<span class="progress-gap lack">还差 ¥' + formatNum(cashGap) + '</span>') +
+                '</div>' +
+                '<div class="progress-bar-wrap"><div class="progress-bar-fill ' + (cashOver ? 'cash-bar over' : 'cash-bar') + '" style="width:' + cashPct + '%"></div></div>' +
+                '<div class="progress-footer">' +
+                '<span class="progress-current"><b>¥' + formatNum(cashCurrent) + '</b> / ¥' + formatNum(cashTarget) + '</span>' +
+                '<span class="progress-rate' + (cashOver ? ' over' : '') + '">' + cashRate + '%</span>' +
+                '</div></div>' +
+                '<div class="progress-block">' +
+                '<div class="progress-header">' +
+                '<span class="progress-title"><span class="dot ' + (consumeOver ? 'over' : 'consume') + '"></span>消耗业绩</span>' +
+                (consumeOver
+                    ? '<span class="progress-gap done">已达标 ✓</span>'
+                    : '<span class="progress-gap lack">还差 ¥' + formatNum(consumeGap) + '</span>') +
+                '</div>' +
+                '<div class="progress-bar-wrap"><div class="progress-bar-fill ' + (consumeOver ? 'consume-bar over' : 'consume-bar') + '" style="width:' + consumePct + '%"></div></div>' +
+                '<div class="progress-footer">' +
+                '<span class="progress-current"><b>¥' + formatNum(consumeCurrent) + '</b> / ¥' + formatNum(consumeTarget) + '</span>' +
+                '<span class="progress-rate' + (consumeOver ? ' over' : '') + '">' + consumeRate + '%</span>' +
+                '</div></div>' +
+                '</div></td></tr>';
+
+            html += '<tr class="target-row consume-bg"><td><span class="target-label green">完成率</span></td>' +
+                '<td class="num ' + (parseFloat(cashRate)>=100?'rate-up':'rate-warn') + '">' + cashRate + '%</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num ' + (parseFloat(consumeRate)>=100?'rate-up':'rate-warn') + '">' + consumeRate + '%</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td><td class="num subtle">—</td>' +
+                '<td class="num subtle">—</td><td class="num subtle">—</td></tr>';
+
+            return html;
+        }
+
+        const THEAD = '<thead><tr>' +
+            '<th rowspan="2" class="col-date">日期</th>' +
+            '<th colspan="4" class="group-cash">现金业绩</th>' +
+            '<th colspan="3" class="group-consume">消耗业绩</th>' +
+            '<th colspan="4" class="group-flow">客流</th>' +
+            '<th colspan="2" class="group-member">会员</th>' +
+            '</tr><tr>' +
+            '<th class="sub-total">合计</th><th class="sub-cash">产品现金</th><th class="sub-cash">护理现金</th><th class="sub-cash">卡项现金</th>' +
+            '<th class="sub-total">合计</th><th class="sub-consume">疗程消耗</th><th class="sub-consume">产品消耗</th>' +
+            '<th class="sub-flow">0护理客流</th><th class="sub-flow">非0护理客流</th><th class="sub-flow">产品客流</th><th class="sub-flow">总客流</th>' +
+            '<th class="sub-member">体验人数</th><th class="sub-member">成交人数</th>' +
+            '</tr></thead>';
+
+        const THEAD_YEAR = '<thead><tr>' +
+            '<th rowspan="2" class="col-date">月份</th>' +
+            '<th colspan="4" class="group-cash">现金业绩</th>' +
+            '<th colspan="3" class="group-consume">消耗业绩</th>' +
+            '<th colspan="4" class="group-flow">客流</th>' +
+            '<th colspan="2" class="group-member">会员</th>' +
+            '</tr><tr>' +
+            '<th class="sub-total">合计</th><th class="sub-cash">产品现金</th><th class="sub-cash">护理现金</th><th class="sub-cash">卡项现金</th>' +
+            '<th class="sub-total">合计</th><th class="sub-consume">疗程消耗</th><th class="sub-consume">产品消耗</th>' +
+            '<th class="sub-flow">0护理客流</th><th class="sub-flow">非0护理客流</th><th class="sub-flow">产品客流</th><th class="sub-flow">总客流</th>' +
+            '<th class="sub-member">体验人数</th><th class="sub-member">成交人数</th>' +
+            '</tr></thead>';
+
+        const dailyData = [
+            {d:'05-01',c:1800,pc:600,cc:700,kc:500,x:2200,lc:1400,prc:800,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-02',c:2200,pc:750,cc:850,kc:600,x:2800,lc:1800,prc:1000,zl:1,nzl:4,pf:1,tf:6,ty:1,dm:1},
+            {d:'05-03',c:1600,pc:550,cc:600,kc:450,x:2100,lc:1350,prc:750,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-04',c:1400,pc:480,cc:520,kc:400,x:1900,lc:1200,prc:700,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+            {d:'05-05',c:2600,pc:900,cc:1000,kc:700,x:3200,lc:2100,prc:1100,zl:2,nzl:4,pf:1,tf:7,ty:0,dm:0},
+            {d:'05-06',c:1900,pc:650,cc:750,kc:500,x:2500,lc:1600,prc:900,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-07',c:1500,pc:500,cc:580,kc:420,x:2000,lc:1300,prc:700,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+            {d:'05-08',c:2100,pc:720,cc:800,kc:580,x:2700,lc:1750,prc:950,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-09',c:2800,pc:950,cc:1050,kc:800,x:3500,lc:2300,prc:1200,zl:2,nzl:4,pf:1,tf:7,ty:0,dm:0},
+            {d:'05-10',c:2400,pc:820,cc:900,kc:680,x:3000,lc:1950,prc:1050,zl:1,nzl:4,pf:1,tf:6,ty:0,dm:0},
+            {d:'05-11',c:1700,pc:580,cc:650,kc:470,x:2200,lc:1400,prc:800,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-12',c:2000,pc:680,cc:780,kc:540,x:2600,lc:1700,prc:900,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-13',c:1850,pc:630,cc:720,kc:500,x:2400,lc:1550,prc:850,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-14',c:2300,pc:790,cc:880,kc:630,x:2900,lc:1900,prc:1000,zl:1,nzl:4,pf:1,tf:6,ty:0,dm:0},
+            {d:'05-15',c:1900,pc:650,cc:730,kc:520,x:2500,lc:1600,prc:900,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-16',c:2150,pc:740,cc:820,kc:590,x:2750,lc:1800,prc:950,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-17',c:1650,pc:560,cc:640,kc:450,x:2150,lc:1400,prc:750,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+            {d:'05-18',c:1500,pc:510,cc:580,kc:410,x:2000,lc:1300,prc:700,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+            {d:'05-19',c:2050,pc:700,cc:790,kc:560,x:2650,lc:1700,prc:950,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-20',c:1800,pc:620,cc:690,kc:490,x:2350,lc:1500,prc:850,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-21',c:2200,pc:750,cc:850,kc:600,x:2850,lc:1850,prc:1000,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-22',c:1700,pc:580,cc:660,kc:460,x:2200,lc:1400,prc:800,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+            {d:'05-23',c:2350,pc:800,cc:900,kc:650,x:3050,lc:2000,prc:1050,zl:1,nzl:4,pf:1,tf:6,ty:0,dm:0},
+            {d:'05-24',c:1900,pc:650,cc:730,kc:520,x:2500,lc:1600,prc:900,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-25',c:2500,pc:850,cc:950,kc:700,x:3200,lc:2100,prc:1100,zl:2,nzl:4,pf:1,tf:7,ty:0,dm:0},
+            {d:'05-26',c:2050,pc:700,cc:790,kc:560,x:2650,lc:1700,prc:950,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-27',c:1750,pc:600,cc:680,kc:470,x:2300,lc:1500,prc:800,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-28',c:2250,pc:770,cc:860,kc:620,x:2900,lc:1900,prc:1000,zl:1,nzl:4,pf:1,tf:6,ty:0,dm:0},
+            {d:'05-29',c:1850,pc:630,cc:710,kc:510,x:2400,lc:1550,prc:850,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-30',c:2100,pc:720,cc:800,kc:580,x:2700,lc:1750,prc:950,zl:1,nzl:3,pf:1,tf:5,ty:0,dm:0},
+            {d:'05-31',c:1550,pc:530,cc:600,kc:420,x:2050,lc:1350,prc:700,zl:1,nzl:2,pf:1,tf:4,ty:0,dm:0},
+        ];
+
+        const monthlyData = [
+            {mn:'1月',c:22500,pc:7800,cc:8500,kc:6200,x:28000,lc:18500,prc:9500,zl:12,nzl:28,pf:5,tf:45,ty:8,dm:3},
+            {mn:'2月',c:19800,pc:6800,cc:7500,kc:5500,x:24500,lc:16000,prc:8500,zl:10,nzl:24,pf:5,tf:39,ty:6,dm:2},
+            {mn:'3月',c:26800,pc:9200,cc:10200,kc:7400,x:33000,lc:21500,prc:11500,zl:14,nzl:32,pf:6,tf:52,ty:10,dm:4},
+            {mn:'4月',c:24200,pc:8300,cc:9200,kc:6700,x:30000,lc:19500,prc:10500,zl:12,nzl:29,pf:6,tf:47,ty:7,dm:3},
+            {mn:'5月',c:25600,pc:8800,cc:9700,kc:7100,x:32500,lc:21000,prc:11500,zl:13,nzl:31,pf:6,tf:50,ty:5,dm:1},
+            {mn:'6月',c:23800,pc:8200,cc:9000,kc:6600,x:29500,lc:19000,prc:10500,zl:12,nzl:28,pf:6,tf:46,ty:6,dm:2},
+            {mn:'7月',c:27500,pc:9500,cc:10500,kc:7500,x:34000,lc:22000,prc:12000,zl:14,nzl:33,pf:7,tf:54,ty:8,dm:3},
+            {mn:'8月',c:25200,pc:8700,cc:9600,kc:6900,x:31000,lc:20000,prc:11000,zl:13,nzl:30,pf:6,tf:49,ty:6,dm:2},
+            {mn:'9月',c:28800,pc:9900,cc:11000,kc:7900,x:35500,lc:23000,prc:12500,zl:15,nzl:35,pf:7,tf:57,ty:10,dm:4},
+            {mn:'10月',c:26500,pc:9100,cc:10100,kc:7300,x:32800,lc:21200,prc:11600,zl:14,nzl:32,pf:6,tf:52,ty:8,dm:3},
+            {mn:'11月',c:24800,pc:8500,cc:9500,kc:6800,x:30500,lc:19800,prc:10700,zl:13,nzl:29,pf:6,tf:48,ty:6,dm:2},
+            {mn:'12月',c:29200,pc:10100,cc:11200,kc:7900,x:36000,lc:23500,prc:12500,zl:15,nzl:36,pf:7,tf:58,ty:12,dm:5},
+        ];
+
+        function getWeeksForMonth(year, month) {
+            const daysInMonth = new Date(year, month, 0).getDate();
+            const weeks = [];
+            let weekStart = 1;
+            let weekNum = 1;
+            while (weekStart <= daysInMonth) {
+                const remainingDays = daysInMonth - weekStart + 1;
+                const weekLength = Math.min(7, remainingDays);
+                const weekEnd = weekStart + weekLength - 1;
+                weeks.push({ num: weekNum, start: weekStart, end: weekEnd });
+                weekStart = weekEnd + 1;
+                weekNum++;
+            }
+            return weeks;
+        }
+
+        function renderMonthlyTable(year, month) {
+            const weeks = getWeeksForMonth(year, month);
+            const monthTarget = 80000;
+            const consumeTarget = 100000;
+
+            let mCash=0,mProdCash=0,mCareCash=0,mCardCash=0,mConsume=0,mCourse=0,mProd=0;
+            let mZl=0,mNzl=0,mPf=0,mTf=0,mTy=0,mDm=0;
+
+            dailyData.forEach(r => {
+                mCash+=r.c; mProdCash+=r.pc; mCareCash+=r.cc; mCardCash+=r.kc;
+                mConsume+=r.x; mCourse+=r.lc; mProd+=r.prc;
+                mZl+=r.zl; mNzl+=r.nzl; mPf+=r.pf; mTf+=r.tf; mTy+=r.ty; mDm+=r.dm;
+            });
+
+            let html = '<tbody>';
+            html += buildTargetWithProgress('月目标', monthTarget, consumeTarget, mCash, mConsume);
+
+            weeks.forEach(week => {
+                const startStr = String(month).padStart(2,'0') + '-' + String(week.start).padStart(2,'0');
+                const endStr = String(month).padStart(2,'0') + '-' + String(week.end).padStart(2,'0');
+                html += buildSectionRow(year + '年' + month + '月 第' + week.num + '周（' + startStr + ' 至 ' + endStr + '）');
+
+                let wCash=0,wProdCash=0,wCareCash=0,wCardCash=0,wConsume=0,wCourse=0,wProd=0;
+                let wZl=0,wNzl=0,wPf=0,wTf=0,wTy=0,wDm=0;
+                for (let d = week.start; d <= week.end; d++) {
+                    const idx = d - 1;
+                    if (idx >= 0 && idx < dailyData.length) {
+                        const r = dailyData[idx];
+                        const dateStr = String(month).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+                        html += buildDayRow(dateStr, r.c, r.pc, r.cc, r.kc, r.x, r.lc, r.prc, r.zl, r.nzl, r.pf, r.tf, r.ty, r.dm);
+                        wCash+=r.c; wProdCash+=r.pc; wCareCash+=r.cc; wCardCash+=r.kc;
+                        wConsume+=r.x; wCourse+=r.lc; wProd+=r.prc;
+                        wZl+=r.zl; wNzl+=r.nzl; wPf+=r.pf; wTf+=r.tf; wTy+=r.ty; wDm+=r.dm;
+                    }
+                }
+                html += buildTotalRow('周合计', wCash, wProdCash, wCareCash, wCardCash, wConsume, wCourse, wProd, wZl, wNzl, wPf, wTf, wTy, wDm);
+            });
+
+            html += buildTotalRow('月累计', mCash, mProdCash, mCareCash, mCardCash, mConsume, mCourse, mProd, mZl, mNzl, mPf, mTf, mTy, mDm);
+            html += '</tbody>';
+            return THEAD + html;
+        }
+
+        function renderYearlyTable(year) {
+            const yearTarget = 960000;
+            const consumeTarget = 1200000;
+
+            let yCash=0,yProdCash=0,yCareCash=0,yCardCash=0,yConsume=0,yCourse=0,yProd=0;
+            let yZl=0,yNzl=0,yPf=0,yTf=0,yTy=0,yDm=0;
+            monthlyData.forEach(r => {
+                yCash+=r.c; yProdCash+=r.pc; yCareCash+=r.cc; yCardCash+=r.kc;
+                yConsume+=r.x; yCourse+=r.lc; yProd+=r.prc;
+                yZl+=r.zl; yNzl+=r.nzl; yPf+=r.pf; yTf+=r.tf; yTy+=r.ty; yDm+=r.dm;
+            });
+
+            let html = '<tbody>';
+            html += buildTargetWithProgress('年目标', yearTarget, consumeTarget, yCash, yConsume);
+
+            for (let q = 1; q <= 4; q++) {
+                const startIdx = (q - 1) * 3;
+                const endIdx = startIdx + 2;
+
+                let qCash=0,qProdCash=0,qCareCash=0,qCardCash=0,qConsume=0,qCourse=0,qProd=0;
+                let qZl=0,qNzl=0,qPf=0,qTf=0,qTy=0,qDm=0;
+                for (let i = startIdx; i <= endIdx && i < monthlyData.length; i++) {
+                    const r = monthlyData[i];
+                    html += buildDayRow(r.mn, r.c, r.pc, r.cc, r.kc, r.x, r.lc, r.prc, r.zl, r.nzl, r.pf, r.tf, r.ty, r.dm);
+                    qCash+=r.c; qProdCash+=r.pc; qCareCash+=r.cc; qCardCash+=r.kc;
+                    qConsume+=r.x; qCourse+=r.lc; qProd+=r.prc;
+                    qZl+=r.zl; qNzl+=r.nzl; qPf+=r.pf; qTf+=r.tf; qTy+=r.ty; qDm+=r.dm;
+                }
+                html += buildTotalRow('第' + q + '季度合计', qCash, qProdCash, qCareCash, qCardCash, qConsume, qCourse, qProd, qZl, qNzl, qPf, qTf, qTy, qDm);
+            }
+
+            html += buildTotalRow('年累计', yCash, yProdCash, yCareCash, yCardCash, yConsume, yCourse, yProd, yZl, yNzl, yPf, yTf, yTy, yDm);
+            html += '</tbody>';
+            return THEAD_YEAR + html;
+        }
+
+        function renderCustomTable(startStr, endStr) {
+            const start = new Date(startStr);
+            const end = new Date(endStr);
+            if (isNaN(start.getTime()) || isNaN(end.getTime()) || start > end) {
+                return THEAD + '<tbody><tr><td colspan="' + COLS + '" style="text-align:center;padding:40px;color:var(--text-muted)">请选择有效的日期范围</td></tr></tbody>';
+            }
+
+            const monthRanges = [];
+            let cur = new Date(start.getFullYear(), start.getMonth(), 1);
+            while (cur <= end) {
+                const mStart = new Date(Math.max(cur.getTime(), start.getTime()));
+                const mEnd = new Date(Math.min(new Date(cur.getFullYear(), cur.getMonth()+1, 0).getTime(), end.getTime()));
+                monthRanges.push({ year: cur.getFullYear(), month: cur.getMonth()+1, startDay: mStart.getDate(), endDay: mEnd.getDate() });
+                cur.setMonth(cur.getMonth()+1);
+            }
+
+            let totalCash=0,totalProdCash=0,totalCareCash=0,totalCardCash=0,totalConsume=0,totalCourse=0,totalProd=0;
+            let totalZl=0,totalNzl=0,totalPf=0,totalTf=0,totalTy=0,totalDm=0;
+
+            let html = '<tbody>';
+
+            monthRanges.forEach(mr => {
+                html += buildSectionRow(mr.year + '年' + mr.month + '月（' + String(mr.month).padStart(2,'0') + '-' + String(mr.startDay).padStart(2,'0') + ' 至 ' + String(mr.month).padStart(2,'0') + '-' + String(mr.endDay).padStart(2,'0') + '）');
+                let mCash=0,mProdCash=0,mCareCash=0,mCardCash=0,mConsume=0,mCourse=0,mProd=0;
+                let mZl=0,mNzl=0,mPf=0,mTf=0,mTy=0,mDm=0;
+                for (let d = mr.startDay; d <= mr.endDay; d++) {
+                    const idx = d - 1;
+                    if (mr.month === 5 && idx >= 0 && idx < dailyData.length) {
+                        const r = dailyData[idx];
+                        const dateStr = '05-' + String(d).padStart(2,'0');
+                        html += buildDayRow(dateStr, r.c, r.pc, r.cc, r.kc, r.x, r.lc, r.prc, r.zl, r.nzl, r.pf, r.tf, r.ty, r.dm);
+                        mCash+=r.c; mProdCash+=r.pc; mCareCash+=r.cc; mCardCash+=r.kc;
+                        mConsume+=r.x; mCourse+=r.lc; mProd+=r.prc;
+                        mZl+=r.zl; mNzl+=r.nzl; mPf+=r.pf; mTf+=r.tf; mTy+=r.ty; mDm+=r.dm;
+                    } else {
+                        const dateStr = String(mr.month).padStart(2,'0') + '-' + String(d).padStart(2,'0');
+                        const fakeC = 1500 + Math.floor(Math.random()*1500);
+                        const fakePC = Math.floor(fakeC*0.35);
+                        const fakeCC = Math.floor(fakeC*0.35);
+                        const fakeKC = fakeC - fakePC - fakeCC;
+                        const fakeX = fakeC + 800 + Math.floor(Math.random()*1000);
+                        const fakeLC = Math.floor(fakeX*0.6);
+                        const fakePRC = fakeX - fakeLC;
+                        const fakeZl = 1 + Math.floor(Math.random()*2);
+                        const fakeNzl = 2 + Math.floor(Math.random()*4);
+                        const fakePf = Math.floor(Math.random()*2);
+                        const fakeTf = fakeZl + fakeNzl + fakePf;
+                        const fakeTy = Math.floor(Math.random()*2);
+                        const fakeDm = Math.floor(Math.random()*2);
+                        html += buildDayRow(dateStr, fakeC, fakePC, fakeCC, fakeKC, fakeX, fakeLC, fakePRC, fakeZl, fakeNzl, fakePf, fakeTf, fakeTy, fakeDm);
+                        mCash+=fakeC; mProdCash+=fakePC; mCareCash+=fakeCC; mCardCash+=fakeKC;
+                        mConsume+=fakeX; mCourse+=fakeLC; mProd+=fakePRC;
+                        mZl+=fakeZl; mNzl+=fakeNzl; mPf+=fakePf; mTf+=fakeTf; mTy+=fakeTy; mDm+=fakeDm;
+                    }
+                }
+                html += buildTotalRow(mr.year + '年' + mr.month + '月小计', mCash, mProdCash, mCareCash, mCardCash, mConsume, mCourse, mProd, mZl, mNzl, mPf, mTf, mTy, mDm);
+                totalCash+=mCash; totalProdCash+=mProdCash; totalCareCash+=mCareCash; totalCardCash+=mCardCash;
+                totalConsume+=mConsume; totalCourse+=mCourse; totalProd+=mProd;
+                totalZl+=mZl; totalNzl+=mNzl; totalPf+=mPf; totalTf+=mTf; totalTy+=mTy; totalDm+=mDm;
+            });
+
+            html += buildTotalRow('区间累计', totalCash, totalProdCash, totalCareCash, totalCardCash, totalConsume, totalCourse, totalProd, totalZl, totalNzl, totalPf, totalTf, totalTy, totalDm);
+            html += '</tbody>';
+            return THEAD + html;
+        }
+
+        function renderTable() {
+            const table = document.getElementById('reportTable');
+            if (currentView === 'monthly') {
+                table.innerHTML = renderMonthlyTable(currentDate.getFullYear(), currentDate.getMonth()+1);
+            } else if (currentView === 'yearly') {
+                table.innerHTML = renderYearlyTable(currentDate.getFullYear());
+            } else if (currentView === 'custom') {
+                const startVal = document.getElementById('customStart').value;
+                const endVal = document.getElementById('customEnd').value;
+                table.innerHTML = renderCustomTable(startVal, endVal);
+            }
+        }
+
+        document.querySelectorAll('.table-tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                switchView(this.dataset.view);
+            });
+        });
+
+        document.getElementById('navPrev').addEventListener('click', navPrev);
+        document.getElementById('navNext').addEventListener('click', navNext);
+
+        document.getElementById('customConfirm').addEventListener('click', function() {
+            renderTable();
+        });
+
+        document.addEventListener('DOMContentLoaded', function() {
+            switchView('monthly');
+        });
+    </script>
+</body>
+</html>

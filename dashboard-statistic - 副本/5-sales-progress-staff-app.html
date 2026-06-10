@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>员工目标管理</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <style>
+        /* ============ CSS 变量定义 ============ */
+        :root {
+            --brand-primary-400: #34D399;
+            --brand-primary-500: #0D9488;
+            --brand-primary-600: #0B7B72;
+            --brand-primary-700: #09625B;
+            --brand-primary-300: #6EE7B7;
+            --brand-primary-200: #A7F3D0;
+            --brand-primary-100: #D1FAE5;
+            --brand-primary-50: #ECFDF5;
+            
+            --bg-primary: #FFFFFF;
+            --bg-card: #FFFFFF;
+            --bg-secondary: #F9FAFB;
+            --bg-modal: rgba(0, 0, 0, 0.5);
+            
+            --text-primary: #111827;
+            --text-secondary: #4B5563;
+            --text-muted: #9CA3AF;
+            --text-white: #FFFFFF;
+            --text-brand: #0D9488;
+            
+            --border-color: #E5E7EB;
+            
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --spacing-xl: 32px;
+            --spacing-2xl: 48px;
+            
+            --font-size-xs: 11px;
+            --font-size-sm: 12px;
+            --font-size-base: 14px;
+            --font-size-md: 16px;
+            --font-size-lg: 18px;
+            
+            --state-hover: #E5E7EB;
+            
+            --font-weight-medium: 500;
+            --font-weight-semibold: 600;
+            
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 16px;
+            --radius-xl: 24px;
+            --radius-full: 9999px;
+            
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            
+            --transition-fast: all 0.15s ease;
+            --transition-normal: all 0.25s ease;
+            --transition-slow: all 0.35s ease;
+            --transition-bounce: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            
+            --progress-bg: #E5E7EB;
+            
+            --accent-success: #10B981;
+            --accent-warning: #F59E0B;
+            --accent-danger: #EF4444;
+            
+            --btn-secondary-bg: #FFFFFF;
+            --btn-secondary-text: #4B5563;
+            --btn-secondary-hover: #F9FAFB;
+            
+            --input-border: #D1D5DB;
+            --input-focus: #0D9488;
+            --input-placeholder: #9CA3AF;
+            
+            --font-family-primary: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        :root {
+            --brand-primary-400: #F1A3B8;
+            --brand-primary-500: #E87C9A;
+            --brand-primary-600: #D66B85;
+            --brand-primary-700: #B75A70;
+            --brand-primary-300: #FFA0BE;
+            --brand-primary-200: #FFC7D9;
+            --brand-primary-100: #FFE4EC;
+            --brand-primary-50: #FFF1F5;
+            --text-brand: #E87C9A;
+            --input-focus: #E87C9A;
+            --bg-secondary: #f7f8fa;
+        }
+
+        /* ============ 全局样式 ============ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            background: #e2e2e2;
+        }
+
+        body {
+            width: 100%;
+            max-width: 375px;
+            min-height: 100vh;
+            margin: 0 auto;
+            background: #f7f8fa;
+            font-family: var(--font-family-primary);
+            position: relative;
+            box-shadow: 0 0 30px rgba(0,0,0,0.12);
+        }
+
+        /* ============ 顶部导航栏 ============ */
+        .app-header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            z-index: 100;
+            background: var(--bg-primary);
+            padding: 0 var(--spacing-lg);
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .header-btn {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+        }
+
+        .header-btn svg {
+            width: 20px;
+            height: 20px;
+            color: var(--text-secondary);
+        }
+
+        .header-title {
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+        }
+
+        /* ============ 主内容区 ============ */
+        .app-content {
+            padding-top: calc(44px + var(--spacing-md));
+            padding-bottom: calc(var(--spacing-lg) + env(safe-area-inset-bottom));
+        }
+
+        /* ============ 年月选择器容器 ============ */
+        .date-picker {
+            background: var(--bg-card);
+            margin: 0px 16px var(--spacing-md) 16px;
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+            margin-bottom: var(--spacing-md);
+        }
+
+        .picker-divider {
+            width: 1px;
+            height: 24px;
+            background: var(--border-color);
+        }
+
+        /* ============ 下拉选择框 ============ */
+        .dropdown-container {
+            position: relative;
+            flex: 1;
+        }
+
+        .dropdown-trigger {
+            width: 100%;
+            height: 44px;
+            background: white;
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-md);
+            padding: 0 var(--spacing-lg);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .dropdown-trigger:hover {
+            border-color: var(--brand-primary-300);
+            background: var(--brand-primary-50);
+        }
+
+        .dropdown-trigger:focus {
+            outline: none;
+            border-color: var(--brand-primary-500);
+            box-shadow: 0 0 0 3px var(--brand-primary-50);
+        }
+
+        .dropdown-trigger.active {
+            border-color: var(--brand-primary-500);
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+        }
+
+        .dropdown-arrow {
+            width: 0;
+            height: 0;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+            border-top: 5px solid var(--text-secondary);
+            transition: var(--transition-fast);
+            flex-shrink: 0;
+        }
+
+        .dropdown-arrow.active {
+            transform: rotate(180deg);
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-top: none;
+            border-radius: 0 0 var(--radius-md) var(--radius-md);
+            max-height: 200px;
+            overflow-y: auto;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-8px);
+            transition: var(--transition-normal);
+            z-index: 100;
+            box-shadow: var(--shadow-md);
+        }
+
+        .dropdown-menu.show {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-item {
+            padding: var(--spacing-md) var(--spacing-lg);
+            font-size: var(--font-size-base);
+            color: var(--text-primary);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            white-space: nowrap;
+        }
+
+        .dropdown-item:hover {
+            background: var(--brand-primary-50);
+            color: var(--brand-primary-600);
+        }
+
+        .dropdown-item.active {
+            background: var(--brand-primary-100);
+            color: var(--brand-primary-700);
+            font-weight: var(--font-weight-medium);
+        }
+
+        /* ============ 全年目标看板 ============ */
+        .yearly-dashboard {
+            background: var(--bg-card);
+            margin: 0 var(--spacing-lg) var(--spacing-md);
+            padding: var(--spacing-xl) 0px var(--spacing-xl) 0px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .dashboard-title {
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-xl);
+            text-align: center;
+        }
+
+        .ring-chart-container {
+            display: flex;
+            justify-content: space-around;
+            align-items: flex-end;
+        }
+
+        .ring-chart-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            width: 70px;
+        }
+
+        .ring-chart {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .ring-chart::before {
+            content: '';
+            position: absolute;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            background: var(--bg-card);
+        }
+
+        .ring-chart-value {
+            position: relative;
+            font-size: 12px;
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            z-index: 1;
+        }
+
+        .ring-chart-label {
+            font-size: var(--font-size-xs);
+            color: var(--text-muted);
+            text-align: center;
+            font-weight: var(--font-weight-medium);
+        }
+
+        .ring-chart-info {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+            margin-top: 4px;
+        }
+
+        .info-value {
+            font-size: 10px;
+            color: var(--text-muted);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .info-value.completed {
+            color: var(--brand-primary-600);
+        }
+
+
+
+        .picker-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: var(--radius-full);
+            background: var(--bg-secondary);
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .picker-btn:hover:not(:disabled) {
+            background: var(--brand-primary-50);
+        }
+
+        .picker-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .picker-btn svg {
+            width: 16px;
+            height: 16px;
+            color: var(--text-secondary);
+        }
+
+        .month-display {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+        }
+
+        /* ============ 目标详情卡片 ============ */
+        .goal-card {
+            background: var(--bg-card);
+            margin: 0 var(--spacing-lg) var(--spacing-md);
+            padding: 20px 20px 6px 20px;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .goal-title {
+            font-size: var(--font-size-md);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            margin-bottom: var(--spacing-lg);
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--progress-bg);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            margin-bottom: var(--spacing-md);
+        }
+
+        .progress-fill {
+            height: 100%;
+            border-radius: var(--radius-sm);
+            transition: var(--transition-normal);
+        }
+
+        .progress-fill.success {
+            background: var(--accent-success);
+        }
+
+        .progress-fill.warning {
+            background: var(--accent-warning);
+        }
+
+        .progress-fill.danger {
+            background: linear-gradient(135deg, var(--brand-primary-400) 0%, var(--brand-primary-600) 100%);
+        }
+
+        .goal-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: var(--font-size-base);
+        }
+
+        .info-label {
+            color: var(--text-muted);
+        }
+
+        .info-value {
+            color: var(--text-primary);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .info-value.highlight {
+            color: var(--text-brand);
+        }
+
+        .edit-btn {
+            width: 100%;
+            height: 44px;
+            background: var(--btn-secondary-bg);
+            border: 1px solid var(--brand-primary-200);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            color: var(--btn-secondary-text);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: var(--font-weight-medium);
+        }
+
+        .edit-btn:hover {
+            background: var(--btn-secondary-hover);
+        }
+
+        .edit-btn:active {
+            transform: scale(0.98);
+        }
+
+        /* ============ 编辑弹窗 ============ */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 375px;
+            bottom: 0;
+            background: var(--bg-modal);
+            display: flex;
+            align-items: flex-end;
+            z-index: 1000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-container {
+            background: var(--bg-card);
+            width: 100%;
+            max-width: 375px;
+            margin: 0 auto;
+            border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+            padding: var(--spacing-2xl) var(--spacing-lg);
+            padding-bottom: calc(var(--spacing-2xl) + env(safe-area-inset-bottom));
+            transform: translateY(100%);
+            transition: var(--transition-bounce);
+        }
+
+        .modal-overlay.show .modal-container {
+            transform: translateY(0);
+        }
+
+        .modal-title {
+            font-size: var(--font-size-lg);
+            font-weight: var(--font-weight-semibold);
+            color: var(--text-primary);
+            text-align: center;
+            margin-bottom: var(--spacing-2xl);
+        }
+
+        .form-group {
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-label {
+            font-size: var(--font-size-base);
+            color: var(--text-muted);
+            margin-bottom: var(--spacing-sm);
+            display: block;
+        }
+
+        .form-input {
+            width: 100%;
+            height: 48px;
+            padding: 0 var(--spacing-lg);
+            border: 1px solid var(--input-border);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-md);
+            color: var(--text-primary);
+            transition: var(--transition-fast);
+            background: var(--bg-primary);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px var(--brand-primary-50);
+        }
+
+        .form-input::placeholder {
+            color: var(--input-placeholder);
+        }
+
+        .form-row {
+            display: flex;
+            gap: var(--spacing-md);
+        }
+
+        .form-row .form-group {
+            flex: 1;
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .form-row .form-input {
+            width: 100%;
+        }
+
+        .modal-actions {
+            display: flex;
+            gap: var(--spacing-md);
+            margin-top: var(--spacing-2xl);
+        }
+
+        .modal-btn {
+            flex: 1;
+            height: 48px;
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-base);
+            font-weight: var(--font-weight-medium);
+            border: none;
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .modal-btn.cancel {
+            background: var(--bg-secondary);
+            color: var(--text-muted);
+        }
+
+        .modal-btn.cancel:hover {
+            background: var(--state-hover);
+        }
+
+        .modal-btn.confirm {
+            background: linear-gradient(135deg, var(--brand-primary-400) 0%, var(--brand-primary-600) 100%);
+            color: var(--text-white);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .modal-btn.confirm:hover {
+            background: linear-gradient(135deg, var(--brand-primary-500) 0%, var(--brand-primary-700) 100%);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        /* ============ Toast提示 ============ */
+        .toast {
+            position: fixed;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            color: var(--text-white);
+            padding: var(--spacing-md) var(--spacing-xl);
+            border-radius: var(--radius-md);
+            font-size: var(--font-size-sm);
+            z-index: 2000;
+            opacity: 0;
+            visibility: hidden;
+            transition: var(--transition-normal);
+        }
+
+        .toast.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .toast.success {
+            background: rgba(16, 185, 129, 0.9);
+        }
+
+        .toast.error {
+            background: rgba(239, 68, 68, 0.9);
+        }
+
+        /* ============ 安全区域 ============ */
+        .safe-area-bottom {
+            height: env(safe-area-inset-bottom);
+        }
+    </style>
+</head>
+<body>
+    <!-- 顶部导航栏 -->
+    <header class="app-header">
+        <button class="header-btn" id="backBtn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M15 18l-6-6 6-6" />
+            </svg>
+        </button>
+        <h1 class="header-title">我的目标</h1>
+        <button class="header-btn" id="moreBtn">
+        </button>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="app-content">
+        <!-- 年月选择器 -->
+        <div class="date-picker">
+            <!-- 年份下拉选择 -->
+            <div class="dropdown-container">
+                <button class="dropdown-trigger" id="yearDropdownTrigger">
+                    <span id="currentYearDisplay">2026年</span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+                <div class="dropdown-menu" id="yearDropdownMenu">
+                    <!-- 年份选项将通过JavaScript动态生成 -->
+                </div>
+            </div>
+            
+            <!-- 分隔线 -->
+            <div class="picker-divider"></div>
+            
+            <!-- 月份下拉选择 -->
+            <div class="dropdown-container">
+                <button class="dropdown-trigger" id="monthDropdownTrigger">
+                    <span id="currentMonthDisplay">6月</span>
+                    <span class="dropdown-arrow"></span>
+                </button>
+                <div class="dropdown-menu" id="monthDropdownMenu">
+                    <!-- 月份选项将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </div>
+
+        <!-- 全年目标看板 -->
+        <div class="yearly-dashboard">
+            <h2 class="dashboard-title">全年目标达成情况</h2>
+            <div class="ring-chart-container">
+                <div class="ring-chart-item">
+                    <div class="ring-chart" id="yearlyPerformanceChart">
+                        <span class="ring-chart-value" id="yearlyPerformanceRate">0%</span>
+                    </div>
+                    <span class="ring-chart-label">业绩</span>
+                    <div class="ring-chart-info">
+                        <span class="info-value" id="yearlyPerformanceGoal">¥0</span>
+                        <span class="info-value completed" id="yearlyPerformanceCompleted">¥0</span>
+                    </div>
+                </div>
+                <div class="ring-chart-item">
+                    <div class="ring-chart" id="yearlyCardConsumeChart">
+                        <span class="ring-chart-value" id="yearlyCardConsumeRate">0%</span>
+                    </div>
+                    <span class="ring-chart-label">卡耗</span>
+                    <div class="ring-chart-info">
+                        <span class="info-value" id="yearlyCardConsumeGoal">¥0</span>
+                        <span class="info-value completed" id="yearlyCardConsumeCompleted">¥0</span>
+                    </div>
+                </div>
+                <div class="ring-chart-item">
+                    <div class="ring-chart" id="yearlyCustomerChart">
+                        <span class="ring-chart-value" id="yearlyCustomerRate">0%</span>
+                    </div>
+                    <span class="ring-chart-label">拓客</span>
+                    <div class="ring-chart-info">
+                        <span class="info-value" id="yearlyCustomerGoal">0人</span>
+                        <span class="info-value completed" id="yearlyCustomerCompleted">0人</span>
+                    </div>
+                </div>
+                <div class="ring-chart-item">
+                    <div class="ring-chart" id="yearlyVisitsChart">
+                        <span class="ring-chart-value" id="yearlyVisitsRate">0%</span>
+                    </div>
+                    <span class="ring-chart-label">客次</span>
+                    <div class="ring-chart-info">
+                        <span class="info-value" id="yearlyVisitsGoal">0次</span>
+                        <span class="info-value completed" id="yearlyVisitsCompleted">0次</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 现金目标卡片 -->
+        <div class="goal-card">
+            <h2 class="goal-title">现金目标</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="performanceProgress"></div>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">目标</span>
+                <span class="info-value" id="performanceGoal">¥50,000</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">完成</span>
+                <span class="info-value highlight" id="performanceCompleted">¥39,000</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">进度</span>
+                <span class="info-value" id="performanceRate">78%</span>
+            </div>
+        </div>
+
+        <!-- 卡耗目标卡片 -->
+        <div class="goal-card">
+            <h2 class="goal-title">卡耗目标</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="cardConsumeProgress"></div>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">目标</span>
+                <span class="info-value" id="cardConsumeGoal">¥20,000</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">完成</span>
+                <span class="info-value highlight" id="cardConsumeCompleted">¥18,400</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">进度</span>
+                <span class="info-value" id="cardConsumeRate">92%</span>
+            </div>
+        </div>
+
+        <!-- 拓客目标卡片 -->
+        <div class="goal-card">
+            <h2 class="goal-title">拓客目标</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="customerProgress"></div>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">目标</span>
+                <span class="info-value" id="customerGoal">50人</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">完成</span>
+                <span class="info-value highlight" id="customerCompleted">32人</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">进度</span>
+                <span class="info-value" id="customerRate">64%</span>
+            </div>
+        </div>
+
+        <!-- 客次目标卡片 -->
+        <div class="goal-card">
+            <h2 class="goal-title">客次目标</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="visitsProgress"></div>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">目标</span>
+                <span class="info-value" id="visitsGoal">200次</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">完成</span>
+                <span class="info-value highlight" id="visitsCompleted">176次</span>
+            </div>
+            <div class="goal-info">
+                <span class="info-label">进度</span>
+                <span class="info-value" id="visitsRate">88%</span>
+            </div>
+        </div>
+    </main>
+
+    <!-- 底部安全区域 -->
+    <div class="safe-area-bottom"></div>
+
+    <!-- 编辑弹窗 -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal-container">
+            <h3 class="modal-title" id="modalTitle">设置2026年6月目标</h3>
+            
+            <div class="form-group">
+                <label class="form-label">现金目标（元）</label>
+                <input type="number" class="form-input" id="editPerformance" placeholder="请输入现金目标">
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label class="form-label">卡耗目标（元）</label>
+                    <input type="number" class="form-input" id="editCardConsume" placeholder="请输入卡耗目标">
+                </div>
+                
+            </div>
+            <div class="form-group">
+                <div class="form-group">
+                    <label class="form-label">拓客目标（人）</label>
+                    <input type="number" class="form-input" id="editCustomer" placeholder="请输入拓客目标">
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">客次目标（次）</label>
+                <input type="number" class="form-input" id="editVisits" placeholder="请输入客次目标">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="modal-btn cancel" id="modalCancelBtn">取消</button>
+                <button class="modal-btn confirm" id="modalConfirmBtn">确认保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast提示 -->
+    <div class="toast" id="toast"></div>
+
+    <script>
+        // 当前月份（默认2026年6月）
+        let currentYear = 2026;
+        let currentMonth = 6;
+
+        // 模拟数据
+        const mockData = {
+            '2026-06': {
+                performance: { goal: 50000, completed: 39000 },
+                cardConsume: { goal: 20000, completed: 18400 },
+                customer: { goal: 50, completed: 32 },
+                visits: { goal: 200, completed: 176 }
+            },
+            '2026-05': {
+                performance: { goal: 45000, completed: 45000 },
+                cardConsume: { goal: 18000, completed: 16200 },
+                customer: { goal: 45, completed: 48 },
+                visits: { goal: 180, completed: 190 }
+            },
+            '2026-04': {
+                performance: { goal: 48000, completed: 42000 },
+                cardConsume: { goal: 19000, completed: 15200 },
+                customer: { goal: 48, completed: 38 },
+                visits: { goal: 190, completed: 175 }
+            }
+        };
+
+        // 获取当前数据
+        function getCurrentData() {
+            const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+            return mockData[key] || {
+                performance: { goal: 0, completed: 0 },
+                cardConsume: { goal: 0, completed: 0 },
+                customer: { goal: 0, completed: 0 },
+                visits: { goal: 0, completed: 0 }
+            };
+        }
+
+        // 获取全年汇总数据
+        function getYearlyData() {
+            const yearly = {
+                performance: { goal: 0, completed: 0 },
+                cardConsume: { goal: 0, completed: 0 },
+                customer: { goal: 0, completed: 0 },
+                visits: { goal: 0, completed: 0 }
+            };
+            
+            // 遍历12个月汇总数据
+            for (let month = 1; month <= 12; month++) {
+                const key = `${currentYear}-${String(month).padStart(2, '0')}`;
+                const monthData = mockData[key];
+                if (monthData) {
+                    yearly.performance.goal += monthData.performance?.goal || 0;
+                    yearly.performance.completed += monthData.performance?.completed || 0;
+                    yearly.cardConsume.goal += monthData.cardConsume?.goal || 0;
+                    yearly.cardConsume.completed += monthData.cardConsume?.completed || 0;
+                    yearly.customer.goal += monthData.customer?.goal || 0;
+                    yearly.customer.completed += monthData.customer?.completed || 0;
+                    yearly.visits.goal += monthData.visits?.goal || 0;
+                    yearly.visits.completed += monthData.visits?.completed || 0;
+                }
+            }
+            
+            return yearly;
+        }
+
+        // 更新页面显示
+        function updatePage() {
+            const data = getCurrentData();
+            
+            // 更新年份显示
+            document.getElementById('currentYearDisplay').textContent = `${currentYear}年`;
+            
+            // 更新月份显示（仅显示月份，年份跟随年份选择器）
+            document.getElementById('currentMonthDisplay').textContent = `${currentMonth}月`;
+            
+            // 更新下拉选项的激活状态
+            updateDropdownActiveStates();
+            
+            // 更新全年看板
+            updateYearlyDashboard();
+            
+            // 更新现金目标
+            updateGoalDisplay('performance', data.performance);
+            
+            // 更新卡耗目标
+            updateGoalDisplay('cardConsume', data.cardConsume);
+            
+            // 更新拓客目标
+            updateGoalDisplay('customer', data.customer);
+            
+            // 更新客次目标
+            updateGoalDisplay('visits', data.visits);
+        }
+
+        // 更新全年看板
+        function updateYearlyDashboard() {
+            const yearlyData = getYearlyData();
+            
+            updateRingChart('performance', yearlyData.performance);
+            updateRingChart('cardConsume', yearlyData.cardConsume);
+            updateRingChart('customer', yearlyData.customer);
+            updateRingChart('visits', yearlyData.visits);
+        }
+
+        // 更新环形图
+        function updateRingChart(type, data) {
+            const rate = data.goal > 0 ? Math.round((data.completed / data.goal) * 100) : 0;
+            const deg = Math.min(rate * 3.6, 360);
+            
+            const chartEl = document.getElementById(`yearly${type.charAt(0).toUpperCase() + type.slice(1)}Chart`);
+            const rateEl = document.getElementById(`yearly${type.charAt(0).toUpperCase() + type.slice(1)}Rate`);
+            const goalEl = document.getElementById(`yearly${type.charAt(0).toUpperCase() + type.slice(1)}Goal`);
+            const completedEl = document.getElementById(`yearly${type.charAt(0).toUpperCase() + type.slice(1)}Completed`);
+            
+            // 使用内联样式设置进度
+            chartEl.style.background = `conic-gradient(
+                var(--brand-primary-500) 0deg,
+                var(--brand-primary-500) ${deg}deg,
+                #e5e7eb ${deg}deg,
+                #e5e7eb 360deg
+            )`;
+            
+            rateEl.textContent = `${rate}%`;
+            
+            // 设置目标值和完成值，根据类型添加单位
+            let unit = '';
+            let prefix = '';
+            if (type === 'performance' || type === 'cardConsume') {
+                prefix = '¥';
+            } else if (type === 'customer') {
+                unit = '人';
+            } else if (type === 'visits') {
+                unit = '次';
+            }
+            
+            goalEl.textContent = `${prefix}${formatNum(data.goal)}${unit}`;
+            completedEl.textContent = `${prefix}${formatNum(data.completed)}${unit}`;
+        }
+
+        // 更新单个目标显示
+        function updateGoalDisplay(type, data) {
+            const rate = data.goal > 0 ? Math.round((data.completed / data.goal) * 100) : 0;
+            const safeRate = Math.min(rate, 100);
+            
+            // 设置进度条
+            const progressEl = document.getElementById(`${type}Progress`);
+            progressEl.style.width = `${safeRate}%`;
+            
+            // 设置进度条颜色
+            if (rate >= 100) {
+                progressEl.className = 'progress-fill success';
+            } else {
+                progressEl.className = 'progress-fill danger';
+            }
+            
+            // 设置数值显示
+            let unit = '';
+            let prefix = '';
+            if (type === 'performance' || type === 'cardConsume') {
+                prefix = '¥';
+            } else if (type === 'customer') {
+                unit = '人';
+            } else if (type === 'visits') {
+                unit = '次';
+            }
+            
+            document.getElementById(`${type}Goal`).textContent = `${prefix}${formatNum(data.goal)}${unit}`;
+            document.getElementById(`${type}Completed`).textContent = `${prefix}${formatNum(data.completed)}${unit}`;
+            document.getElementById(`${type}Rate`).textContent = `${rate}%`;
+        }
+
+        // 格式化数字
+        function formatNum(value) {
+            if (typeof value !== 'number' || isNaN(value)) return '0';
+            return value.toLocaleString('zh-CN');
+        }
+
+        // 打开编辑弹窗
+        function openEditModal() {
+            const data = getCurrentData();
+            
+            // 更新弹窗标题，显示当前年月
+            document.getElementById('modalTitle').textContent = `设置${currentYear}年${currentMonth}月目标`;
+            
+            // 填充当前值
+            document.getElementById('editPerformance').value = data.performance.goal;
+            document.getElementById('editCardConsume').value = data.cardConsume.goal;
+            document.getElementById('editCustomer').value = data.customer.goal;
+            document.getElementById('editVisits').value = data.visits.goal;
+            
+            // 显示弹窗
+            document.getElementById('editModal').classList.add('show');
+        }
+
+        // 关闭编辑弹窗
+        function closeEditModal() {
+            document.getElementById('editModal').classList.remove('show');
+        }
+
+        // 保存目标
+        function saveGoals() {
+            const performance = parseFloat(document.getElementById('editPerformance').value);
+            const cardConsume = parseFloat(document.getElementById('editCardConsume').value);
+            const customer = parseInt(document.getElementById('editCustomer').value);
+            const visits = parseInt(document.getElementById('editVisits').value);
+            
+            // 验证
+            if (isNaN(performance) || performance <= 0) {
+                showToast('请输入有效的现金目标', 'error');
+                return;
+            }
+            if (isNaN(cardConsume) || cardConsume <= 0) {
+                showToast('请输入有效的卡耗目标', 'error');
+                return;
+            }
+            if (isNaN(customer) || customer <= 0) {
+                showToast('请输入有效的拓客目标', 'error');
+                return;
+            }
+            if (isNaN(visits) || visits <= 0) {
+                showToast('请输入有效的客次目标', 'error');
+                return;
+            }
+            
+            // 更新数据（模拟）
+            const key = `${currentYear}-${String(currentMonth).padStart(2, '0')}`;
+            mockData[key] = {
+                performance: { goal: performance, completed: mockData[key]?.performance?.completed || 0 },
+                cardConsume: { goal: cardConsume, completed: mockData[key]?.cardConsume?.completed || 0 },
+                customer: { goal: customer, completed: mockData[key]?.customer?.completed || 0 },
+                visits: { goal: visits, completed: mockData[key]?.visits?.completed || 0 }
+            };
+            
+            // 关闭弹窗
+            closeEditModal();
+            
+            // 更新页面
+            updatePage();
+            
+            // 显示成功提示
+            showToast('保存成功', 'success');
+        }
+
+        // 显示Toast提示
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            
+            // 移除之前的类型类
+            toast.classList.remove('success', 'error');
+            
+            // 添加当前类型类
+            if (type === 'success') {
+                toast.classList.add('success');
+            } else if (type === 'error') {
+                toast.classList.add('error');
+            }
+            
+            toast.classList.add('show');
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 2000);
+        }
+
+        // 设置年份
+        function setYear(year) {
+            currentYear = year;
+            updatePage();
+            closeAllDropdowns();
+        }
+
+        // 设置月份
+        function setMonth(month) {
+            currentMonth = month;
+            updatePage();
+            closeAllDropdowns();
+        }
+
+        // 关闭所有下拉框
+        function closeAllDropdowns() {
+            document.getElementById('yearDropdownMenu').classList.remove('show');
+            document.getElementById('monthDropdownMenu').classList.remove('show');
+            document.getElementById('yearDropdownTrigger').classList.remove('active');
+            document.getElementById('monthDropdownTrigger').classList.remove('active');
+            document.querySelector('#yearDropdownTrigger .dropdown-arrow').classList.remove('active');
+            document.querySelector('#monthDropdownTrigger .dropdown-arrow').classList.remove('active');
+        }
+
+        // 切换下拉框状态
+        function toggleDropdown(dropdownType) {
+            closeAllDropdowns();
+            
+            const menu = document.getElementById(`${dropdownType}DropdownMenu`);
+            const trigger = document.getElementById(`${dropdownType}DropdownTrigger`);
+            const arrow = document.querySelector(`#${dropdownType}DropdownTrigger .dropdown-arrow`);
+            
+            menu.classList.add('show');
+            trigger.classList.add('active');
+            arrow.classList.add('active');
+        }
+
+        // 初始化下拉选项
+        function initDropdowns() {
+            // 生成年份选项（前后5年）
+            const yearMenu = document.getElementById('yearDropdownMenu');
+            yearMenu.innerHTML = '';
+            for (let i = -5; i <= 5; i++) {
+                const year = new Date().getFullYear() + i;
+                const item = document.createElement('div');
+                item.className = `dropdown-item${year === currentYear ? ' active' : ''}`;
+                item.textContent = `${year}年`;
+                item.addEventListener('click', () => setYear(year));
+                yearMenu.appendChild(item);
+            }
+            
+            // 生成月份选项（1-12月）
+            const monthMenu = document.getElementById('monthDropdownMenu');
+            monthMenu.innerHTML = '';
+            const monthNames = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            for (let i = 0; i < 12; i++) {
+                const month = i + 1;
+                const item = document.createElement('div');
+                item.className = `dropdown-item${month === currentMonth ? ' active' : ''}`;
+                item.textContent = monthNames[i];
+                item.addEventListener('click', () => setMonth(month));
+                monthMenu.appendChild(item);
+            }
+        }
+
+        // 更新下拉选项的激活状态
+        function updateDropdownActiveStates() {
+            // 更新年份选项
+            const yearItems = document.querySelectorAll('#yearDropdownMenu .dropdown-item');
+            yearItems.forEach((item, index) => {
+                const year = new Date().getFullYear() - 5 + index;
+                item.classList.toggle('active', year === currentYear);
+            });
+            
+            // 更新月份选项
+            const monthItems = document.querySelectorAll('#monthDropdownMenu .dropdown-item');
+            monthItems.forEach((item, index) => {
+                item.classList.toggle('active', index + 1 === currentMonth);
+            });
+        }
+
+        // 初始化
+        document.addEventListener('DOMContentLoaded', () => {
+            // 初始化下拉选项
+            initDropdowns();
+            
+            // 更新页面
+            updatePage();
+            
+            // 绑定年份下拉触发
+            document.getElementById('yearDropdownTrigger').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown('year');
+            });
+            
+            // 绑定月份下拉触发
+            document.getElementById('monthDropdownTrigger').addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleDropdown('month');
+            });
+            
+            // 点击页面其他地方关闭下拉框
+            document.addEventListener('click', closeAllDropdowns);
+            
+            // 阻止下拉菜单内点击事件冒泡
+            document.getElementById('yearDropdownMenu').addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            document.getElementById('monthDropdownMenu').addEventListener('click', (e) => {
+                e.stopPropagation();
+            });
+            
+            document.getElementById('modalCancelBtn').addEventListener('click', closeEditModal);
+            document.getElementById('modalConfirmBtn').addEventListener('click', saveGoals);
+            
+            // ESC关闭弹窗
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape') {
+                    closeEditModal();
+                    closeAllDropdowns();
+                }
+            });
+            
+            // 点击弹窗外部关闭
+            document.getElementById('editModal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('editModal')) {
+                    closeEditModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
