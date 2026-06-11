@@ -1,11 +1,10 @@
-<!DOCTYPE html>
-<html lang="zh-CN">
-<head>
+﻿<!DOCTYPE html>
+<html lang="zh-CN"><head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>销售目标管理</title>
+    <title>閿€鍞洰鏍囩鐞?/title>
     <link rel="stylesheet" href="../chlitina-brand.css">
-    <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+    <script defer="" src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
         :root {
             --primary: #0D9488;
@@ -266,7 +265,7 @@
             width: 100%;
         }
 
-        /* ============ 门店目标TAB页独立布局样式 ============ */
+        /* ============ 闂ㄥ簵鐩爣TAB椤电嫭绔嬪竷灞€鏍峰紡 ============ */
         .store-goal-layout {
             display: grid;
             grid-template-columns: minmax(280px, 340px) 1fr;
@@ -392,7 +391,7 @@
             color: var(--primary-600);
         }
 
-        /* ============ 趋势图样式 ============ */
+        /* ============ 瓒嬪娍鍥炬牱寮?============ */
         .store-trend-section {
             height: 300px;
             margin-top: 24px;
@@ -719,7 +718,7 @@
             transition: width 0.3s ease;
         }
 
-        /* ============ 门店目标TAB页响应式样式 ============ */
+        /* ============ 闂ㄥ簵鐩爣TAB椤靛搷搴斿紡鏍峰紡 ============ */
         @media (max-width: 1024px) {
             .store-goal-layout {
                 grid-template-columns: 1fr;
@@ -803,7 +802,7 @@
             }
         }
 
-        /* ============ 原有样式（保留供员工业绩目标使用） ============ */
+        /* ============ 鍘熸湁鏍峰紡锛堜繚鐣欎緵鍛樺伐涓氱哗鐩爣浣跨敤锛?============ */
         .year-overview-card {
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
@@ -1309,12 +1308,12 @@
         }
 
         .toast.success .toast-icon::before {
-            content: '✓';
+            content: '鉁?;
             color: #10B981;
         }
 
         .toast.error .toast-icon::before {
-            content: '✕';
+            content: '鉁?;
             color: #EF4444;
         }
 
@@ -1412,7 +1411,7 @@
             }
         }
 
-        /* ============ 员工业绩目标页面样式 ============ */
+        /* ============ 鍛樺伐涓氱哗鐩爣椤甸潰鏍峰紡 ============ */
         .staff-goal-container {
             background: var(--bg-primary);
             border-radius: var(--radius-lg);
@@ -1871,7 +1870,7 @@
             .staff-goal-type-table th, .staff-goal-type-table td { padding: 6px 4px; }
             .staff-goal-type-section { padding: 12px; }
         }
-        /* ============ 响应式 ============ */
+        /* ============ 鍝嶅簲寮?============ */
         @media (max-width: 992px) {
             .staff-goal-type-section { padding: 14px; }
             .staff-goal-type-table { font-size: 12px; }
@@ -2100,7 +2099,7 @@
             color: var(--primary-600);
         }
 
-        /* ============ 员工目标编辑弹窗 ============ */
+        /* ============ 鍛樺伐鐩爣缂栬緫寮圭獥 ============ */
         .staff-goal-modal .modal-body {
             padding: 24px;
         }
@@ -2195,14 +2194,11 @@
         .chl-page-scroll{flex:1;min-height:0;overflow:auto}
         @media (max-width: 768px) {
             html, body { width:100%; max-width:100%; overflow-x:hidden; }
-            body { height:auto; min-height:100vh; overflow:auto; }
+            body { min-height:100vh; }
             .chl-topbar { display:none !important; }
             .chl-layout, .chl-page-scroll, .page-container, .page-main { width:100%; max-width:100%; }
-            .chl-layout { height:auto; min-height:100vh; }
             .chl-page-scroll { overflow:visible; min-height:100vh; }
-            .page-container { min-height:auto; }
-            .page-main { flex:none; min-height:auto; }
-            .page-main { padding:16px; }
+            .page-main { padding:16px; max-width:75%; }
             .page-header { display:none; }
             .header-tabs {
                 display:flex;
@@ -2262,35 +2258,34 @@
             .staff-goal-cards { grid-template-columns:1fr; }
         }
 
-    </style>
 </head>
 <body>
     <div class="chl-layout">
         <div class="chl-topbar">
             <div class="chl-topbar-left">
-                <a class="chl-back" href="report-entry-pad.html" aria-label="返回">
+                <a class="chl-back" href="report-entry-pad.html" aria-label="杩斿洖">
                     <iconify-icon class="text-2xl" icon="mdi:arrow-left"></iconify-icon>
                 </a>
                 <div class="chl-brand">
-                    <span>CHLITINA</span>&nbsp;克丽缇娜
+                    <span>CHLITINA</span>&nbsp;鍏嬩附缂囧
                 </div>
                 <div class="chl-store">
-                    <span>测试店1</span>
+                    <span>娴嬭瘯搴?</span>
                     <iconify-icon icon="mdi:chevron-down"></iconify-icon>
                 </div>
             </div>
             <div class="chl-topbar-right">
-                <button class="chl-icon-btn" type="button" aria-label="通知">
+                <button class="chl-icon-btn" type="button" aria-label="閫氱煡">
                     <iconify-icon class="text-lg" icon="mdi:bell-outline"></iconify-icon>
                 </button>
                 <span class="chl-meta-strong">23:04</span>
-                <span class="chl-meta">6月2日 周二</span>
+                <span class="chl-meta">6鏈?鏃?鍛ㄤ簩</span>
                 <iconify-icon class="text-base" icon="mdi:wifi"></iconify-icon>
                 <span class="chl-meta">24%</span>
                 <div class="chl-user">
                     <img alt="User Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
                     <span class="chl-user-name">roger</span>
-                    <span class="chl-user-role">店总</span>
+                    <span class="chl-user-role">搴楁€?/span>
                 </div>
             </div>
         </div>
@@ -2311,38 +2306,38 @@
                 </button>
             </div>
             <div class="header-tabs" id="goalTypeTabs">
-                <button class="tab-item active" data-goal-type="store-performance">门店现金目标</button>
-                <button class="tab-item" data-goal-type="store-card-consume">门店卡耗目标</button>
-                <button class="tab-item" data-goal-type="customer-flow">客流目标</button>
-                <button class="tab-item" data-goal-type="staff-performance">员工业绩目标</button>
+                <button class="tab-item active" data-goal-type="store-performance">闂ㄥ簵鐜伴噾鐩爣</button>
+                <button class="tab-item" data-goal-type="store-card-consume">闂ㄥ簵鍗¤€楃洰鏍?/button>
+                <button class="tab-item" data-goal-type="customer-flow">瀹㈡祦鐩爣</button>
+                <button class="tab-item" data-goal-type="staff-performance">鍛樺伐涓氱哗鐩爣</button>
             </div>
             <div class="store-goal-layout" id="storeGoalContent">
                 <aside class="store-goal-sidebar">
                     <div class="store-overview-card">
-                        <h2 class="store-overview-title">年度概览</h2>
+                        <h2 class="store-overview-title">骞村害姒傝</h2>
                         <div class="store-circle-progress-container">
                             <div class="store-circle-progress-wrapper">
                                 <div class="store-circle-progress-bg"></div>
                                 <div class="store-circle-progress-fill" id="yearProgressFill"></div>
                                 <div class="store-circle-progress-inner">
                                     <div class="store-circle-percentage" id="yearCompletionRate">78%</div>
-                                    <div class="store-circle-label">进度</div>
+                                    <div class="store-circle-label">杩涘害</div>
                                 </div>
                             </div>
                         </div>
                         <div class="store-overview-stats">
                             <div class="store-stat-item">
-                                <span class="store-stat-label">年度目标</span>
-                                <span class="store-stat-value">¥1,200,000</span>
+                                <span class="store-stat-label">骞村害鐩爣</span>
+                                <span class="store-stat-value">楼1,200,000</span>
                             </div>
                             <div class="store-stat-item">
-                                <span class="store-stat-label">年度完成</span>
-                                <span class="store-stat-value highlight">¥936,000</span>
+                                <span class="store-stat-label">骞村害瀹屾垚</span>
+                                <span class="store-stat-value highlight">楼936,000</span>
                             </div>
                         </div>
                         
                         <div class="store-trend-section">
-                            <h3 class="store-trend-title">月度趋势对比</h3>
+                            <h3 class="store-trend-title">鏈堝害瓒嬪娍瀵规瘮</h3>
                             <div class="store-trend-chart" id="yearTrendChart">
                                 <div class="store-trend-y-axis" id="trendYAxis"></div>
                                 <div class="store-trend-content">
@@ -2367,11 +2362,11 @@
                                 <div class="store-trend-legend" id="trendLegend">
                                     <div class="store-trend-legend-item">
                                         <span class="store-trend-legend-dot current"></span>
-                                        <span id="legendCurrentYear">2026年</span>
+                                        <span id="legendCurrentYear">2026骞?/span>
                                     </div>
                                     <div class="store-trend-legend-item">
                                         <span class="store-trend-legend-dot last-year"></span>
-                                        <span id="legendLastYear">2025年</span>
+                                        <span id="legendLastYear">2025骞?/span>
                                     </div>
                                 </div>
                             </div>
@@ -2382,9 +2377,9 @@
                 <main class="store-goal-main">
                     <div class="store-month-grid-container">
                         <div class="store-month-grid-header">
-                            <h2 class="store-month-grid-title">月度目标</h2>
+                            <h2 class="store-month-grid-title">鏈堝害鐩爣</h2>
                             <div class="store-batch-actions">
-                                <button class="store-btn-batch" id="batchClearBtn" disabled>清空选中的目标 (0)</button>
+                                <button class="store-btn-batch" id="batchClearBtn" disabled>娓呯┖閫変腑鐨勭洰鏍?(0)</button>
                             </div>
                         </div>
                         <div class="store-month-grid" id="monthGrid">
@@ -2397,14 +2392,14 @@
                 <div class="staff-goal-layout">
                     <div class="staff-sidebar">
                         <div class="staff-sidebar-header">
-                            <h3>员工列表</h3>
+                            <h3>鍛樺伐鍒楄〃</h3>
                             <div class="staff-month-selector">
                                 <button class="month-nav-btn" id="staffPrevMonthBtn">
                                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M15 19l-7-7 7-7" />
                                     </svg>
                                 </button>
-                                <span class="staff-month-label" id="staffMonthLabel">5月</span>
+                                <span class="staff-month-label" id="staffMonthLabel">5鏈?/span>
                                 <button class="month-nav-btn" id="staffNextMonthBtn">
                                     <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M9 5l7 7-7 7" />
@@ -2416,13 +2411,13 @@
                     </div>
                     <div class="staff-main">
                         <div class="staff-main-header">
-                            <h3 class="staff-main-title" id="staffMainTitle">请选择员工</h3>
+                            <h3 class="staff-main-title" id="staffMainTitle">璇烽€夋嫨鍛樺伐</h3>
                             <div class="staff-main-actions">
                                 <button class="add-staff-goal-btn" id="addStaffGoalBtn">
                                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                                         <path d="M12 5v14M5 12h14" />
                                     </svg>
-                                    新增目标
+                                    鏂板鐩爣
                                 </button>
                             </div>
                         </div>
@@ -2436,7 +2431,7 @@
     <div class="modal-overlay" id="goalModal">
         <div class="modal-container">
             <div class="modal-header">
-                <h3 class="modal-title" id="modalTitle">设置目标</h3>
+                <h3 class="modal-title" id="modalTitle">璁剧疆鐩爣</h3>
                 <button class="modal-close" id="modalCloseBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12" />
@@ -2445,30 +2440,30 @@
             </div>
             <div class="modal-body">
                 <div class="modal-field">
-                    <label class="modal-label">目标所属</label>
-                    <div class="modal-value" id="modalTargetInfo">2026年1月</div>
+                    <label class="modal-label">鐩爣鎵€灞?/label>
+                    <div class="modal-value" id="modalTargetInfo">2026骞?鏈?/div>
                 </div>
                 <div class="modal-field">
-                    <label class="modal-label">目标数值</label>
+                    <label class="modal-label">鐩爣鏁板€?/label>
                     <div class="modal-input-wrap">
-                        <span class="modal-input-prefix" id="goalUnitPrefix">¥</span>
-                        <input type="text" class="modal-input" id="goalAmountInput" placeholder="请输入目标数值" inputmode="decimal">
+                        <span class="modal-input-prefix" id="goalUnitPrefix">楼</span>
+                        <input type="text" class="modal-input" id="goalAmountInput" placeholder="璇疯緭鍏ョ洰鏍囨暟鍊? inputmode="decimal">
                     </div>
-                    <div class="modal-tip" id="goalModalTip">请输入有效的数字</div>
+                    <div class="modal-tip" id="goalModalTip">璇疯緭鍏ユ湁鏁堢殑鏁板瓧</div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn secondary" id="modalCancelBtn">取消</button>
-                <button class="modal-btn primary" id="modalConfirmBtn">确定</button>
+                <button class="modal-btn secondary" id="modalCancelBtn">鍙栨秷</button>
+                <button class="modal-btn primary" id="modalConfirmBtn">纭畾</button>
             </div>
         </div>
     </div>
 
-    <!-- 员工目标编辑弹窗 -->
+    <!-- 鍛樺伐鐩爣缂栬緫寮圭獥 -->
     <div class="modal-overlay" id="staffGoalModal">
         <div class="modal-container staff-goal-modal">
             <div class="modal-header">
-                <h3 class="modal-title" id="staffModalTitle">编辑员工目标</h3>
+                <h3 class="modal-title" id="staffModalTitle">缂栬緫鍛樺伐鐩爣</h3>
                 <button class="modal-close" id="staffModalCloseBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12" />
@@ -2477,23 +2472,23 @@
             </div>
             <div class="modal-body">
                 <div class="modal-staff-info">
-                    <div class="modal-staff-name" id="staffModalStaffName">员工姓名</div>
-                    <div class="modal-month-info" id="staffModalMonthInfo">2026年1月</div>
+                    <div class="modal-staff-name" id="staffModalStaffName">鍛樺伐濮撳悕</div>
+                    <div class="modal-month-info" id="staffModalMonthInfo">2026骞?鏈?/div>
                 </div>
                 <div class="goal-fields" id="staffGoalFields"></div>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn secondary" id="staffModalCancelBtn">取消</button>
-                <button class="modal-btn primary" id="staffModalConfirmBtn">保存目标</button>
+                <button class="modal-btn secondary" id="staffModalCancelBtn">鍙栨秷</button>
+                <button class="modal-btn primary" id="staffModalConfirmBtn">淇濆瓨鐩爣</button>
             </div>
         </div>
     </div>
 
-    <!-- 新增员工目标类型弹窗 -->
+    <!-- 鏂板鍛樺伐鐩爣绫诲瀷寮圭獥 -->
     <div class="modal-overlay" id="addStaffGoalTypeModal">
         <div class="modal-container" style="max-width:520px">
             <div class="modal-header">
-                <h3 class="modal-title">新增员工目标</h3>
+                <h3 class="modal-title">鏂板鍛樺伐鐩爣</h3>
                 <button class="modal-close" id="addStaffGoalTypeCloseBtn">
                     <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M18 6L6 18M6 6l12 12" />
@@ -2502,27 +2497,27 @@
             </div>
             <div class="modal-body" style="max-height:70vh;overflow-y:auto">
                 <div class="modal-field">
-                    <label class="modal-label">目标名称</label>
-                    <input type="text" class="modal-input" id="staffGoalTypeNameInput" placeholder="请输入目标名称" style="width:100%;padding:10px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:14px">
+                    <label class="modal-label">鐩爣鍚嶇О</label>
+                    <input type="text" class="modal-input" id="staffGoalTypeNameInput" placeholder="璇疯緭鍏ョ洰鏍囧悕绉? style="width:100%;padding:10px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:14px">
                 </div>
                 <div class="modal-field" style="margin-top:16px">
-                    <label class="modal-label">计量单位</label>
+                    <label class="modal-label">璁￠噺鍗曚綅</label>
                     <select id="staffGoalTypeUnitInput" style="width:100%;padding:10px 12px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:14px;background:var(--bg-primary)">
-                        <option value="元">元</option>
-                        <option value="人">人</option>
-                        <option value="次">次</option>
-                        <option value="笔">笔</option>
-                        <option value="个">个</option>
+                        <option value="鍏?>鍏?/option>
+                        <option value="浜?>浜?/option>
+                        <option value="娆?>娆?/option>
+                        <option value="绗?>绗?/option>
+                        <option value="涓?>涓?/option>
                     </select>
                 </div>
                 <div class="modal-field" style="margin-top:20px">
-                    <label class="modal-label" id="staffGoalValuesLabel">设置各员工目标</label>
+                    <label class="modal-label" id="staffGoalValuesLabel">璁剧疆鍚勫憳宸ョ洰鏍?/label>
                     <div id="staffGoalValuesContainer"></div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="modal-btn secondary" id="addStaffGoalTypeCancelBtn">取消</button>
-                <button class="modal-btn primary" id="addStaffGoalTypeConfirmBtn">保存</button>
+                <button class="modal-btn secondary" id="addStaffGoalTypeCancelBtn">鍙栨秷</button>
+                <button class="modal-btn primary" id="addStaffGoalTypeConfirmBtn">淇濆瓨</button>
             </div>
         </div>
     </div>
@@ -2536,12 +2531,12 @@
         const MIN_YEAR = CURRENT_YEAR - 5;
         const MAX_YEAR = CURRENT_YEAR;
 
-        // 默认目标类型数据（用于API不可用时）
+        // 榛樿鐩爣绫诲瀷鏁版嵁锛堢敤浜嶢PI涓嶅彲鐢ㄦ椂锛?
         const defaultGoalTypes = [
-            { id: 1, type_name: '门店现金目标', unit: '元' },
-            { id: 2, type_name: '门店卡耗目标', unit: '元' },
-            { id: 3, type_name: '客流目标', unit: '人' },
-            { id: 4, type_name: '员工业绩目标', unit: '元' }
+            { id: 1, type_name: '闂ㄥ簵鐜伴噾鐩爣', unit: '鍏? },
+            { id: 2, type_name: '闂ㄥ簵鍗¤€楃洰鏍?, unit: '鍏? },
+            { id: 3, type_name: '瀹㈡祦鐩爣', unit: '浜? },
+            { id: 4, type_name: '鍛樺伐涓氱哗鐩爣', unit: '鍏? }
         ];
         
         let goalTypes = [];
@@ -2554,7 +2549,7 @@
         let isLoading = false;
         let useMockData = true;
 
-        // ============ API 请求封装（含异常处理） ============
+        // ============ API 璇锋眰灏佽锛堝惈寮傚父澶勭悊锛?============
         async function apiRequest(url, options = {}) {
             const controller = new AbortController();
             const timeout = setTimeout(() => controller.abort(), 10000);
@@ -2563,40 +2558,42 @@
                 clearTimeout(timeout);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const data = await res.json();
-                if (data.code !== 0) throw new Error(data.message || '服务器错误');
+                if (data.code !== 0) throw new Error(data.message || '鏈嶅姟鍣ㄩ敊璇?);
                 return data.data;
             } catch (err) {
                 clearTimeout(timeout);
-                if (err.name === 'AbortError') throw new Error('请求超时，请检查网络连接');
-                if (err.message === 'Failed to fetch') throw new Error('网络连接失败，请检查服务器状态');
+                if (err.name === 'AbortError') throw new Error('璇锋眰瓒呮椂锛岃妫€鏌ョ綉缁滆繛鎺?);
+                if (err.message === 'Failed to fetch') throw new Error('缃戠粶杩炴帴澶辫触锛岃妫€鏌ユ湇鍔″櫒鐘舵€?);
                 throw err;
             }
         }
 
-        // ============ 数据加载 ============
+        // ============ 鏁版嵁鍔犺浇 ============
         async function loadGoalTypes() {
+            console.log('loadGoalTypes called');
             useMockData = true;
             goalTypes = JSON.parse(JSON.stringify(defaultGoalTypes));
             currentGoalTypeId = goalTypes[0].id;
             currentGoalTypeIndex = 0;
+            console.log('Goal types set:', goalTypes, 'currentGoalTypeId:', currentGoalTypeId);
             renderTabs();
-            showToast('使用本地数据模式', 'success');
+            showToast('浣跨敤鏈湴鏁版嵁妯″紡', 'success');
         }
 
         async function fetchGoals() {
             if (!currentGoalTypeId) return;
             
-            // 本地数据模式下生成模拟数据
+            // 鏈湴鏁版嵁妯″紡涓嬬敓鎴愭ā鎷熸暟鎹?
             if (useMockData) {
                 const currentType = goalTypes[currentGoalTypeIndex] || {};
                 monthlyGoals = {};
                 
-                // 默认目标类型（id <= 4）生成模拟数据，新增目标类型（id > 4）显示空数据
+                // 榛樿鐩爣绫诲瀷锛坕d <= 4锛夌敓鎴愭ā鎷熸暟鎹紝鏂板鐩爣绫诲瀷锛坕d > 4锛夋樉绀虹┖鏁版嵁
                 if (currentType.id && currentType.id <= 4) {
-                    const unit = currentType.unit || '元';
+                    const unit = currentType.unit || '鍏?;
                     for (let month = 1; month <= 12; month++) {
-                        const baseGoal = unit === '元' ? (80000 + Math.floor(Math.random() * 40000)) :
-                                         unit === '人' ? (30 + Math.floor(Math.random() * 20)) :
+                        const baseGoal = unit === '鍏? ? (80000 + Math.floor(Math.random() * 40000)) :
+                                         unit === '浜? ? (30 + Math.floor(Math.random() * 20)) :
                                          (100 + Math.floor(Math.random() * 80));
                         const completionRate = 60 + Math.floor(Math.random() * 50);
                         monthlyGoals[month] = {
@@ -2622,14 +2619,14 @@
                 updateYearOverview();
             } catch (err) {
                 setLoading(false);
-                showToast('加载目标数据失败: ' + err.message, 'error');
+                showToast('鍔犺浇鐩爣鏁版嵁澶辫触: ' + err.message, 'error');
                 monthlyGoals = {};
                 renderMonthGrid();
                 updateYearOverview();
             }
         }
 
-        // ============ 渲染函数 ============
+        // ============ 娓叉煋鍑芥暟 ============
         function renderTabs() {
             const container = document.getElementById('goalTypeTabs');
             const tabsHtml = goalTypes.map((t, i) => `
@@ -2644,21 +2641,23 @@
         }
 
         function renderMonthGrid() {
+            console.log('renderMonthGrid called, monthlyGoals:', monthlyGoals);
             const grid = document.getElementById('monthGrid');
             if (!grid) {
+                console.error('monthGrid element not found!');
                 return;
             }
             if (isLoading) {
-                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--neutral-400)">加载中...</div>';
+                grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:60px;color:var(--neutral-400)">鍔犺浇涓?..</div>';
                 return;
             }
 
             let html = '';
-            const months = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+            const months = ['1鏈?,'2鏈?,'3鏈?,'4鏈?,'5鏈?,'6鏈?,'7鏈?,'8鏈?,'9鏈?,'10鏈?,'11鏈?,'12鏈?];
             const currentType = goalTypes[currentGoalTypeIndex] || {};
-            const unit = currentType.unit || '元';
-            const prefix = unit === '元' ? '¥' : '';
-            const suffix = unit === '元' ? '' : unit;
+            const unit = currentType.unit || '鍏?;
+            const prefix = unit === '鍏? ? '楼' : '';
+            const suffix = unit === '鍏? ? '' : unit;
             
             months.forEach((monthName, index) => {
                 const month = index + 1;
@@ -2671,17 +2670,19 @@
                     const rate = Math.min(goalData.completionRate || 0, 100);
                     cardContent = `
                         <div class="store-month-info">
-                            <div class="store-info-row"><span class="store-info-label">目标</span><span class="store-info-value goal">${prefix}${formatNum(goalData.goal)}${suffix}</span></div>
-                            <div class="store-info-row"><span class="store-info-label">完成</span><span class="store-info-value completed">${prefix}${formatNum(goalData.completed)}${suffix}</span></div>
+                            <div class="store-info-row"><span class="store-info-label">鐩爣</span><span class="store-info-value goal">${prefix}${formatNum(goalData.goal)}${suffix}</span></div>
+                            <div class="store-info-row"><span class="store-info-label">瀹屾垚</span><span class="store-info-value completed">${prefix}${formatNum(goalData.completed)}${suffix}</span></div>
                             <div class="store-month-progress-bar"><div class="store-month-progress-fill" style="width:${rate}%"></div></div>
-                            <div class="store-info-row" style="margin-top:4px"><span class="store-info-label">进度</span><span class="store-info-value">${goalData.completionRate}%</span></div>
+                            <div class="store-info-row" style="margin-top:4px"><span class="store-info-label">杩涘害</span><span class="store-info-value">${goalData.completionRate}%</span></div>
                         </div>`;
                 } else {
-                    cardContent = '<div class="store-month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div></div>';
+                    cardContent = '<div class="store-month-info"><div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">鏈缃洰鏍?/div></div>';
                 }
                 html += `<div class="store-month-card ${isSelected?'selected':''} ${isUnset?'unset':''}" data-month="${month}"><div class="store-month-select-indicator"></div><div class="store-month-name">${monthName}</div>${cardContent}</div>`;
             });
+            console.log('Setting monthGrid innerHTML, html length:', html.length);
             grid.innerHTML = html;
+            console.log('monthGrid innerHTML set, child element count:', grid.children.length);
             updateBatchButton();
         }
 
@@ -2701,8 +2702,8 @@
             if (fill) fill.style.setProperty('--progress-deg', `${progressDeg}deg`);
             const stats = document.querySelectorAll('.store-overview-stats .store-stat-value');
             const currentType = goalTypes[currentGoalTypeIndex] || {};
-            const unit = currentType.unit || '元';
-            const prefix = unit === '元' ? '¥' : '';
+            const unit = currentType.unit || '鍏?;
+            const prefix = unit === '鍏? ? '楼' : '';
             if (stats[0]) stats[0].textContent = `${prefix}${formatNum(totalGoal)}`;
             if (stats[1]) stats[1].textContent = `${prefix}${formatNum(totalCompleted)}`;
             
@@ -2713,18 +2714,18 @@
         function updateLegendYears() {
             const currentYearEl = document.getElementById('legendCurrentYear');
             const lastYearEl = document.getElementById('legendLastYear');
-            if (currentYearEl) currentYearEl.textContent = `${currentYear}年`;
-            if (lastYearEl) lastYearEl.textContent = `${currentYear - 1}年`;
+            if (currentYearEl) currentYearEl.textContent = `${currentYear}骞碻;
+            if (lastYearEl) lastYearEl.textContent = `${currentYear - 1}骞碻;
         }
 
-        // 生成去年模拟数据
+        // 鐢熸垚鍘诲勾妯℃嫙鏁版嵁
         function generateLastYearData() {
             const lastYearData = {};
             const currentType = goalTypes[currentGoalTypeIndex] || {};
-            const unit = currentType.unit || '元';
+            const unit = currentType.unit || '鍏?;
             for (let month = 1; month <= 12; month++) {
-                const baseGoal = unit === '元' ? (70000 + Math.floor(Math.random() * 35000)) :
-                                 unit === '人' ? (25 + Math.floor(Math.random() * 18)) :
+                const baseGoal = unit === '鍏? ? (70000 + Math.floor(Math.random() * 35000)) :
+                                 unit === '浜? ? (25 + Math.floor(Math.random() * 18)) :
                                  (80 + Math.floor(Math.random() * 70));
                 const completionRate = 55 + Math.floor(Math.random() * 50);
                 lastYearData[month] = {
@@ -2736,13 +2737,13 @@
             return lastYearData;
         }
 
-        // 渲染趋势图
+        // 娓叉煋瓒嬪娍鍥?
         function renderTrendChart() {
-            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            const months = ['1鏈?, '2鏈?, '3鏈?, '4鏈?, '5鏈?, '6鏈?, '7鏈?, '8鏈?, '9鏈?, '10鏈?, '11鏈?, '12鏈?];
             const lastYearData = generateLastYearData();
             
             const currentType = goalTypes[currentGoalTypeIndex] || {};
-            const unit = currentType.unit || '元';
+            const unit = currentType.unit || '鍏?;
             
             let maxValue = 0;
             const currentYearValues = [];
@@ -2769,15 +2770,15 @@
             const yAxis = document.getElementById('trendYAxis');
             if (!yAxis) return;
             
-            const prefix = unit === '元' ? '¥' : '';
-            const suffix = unit === '元' ? '' : unit;
+            const prefix = unit === '鍏? ? '楼' : '';
+            const suffix = unit === '鍏? ? '' : unit;
             
             const values = [maxValue, maxValue * 0.75, maxValue * 0.5, maxValue * 0.25, 0];
             yAxis.innerHTML = values.map(v => {
                 let displayValue = '';
-                if (unit === '元') {
+                if (unit === '鍏?) {
                     if (v >= 10000) {
-                        displayValue = `${(v / 10000).toFixed(0)}万`;
+                        displayValue = `${(v / 10000).toFixed(0)}涓嘸;
                     } else {
                         displayValue = Math.round(v).toString();
                     }
@@ -2823,7 +2824,7 @@
             if (!container) return;
             
             let pointsHtml = '';
-            const months = ['1月', '2月', '3月', '4月', '5月', '6月', '7月', '8月', '9月', '10月', '11月', '12月'];
+            const months = ['1鏈?, '2鏈?, '3鏈?, '4鏈?, '5鏈?, '6鏈?, '7鏈?, '8鏈?, '9鏈?, '10鏈?, '11鏈?, '12鏈?];
             
             currentValues.forEach((value, index) => {
                 const x = (index / (currentValues.length - 1)) * 100;
@@ -2852,17 +2853,17 @@
             isLoading = state;
         }
 
-        // ============ 格式化 ============
+        // ============ 鏍煎紡鍖?============
         function formatNum(value) {
             if (typeof value !== 'number' || isNaN(value)) return '0.00';
             return value.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
         }
 
-        // ============ 操作函数 ============
+        // ============ 鎿嶄綔鍑芥暟 ============
         function updateBatchButton() {
             const btn = document.getElementById('batchClearBtn');
             if (!btn) return;
-            btn.textContent = `清空选中的目标 (${selectedMonths.length})`;
+            btn.textContent = `娓呯┖閫変腑鐨勭洰鏍?(${selectedMonths.length})`;
             btn.disabled = selectedMonths.length === 0;
         }
 
@@ -2876,16 +2877,16 @@
         function openGoalModal(month) {
             editingMonth = month;
             const goalData = monthlyGoals[month];
-            document.getElementById('modalTitle').textContent = '设置目标';
-            document.getElementById('modalTargetInfo').textContent = `${currentYear}年${month}月`;
+            document.getElementById('modalTitle').textContent = '璁剧疆鐩爣';
+            document.getElementById('modalTargetInfo').textContent = `${currentYear}骞?{month}鏈坄;
             document.getElementById('goalAmountInput').value = goalData ? goalData.goal : '';
             
             const currentType = goalTypes[currentGoalTypeIndex];
-            const unit = currentType?.unit || '元';
-            const prefix = unit === '元' ? '¥' : unit;
+            const unit = currentType?.unit || '鍏?;
+            const prefix = unit === '鍏? ? '楼' : unit;
             document.getElementById('goalUnitPrefix').textContent = prefix;
-            document.getElementById('goalAmountInput').placeholder = `请输入目标${unit}`;
-            document.getElementById('goalModalTip').textContent = `请输入有效的数字（单位：${unit}）`;
+            document.getElementById('goalAmountInput').placeholder = `璇疯緭鍏ョ洰鏍?{unit}`;
+            document.getElementById('goalModalTip').textContent = `璇疯緭鍏ユ湁鏁堢殑鏁板瓧锛堝崟浣嶏細${unit}锛塦;
             
             document.getElementById('goalAmountInput').focus();
             document.getElementById('goalModal').classList.add('show');
@@ -2902,7 +2903,7 @@
             const input = document.getElementById('goalAmountInput');
             const value = parseFloat(input.value);
             if (isNaN(value) || value <= 0) {
-                showToast('请输入有效的目标金额', 'error');
+                showToast('璇疯緭鍏ユ湁鏁堢殑鐩爣閲戦', 'error');
                 return;
             }
             try {
@@ -2918,9 +2919,9 @@
                 });
                 closeGoalModal();
                 await fetchGoals();
-                showToast('目标设置成功', 'success');
+                showToast('鐩爣璁剧疆鎴愬姛', 'success');
             } catch (err) {
-                showToast('保存失败: ' + err.message, 'error');
+                showToast('淇濆瓨澶辫触: ' + err.message, 'error');
             }
         }
 
@@ -2939,9 +2940,9 @@
                 const count = selectedMonths.length;
                 selectedMonths = [];
                 await fetchGoals();
-                showToast(`已清空 ${count} 个月份的目标`, 'success');
+                showToast(`宸叉竻绌?${count} 涓湀浠界殑鐩爣`, 'success');
             } catch (err) {
-                showToast('清空失败: ' + err.message, 'error');
+                showToast('娓呯┖澶辫触: ' + err.message, 'error');
             }
         }
 
@@ -2962,20 +2963,20 @@
             await fetchGoals();
         }
 
-        // ============ 员工业绩目标功能 ============
+        // ============ 鍛樺伐涓氱哗鐩爣鍔熻兘 ============
         const staffList = [
-            { id: 1, name: '张三' },
-            { id: 2, name: '李四' },
-            { id: 3, name: '王五' },
-            { id: 4, name: '赵六' },
-            { id: 5, name: '钱七' }
+            { id: 1, name: '寮犱笁' },
+            { id: 2, name: '鏉庡洓' },
+            { id: 3, name: '鐜嬩簲' },
+            { id: 4, name: '璧靛叚' },
+            { id: 5, name: '閽变竷' }
         ];
 
         let staffGoalTypes = [
-            { id: 1, name: '现金目标', unit: '元' },
-            { id: 2, name: '卡耗目标', unit: '元' },
-            { id: 3, name: '拓客目标', unit: '人' },
-            { id: 4, name: '客次目标', unit: '次' }
+            { id: 1, name: '鐜伴噾鐩爣', unit: '鍏? },
+            { id: 2, name: '鍗¤€楃洰鏍?, unit: '鍏? },
+            { id: 3, name: '鎷撳鐩爣', unit: '浜? },
+            { id: 4, name: '瀹㈡鐩爣', unit: '娆? }
         ];
 
         let staffGoals = {};
@@ -2992,9 +2993,9 @@
                 for (let month = 1; month <= 12; month++) {
                     staffGoals[staff.id][month] = {};
                     staffGoalTypes.forEach(gt => {
-                        const baseGoal = gt.unit === '元' ? (5000 + Math.floor(Math.random() * 15000)) :
-                                         gt.unit === '人' ? (10 + Math.floor(Math.random() * 30)) :
-                                         gt.unit === '次' ? (50 + Math.floor(Math.random() * 80)) :
+                        const baseGoal = gt.unit === '鍏? ? (5000 + Math.floor(Math.random() * 15000)) :
+                                         gt.unit === '浜? ? (10 + Math.floor(Math.random() * 30)) :
+                                         gt.unit === '娆? ? (50 + Math.floor(Math.random() * 80)) :
                                          (5 + Math.floor(Math.random() * 20));
                         const completionRate = 60 + Math.floor(Math.random() * 60);
                         staffGoals[staff.id][month][gt.id] = {
@@ -3017,7 +3018,7 @@
 
         function updateStaffMonthLabel() {
             const label = document.getElementById('staffMonthLabel');
-            if (label) label.textContent = `${currentStaffMonth}月`;
+            if (label) label.textContent = `${currentStaffMonth}鏈坄;
         }
 
         function changeStaffMonth(delta) {
@@ -3052,19 +3053,19 @@
             if (!cardsContainer) return;
 
             if (!currentStaffId) {
-                if (titleEl) titleEl.textContent = '请选择员工';
-                cardsContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--neutral-400);font-size:15px">请在左侧选择一位员工</div>';
+                if (titleEl) titleEl.textContent = '璇烽€夋嫨鍛樺伐';
+                cardsContainer.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;min-height:300px;color:var(--neutral-400);font-size:15px">璇峰湪宸︿晶閫夋嫨涓€浣嶅憳宸?/div>';
                 return;
             }
 
             const staff = staffList.find(s => s.id === currentStaffId);
-            if (titleEl) titleEl.textContent = `${staff?.name || ''} - ${staffYear}年${currentStaffMonth}月`;
+            if (titleEl) titleEl.textContent = `${staff?.name || ''} - ${staffYear}骞?{currentStaffMonth}鏈坄;
 
             let cardsHtml = '';
             staffGoalTypes.forEach(gt => {
                 const goalData = staffGoals[currentStaffId]?.[currentStaffMonth]?.[gt.id];
-                const prefix = gt.unit === '元' ? '¥' : '';
-                const suffix = gt.unit === '元' ? '' : gt.unit;
+                const prefix = gt.unit === '鍏? ? '楼' : '';
+                const suffix = gt.unit === '鍏? ? '' : gt.unit;
                 const rate = goalData ? Math.round((goalData.completed / goalData.goal) * 100) : 0;
                 const displayRate = Math.min(rate, 100);
                 const isAchieved = rate >= 100;
@@ -3073,28 +3074,28 @@
                     <div class="staff-goal-card">
                         <div class="staff-goal-card-header">
                             <span class="staff-goal-card-name">${gt.name}</span>
-                            <span class="staff-goal-card-unit">单位：${gt.unit}</span>
+                            <span class="staff-goal-card-unit">鍗曚綅锛?{gt.unit}</span>
                         </div>
                         ${goalData ? `
                             <div class="staff-goal-card-body">
                                 <div class="staff-goal-card-row">
-                                    <span class="staff-goal-card-label">目标</span>
+                                    <span class="staff-goal-card-label">鐩爣</span>
                                     <span class="staff-goal-card-value">${prefix}${formatNum(goalData.goal)}${suffix}</span>
                                 </div>
                                 <div class="staff-goal-card-row">
-                                    <span class="staff-goal-card-label">完成</span>
+                                    <span class="staff-goal-card-label">瀹屾垚</span>
                                     <span class="staff-goal-card-value completed">${prefix}${formatNum(goalData.completed)}${suffix}</span>
                                 </div>
                                 <div class="staff-goal-card-progress">
                                     <div class="staff-goal-card-progress-fill ${isAchieved ? 'achieved' : 'not-achieved'}" style="width:${displayRate}%"></div>
                                 </div>
                                 <div class="staff-goal-card-rate">
-                                    进度 <span class="${isAchieved ? 'achieved' : ''}">${rate}%</span>
+                                    杩涘害 <span class="${isAchieved ? 'achieved' : ''}">${rate}%</span>
                                 </div>
                             </div>
                         ` : `
                             <div class="staff-goal-card-body">
-                                <div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">未设置目标</div>
+                                <div style="text-align:center;padding:16px 0;color:var(--neutral-400);font-size:13px">鏈缃洰鏍?/div>
                             </div>
                         `}
                         <div class="staff-goal-card-footer">
@@ -3103,13 +3104,13 @@
                                     <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
                                     <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
                                 </svg>
-                                编辑
+                                缂栬緫
                             </button>
                             <button class="staff-goal-delete-btn" data-goal-type-id="${gt.id}">
                                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2">
                                     <path d="M3 6h18M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6m3 0V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2" />
                                 </svg>
-                                删除
+                                鍒犻櫎
                             </button>
                         </div>
                     </div>
@@ -3143,15 +3144,15 @@
             const gt = staffGoalTypes.find(t => t.id === goalTypeId);
             const goalData = staffGoals[staffId]?.[currentStaffMonth]?.[goalTypeId];
 
-            document.getElementById('staffModalStaffName').textContent = staff?.name || '未知员工';
-            document.getElementById('staffModalMonthInfo').textContent = `${staffYear}年${currentStaffMonth}月`;
+            document.getElementById('staffModalStaffName').textContent = staff?.name || '鏈煡鍛樺伐';
+            document.getElementById('staffModalMonthInfo').textContent = `${staffYear}骞?{currentStaffMonth}鏈坄;
 
             const fieldsContainer = document.getElementById('staffGoalFields');
             fieldsContainer.innerHTML = `
                 <div class="goal-field">
-                    <label>${gt?.name || '目标'}（${gt?.unit || '元'}）</label>
-                    <input type="text" id="staffGoalValueInput" placeholder="请输入${gt?.name || '目标'}" inputmode="decimal" value="${goalData?.goal || ''}">
-                    <div class="field-unit">单位：${gt?.unit || '元'}</div>
+                    <label>${gt?.name || '鐩爣'}锛?{gt?.unit || '鍏?}锛?/label>
+                    <input type="text" id="staffGoalValueInput" placeholder="璇疯緭鍏?{gt?.name || '鐩爣'}" inputmode="decimal" value="${goalData?.goal || ''}">
+                    <div class="field-unit">鍗曚綅锛?{gt?.unit || '鍏?}</div>
                 </div>
             `;
             fieldsContainer.dataset.goalTypeId = goalTypeId;
@@ -3174,7 +3175,7 @@
             const value = parseFloat(valueInput.value);
 
             if (isNaN(value) || value <= 0) {
-                showToast('请输入有效的目标数值', 'error');
+                showToast('璇疯緭鍏ユ湁鏁堢殑鐩爣鏁板€?, 'error');
                 return;
             }
 
@@ -3188,15 +3189,15 @@
 
             closeStaffGoalModal();
             renderStaffGoalCards();
-            showToast('目标保存成功', 'success');
+            showToast('鐩爣淇濆瓨鎴愬姛', 'success');
         }
 
         function openAddStaffGoalTypeModal() {
             document.getElementById('staffGoalTypeNameInput').value = '';
-            document.getElementById('staffGoalTypeUnitInput').value = '元';
+            document.getElementById('staffGoalTypeUnitInput').value = '鍏?;
             const staffGoalValuesLabel = document.getElementById('staffGoalValuesLabel');
             if (staffGoalValuesLabel) {
-                staffGoalValuesLabel.textContent = `设置各员工目标（${currentYear}年${currentStaffMonth}月）`;
+                staffGoalValuesLabel.textContent = `璁剧疆鍚勫憳宸ョ洰鏍囷紙${currentYear}骞?{currentStaffMonth}鏈堬級`;
             }
 
             const container = document.getElementById('staffGoalValuesContainer');
@@ -3205,7 +3206,7 @@
                 html += `
                     <div class="modal-field" style="margin-top:12px;display:flex;align-items:center;gap:12px">
                         <label class="modal-label" style="min-width:60px;margin:0">${s.name}</label>
-                        <input type="text" class="staff-goal-value-input" data-staff-id="${s.id}" placeholder="请输入目标数值" inputmode="decimal" style="flex:1;padding:8px 10px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:13px">
+                        <input type="text" class="staff-goal-value-input" data-staff-id="${s.id}" placeholder="璇疯緭鍏ョ洰鏍囨暟鍊? inputmode="decimal" style="flex:1;padding:8px 10px;border:1px solid var(--neutral-200);border-radius:var(--radius-md);font-size:13px">
                     </div>
                 `;
             });
@@ -3223,11 +3224,11 @@
             const unit = document.getElementById('staffGoalTypeUnitInput').value;
 
             if (!name) {
-                showToast('请输入目标名称', 'error');
+                showToast('璇疯緭鍏ョ洰鏍囧悕绉?, 'error');
                 return;
             }
             if (staffGoalTypes.some(t => t.name === name)) {
-                showToast('目标名称已存在', 'error');
+                showToast('鐩爣鍚嶇О宸插瓨鍦?, 'error');
                 return;
             }
 
@@ -3253,48 +3254,48 @@
 
             closeAddStaffGoalTypeModal();
             renderStaffGoalCards();
-            showToast('目标类型添加成功', 'success');
+            showToast('鐩爣绫诲瀷娣诲姞鎴愬姛', 'success');
         }
 
         function deleteStaffGoalType(goalTypeId) {
             const gt = staffGoalTypes.find(t => t.id === goalTypeId);
             if (!gt) return;
-            if (!confirm(`确定要删除目标 "${gt.name}" 吗？`)) return;
+            if (!confirm(`纭畾瑕佸垹闄ょ洰鏍?"${gt.name}" 鍚楋紵`)) return;
 
             staffGoalTypes = staffGoalTypes.filter(t => t.id !== goalTypeId);
             renderStaffGoalCards();
-            showToast('目标类型删除成功', 'success');
+            showToast('鐩爣绫诲瀷鍒犻櫎鎴愬姛', 'success');
         }
 
-        // 渲染目标单元格
-        function renderGoalCell(goalData, unit = '元') {
+        // 娓叉煋鐩爣鍗曞厓鏍?
+        function renderGoalCell(goalData, unit = '鍏?) {
             if (!goalData) {
-                return '<div style="color: var(--neutral-400);">未设置</div>';
+                return '<div style="color: var(--neutral-400);">鏈缃?/div>';
             }
             
             const rate = Math.round((goalData.completed / goalData.goal) * 100);
             const isAchieved = rate >= 100;
             const displayRate = Math.min(rate, 100);
-            const prefix = unit === '元' ? '¥' : '';
-            const suffix = unit === '元' ? '' : unit;
+            const prefix = unit === '鍏? ? '楼' : '';
+            const suffix = unit === '鍏? ? '' : unit;
             
             return `
                 <div class="goal-value">
-                    <span class="label">目标:</span>${prefix}${formatNum(goalData.goal)}${suffix}
+                    <span class="label">鐩爣:</span>${prefix}${formatNum(goalData.goal)}${suffix}
                 </div>
                 <div class="goal-value">
-                    <span class="label">完成:</span>${prefix}${formatNum(goalData.completed)}${suffix}
+                    <span class="label">瀹屾垚:</span>${prefix}${formatNum(goalData.completed)}${suffix}
                 </div>
                 <div class="goal-progress-bar">
                     <div class="goal-progress-fill ${isAchieved ? 'achieved' : 'not-achieved'}" style="width: ${displayRate}%"></div>
                 </div>
                 <div class="goal-rate">
-                    进度: ${rate}%
+                    杩涘害: ${rate}%
                 </div>
             `;
         }
 
-        // 修改TAB切换逻辑
+        // 淇敼TAB鍒囨崲閫昏緫
         async function changeGoalType(typeIndex) {
             currentGoalTypeIndex = typeIndex;
             currentGoalTypeId = goalTypes[typeIndex]?.id;
@@ -3305,7 +3306,7 @@
             const staffGoalContent = document.getElementById('staffGoalContent');
 
             const currentType = goalTypes[typeIndex];
-            if (currentType && currentType.type_name === '员工业绩目标') {
+            if (currentType && currentType.type_name === '鍛樺伐涓氱哗鐩爣') {
                 if (storeGoalContent) storeGoalContent.style.display = 'none';
                 if (staffGoalContent) staffGoalContent.style.display = 'block';
                 if (!Object.keys(staffGoals).length) {
@@ -3322,29 +3323,34 @@
         function bindEventById(id, eventName, handler) {
             const element = document.getElementById(id);
             if (!element) {
+                console.warn(`Element not found: ${id}`);
                 return null;
             }
             element.addEventListener(eventName, handler);
             return element;
         }
 
-        // ============ 初始化 ============
+        // ============ 鍒濆鍖?============
         document.addEventListener('DOMContentLoaded', async () => {
+            console.log('Page initialized');
             try {
                 await loadGoalTypes();
+                console.log('Goal types loaded');
 
-                // 同步年份显示
+                // 鍚屾骞翠唤鏄剧ず
                 const yearDisplay = document.getElementById('currentYearDisplay');
                 if (yearDisplay) yearDisplay.textContent = currentYear;
 
-                // 确保门店目标内容区域显示，员工目标内容区域隐藏
+                // 纭繚闂ㄥ簵鐩爣鍐呭鍖哄煙鏄剧ず锛屽憳宸ョ洰鏍囧唴瀹瑰尯鍩熼殣钘?
                 const storeGoalContent = document.getElementById('storeGoalContent');
                 const staffGoalContent = document.getElementById('staffGoalContent');
                 if (storeGoalContent) storeGoalContent.style.display = 'grid';
                 if (staffGoalContent) staffGoalContent.style.display = 'none';
 
+                console.log('Before fetchGoals, currentGoalTypeId:', currentGoalTypeId);
                 if (currentGoalTypeId) {
                     await fetchGoals();
+                    console.log('fetchGoals completed, monthlyGoals:', monthlyGoals);
                 }
 
                 bindEventById('prevYearBtn', 'click', () => changeYear(-1));
@@ -3370,27 +3376,30 @@
                     if (e.key === 'Enter') submitGoal();
                 });
 
-                // 员工目标编辑弹窗事件
+                // 鍛樺伐鐩爣缂栬緫寮圭獥浜嬩欢
                 bindEventById('staffModalCloseBtn', 'click', closeStaffGoalModal);
                 bindEventById('staffModalCancelBtn', 'click', closeStaffGoalModal);
                 bindEventById('staffModalConfirmBtn', 'click', saveStaffGoals);
 
-                // 新增员工目标类型弹窗事件
+                // 鏂板鍛樺伐鐩爣绫诲瀷寮圭獥浜嬩欢
                 bindEventById('addStaffGoalBtn', 'click', openAddStaffGoalTypeModal);
                 bindEventById('addStaffGoalTypeCloseBtn', 'click', closeAddStaffGoalTypeModal);
                 bindEventById('addStaffGoalTypeCancelBtn', 'click', closeAddStaffGoalTypeModal);
                 bindEventById('addStaffGoalTypeConfirmBtn', 'click', saveStaffGoalType);
 
-                // 月份切换事件
+                // 鏈堜唤鍒囨崲浜嬩欢
                 bindEventById('staffPrevMonthBtn', 'click', () => changeStaffMonth(-1));
                 bindEventById('staffNextMonthBtn', 'click', () => changeStaffMonth(1));
+            
+            console.log('Initialization complete');
         } catch (error) {
-            showToast('初始化失败: ' + error.message, 'error');
+            console.error('Error during initialization:', error);
+            showToast('鍒濆鍖栧け璐? ' + error.message, 'error');
         }
     });
     </script>
         </div>
     </div>
-</div>
 </body>
 </html>
+</style></head><body></body></html>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>费用支出记账 - 回蓝美容</title>
+    <title>支出记账</title>
     <link rel="stylesheet" href="../chlitina-brand.css">
     <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
@@ -61,10 +61,18 @@
         .stat-change{font-size:11px;color:var(--text-muted);margin-top:4px}
 
         .panel{background:var(--bg-card);border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,.06);border:1px solid var(--border);overflow:hidden}
+        .panel-title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%}
         .panel-header{padding:18px 24px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;align-items:flex-start;gap:14px}
         .panel-title{font-size:15px;font-weight:600;color:var(--text-primary);display:flex;align-items:center;gap:8px}
         .panel-title-dot{width:8px;height:8px;border-radius:50%;background:var(--primary)}
+        .mobile-filter-btn{display:none;align-items:center;gap:6px;height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer}
+        .mobile-filter-btn svg{width:14px;height:14px}
+        .mobile-filter-btn:hover{border-color:var(--primary);color:var(--primary)}
         .panel-tools{display:flex;gap:8px;align-items:center;flex-wrap:wrap;width:100%}
+        .mobile-filter-panel{display:contents}
+        .mobile-filter-head{display:none}
+        .mobile-filter-close{width:32px;height:32px;border-radius:8px;border:none;background:var(--bg-main);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;color:var(--text-secondary)}
+        .mobile-filter-close svg{width:16px;height:16px}
         .panel-tools .search-box{position:relative;flex:0 0 220px}
         .search-box{position:relative}
         .search-box input{padding:8px 12px 8px 34px;border-radius:8px;border:1px solid var(--border);font-size:13px;width:220px;outline:none;transition:all .2s;height:36px}
@@ -202,7 +210,102 @@
         .modal-left-item .delete-category svg{width:10px;height:10px;color:var(--text-muted)}
 
         @media(max-width:1200px){.stats-bar{grid-template-columns:repeat(2, 1fr)}}
-        @media(max-width:768px){.stats-bar{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}.modal{width:95vw}}
+        @media(max-width:768px){
+            body{height:auto;min-height:100vh;overflow:auto}
+            .chl-topbar{display:none}
+            .chl-page-scroll{min-height:100vh;overflow:visible}
+            .content-area{padding:16px;}
+            .content-head{align-items:stretch;gap:12px}
+            .page-title{font-size:18px}
+            .page-title-icon{width:32px;height:32px}
+            .page-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+            button[onclick="exportData()"]{display:none}
+            .page-actions .btn{justify-content:center;padding:0 12px;height:40px}
+            .stats-bar{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+            .stat-card{padding:16px}
+            .stat-value{font-size:20px}
+            .panel{border-radius:14px}
+            .panel-header{padding:16px}
+            .panel-title-row{align-items:center}
+            .mobile-filter-btn{display:inline-flex}
+            .panel-tools{
+                position:fixed;inset:0;z-index:1200;background:rgba(17,24,39,0.44);
+                padding:16px;display:flex;flex-direction:column;justify-content:flex-end;align-items:stretch;
+                opacity:0;pointer-events:none;transition:opacity .2s ease
+            }
+            .mobile-filter-panel{display:flex;flex-direction:column}
+            .panel-tools::before{
+                content:'';position:absolute;inset:0
+            }
+            .panel-tools > *{position:relative;z-index:1}
+            .mobile-filter-head{
+                display:flex;align-items:center;justify-content:space-between;gap:12px;
+                padding:0 0 6px;color:var(--text-primary)
+            }
+            .mobile-filter-title{font-size:16px;font-weight:700}
+            .panel-tools .search-box,
+            .panel-tools > .filter-select,
+            .date-filter-group,
+            .filter-actions{
+                width:100%;min-width:0;flex:none
+            }
+            .panel-tools .search-box input,
+            .panel-tools .filter-select{width:100%;min-width:0;height:40px}
+            .panel-tools .search-box,
+            .panel-tools > .filter-select,
+            .date-filter-group,
+            .filter-actions{
+                padding-left:0;padding-right:0
+            }
+            .panel-tools .search-box{padding-top:0}
+            .date-filter-group{
+                display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+                padding-top:0;gap:10px;align-items:center
+            }
+            .date-filter-group span{display:flex;align-items:center;justify-content:center}
+            .date-filter-group .filter-select{width:100%;min-width:0}
+            .filter-actions{
+                display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding-top:12px;padding-bottom:16px;
+                border-radius:0 0 18px 18px;position:sticky;bottom:0;box-shadow:0 -8px 16px rgba(17,24,39,.04)
+            }
+            .filter-actions .btn{width:100%;justify-content:center}
+            .mobile-filter-panel{
+                background:var(--bg-card);border-radius:18px 18px 0 0;box-shadow:0 -16px 40px rgba(17,24,39,.18);
+                width:min(100%, 420px);margin:0 auto;box-sizing:border-box;
+                min-height:min(76vh,620px);max-height:min(90vh,780px);
+                display:flex;flex-direction:column;overflow:auto;padding:20px 18px 18px;gap:14px
+            }
+            body.expense-mobile-filter-open .panel-tools{opacity:1;pointer-events:auto}
+            body.expense-mobile-filter-open .chl-page-scroll{overflow:hidden}
+            .table-container{margin:0 -16px;padding:0 16px}
+            table{min-width:720px}
+            thead th,tbody td{padding:12px 12px}
+            .pagination{flex-wrap:nowrap;justify-content:flex-start;padding:14px 16px;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+            .page-info{width:auto;flex:0 0 auto;margin-right:8px}
+            .modal-overlay{padding:12px}
+            .modal{
+                width:calc(100vw - 24px);max-width:none;height:calc(100vh - 24px);max-height:calc(100vh - 24px);
+                display:flex;flex-direction:column;border-radius:18px
+            }
+            .modal-header{padding:16px 16px 14px}
+            .modal-search{padding:12px 16px}
+            .modal-body{flex:1;min-height:0;max-height:none;display:flex;flex-direction:column}
+            #addView{display:flex;flex-direction:column;flex:1;min-height:0}
+            .modal-split{flex-direction:column;min-height:0;flex:1}
+            .modal-left{width:100%;max-height:168px;border-right:none;border-bottom:1px solid var(--border)}
+            .modal-left-item{padding:12px 14px}
+            .modal-right{padding:16px;min-height:0}
+            .project-grid{grid-template-columns:1fr}
+            .modal-form{padding:16px}
+            .form-row{grid-template-columns:1fr}
+            .form-input{height:40px}
+            .modal-footer{padding:14px 16px;background:var(--bg-card);display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+            .modal-footer .btn{width:100%;justify-content:center;height:40px;padding:0 12px}
+        }
+        @media(max-width:480px){
+            .stats-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+            .page-actions{grid-template-columns:1fr}
+        }
 
         .chl-layout{display:flex;flex-direction:column;height:100vh}
         .chl-topbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #e5e7eb;z-index:10;flex-shrink:0}
@@ -228,6 +331,27 @@
         .main-area{min-height:0}
         .content-area{min-height:0}
         .content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+        @media(max-width:768px){
+            html,body{width:100%;max-width:100%;overflow-x:hidden}
+            .chl-layout,.chl-page-scroll,.app,.main-area,.content-area{width:100%;max-width:100%;overflow-x:hidden}
+            .chl-topbar{display:none !important}
+            .chl-page-scroll{min-height:100vh;overflow:visible}
+            .content-area{padding:16px;}
+            .content-head{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+            .content-head > *{min-width:0}
+            .page-title{min-width:0;flex-wrap:wrap}
+            .page-actions{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+            .page-actions .btn{width:100%;justify-content:center}
+            .stats-bar{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+            .stats-bar,.stat-card,.panel{min-width:0;max-width:100%}
+            .table-container{max-width:100%;overflow-x:auto;overflow-y:hidden}
+            .pagination{display:flex;align-items:center;flex-wrap:nowrap;gap:6px;overflow-x:auto;overflow-y:hidden;white-space:nowrap}
+            .page-info{width:auto;flex:0 0 auto;margin-right:8px}
+        }
+        @media(max-width:480px){
+            .page-actions{grid-template-columns:1fr}
+            .stats-bar{grid-template-columns:repeat(2,minmax(0,1fr))}
+        }
     </style>
 </head>
 <body>
@@ -326,19 +450,37 @@
 
                 <div class="panel">
                     <div class="panel-header">
-                        <div class="panel-title">
-                            <div class="panel-title-dot"></div>
-                            支出明细
+                        <div class="panel-title-row">
+                            <div class="panel-title">
+                                <div class="panel-title-dot"></div>
+                                支出明细
+                            </div>
+                            <button class="mobile-filter-btn" type="button" onclick="openMobileExpenseFilter()" aria-label="打开筛选">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+                                </svg>
+                                筛选
+                            </button>
                         </div>
-                        <div class="panel-tools">
-                            <div class="search-box">
+                        <div class="panel-tools" id="expenseFilterPanel">
+                            <div class="mobile-filter-panel">
+                                <div class="mobile-filter-head">
+                                    <div class="mobile-filter-title">筛选条件</div>
+                                    <button class="mobile-filter-close" type="button" onclick="closeMobileExpenseFilter()" aria-label="关闭筛选">
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <line x1="18" y1="6" x2="6" y2="18"></line>
+                                            <line x1="6" y1="6" x2="18" y2="18"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                                <div class="search-box">
                                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                     <circle cx="11" cy="11" r="8"/>
                                     <path d="m21 21-4.35-4.35"/>
                                 </svg>
                                 <input type="text" placeholder="搜索项目..." id="expenseSearch">
-                            </div>
-                            <select class="filter-select" id="categoryFilter">
+                                </div>
+                                <select class="filter-select" id="categoryFilter">
                                 <option value="">全部类别</option>
                                 <option value="daily">日常运营成本</option>
                                 <option value="staff">人员支出</option>
@@ -346,8 +488,8 @@
                                 <option value="equipment">设备相关</option>
                                 <option value="marketing">营销推广</option>
                                 <option value="other">其他费用</option>
-                            </select>
-                            <select class="filter-select" id="projectFilter">
+                                </select>
+                                <select class="filter-select" id="projectFilter">
                                 <option value="">全部项目</option>
                                 <optgroup label="日常运营成本" data-category="daily">
                                     <option value="房租">房租</option>
@@ -386,15 +528,16 @@
                                     <option value="工商年检费">工商年检费</option>
                                     <option value="基础设施维修/更换">基础设施维修/更换</option>
                                 </optgroup>
-                            </select>
-                            <div class="date-filter-group">
+                                </select>
+                                <div class="date-filter-group">
                                 <input type="date" class="filter-select" id="dateFrom">
                                 <span style="font-size:12px;color:var(--text-muted)">~</span>
                                 <input type="date" class="filter-select" id="dateTo">
-                            </div>
-                            <div class="filter-actions">
+                                </div>
+                                <div class="filter-actions">
                                 <button class="btn btn-primary" onclick="applyTimeFilter()">筛选</button>
                                 <button class="btn btn-secondary" onclick="resetExpenseFilter()">重置</button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -884,6 +1027,12 @@
             const searchInput = document.getElementById('projectSearch');
             if (searchInput) searchInput.value = '';
         }
+        function openMobileExpenseFilter() {
+            document.body.classList.add('expense-mobile-filter-open');
+        }
+        function closeMobileExpenseFilter() {
+            document.body.classList.remove('expense-mobile-filter-open');
+        }
         function searchProjects(keyword) {
             const term = keyword.trim().toLowerCase();
             if (!term) {
@@ -1002,6 +1151,7 @@
                 alert('请选择完整的日期范围');
                 return;
             }
+            closeMobileExpenseFilter();
             alert(`筛选时间范围：${dateFrom} ~ ${dateTo}`);
         }
 
@@ -1016,7 +1166,13 @@
             projectSelect.querySelectorAll('optgroup').forEach(group => {
                 group.style.display = '';
             });
+            closeMobileExpenseFilter();
         }
+        document.getElementById('expenseFilterPanel').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeMobileExpenseFilter();
+            }
+        });
     </script>
 </body>
 </html>

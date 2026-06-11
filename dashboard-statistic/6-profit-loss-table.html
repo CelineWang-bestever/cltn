@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>经营损益表 - 回蓝美容</title>
+    <title>经营损益报表</title>
     <link rel="stylesheet" href="../chlitina-brand.css">
     <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
@@ -212,6 +212,51 @@
         .main-area{min-height:0}
         .content-area{min-height:0}
         .content-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;gap:16px;flex-wrap:wrap}
+        @media(max-width:768px){
+            html,body{width:100%;max-width:100%;overflow-x:hidden}
+            body{height:auto;min-height:100vh;overflow:auto}
+            .chl-topbar{display:none !important}
+            .chl-layout,.chl-page-scroll,.app,.main-area,.content-area{width:100%;max-width:100%}
+            .chl-page-scroll{min-height:100vh;overflow:visible}
+            .content-area{padding:16px;}
+            .content-head{display:flex;flex-direction:column;align-items:stretch;gap:12px}
+            .content-head > *{min-width:0}
+            .page-title{font-size:18px}
+            .page-title-icon{width:32px;height:32px}
+            .page-actions{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;width:100%}
+            button[onclick="exportReport()"]{display:none}
+            .page-actions > *{min-width:0;width:100%}
+            .btn{justify-content:center;height:40px;padding:0 12px}
+            .filter-select{height:40px}
+            .profit-hero{padding:22px 18px;border-radius:16px;margin-bottom:16px}
+            .profit-hero-top{flex-direction:column;gap:18px;align-items:flex-start;margin-bottom:18px}
+            .profit-hero-value{font-size:32px}
+            .profit-hero-right{width:100%;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+            .profit-hero-item{text-align:left}
+            .profit-hero-item-value{font-size:18px}
+            .profit-hero-legend{flex-direction:column;gap:8px}
+            .summary-cards{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:16px}
+            .summary-card{padding:16px}
+            .summary-card-value{font-size:22px}
+            .summary-card-footer{flex-direction:column;align-items:flex-start;gap:8px}
+            .chart-row{grid-template-columns:1fr;gap:16px}
+            .chart-card-header,.chart-card-body{padding-left:16px;padding-right:16px}
+            .donut-chart{flex-direction:column;gap:20px}
+            .donut-svg{width:136px;height:136px}
+            .pnl-section{overflow-x:auto}
+            .pnl-section-header{padding:16px}
+            .pnl-row{min-width:760px;padding-top:12px;padding-bottom:12px}
+            .modal-overlay{padding:12px}
+            .modal{width:calc(100vw - 24px);max-width:none;max-height:calc(100vh - 24px);border-radius:18px}
+            .modal-header{padding:16px}
+            .modal-body{max-height:calc(100vh - 96px)}
+            .modal-table{min-width:640px}
+        }
+        @media(max-width:480px){
+            .page-actions{grid-template-columns:1fr}
+            .profit-hero-right{grid-template-columns:1fr}
+            .summary-cards{grid-template-columns:1fr}
+        }
     </style>
 </head>
 <body>

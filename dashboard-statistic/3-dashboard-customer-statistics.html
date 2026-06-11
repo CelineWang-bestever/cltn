@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>客户销售分析 - 回蓝美容</title>
+<title>客户分析</title>
 <link rel="stylesheet" href="../chlitina-brand.css">
 <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
 <style>
@@ -79,8 +79,25 @@ body { font-family:'Inter','Noto Sans SC',sans-serif; background:var(--bg); colo
 .content { padding:24px; }
 .page-header { margin-bottom:24px; display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
 .page-header-main { min-width:0; }
+.page-header-actions { display:flex; align-items:center; gap:12px; flex-wrap:wrap; }
 .page-title { font-size:20px; font-weight:700; margin-bottom:4px; }
 .page-desc { font-size:13px; color:var(--text-secondary); }
+.mobile-filter-entry {
+display:none;
+height:36px;
+padding:0 14px;
+border-radius:8px;
+border:1px solid var(--border);
+background:var(--white);
+color:var(--text-secondary);
+font-size:13px;
+font-weight:500;
+align-items:center;
+gap:8px;
+cursor:pointer;
+}
+.mobile-filter-entry:hover { border-color:var(--primary); color:var(--primary); }
+.mobile-filter-row { display:none; }
 
 .filter-bar {
 background:var(--white);
@@ -92,6 +109,20 @@ display:flex;
 align-items:flex-end;
 flex-wrap:wrap;
 gap:12px;
+}
+.filter-bar-surface { display:contents; }
+.filter-bar-mobile-header { display:none; }
+.filter-bar-close {
+width:32px;
+height:32px;
+border-radius:8px;
+border:none;
+background:var(--border-light);
+display:flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+color:var(--text-secondary);
 }
 .filter-group { display:flex; flex-direction:column; gap:4px; min-width:140px; }
 .filter-label { font-size:12px; font-weight:500; color:var(--text-secondary); }
@@ -248,7 +279,9 @@ cursor:pointer;
 width:16px;
 height:16px;
 accent-color: var(--primary);
+flex:0 0 auto;
 }
+.stats-settings-item span { flex:1; min-width:0; }
 .stats-settings-tip { margin-top:10px; font-size:12px; color:var(--text-light); }
 #tableSettingsPanel {
 height:320px;
@@ -264,9 +297,63 @@ padding-right:4px;
 }
 .stats-row { display:grid; grid-template-columns:repeat(6,minmax(0,1fr)); gap:12px; }
 .stat-card { background:var(--white); border-radius:var(--radius); padding:16px; box-shadow:var(--shadow-sm); min-width:0; }
-.stat-card-label { font-size:12px; color:var(--text-secondary); margin-bottom:8px; }
+.stat-card-label { font-size:12px; color:var(--text-secondary); margin-bottom:8px; display:flex; align-items:center; gap:6px; }
+.stat-card-label-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
 .stat-card-value { font-size:24px; font-weight:700; color:var(--text-primary); }
 .stat-card-sub { font-size:12px; color:var(--text-light); margin-top:4px; }
+.stat-card-trend { display:inline-flex; align-items:center; gap:5px; font-size:12px; margin-top:4px; }
+.stat-card-trend-label { color:var(--text-light); }
+.stat-card-trend-triangle { width:0; height:0; flex:0 0 auto; }
+/* .stat-card-trend-value { font-weight:600; } */
+.stat-card-trend.up .stat-card-trend-triangle {
+border-left:5px solid transparent;
+border-right:5px solid transparent;
+border-bottom:8px solid var(--success);
+}
+/* .stat-card-trend.up .stat-card-trend-value { color:var(--success); } */
+.stat-card-trend.down .stat-card-trend-triangle {
+border-left:5px solid transparent;
+border-right:5px solid transparent;
+border-top:8px solid var(--danger);
+}
+/* .stat-card-trend.down .stat-card-trend-value { color:var(--danger); } */
+.stat-tip-btn{
+width:18px;
+height:18px;
+border-radius:6px;
+border:1px solid var(--border-light);
+background:var(--white);
+display:inline-flex;
+align-items:center;
+justify-content:center;
+cursor:pointer;
+color:var(--text-light);
+padding:0;
+transition:all .15s;
+flex:0 0 auto;
+}
+.stat-tip-btn iconify-icon{font-size:14px}
+.stat-tip-btn:hover{border-color:rgba(232,124,154,0.28);color:var(--primary);background:rgba(232,124,154,0.06)}
+.stat-tip-btn:active{transform:scale(.98)}
+.stat-tooltip{
+position:fixed;
+z-index:360;
+max-width:280px;
+background:rgba(255,255,255,0.96);
+backdrop-filter:saturate(180%) blur(8px);
+border:1px solid var(--border-light);
+box-shadow:var(--shadow-md);
+border-radius:10px;
+padding:10px 12px;
+font-size:12px;
+line-height:1.45;
+color:var(--text-secondary);
+opacity:0;
+transform:translateY(4px);
+pointer-events:none;
+transition:opacity .12s ease, transform .12s ease;
+}
+.stat-tooltip.show{opacity:1;transform:translateY(0)}
 
 
 
@@ -276,7 +363,7 @@ padding-right:4px;
 .table-title { font-size:15px; font-weight:600; }
 .table-count { font-size:12px; color:var(--text-secondary); }
 .table-scroll { overflow-x:auto; position:relative; isolation:isolate; }
-table { width:100%; border-collapse:separate; border-spacing:0; min-width:2200px; }
+table { width:100%; border-collapse:separate; border-spacing:0; min-width:2800px; }
 thead th { padding:12px 14px; font-size:12px; font-weight:600; color:var(--text-secondary); background:var(--border-light); text-align:left; white-space:nowrap; border-bottom:1px solid var(--border); position:sticky; top:0; z-index:1; }
 thead th.num { text-align:right; }
 tbody td { padding:12px 14px; font-size:13px; border-bottom:1px solid var(--border-light); white-space:nowrap; }
@@ -326,7 +413,7 @@ font-weight:600;
 }
 
 .tag { display:inline-block; padding:2px 8px; border-radius:4px; font-size:11px; font-weight:500; }
-.tag-active { background:var(--success-light); color:var(--success); }
+.tag-active { background:var(--primary-light); color:var(--primary); }
 .tag-silent { background:var(--warning-light); color:var(--warning); }
 .tag-churn { background:var(--danger-light); color:var(--danger); }
 .tag-new { background:var(--primary-light); color:var(--primary); }
@@ -339,32 +426,40 @@ font-weight:600;
 .page-btn:hover { border-color:var(--primary); color:var(--primary); }
 .page-btn.active { background:var(--primary); color:white; border-color:var(--primary); }
 
-.detail-panel { display:none; position:fixed; top:0; right:0; bottom:0; width:520px; background:var(--white); box-shadow:-8px 0 24px rgba(0,0,0,0.12); z-index:200; overflow-y:auto; animation:slideIn 0.3s ease; }
+.detail-panel { display:none; position:fixed; top:0; right:0; bottom:0; width:760px; background:var(--white); box-shadow:-8px 0 24px rgba(0,0,0,0.12); z-index:200; overflow-y:auto; animation:slideIn 0.3s ease; }
 .detail-panel.active { display:block; }
 @keyframes slideIn { from{transform:translateX(100%)} to{transform:translateX(0)} }
 .detail-header { padding:20px 24px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; background:var(--white); z-index:1; }
 .detail-close { width:32px; height:32px; border-radius:8px; border:none; background:var(--border-light); cursor:pointer; display:flex; align-items:center; justify-content:center; font-size:16px; transition:all 0.2s; }
 .detail-close:hover { background:var(--border); }
-.detail-profile { padding:24px; text-align:center; border-bottom:1px solid var(--border); }
-.detail-avatar { width:64px; height:64px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:24px; font-weight:700; color:white; margin:0 auto 12px; }
-.detail-name { font-size:18px; font-weight:700; margin-bottom:4px; }
-.detail-meta { font-size:13px; color:var(--text-secondary); }
-.detail-stats { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; padding:20px 24px; border-bottom:1px solid var(--border); }
+.detail-summary { padding:24px; border-bottom:1px solid var(--border); }
+.detail-summary-head { display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:12px; }
+.detail-summary-name { font-size:18px; font-weight:700; line-height:1.3; }
+.detail-summary-meta { font-size:13px; color:var(--text-secondary); margin-top:4px; }
+.detail-summary-badges { display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
+.detail-stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:12px; padding:20px 24px; border-bottom:1px solid var(--border); }
 .detail-stat { text-align:center; }
 .detail-stat-value { font-size:20px; font-weight:700; }
 .detail-stat-label { font-size:11px; color:var(--text-secondary); margin-top:2px; }
 .detail-section { padding:20px 24px; border-bottom:1px solid var(--border); }
 .detail-section-title { font-size:14px; font-weight:600; margin-bottom:16px; }
-.detail-row { display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--border-light); }
+.detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:0 20px; }
+.detail-row { display:flex; justify-content:space-between; align-items:flex-start; gap:16px; padding:12px 0; border-bottom:1px solid var(--border-light); min-width:0; }
 .detail-row:last-child { border-bottom:none; }
-.detail-row-label { font-size:13px; color:var(--text-secondary); }
-.detail-row-value { font-size:13px; font-weight:600; }
+.detail-row.span-2 { grid-column:1 / -1; }
+.detail-row-label { font-size:13px; color:var(--text-secondary); flex:0 0 108px; }
+.detail-row-value { font-size:13px; font-weight:600; min-width:0; text-align:right; flex:1 1 auto; }
+.detail-trend { display:inline-flex; align-items:center; gap:5px; margin-left:10px; font-size:12px; }
+.detail-trend.stat-card-trend { margin-top:0; }
+.detail-tag-list { display:flex; flex-wrap:wrap; gap:6px; justify-content:flex-end; width:100%; }
+.detail-tag-list .tag { white-space:nowrap; }
+.detail-empty-text { color:var(--text-light); font-weight:500; }
 .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:150; }
 .overlay.active { display:block; }
 
 .days-warn { color:var(--warning); }
 .days-danger { color:var(--danger); }
-.days-ok { color:var(--success); }
+.days-ok { color:var(--primary); }
 
 .filter-summary { background:var(--primary-light); border:1px solid rgba(232,124,154,0.15); border-radius:var(--radius-sm); padding:10px 16px; margin-bottom:16px; display:flex; align-items:center; gap:6px; font-size:13px; color:var(--text-secondary); }
 .filter-summary-label { background:var(--primary); color:white; padding:2px 10px; border-radius:4px; font-size:12px; font-weight:600; margin-right:6px; }
@@ -392,6 +487,235 @@ body{height:100vh;overflow:hidden}
 .chl-user-name{font-size:14px;font-weight:600;color:#374151}
 .chl-user-role{background:#f3f4f6;padding:2px 8px;border-radius:6px;font-size:12px;color:#6b7280}
 .chl-page-scroll{flex:1;min-height:0;overflow:auto}
+@media (max-width: 768px) {
+html, body { width:100%; max-width:100%; overflow-x:hidden; }
+body { min-height:100vh; height:auto; overflow:auto; }
+.chl-topbar { display:none; }
+.chl-page-scroll { overflow:visible; min-height:100vh; }
+.chl-layout, .chl-page-scroll, .content { width:100%; max-width:100%; }
+.content { padding:16px; }
+.page-header { margin-bottom:16px; align-items:stretch; flex-direction:column; }
+.page-header-actions { width:100%; justify-content:flex-end; }
+.mobile-filter-row {
+display:block;
+margin-bottom:16px;
+}
+.mobile-filter-entry {
+display:inline-flex;
+width:100%;
+justify-content:center;
+}
+.stats-settings-btn { padding:0 12px; }
+.stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.stat-card { padding:14px; }
+.stat-card-value { font-size:20px; }
+.filter-bar {
+position:fixed;
+inset:0;
+z-index:320;
+background:rgba(17,24,39,0.44);
+display:flex;
+align-items:flex-end;
+justify-content:flex-start;
+padding:16px;
+opacity:0;
+pointer-events:none;
+margin:0;
+border-radius:0;
+box-shadow:none;
+}
+.filter-bar-surface {
+display:flex;
+flex-direction:column;
+width:min(420px, calc(100vw - 32px));
+max-width:calc(100vw - 32px);
+margin:0;
+min-height:auto;
+max-height:min(72vh, 560px);
+overflow:auto;
+padding:18px 16px 16px;
+border-radius:18px 18px 0 0;
+background:var(--white);
+box-shadow:var(--shadow-lg);
+gap:12px;
+}
+.filter-bar-mobile-header {
+display:flex;
+align-items:center;
+justify-content:space-between;
+gap:12px;
+margin-bottom:0;
+position:sticky;
+top:0;
+background:var(--white);
+padding-bottom:2px;
+z-index:1;
+}
+.filter-bar-mobile-title { font-size:16px; font-weight:700; color:var(--text-primary); }
+body.customer-mobile-filter-open .filter-bar {
+opacity:1;
+pointer-events:auto;
+}
+body.customer-mobile-filter-open .chl-page-scroll { overflow:hidden; }
+.filter-search,
+.filter-group,
+.filter-tag-group,
+.filter-number-group,
+.birthday-filter-group,
+.filter-actions {
+min-width:0;
+width:100%;
+flex:none;
+}
+.search-select-wrapper,
+.filter-select { width:100%; }
+.filter-search input,
+.filter-select,
+.search-select-trigger,
+.search-select-search { height:40px; }
+.filter-range-row,
+.filter-number-row,
+.birthday-filter-row {
+display:grid;
+grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+width:100%;
+gap:10px;
+align-items:center;
+}
+.birthday-filter-row .filter-select:first-child,
+.birthday-filter-row .filter-select:last-child,
+.filter-range-row .filter-select,
+.filter-number-row .filter-select {
+width:100%;
+min-width:0;
+}
+.filter-range-row span,
+.filter-number-row span,
+.birthday-filter-row span { display:flex; align-items:center; justify-content:center; }
+.filter-actions {
+margin-left:0;
+display:grid;
+grid-template-columns:repeat(2,minmax(0,1fr));
+position:sticky;
+bottom:0;
+background:var(--white);
+padding-top:10px;
+box-shadow:0 -8px 16px rgba(17,24,39,0.04);
+}
+.filter-actions .btn { width:100%; justify-content:center; }
+.filter-summary {
+display:grid;
+grid-template-columns:1fr;
+align-items:flex-start;
+gap:6px;
+padding:12px 14px;
+}
+.filter-summary-divider { display:none; }
+.table-header,
+.table-footer {
+padding:14px 16px;
+flex-direction:column;
+align-items:flex-start;
+gap:10px;
+}
+.table-header-right,
+.pagination {
+width:100%;
+flex-wrap:wrap;
+}
+.stats-settings-panel {
+position:fixed;
+left:16px;
+right:auto;
+top:auto;
+bottom:16px;
+width:calc(75vw - 32px);
+max-width:calc(75vw - 32px);
+z-index:340;
+display:none;
+flex-direction:column;
+gap:12px;
+padding:16px 14px 14px;
+border-radius:18px;
+box-shadow:var(--shadow-lg);
+max-height:min(58vh, 420px);
+overflow:hidden;
+background:var(--white);
+}
+.stats-settings-panel.active { display:flex; }
+.stats-settings-title {
+font-size:16px;
+margin-bottom:0;
+line-height:1.4;
+position:sticky;
+top:0;
+background:var(--white);
+z-index:1;
+padding-bottom:2px;
+}
+.stats-settings-list {
+flex:1;
+min-height:0;
+overflow-y:auto;
+gap:8px;
+padding-right:2px;
+}
+.stats-settings-item {
+padding:9px 11px;
+border:1px solid var(--border-light);
+border-radius:10px;
+background:var(--bg);
+align-items:flex-start;
+}
+.stats-settings-item input { margin-top:2px; }
+.stats-settings-tip {
+margin-top:0;
+line-height:1.5;
+position:sticky;
+bottom:0;
+background:var(--white);
+padding-top:8px;
+}
+#tableSettingsPanel {
+height:auto;
+display:none;
+}
+#tableSettingsPanel.active { display:flex; }
+#tableSettingsPanel .stats-settings-list { padding-right:2px; }
+body.customer-mobile-settings-open .chl-page-scroll { overflow:hidden; }
+.btn-export,
+button[onclick="exportData()"],
+[data-action="export"] { display:none !important; }
+.table-scroll { margin:0 -16px; padding:0 16px; }
+table { min-width:1800px; }
+.sticky-col,
+.sticky-col-1,
+.sticky-col-2 { position:static; left:auto; width:auto; min-width:unset; box-shadow:none; }
+.sticky-col-2::after { display:none; }
+.detail-panel { left:0; width:100vw; max-width:none; z-index:330; }
+.detail-header,
+.detail-summary,
+.detail-section { padding-left:16px; padding-right:16px; }
+.detail-stats { grid-template-columns:repeat(2,minmax(0,1fr)); padding:16px; gap:12px; }
+.detail-stat { text-align:left; padding:12px 12px 10px; border-radius:12px; border:1px solid var(--border-light); background:var(--bg); }
+.detail-stat-value { font-size:18px; line-height:1.1; }
+.detail-stat-label { font-size:11px; margin-top:6px; }
+.detail-grid { grid-template-columns:1fr; }
+.detail-row,
+.detail-row.span-2 { grid-column:auto; }
+.detail-row-label { flex-basis:96px; }
+}
+@media (max-width: 480px) {
+.page-header-actions { flex-direction:column; align-items:stretch; }
+.page-header-actions .stats-settings,
+.page-header-actions .stats-settings-btn { width:100%; }
+.page-header-actions .stats-settings-btn,
+.mobile-filter-entry { justify-content:center; }
+.filter-actions { grid-template-columns:1fr; }
+.detail-stats { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+.detail-stat { padding:10px 10px 8px; }
+.detail-stat-value { font-size:16px; }
+}
 </style>
 </head>
 <body>
@@ -430,18 +754,20 @@ body{height:100vh;overflow:hidden}
         <div class="content">
         <div class="page-header">
             <div class="page-header-main">
-                <div class="page-title">客户销售分析</div>
-                <div class="page-desc">按客户维度分析销售业绩、卡项消费、产品购买及服务消耗数据</div>
+                <div class="page-title">客户分析</div>
+                <div class="page-desc">客户消费画像、活跃画像、消费趋势分析</div>
             </div>
-            <div class="stats-settings" id="statsSettings">
-                <button type="button" class="stats-settings-btn" id="statsSettingsBtn">
-                    <iconify-icon icon="mdi:tune-variant"></iconify-icon>
-                    <span>指标卡显示设置</span>
-                </button>
-                <div class="stats-settings-panel" id="statsSettingsPanel">
-                    <div class="stats-settings-title">选择要显示的指标卡</div>
-                    <div class="stats-settings-list" id="statsSettingsList"></div>
-                    <div class="stats-settings-tip">至少保留 1 张指标卡显示</div>
+            <div class="page-header-actions">
+                <div class="stats-settings" id="statsSettings">
+                    <button type="button" class="stats-settings-btn" id="statsSettingsBtn">
+                        <iconify-icon icon="mdi:tune-variant"></iconify-icon>
+                        <span>指标卡显示设置</span>
+                    </button>
+                    <div class="stats-settings-panel" id="statsSettingsPanel">
+                        <div class="stats-settings-title">选择要显示的指标卡</div>
+                        <div class="stats-settings-list" id="statsSettingsList"></div>
+                        <div class="stats-settings-tip">至少保留 1 张指标卡显示</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -449,56 +775,72 @@ body{height:100vh;overflow:hidden}
         <div class="stats-section">
         <div class="stats-row">
             <div class="stat-card" data-card-id="customerTotal">
-                <div class="stat-card-label">客户总数</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">客户总数</span><button type="button" class="stat-tip-btn" data-tip="平台累计注册的全部客户数量总和" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value" id="customerTotalStat">1,286</div>
             </div>
             <div class="stat-card" data-card-id="member">
-                <div class="stat-card-label">会员数</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">会员数</span><button type="button" class="stat-tip-btn" data-tip="产生消费，且交易记录中包含卡项（金额卡/次卡）的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value" id="memberStat">456</div>
             </div>
             <div class="stat-card" data-card-id="newCustomer">
-                <div class="stat-card-label">新客数</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">新客数</span><button type="button" class="stat-tip-btn" data-tip="没有消费过的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value" id="newCustomerStat">0</div>
             </div>
             <div class="stat-card" data-card-id="experienceCustomer">
-                <div class="stat-card-label">体验客数</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">体验客数</span><button type="button" class="stat-tip-btn" data-tip="产生消费，但交易记录中不包含卡项的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value" id="experienceCustomerStat">0</div>
             </div>
             <div class="stat-card" data-card-id="activeMember">
-                <div class="stat-card-label">活跃会员</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">活跃客户</span><button type="button" class="stat-tip-btn" data-tip="最近90天内产生过有效成交记录的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value">328</div>
             </div>
             <div class="stat-card" data-card-id="validMember">
-                <div class="stat-card-label">有效会员</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">有效客户</span><button type="button" class="stat-tip-btn" data-tip="最近90天至180天区间内产生过有效成交记录的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value">312</div>
             </div>
             <div class="stat-card" data-card-id="sleepingMember">
-                <div class="stat-card-label">沉睡会员</div>
+                <div class="stat-card-label"><span class="stat-card-label-text">沉睡客户</span><button type="button" class="stat-tip-btn" data-tip="最近180天内未产生任何有效成交记录的客户数量" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
                 <div class="stat-card-value">144</div>
             </div>
-            <div class="stat-card" data-card-id="totalConsume">
-                <div class="stat-card-label">累计消费</div>
-                <div class="stat-card-value">¥1,862,000</div>
+            <div class="stat-card" data-card-id="totalConsumeThisYear">
+                <div class="stat-card-label"><span class="stat-card-label-text">今年累计消费</span><button type="button" class="stat-tip-btn" data-tip="统计年度内所有客户产生的消费金额总和" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                <div class="stat-card-value" id="totalConsumeThisYearStat">¥1,862,000</div>
+                <div class="stat-card-trend up"><span class="stat-card-trend-label">较前一年</span><span class="stat-card-trend-triangle" aria-hidden="true"></span><span class="stat-card-trend-value">+32%</span></div>
             </div>
-            <div class="stat-card" data-card-id="avgSpend">
-                <div class="stat-card-label">人均消费</div>
-                <div class="stat-card-value">¥426</div>
+            <div class="stat-card" data-card-id="totalConsumeLastYear">
+                <div class="stat-card-label"><span class="stat-card-label-text">去年累计消费</span><button type="button" class="stat-tip-btn" data-tip="上一自然年度内所有客户产生的消费金额总和" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                <div class="stat-card-value" id="totalConsumeLastYearStat">¥1,410,606</div>
+            </div>
+            <div class="stat-card" data-card-id="avgSpendThisYear">
+                <div class="stat-card-label"><span class="stat-card-label-text">今年人均消费</span><button type="button" class="stat-tip-btn" data-tip="统计年度内消费总额除以消费人数得到的平均消费金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                <div class="stat-card-value" id="avgSpendThisYearStat">¥426</div>
+                <div class="stat-card-trend up"><span class="stat-card-trend-label">较前一年</span><span class="stat-card-trend-triangle" aria-hidden="true"></span><span class="stat-card-trend-value">+32%</span></div>
+            </div>
+            <div class="stat-card" data-card-id="avgSpendLastYear">
+                <div class="stat-card-label"><span class="stat-card-label-text">去年人均消费</span><button type="button" class="stat-tip-btn" data-tip="上一自然年度消费总额除以去年消费人数得到的平均消费金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                <div class="stat-card-value" id="avgSpendLastYearStat">¥323</div>
             </div>
         </div>
         </div>
 
-        <div class="filter-bar">
+        <div class="mobile-filter-row">
+            <button type="button" class="mobile-filter-entry" onclick="openMobileCustomerFilter()">
+                <iconify-icon icon="mdi:filter-outline"></iconify-icon>
+                <span>筛选条件</span>
+            </button>
+        </div>
+
+        <div class="filter-bar" id="customerFilterOverlay">
+            <div class="filter-bar-surface">
+            <div class="filter-bar-mobile-header">
+                <div class="filter-bar-mobile-title">筛选条件</div>
+                <button type="button" class="filter-bar-close" onclick="closeMobileCustomerFilter()" aria-label="关闭筛选">
+                    <iconify-icon icon="mdi:close"></iconify-icon>
+                </button>
+            </div>
             <div class="filter-search">
                 <span class="filter-label">搜索</span>
                 <input type="text" id="searchInput" placeholder="搜索客户姓名 / 手机号" oninput="filterTable()">
-            </div>
-            <div class="filter-group">
-                <span class="filter-label">订单时间</span>
-                <div class="filter-range-row">
-                    <input type="date" class="filter-select" id="filterStartDate">
-                    <span style="color:var(--text-light);font-size:12px;">至</span>
-                    <input type="date" class="filter-select" id="filterEndDate">
-                </div>
             </div>
             <div class="filter-group filter-number-group">
                 <span class="filter-label">累计消费</span>
@@ -537,6 +879,15 @@ body{height:100vh;overflow:hidden}
                     <option value="2个月未到店">2个月未到店</option>
                     <option value="3个月未到店">3个月未到店</option>
                     <option value="半年未到店">半年未到店</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <span class="filter-label">活跃度</span>
+                <select class="filter-select" id="filterActivityLevel" onchange="filterTable()">
+                    <option value="全部">全部</option>
+                    <option value="活跃客户">活跃客户</option>
+                    <option value="有效客户">有效客户</option>
+                    <option value="沉睡客户">沉睡客户</option>
                 </select>
             </div>
             <div class="filter-group birthday-filter-group">
@@ -579,11 +930,12 @@ body{height:100vh;overflow:hidden}
                 </select>
             </div>
             <div class="filter-actions">
-                <button class="btn btn-primary" onclick="filterTable()">
+                <button class="btn btn-primary" onclick="applyMobileCustomerFilter()">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"/></svg>
                     筛选
                 </button>
                 <button class="btn" onclick="resetFilter()">重置</button>
+            </div>
             </div>
         </div>
 
@@ -600,7 +952,7 @@ body{height:100vh;overflow:hidden}
 
         <div class="table-card">
             <div class="table-header">
-                <div class="table-title">客户销售明细</div>
+                <div class="table-title">客户明细</div>
                 <div class="table-header-right">
                     <div class="stats-settings" id="tableSettings">
                         <button type="button" class="stats-settings-btn" id="tableSettingsBtn">
@@ -623,8 +975,16 @@ body{height:100vh;overflow:hidden}
                             <th class="sticky-col sticky-col-2 sortable" data-sort-key="phone">手机号</th>
                             <th class="sortable" data-sort-key="customerType" data-col-id="customerType">客户类型</th>
                             <th class="sortable" data-sort-key="birthday" data-col-id="birthday">生日</th>
+                            <th class="sortable" data-sort-key="ageRange" data-col-id="ageRange">年龄段</th>
                             <th class="sortable" data-sort-key="staff" data-col-id="staff">责任美容师</th>
                             <th class="num sortable" data-sort-key="totalConsume" data-col-id="totalConsume">累计消费</th>
+                            <th class="num sortable" data-sort-key="lastVisit" data-col-id="lastVisit">最近到店</th>
+                            <th class="num sortable" data-sort-key="daysSinceLastVisit" data-col-id="daysSinceLastVisit">未到店天数</th>
+                            <th class="num sortable" data-sort-key="currentYearConsume" data-col-id="currentYearConsume">今年累计消费</th>
+                            <th class="num sortable" data-sort-key="lastYearConsume" data-col-id="lastYearConsume">去年累计消费</th>
+                            <th class="num sortable" data-sort-key="avgSpend" data-col-id="avgSpend">客单价</th>
+                            <th class="num sortable" data-sort-key="highestConsume" data-col-id="highestConsume">最高消费金额</th>
+                            <th class="sortable" data-sort-key="activityLevel" data-col-id="activityLevel">活跃度</th>
                             <th class="num sortable" data-sort-key="salesPerf" data-col-id="salesPerf">销售业绩</th>
                             <th class="num sortable" data-sort-key="cardSales" data-col-id="cardSales">卡项销售</th>
                             <th class="num sortable" data-sort-key="careSales" data-col-id="careSales">护理销售</th>
@@ -640,9 +1000,7 @@ body{height:100vh;overflow:hidden}
                             <th class="num sortable" data-sort-key="serviceCardAsset" data-col-id="serviceCardAsset">次卡剩余资产</th>
                             <th class="num sortable" data-sort-key="wallet" data-col-id="wallet">钱包</th>
                             <th class="num sortable" data-sort-key="arrears" data-col-id="arrears">欠款</th>
-                            <th class="num sortable" data-sort-key="lastVisit" data-col-id="lastVisit">最近到店</th>
-                            <th class="num sortable" data-sort-key="daysSinceLastVisit" data-col-id="daysSinceLastVisit">未到店天数</th>
-                            <th class="num sortable" data-sort-key="avgSpend" data-col-id="avgSpend">客单价</th>
+                            <th class="num sortable" data-sort-key="conversionDays" data-col-id="conversionDays">转化天数</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">
@@ -728,6 +1086,62 @@ const customerMetaMap = Object.fromEntries(
         customerMetaList[index] || { channel:'其他', tags:[], birthday:'01-01', birthdayType:'阳' }
     ])
 );
+const customerInsightList = [
+    { ageRange:'31-40', lastYearConsume:280, activityLevel:'活跃客户' },
+    { ageRange:'41-50', lastYearConsume:16800, activityLevel:'活跃客户' },
+    { ageRange:'26-30', lastYearConsume:36200, activityLevel:'活跃客户' },
+    { ageRange:'18-25', lastYearConsume:520, activityLevel:'活跃客户' },
+    { ageRange:'31-40', lastYearConsume:26800, activityLevel:'有效客户' },
+    { ageRange:'41-50', lastYearConsume:48600, activityLevel:'活跃客户' },
+    { ageRange:'18-25', lastYearConsume:0, activityLevel:'活跃客户' },
+    { ageRange:'31-40', lastYearConsume:32200, activityLevel:'活跃客户' },
+    { ageRange:'51-60', lastYearConsume:14500, activityLevel:'有效客户' },
+    { ageRange:'41-50', lastYearConsume:41800, activityLevel:'活跃客户' },
+    { ageRange:'26-30', lastYearConsume:0, activityLevel:'活跃客户' },
+    { ageRange:'31-40', lastYearConsume:22100, activityLevel:'有效客户' },
+    { ageRange:'41-50', lastYearConsume:39800, activityLevel:'活跃客户' },
+    { ageRange:'18-25', lastYearConsume:0, activityLevel:'活跃客户' },
+    { ageRange:'31-40', lastYearConsume:33600, activityLevel:'活跃客户' },
+    { ageRange:'41-50', lastYearConsume:42200, activityLevel:'活跃客户' },
+    { ageRange:'18-25', lastYearConsume:620, activityLevel:'有效客户' },
+    { ageRange:'31-40', lastYearConsume:30500, activityLevel:'活跃客户' },
+    { ageRange:'41-50', lastYearConsume:45200, activityLevel:'活跃客户' },
+    { ageRange:'61-70', lastYearConsume:19800, activityLevel:'沉睡客户' }
+];
+const customerInsightMap = Object.fromEntries(
+    customerData.map((customer, index) => [
+        customer.name,
+        customerInsightList[index] || { ageRange:'31-40', lastYearConsume:0, activityLevel:'有效客户' }
+    ])
+);
+const customerProfileList = [
+    { gender:'女', registerDate:'2024-08-12', firstOrderDate:'2024-08-20' },
+    { gender:'女', registerDate:'2022-11-06', firstOrderDate:'2022-11-18' },
+    { gender:'女', registerDate:'2021-09-18', firstOrderDate:'2021-10-03' },
+    { gender:'女', registerDate:'2026-03-02', firstOrderDate:'2026-03-05' },
+    { gender:'女', registerDate:'2023-04-21', firstOrderDate:'2023-05-02' },
+    { gender:'女', registerDate:'2020-12-15', firstOrderDate:'2020-12-29' },
+    { gender:'女', registerDate:'2026-05-08', firstOrderDate:'2026-05-10' },
+    { gender:'女', registerDate:'2022-06-19', firstOrderDate:'2022-07-01' },
+    { gender:'女', registerDate:'2021-10-04', firstOrderDate:'2021-10-16' },
+    { gender:'女', registerDate:'2026-04-11', firstOrderDate:'2026-04-14' },
+    { gender:'女', registerDate:'2023-01-26', firstOrderDate:'2023-02-07' },
+    { gender:'女', registerDate:'2020-07-13', firstOrderDate:'2020-07-28' },
+    { gender:'女', registerDate:'2022-03-09', firstOrderDate:'2022-03-20' },
+    { gender:'女', registerDate:'2024-02-17', firstOrderDate:'2024-02-25' },
+    { gender:'女', registerDate:'2021-08-30', firstOrderDate:'2021-09-11' },
+    { gender:'女', registerDate:'2020-05-20', firstOrderDate:'2020-06-02' },
+    { gender:'女', registerDate:'2026-01-15', firstOrderDate:'2026-01-17' },
+    { gender:'女', registerDate:'2022-09-27', firstOrderDate:'2022-10-09' },
+    { gender:'女', registerDate:'2021-12-08', firstOrderDate:'2021-12-22' },
+    { gender:'男', registerDate:'2019-10-10', firstOrderDate:'2019-10-28' }
+];
+const customerProfileMap = Object.fromEntries(
+    customerData.map((customer, index) => [
+        customer.name,
+        customerProfileList[index] || { gender:'女', registerDate:'2024-01-01', firstOrderDate:'2024-01-08' }
+    ])
+);
 let selectedTagValue = '';
 let currentSort = { key:'', direction:'' };
 const CARD_VISIBILITY_STORAGE_KEY = 'dashboard-customer-statistics-visible-cards';
@@ -738,19 +1152,29 @@ const statCardDefinitions = [
     { id:'member', label:'会员数' },
     { id:'newCustomer', label:'新客数' },
     { id:'experienceCustomer', label:'体验客数' },
-    { id:'activeMember', label:'活跃会员' },
-    { id:'validMember', label:'有效会员' },
-    { id:'sleepingMember', label:'沉睡会员' },
-    { id:'totalConsume', label:'累计消费' },
-    { id:'avgSpend', label:'人均消费' }
+    { id:'activeMember', label:'活跃客户' },
+    { id:'validMember', label:'有效客户' },
+    { id:'sleepingMember', label:'沉睡客户' },
+    { id:'totalConsumeThisYear', label:'今年累计消费' },
+    { id:'totalConsumeLastYear', label:'去年累计消费' },
+    { id:'avgSpendThisYear', label:'今年人均消费' },
+    { id:'avgSpendLastYear', label:'去年人均消费' }
 ];
 const tableColumnDefinitions = [
     { id:'customerName', label:'客户姓名', locked:true },
     { id:'phone', label:'手机号', locked:true },
     { id:'customerType', label:'客户类型' },
     { id:'birthday', label:'生日' },
+    { id:'ageRange', label:'年龄段' },
     { id:'staff', label:'责任美容师' },
     { id:'totalConsume', label:'累计消费' },
+    { id:'lastVisit', label:'最近到店' },
+    { id:'daysSinceLastVisit', label:'未到店天数' },
+    { id:'currentYearConsume', label:'今年累计消费' },
+    { id:'lastYearConsume', label:'去年累计消费' },
+    { id:'avgSpend', label:'客单价' },
+    { id:'highestConsume', label:'最高消费金额' },
+    { id:'activityLevel', label:'活跃度' },
     { id:'salesPerf', label:'销售业绩' },
     { id:'cardSales', label:'卡项销售' },
     { id:'careSales', label:'护理销售' },
@@ -766,9 +1190,7 @@ const tableColumnDefinitions = [
     { id:'serviceCardAsset', label:'次卡剩余资产' },
     { id:'wallet', label:'钱包' },
     { id:'arrears', label:'欠款' },
-    { id:'lastVisit', label:'最近到店' },
-    { id:'daysSinceLastVisit', label:'未到店天数' },
-    { id:'avgSpend', label:'客单价' }
+    { id:'conversionDays', label:'转化天数' }
 ];
 
 function getDaysClass(days) {
@@ -810,9 +1232,62 @@ function getCustomerMeta(customer) {
     return customerMetaMap[customer.name] || { channel:'其他', tags:[], birthday:'01-01', birthdayType:'阳' };
 }
 
+function getCustomerInsight(customer) {
+    return customerInsightMap[customer.name] || { ageRange:'31-40', lastYearConsume:0, activityLevel:'有效客户' };
+}
+
+function getCustomerProfile(customer) {
+    return customerProfileMap[customer.name] || { gender:'女', registerDate:'2024-01-01', firstOrderDate:'2024-01-08' };
+}
+
+function getDateDiffDays(startDate, endDate) {
+    const start = new Date(`${startDate}T00:00:00`);
+    const end = new Date(`${endDate}T00:00:00`);
+    if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) return 0;
+    return Math.max(0, Math.floor((end - start) / (1000 * 60 * 60 * 24)));
+}
+
+function getYearOverYearTrend(currentValue, previousValue) {
+    const current = Number(currentValue) || 0;
+    const previous = Number(previousValue) || 0;
+    if (previous <= 0) {
+        if (current <= 0) {
+            return { direction:'flat', text:'0%' };
+        }
+        return { direction:'up', text:'新增' };
+    }
+    const ratio = ((current - previous) / previous) * 100;
+    if (Math.abs(ratio) < 0.5) {
+        return { direction:'flat', text:'0%' };
+    }
+    const rounded = Math.round(ratio);
+    return {
+        direction: rounded >= 0 ? 'up' : 'down',
+        text: `${rounded >= 0 ? '+' : ''}${rounded}%`
+    };
+}
+
 function getBirthdayDisplay(customer) {
     const meta = getCustomerMeta(customer);
     return `${meta.birthday} ${meta.birthdayType}`;
+}
+
+function getAgeRangeSortValue(ageRange) {
+    const ranges = ['<18', '18-25', '26-30', '31-40', '41-50', '51-60', '61-70'];
+    const index = ranges.indexOf(ageRange);
+    return index === -1 ? ranges.length : index;
+}
+
+function getActivityLevelSortValue(level) {
+    const order = ['活跃客户', '有效客户', '沉睡客户'];
+    const index = order.indexOf(level);
+    return index === -1 ? order.length : index;
+}
+
+function getActivityTag(level) {
+    if (level === '活跃客户') return '<span class="tag tag-active">活跃客户</span>';
+    if (level === '沉睡客户') return '<span class="tag tag-churn">沉睡客户</span>';
+    return '<span class="tag tag-silent">有效客户</span>';
 }
 
 function getRowViewModel(customer, startDate, endDate) {
@@ -820,6 +1295,14 @@ function getRowViewModel(customer, startDate, endDate) {
     const cardSplit = getValidCardSplit(customer);
     const assetValues = getAssetValues(customer);
     const customerMeta = getCustomerMeta(customer);
+    const customerInsight = getCustomerInsight(customer);
+    const customerProfile = getCustomerProfile(customer);
+    const currentYearConsume = customer.monthlyRecords
+        .filter(record => String(record.month).startsWith('2026-'))
+        .reduce((sum, record) => sum + record.salesPerf + record.consumePerf, 0);
+    const highestConsume = customer.monthlyRecords
+        .reduce((max, record) => Math.max(max, record.salesPerf + record.consumePerf), 0);
+    const conversionDays = getDateDiffDays(customerProfile.registerDate, customerProfile.firstOrderDate);
 
     let displaySalesPerf = customer.salesPerf;
     let displayConsumePerf = customer.consumePerf;
@@ -842,6 +1325,12 @@ function getRowViewModel(customer, startDate, endDate) {
         cardSplit,
         assetValues,
         customerMeta,
+        customerInsight,
+        customerProfile,
+        currentYearConsume,
+        previousYearConsume: Number(customerInsight.lastYearConsume) || 0,
+        highestConsume,
+        conversionDays,
         displaySalesPerf,
         displayConsumePerf,
         displayTotalConsume
@@ -954,11 +1443,55 @@ function toggleTagDropdown() {
     }
 }
 
+function mapSampleSplitToMockTotal(targetTotal, sampleCounts) {
+    const safeSamples = Array.isArray(sampleCounts) ? sampleCounts.map(value => Math.max(0, Number(value) || 0)) : [];
+    const totalSamples = safeSamples.reduce((sum, value) => sum + value, 0);
+    const total = Math.max(0, Number(targetTotal) || 0);
+    if (total <= 0) return safeSamples.map(() => 0);
+    if (safeSamples.length === 0) return [];
+    if (totalSamples <= 0) {
+        const fallback = safeSamples.map(() => 0);
+        fallback[0] = total;
+        return fallback;
+    }
+
+    const mapped = safeSamples.map(sample => {
+        const exact = total * (sample / totalSamples);
+        const floored = Math.floor(exact);
+        return { value: floored, frac: exact - floored };
+    });
+
+    let remainder = total - mapped.reduce((sum, item) => sum + item.value, 0);
+    const order = mapped
+        .map((item, index) => ({ index, frac: item.frac }))
+        .sort((a, b) => b.frac - a.frac);
+
+    if (remainder > 0) {
+        for (let i = 0; i < remainder; i += 1) {
+            const picked = order[i % order.length];
+            mapped[picked.index].value += 1;
+        }
+    } else if (remainder < 0) {
+        const reverse = order.slice().reverse();
+        for (let i = 0; i < Math.abs(remainder); i += 1) {
+            const picked = reverse[i % reverse.length];
+            if (mapped[picked.index].value > 0) mapped[picked.index].value -= 1;
+        }
+    }
+
+    return mapped.map(item => item.value);
+}
+
 function renderTopStats() {
     const customerTotal = MOCK_TOTAL_CUSTOMER_COUNT;
-    const memberTotal = customerData.filter(customer => customer.type === '会员').length;
-    const newCustomerTotal = customerData.filter(customer => customer.type === '新客').length;
-    const experienceCustomerTotal = customerData.filter(customer => customer.type === '体验客').length;
+    const memberSample = customerData.filter(customer => customer.type === '会员').length;
+    const newCustomerSample = customerData.filter(customer => customer.type === '新客').length;
+    const experienceCustomerSample = customerData.filter(customer => customer.type === '体验客').length;
+    const [memberTotal, newCustomerTotal, experienceCustomerTotal] = mapSampleSplitToMockTotal(customerTotal, [
+        memberSample,
+        newCustomerSample,
+        experienceCustomerSample
+    ]);
 
     document.getElementById('customerTotalStat').textContent = customerTotal.toLocaleString();
     document.getElementById('memberStat').textContent = memberTotal.toLocaleString();
@@ -982,9 +1515,14 @@ function getVisibleCardIds() {
         const storedValue = localStorage.getItem(CARD_VISIBILITY_STORAGE_KEY);
         if (!storedValue) return getDefaultVisibleCardIds();
         const parsed = JSON.parse(storedValue);
-        const validIds = Array.isArray(parsed)
-            ? parsed.filter(id => statCardDefinitions.some(card => card.id === id))
+        const migratedIds = Array.isArray(parsed)
+            ? parsed.flatMap(id => {
+                if (id === 'totalConsume') return ['totalConsumeThisYear', 'totalConsumeLastYear'];
+                if (id === 'avgSpend') return ['avgSpendThisYear', 'avgSpendLastYear'];
+                return [id];
+            })
             : [];
+        const validIds = migratedIds.filter(id => statCardDefinitions.some(card => card.id === id));
         return validIds.length ? validIds : getDefaultVisibleCardIds();
     } catch (error) {
         return getDefaultVisibleCardIds();
@@ -1053,14 +1591,17 @@ function renderTableSettings() {
 function closeTableSettings() {
     document.getElementById('tableSettingsBtn').classList.remove('active');
     document.getElementById('tableSettingsPanel').classList.remove('active');
+    document.body.classList.remove('customer-mobile-settings-open');
 }
 
 function toggleTableSettings() {
     const button = document.getElementById('tableSettingsBtn');
     const panel = document.getElementById('tableSettingsPanel');
     const willOpen = !panel.classList.contains('active');
+    closeStatsSettings();
     button.classList.toggle('active', willOpen);
     panel.classList.toggle('active', willOpen);
+    document.body.classList.toggle('customer-mobile-settings-open', willOpen);
 }
 
 function syncStatsSettingsInputs(visibleIds) {
@@ -1083,14 +1624,17 @@ function renderStatsSettings() {
 function closeStatsSettings() {
     document.getElementById('statsSettingsBtn').classList.remove('active');
     document.getElementById('statsSettingsPanel').classList.remove('active');
+    document.body.classList.remove('customer-mobile-settings-open');
 }
 
 function toggleStatsSettings() {
     const button = document.getElementById('statsSettingsBtn');
     const panel = document.getElementById('statsSettingsPanel');
     const willOpen = !panel.classList.contains('active');
+    closeTableSettings();
     button.classList.toggle('active', willOpen);
     panel.classList.toggle('active', willOpen);
+    document.body.classList.toggle('customer-mobile-settings-open', willOpen);
 }
 
 function getSortValue(customer, sortKey, startDate, endDate) {
@@ -1104,10 +1648,20 @@ function getSortValue(customer, sortKey, startDate, endDate) {
             return customer.type;
         case 'birthday':
             return Number(rowViewModel.customerMeta.birthday.replace('-', ''));
+        case 'ageRange':
+            return getAgeRangeSortValue(rowViewModel.customerInsight.ageRange);
         case 'staff':
             return customer.staff;
         case 'totalConsume':
             return rowViewModel.displayTotalConsume;
+        case 'currentYearConsume':
+            return rowViewModel.currentYearConsume;
+        case 'lastYearConsume':
+            return rowViewModel.previousYearConsume;
+        case 'highestConsume':
+            return rowViewModel.highestConsume;
+        case 'activityLevel':
+            return getActivityLevelSortValue(rowViewModel.customerInsight.activityLevel);
         case 'salesPerf':
             return rowViewModel.displaySalesPerf;
         case 'cardSales':
@@ -1137,6 +1691,8 @@ function getSortValue(customer, sortKey, startDate, endDate) {
             return rowViewModel.assetValues.wallet;
         case 'arrears':
             return rowViewModel.assetValues.arrears;
+        case 'conversionDays':
+            return rowViewModel.conversionDays;
         case 'lastVisit':
             return new Date(`${customer.lastVisit}T00:00:00`).getTime();
         case 'daysSinceLastVisit':
@@ -1207,6 +1763,7 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
         document.getElementById('filterCustomerType').value !== '全部' ||
         document.getElementById('filterChannel').value !== '全部' ||
         document.getElementById('filterLastVisit').value !== '全部' ||
+        document.getElementById('filterActivityLevel').value !== '全部' ||
         document.getElementById('filterBirthdayRange').value !== '全部' ||
         Boolean(selectedTagValue) ||
         document.getElementById('filterStaff').value !== '全部美容师';
@@ -1243,8 +1800,16 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
                     <span class="birthday-type">${rowViewModel.customerMeta.birthdayType}</span>
                 </div>
             </td>
+            <td data-col-id="ageRange">${rowViewModel.customerInsight.ageRange}</td>
             <td data-col-id="staff">${c.staff}</td>
             <td class="num highlight" data-col-id="totalConsume">¥${rowViewModel.displayTotalConsume.toLocaleString()}</td>
+            <td class="num" data-col-id="lastVisit">${c.lastVisit}</td>
+            <td class="num" data-col-id="daysSinceLastVisit"><span class="${getDaysClass(rowViewModel.days)}">${rowViewModel.days}天</span></td>
+            <td class="num" data-col-id="currentYearConsume">¥${rowViewModel.currentYearConsume.toLocaleString()}</td>
+            <td class="num" data-col-id="lastYearConsume">¥${rowViewModel.previousYearConsume.toLocaleString()}</td>
+            <td class="num" data-col-id="avgSpend">¥${c.avgSpend}</td>
+            <td class="num" data-col-id="highestConsume">¥${rowViewModel.highestConsume.toLocaleString()}</td>
+            <td data-col-id="activityLevel">${getActivityTag(rowViewModel.customerInsight.activityLevel)}</td>
             <td class="num" data-col-id="salesPerf">¥${rowViewModel.displaySalesPerf.toLocaleString()}</td>
             <td class="num" data-col-id="cardSales">¥${c.cardSales.toLocaleString()}</td>
             <td class="num" data-col-id="careSales">¥${c.careSales.toLocaleString()}</td>
@@ -1260,9 +1825,7 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
             <td class="num" data-col-id="serviceCardAsset">¥${rowViewModel.assetValues.serviceCardAsset.toLocaleString()}</td>
             <td class="num" data-col-id="wallet">¥${rowViewModel.assetValues.wallet.toLocaleString()}</td>
             <td class="num" data-col-id="arrears">¥${rowViewModel.assetValues.arrears.toLocaleString()}</td>
-            <td class="num" data-col-id="lastVisit">${c.lastVisit}</td>
-            <td class="num" data-col-id="daysSinceLastVisit"><span class="${getDaysClass(rowViewModel.days)}">${rowViewModel.days}天</span></td>
-            <td class="num" data-col-id="avgSpend">¥${c.avgSpend}</td>
+            <td class="num" data-col-id="conversionDays">${rowViewModel.conversionDays}天</td>
         </tr>`;
     }).join('');
     applyVisibleColumns(getVisibleColumnIds());
@@ -1276,55 +1839,46 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
 
 function filterTable() {
     const keyword = document.getElementById('searchInput').value.toLowerCase();
-    const startDate = document.getElementById('filterStartDate').value;
-    const endDate = document.getElementById('filterEndDate').value;
     const customerType = document.getElementById('filterCustomerType').value;
     const channel = document.getElementById('filterChannel').value;
     const lastVisitFilter = document.getElementById('filterLastVisit').value;
+    const activityLevel = document.getElementById('filterActivityLevel').value;
     const birthdayType = document.getElementById('filterBirthdayType').value;
     const birthdayRange = document.getElementById('filterBirthdayRange').value;
     const staff = document.getElementById('filterStaff').value;
     const consumeRange = getNormalizedConsumeRange();
     let filtered = customerData.filter(c => {
         const customerMeta = getCustomerMeta(c);
-        const rowViewModel = getRowViewModel(c, startDate, endDate);
+        const rowViewModel = getRowViewModel(c, '', '');
         const matchKeyword = !keyword || c.name.includes(keyword) || c.phone.includes(keyword);
         const matchCustomerType = customerType === '全部' || c.type === customerType;
         const matchChannel = channel === '全部' || customerMeta.channel === channel;
         const matchLastVisit = matchesLastVisitFilter(c.lastVisit, lastVisitFilter);
+        const matchActivityLevel = activityLevel === '全部' || rowViewModel.customerInsight.activityLevel === activityLevel;
         const matchBirthday = matchesUpcomingBirthdayFilter(customerMeta, birthdayType, birthdayRange);
         const matchTag = !selectedTagValue || customerMeta.tags.includes(selectedTagValue);
         const matchStaff = staff === '全部美容师' || c.staff === staff;
         const matchConsumeMin = consumeRange.min === null || rowViewModel.displayTotalConsume >= consumeRange.min;
         const matchConsumeMax = consumeRange.max === null || rowViewModel.displayTotalConsume <= consumeRange.max;
-        
-        let matchDateRange = true;
-        if (startDate || endDate) {
-            const start = startDate ? new Date(startDate) : new Date('2000-01-01');
-            const end = endDate ? new Date(endDate) : new Date('2099-12-31');
-            const matchedRecords = c.monthlyRecords.filter(r => {
-                const recordDate = new Date(r.month + '-01');
-                return recordDate >= start && recordDate <= end;
-            });
-            const periodSalesPerf = matchedRecords.reduce((sum, r) => sum + r.salesPerf, 0);
-            const periodConsumePerf = matchedRecords.reduce((sum, r) => sum + r.consumePerf, 0);
-            matchDateRange = periodSalesPerf > 0 || periodConsumePerf > 0;
-        }
-        
-        return matchKeyword && matchCustomerType && matchChannel && matchLastVisit && matchBirthday && matchTag && matchDateRange && matchStaff && matchConsumeMin && matchConsumeMax;
+
+        return matchKeyword && matchCustomerType && matchChannel && matchLastVisit && matchActivityLevel && matchBirthday && matchTag && matchStaff && matchConsumeMin && matchConsumeMax;
     });
-    renderTable(filtered, startDate, endDate, filtered.length);
+    renderTable(filtered, '', '', filtered.length);
+}
+
+function applyMobileCustomerFilter() {
+    filterTable();
+    closeMobileCustomerFilter();
 }
 
 function resetFilter() {
     document.getElementById('searchInput').value = '';
-    document.getElementById('filterStartDate').value = '';
-    document.getElementById('filterEndDate').value = '';
     document.getElementById('filterConsumeMin').value = '';
     document.getElementById('filterConsumeMax').value = '';
     document.getElementById('filterCustomerType').value = '全部';
     document.getElementById('filterChannel').value = '全部';
     document.getElementById('filterLastVisit').value = '全部';
+    document.getElementById('filterActivityLevel').value = '全部';
     document.getElementById('filterBirthdayType').value = '阳';
     document.getElementById('filterBirthdayRange').value = '全部';
     document.getElementById('filterStaff').value = '全部美容师';
@@ -1334,59 +1888,105 @@ function resetFilter() {
     renderTagOptions();
     closeTagDropdown();
     renderTable(customerData, '', '', customerData.length);
+    closeMobileCustomerFilter();
 }
 
 function showDetail(index) {
     const c = customerData[index];
-    const days = Math.floor((new Date('2026-05-26') - new Date(c.lastVisit)) / (1000*60*60*24));
-    const cardSplit = getValidCardSplit(c);
+    const rowViewModel = getRowViewModel(c, '', '');
+    const customerMeta = rowViewModel.customerMeta;
+    const customerInsight = rowViewModel.customerInsight;
+    const customerProfile = getCustomerProfile(c);
+    const consumeTrend = getYearOverYearTrend(rowViewModel.currentYearConsume, rowViewModel.previousYearConsume);
+    const tagsHtml = customerMeta.tags.length
+        ? customerMeta.tags.map(tag => `<span class="tag tag-new">${tag}</span>`).join('')
+        : '<span class="detail-empty-text">暂无标签</span>';
     const content = document.getElementById('detailContent');
     content.innerHTML = `
-        <div class="detail-profile">
-            <div class="detail-avatar" style="background:${c.color}">${c.avatar}</div>
-            <div class="detail-name">${c.name}</div>
-            <div class="detail-meta">${c.phone} · ${c.type} · ${c.staff}</div>
+        <div class="detail-summary">
+            <div class="detail-summary-head">
+                <div>
+                    <div class="detail-summary-name">${c.name}</div>
+                    <div class="detail-summary-meta">${c.phone} · ${c.type} · ${c.staff}</div>
+                </div>
+                <div class="detail-summary-badges">
+                    ${getTypeTag(c.type)}
+                    ${getActivityTag(customerInsight.activityLevel)}
+                </div>
+            </div>
         </div>
         <div class="detail-stats">
             <div class="detail-stat">
-                <div class="detail-stat-value" style="color:${c.color}">¥${c.totalConsume.toLocaleString()}</div>
+                <div class="detail-stat-value highlight">¥${c.totalConsume.toLocaleString()}</div>
                 <div class="detail-stat-label">累计消费</div>
             </div>
             <div class="detail-stat">
-                <div class="detail-stat-value">${c.visitCount}</div>
-                <div class="detail-stat-label">消费次数</div>
+                <div class="detail-stat-value">¥${rowViewModel.currentYearConsume.toLocaleString()}</div>
+                <div class="detail-stat-label">今年累计消费</div>
             </div>
             <div class="detail-stat">
-                <div class="detail-stat-value">${cardSplit.amount}张</div>
-                <div class="detail-stat-label">有效金额卡数</div>
+                <div class="detail-stat-value">¥${rowViewModel.highestConsume.toLocaleString()}</div>
+                <div class="detail-stat-label">最高消费金额</div>
             </div>
             <div class="detail-stat">
-                <div class="detail-stat-value">${cardSplit.service}张</div>
-                <div class="detail-stat-label">有效次卡数</div>
+                <div class="detail-stat-value">${c.visitCount}次</div>
+                <div class="detail-stat-label">累计到店</div>
             </div>
         </div>
         <div class="detail-section">
-            <div class="detail-section-title">销售明细</div>
-            <div class="detail-row"><span class="detail-row-label">销售业绩</span><span class="detail-row-value highlight">¥${c.salesPerf.toLocaleString()}</span></div>
+            <div class="detail-section-title">基础信息</div>
+            <div class="detail-grid">
+            <div class="detail-row"><span class="detail-row-label">客户姓名</span><span class="detail-row-value">${c.name}</span></div>
+            <div class="detail-row"><span class="detail-row-label">手机号码</span><span class="detail-row-value">${c.phone}</span></div>
+            <div class="detail-row"><span class="detail-row-label">客户类型</span><span class="detail-row-value">${c.type}</span></div>
+            <div class="detail-row"><span class="detail-row-label">责任美容师</span><span class="detail-row-value">${c.staff}</span></div>
+            <div class="detail-row"><span class="detail-row-label">生日</span><span class="detail-row-value">${customerMeta.birthday} ${customerMeta.birthdayType}</span></div>
+            <div class="detail-row"><span class="detail-row-label">年龄段</span><span class="detail-row-value">${customerInsight.ageRange}</span></div>
+            <div class="detail-row"><span class="detail-row-label">性别</span><span class="detail-row-value">${customerProfile.gender}</span></div>
+            <div class="detail-row"><span class="detail-row-label">注册时间</span><span class="detail-row-value">${customerProfile.registerDate}</span></div>
+            <div class="detail-row"><span class="detail-row-label">转化天数</span><span class="detail-row-value">${rowViewModel.conversionDays} 天</span></div>
+            <div class="detail-row"><span class="detail-row-label">首单日期</span><span class="detail-row-value">${customerProfile.firstOrderDate}</span></div>
+            <div class="detail-row"><span class="detail-row-label">进店渠道</span><span class="detail-row-value">${customerMeta.channel}</span></div>
+            <div class="detail-row span-2"><span class="detail-row-label">标签信息</span><span class="detail-row-value detail-tag-list">${tagsHtml}</span></div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">账户与资产</div>
+            <div class="detail-grid">
+            <div class="detail-row"><span class="detail-row-label">钱包账户</span><span class="detail-row-value">¥${rowViewModel.assetValues.wallet.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">欠款账户</span><span class="detail-row-value">¥${rowViewModel.assetValues.arrears.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">金额卡资产</span><span class="detail-row-value">¥${rowViewModel.assetValues.amountCardAsset.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">次卡剩余资产</span><span class="detail-row-value">¥${rowViewModel.assetValues.serviceCardAsset.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">有效金额卡数</span><span class="detail-row-value">${rowViewModel.cardSplit.amount}张</span></div>
+            <div class="detail-row"><span class="detail-row-label">有效次卡数</span><span class="detail-row-value">${rowViewModel.cardSplit.service}张</span></div>
+            </div>
+        </div>
+        <div class="detail-section">
+            <div class="detail-section-title">消费资产信息</div>
+            <div class="detail-grid">
+            <div class="detail-row"><span class="detail-row-label">累计消费</span><span class="detail-row-value">¥${rowViewModel.displayTotalConsume.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">今年累计消费</span><span class="detail-row-value">¥${rowViewModel.currentYearConsume.toLocaleString()}<span class="detail-trend stat-card-trend ${consumeTrend.direction}"><span class="stat-card-trend-label">较前一年</span>${consumeTrend.direction === 'flat' ? '' : '<span class="stat-card-trend-triangle" aria-hidden="true"></span>'}<span class="stat-card-trend-value">${consumeTrend.text}</span></span></span></div>
+            <div class="detail-row"><span class="detail-row-label">去年累计消费</span><span class="detail-row-value">¥${rowViewModel.previousYearConsume.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">客单价</span><span class="detail-row-value">¥${c.avgSpend}</span></div>
+            <div class="detail-row"><span class="detail-row-label">最高消费金额</span><span class="detail-row-value">¥${rowViewModel.highestConsume.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">销售业绩</span><span class="detail-row-value highlight">¥${rowViewModel.displaySalesPerf.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">卡项销售</span><span class="detail-row-value">¥${c.cardSales.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">护理销售</span><span class="detail-row-value">¥${c.careSales.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">产品销售</span><span class="detail-row-value">¥${c.productSales.toLocaleString()}</span></div>
-            <div class="detail-row"><span class="detail-row-label">卡项余额</span><span class="detail-row-value">¥${c.balance.toLocaleString()}</span></div>
-            <div class="detail-row"><span class="detail-row-label">积分余额</span><span class="detail-row-value">${c.points} 积分</span></div>
-        </div>
-        <div class="detail-section">
-            <div class="detail-section-title">消耗明细</div>
-            <div class="detail-row"><span class="detail-row-label">消耗业绩</span><span class="detail-row-value">¥${c.consumePerf.toLocaleString()}</span></div>
+            <div class="detail-row"><span class="detail-row-label">消耗业绩</span><span class="detail-row-value highlight">¥${rowViewModel.displayConsumePerf.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">疗程消耗</span><span class="detail-row-value">¥${c.courseConsume.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">产品消耗</span><span class="detail-row-value">¥${c.productConsume.toLocaleString()}</span></div>
+            </div>
         </div>
         <div class="detail-section">
-            <div class="detail-section-title">到店分析</div>
-            <div class="detail-row"><span class="detail-row-label">累计消费</span><span class="detail-row-value">¥${c.totalConsume.toLocaleString()}</span></div>
-            <div class="detail-row"><span class="detail-row-label">消费次数</span><span class="detail-row-value">${c.visitCount} 次</span></div>
-            <div class="detail-row"><span class="detail-row-label">客单价</span><span class="detail-row-value">¥${c.avgSpend}</span></div>
+            <div class="detail-section-title">到店活跃信息</div>
+            <div class="detail-grid">
+            <div class="detail-row"><span class="detail-row-label">活跃度</span><span class="detail-row-value">${getActivityTag(customerInsight.activityLevel)}</span></div>
             <div class="detail-row"><span class="detail-row-label">最近到店</span><span class="detail-row-value">${c.lastVisit}</span></div>
-            <div class="detail-row"><span class="detail-row-label">未到店天数</span><span class="detail-row-value ${getDaysClass(days)}">${days} 天</span></div>
+            <div class="detail-row"><span class="detail-row-label">未到店天数</span><span class="detail-row-value ${getDaysClass(rowViewModel.days)}">${rowViewModel.days} 天</span></div>
+            <div class="detail-row"><span class="detail-row-label">累计到店情况</span><span class="detail-row-value">${c.visitCount} 次</span></div>
+            <div class="detail-row"><span class="detail-row-label">累计消费次数</span><span class="detail-row-value">${c.visitCount} 次</span></div>
+            </div>
         </div>
     `;
     document.getElementById('detailPanel').classList.add('active');
@@ -1397,8 +1997,73 @@ function closeDetail() {
     document.getElementById('detailPanel').classList.remove('active');
     document.getElementById('overlay').classList.remove('active');
 }
+function openMobileCustomerFilter() {
+    document.body.classList.add('customer-mobile-filter-open');
+}
+function closeMobileCustomerFilter() {
+    document.body.classList.remove('customer-mobile-filter-open');
+}
 
 function exportData() { alert('导出报表功能开发中...'); }
+
+function initStatTooltips() {
+    const tooltipEl = document.createElement('div');
+    tooltipEl.className = 'stat-tooltip';
+    document.body.appendChild(tooltipEl);
+
+    function hideTooltip() {
+        tooltipEl.classList.remove('show');
+        tooltipEl.textContent = '';
+    }
+
+    function showTooltip(button) {
+        const tip = button.getAttribute('data-tip') || '';
+        if (!tip) return;
+        tooltipEl.textContent = tip;
+        tooltipEl.style.left = '0px';
+        tooltipEl.style.top = '0px';
+        tooltipEl.classList.add('show');
+
+        const btnRect = button.getBoundingClientRect();
+        const ttRect = tooltipEl.getBoundingClientRect();
+        const gap = 10;
+        const sidePad = 12;
+
+        const preferBelowTop = btnRect.bottom + gap;
+        const preferAboveTop = btnRect.top - gap - ttRect.height;
+        const top = (preferBelowTop + ttRect.height <= window.innerHeight - sidePad) ? preferBelowTop : Math.max(sidePad, preferAboveTop);
+
+        let left = btnRect.left + (btnRect.width / 2) - (ttRect.width / 2);
+        left = Math.max(sidePad, Math.min(left, window.innerWidth - sidePad - ttRect.width));
+
+        tooltipEl.style.left = `${left}px`;
+        tooltipEl.style.top = `${top}px`;
+    }
+
+    document.querySelectorAll('.stat-tip-btn').forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+            const tip = this.getAttribute('data-tip') || '';
+            const isOpen = tooltipEl.classList.contains('show') && tooltipEl.textContent === tip;
+            if (isOpen) {
+                hideTooltip();
+            } else {
+                showTooltip(this);
+            }
+        });
+        button.addEventListener('mouseenter', function() { showTooltip(this); });
+        button.addEventListener('focus', function() { showTooltip(this); });
+        button.addEventListener('mouseleave', hideTooltip);
+        button.addEventListener('blur', hideTooltip);
+    });
+
+    document.addEventListener('click', function(event) {
+        if (event.target.closest('.stat-tip-btn')) return;
+        hideTooltip();
+    });
+    window.addEventListener('scroll', hideTooltip, true);
+    window.addEventListener('resize', hideTooltip);
+}
 
 document.getElementById('tagTrigger').addEventListener('click', function(event) {
     event.stopPropagation();
@@ -1424,6 +2089,7 @@ document.addEventListener('click', function(event) {
     const tagWrapper = document.getElementById('filterTagWrapper');
     const statsWrapper = document.getElementById('statsSettings');
     const tableWrapper = document.getElementById('tableSettings');
+    const filterOverlay = document.getElementById('customerFilterOverlay');
     if (!tagWrapper.contains(event.target)) {
         closeTagDropdown();
     }
@@ -1432,6 +2098,9 @@ document.addEventListener('click', function(event) {
     }
     if (!tableWrapper.contains(event.target)) {
         closeTableSettings();
+    }
+    if (event.target === filterOverlay) {
+        closeMobileCustomerFilter();
     }
 });
 
@@ -1484,6 +2153,7 @@ document.getElementById('tableSettingsList').addEventListener('change', function
 syncTagTrigger();
 renderTagOptions();
 syncSortHeaders();
+initStatTooltips();
 renderTopStats();
 renderStatsSettings();
 applyVisibleCards(getVisibleCardIds());

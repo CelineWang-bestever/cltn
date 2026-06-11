@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>业绩汇总 - 回蓝 · 美业收银系统</title>
+    <title>经营总览</title>
     <link rel="stylesheet" href="../chlitina-brand.css">
     <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
     <style>
@@ -67,8 +67,11 @@
         .page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
         .page-title{font-size:22px;font-weight:700;color:var(--text-primary)}
         .page-title-sub{font-size:13px;color:var(--text-muted);margin-top:2px}
+        .mobile-filter-entry{display:none;align-items:center;gap:8px;height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--border);background:var(--bg-card);color:var(--text-secondary);font-size:13px;font-weight:500;cursor:pointer}
 
         .filter-bar{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+        .filter-bar-surface{display:contents}
+        .filter-bar-mobile-header,.filter-bar-actions{display:none}
         .filter-left{display:flex;align-items:center;gap:10px}
         .table-tabs{display:flex;gap:0;background:var(--bg);border-radius:20px;padding:3px}
         .table-tab{padding:6px 16px;font-size:12px;color:var(--text-secondary);background:transparent;border:none;border-radius:16px;cursor:pointer;transition:all .2s;font-family:inherit;font-weight:500}
@@ -105,7 +108,7 @@
         .trend-down{color:var(--error)}
         .trend-label{color:var(--text-muted)}
 
-        .section-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+        .section-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
         .section-card{background:var(--bg-card);border-radius:var(--radius-lg);padding:20px;box-shadow:var(--shadow-sm);border:1px solid var(--border-light)}
         .section-header{display:flex;align-items:center;gap:8px;margin-bottom:16px}
         .section-icon{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
@@ -115,7 +118,16 @@
         .section-icon.performance{background:var(--primary-bg);color:var(--primary)}
         .section-title{font-size:15px;font-weight:600;color:var(--text-primary)}
         .section-body{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-        .metric-item{display:flex;flex-direction:column;gap:4px}
+        #serviceOpsCard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
+        #serviceOpsCard .section-header{grid-column:1/-1;margin-bottom:0}
+        #serviceOpsCard .section-subgroup{min-width:0}
+        #serviceOpsCard > .cash-detail-panel{grid-column:1/-1}
+        .section-subgroup + .section-subgroup{margin-top:18px;padding-top:18px;border-top:1px solid var(--border-light)}
+        #serviceOpsCard .section-subgroup + .section-subgroup{margin-top:0;padding-top:0;padding-left:18px;border-top:none;border-left:1px solid var(--border-light)}
+        .section-subtitle{font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px}
+        #businessCard,#customerCard,#serviceOpsCard{grid-column:1/-1}
+        #businessCard .section-body,#customerCard .section-body{grid-template-columns:repeat(6,minmax(0,1fr))}
+        .metric-item{display:flex;flex-direction:column;gap:4px;}
         .metric-label{font-size:12px;color:var(--text-muted);display:flex;align-items:center;gap:4px}
         .metric-value{font-size:20px;font-weight:700;color:var(--text-primary);font-family:'DM Sans',sans-serif}
         .metric-value.zero{color:var(--text-muted)}
@@ -127,15 +139,26 @@
         .metric-tooltip{position:fixed;z-index:300;max-width:280px;background:rgba(255,255,255,0.96);backdrop-filter:saturate(180%) blur(8px);border:1px solid var(--border-light);box-shadow:var(--shadow-md);border-radius:10px;padding:10px 12px;font-size:12px;line-height:1.45;color:var(--text-secondary);opacity:0;transform:translateY(4px);pointer-events:none;transition:opacity .12s ease, transform .12s ease}
         .metric-tooltip.show{opacity:1;transform:translateY(0);pointer-events:auto}
 
-        .metric-item.clickable{cursor:pointer;border-radius:8px;padding:0 8px;margin:-4px -8px;transition:all .15s}
+        .metric-trends{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:4px;font-size:12px}
+        .metric-trend{display:inline-flex;align-items:center;gap:5px;min-width:0}
+        .metric-trend-label{color:var(--text-muted);}
+        .metric-trend-triangle{width:0;height:0;flex:0 0 auto}
+        .metric-trend-value{}
+        .metric-trend.up .metric-trend-triangle{border-left:5px solid transparent;border-right:5px solid transparent;border-bottom:8px solid var(--success)}
+        /* .metric-trend.up .metric-trend-value{color:var(--success)} */
+        .metric-trend.down .metric-trend-triangle{border-left:5px solid transparent;border-right:5px solid transparent;border-top:8px solid var(--error)}
+        /* .metric-trend.down .metric-trend-value{color:var(--error)} */
+        .metric-trend.flat .metric-trend-value{color:var(--text-secondary);}
+
+        .metric-item.clickable{cursor:pointer;border-radius:8px;padding:0 8px;margin:-4px -8px;transition:all .15s;}
         .metric-item.clickable:hover{background:var(--primary-bg)}
-        .metric-item.clickable .metric-label{color:var(--primary);font-weight:500}
+        .metric-item.clickable .metric-label{font-weight:500}
         .metric-item.clickable.active{background:var(--primary-bg)}
         .metric-item.clickable.active .metric-value{color:var(--primary)}
         .metric-item.clickable .metric-label svg{transition:transform .2s}
         .metric-item.clickable.active .metric-label svg{transform:rotate(180deg)}
 
-        .cash-detail-panel{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);border:1px solid var(--border-light);margin-bottom:20px;overflow:hidden;max-height:0;opacity:0;transition:all .35s ease}
+        .cash-detail-panel{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-md);border:1px solid var(--border-light);overflow:hidden;max-height:0;opacity:0;transition:all .35s ease}
         .cash-detail-panel.show{max-height:600px;opacity:1;margin-top:14px}
         .cash-detail-header{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border-light)}
         .cash-detail-title{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:600;color:var(--text-primary)}
@@ -172,6 +195,72 @@
         .cash-detail-table .amount-cell{font-weight:600;font-family:'DM Sans',sans-serif;color:var(--primary)}
         .cash-detail-table .amount-cell-neutral{font-weight:600;font-family:'DM Sans',sans-serif;color:var(--text-primary)}
 
+        .trend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-bottom:20px}
+        .trend-card{background:var(--bg-card);border-radius:var(--radius-lg);box-shadow:var(--shadow-sm);border:1px solid var(--border-light);overflow:hidden;min-width:0}
+        .trend-header{padding:18px 18px 12px;display:flex;align-items:flex-start;justify-content:space-between;gap:14px;border-bottom:1px solid var(--border-light)}
+        .trend-title-wrap{display:flex;flex-direction:column;gap:4px;min-width:0}
+        .trend-title{font-size:15px;font-weight:700;color:var(--text-primary)}
+        .trend-subtitle{font-size:12px;color:var(--text-secondary);line-height:1.45}
+        .trend-legend{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+        .trend-legend-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text-secondary)}
+        .trend-legend-line{width:22px;height:0;border-top:3px solid currentColor;border-radius:999px}
+        .trend-legend-line.current{color:var(--primary)}
+        .trend-legend-line.previous{color:#d8a9b9;border-top-style:dashed}
+        .trend-chart-shell{position:relative;padding:14px 18px 16px}
+        .trend-chart svg{display:block;width:100%;height:auto}
+        .trend-grid-line{stroke:#f1f5f9;stroke-width:1}
+        .trend-axis-line{stroke:#e5e7eb;stroke-width:1}
+        .trend-line-current{stroke:var(--primary);stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round}
+        .trend-line-previous{stroke:#d8a9b9;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:7 5}
+        .trend-point-current{fill:var(--primary)}
+        .trend-point-previous{fill:#d8a9b9}
+        .trend-hover-zone{fill:transparent;cursor:pointer}
+        .trend-tooltip{position:absolute;min-width:220px;max-width:260px;background:rgba(255,255,255,0.98);border:1px solid var(--border-light);box-shadow:var(--shadow-md);border-radius:12px;padding:12px 14px;pointer-events:none;opacity:0;transform:translateY(4px);transition:opacity .12s ease, transform .12s ease;z-index:260}
+        .trend-tooltip.show{opacity:1;transform:translateY(0)}
+        .trend-tooltip-month{font-size:13px;font-weight:700;color:var(--text-primary);margin-bottom:8px}
+        .trend-tooltip-series{padding-top:8px;border-top:1px solid var(--border-light);margin-top:8px}
+        .trend-tooltip-series:first-of-type{padding-top:0;border-top:none;margin-top:0}
+        .trend-tooltip-series-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:6px}
+        .trend-tooltip-series-title{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700;color:var(--text-primary)}
+        .trend-tooltip-dot{width:8px;height:8px;border-radius:50%;background:currentColor;flex:0 0 auto}
+        .trend-tooltip-series.current .trend-tooltip-dot{color:var(--primary)}
+        .trend-tooltip-series.previous .trend-tooltip-dot{color:#d8a9b9}
+        .trend-tooltip-total{font-size:12px;font-weight:800;color:var(--text-primary)}
+        .trend-tooltip-breakdown{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px 12px;font-size:12px;color:var(--text-secondary)}
+        .trend-tooltip-breakdown strong{color:var(--text-primary);font-weight:700}
+        .trend-totals{display:flex;align-items:flex-end;justify-content:space-between;gap:14px;padding:12px 18px 14px;border-top:1px solid var(--border-light);background:var(--bg);flex-wrap:wrap}
+        .trend-total-item{display:flex;flex-direction:column;gap:2px;min-width:150px}
+        .trend-total-label{font-size:11px;color:var(--text-secondary)}
+        .trend-total-value{font-size:16px;font-weight:900;color:var(--text-primary);letter-spacing:.2px}
+        .trend-yoy{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:900}
+        .trend-yoy.up{color:var(--success)}
+        .trend-yoy.down{color:var(--error)}
+        .trend-yoy.flat{color:var(--text-secondary);font-weight:800}
+        .trend-yoy-triangle{width:0;height:0}
+        .trend-yoy.up .trend-yoy-triangle{border-left:6px solid transparent;border-right:6px solid transparent;border-bottom:10px solid currentColor}
+        .trend-yoy.down .trend-yoy-triangle{border-left:6px solid transparent;border-right:6px solid transparent;border-top:10px solid currentColor}
+
+        .trend-month-modal-overlay{position:fixed;inset:0;background:rgba(17,24,39,0.45);display:none;align-items:center;justify-content:center;padding:18px;z-index:360}
+        .trend-month-modal-overlay.active{display:flex}
+        .trend-month-modal{width:min(92vw,380px);max-height:min(72vh,520px);overflow:auto;background:rgba(255,255,255,0.98);border:1px solid var(--border-light);box-shadow:var(--shadow-lg);border-radius:16px}
+        .trend-month-modal-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;padding:14px 14px 10px;border-bottom:1px solid var(--border-light)}
+        .trend-month-modal-title{font-size:14px;font-weight:800;color:var(--text-primary)}
+        .trend-month-modal-subtitle{font-size:12px;color:var(--text-secondary);margin-top:2px}
+        .trend-month-modal-close{width:34px;height:34px;border-radius:12px;border:1px solid var(--border-light);background:var(--bg-card);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-secondary);flex:0 0 auto}
+        .trend-month-modal-close:hover{color:var(--primary);border-color:rgba(232,124,154,0.22)}
+        .trend-month-modal-body{padding:12px 14px 16px;display:flex;flex-direction:column;gap:10px}
+        .trend-month-card{border:1px solid var(--border-light);border-radius:14px;background:var(--bg-card);padding:12px 12px 10px}
+        .trend-month-card-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:8px}
+        .trend-month-card-title{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:800;color:var(--text-primary)}
+        .trend-month-dot{width:10px;height:10px;border-radius:999px;background:currentColor;flex:0 0 auto}
+        .trend-month-card.current .trend-month-dot{color:var(--primary)}
+        .trend-month-card.previous .trend-month-dot{color:#d8a9b9}
+        .trend-month-total{font-size:18px;font-weight:900;color:var(--text-primary);letter-spacing:.2px}
+        .trend-month-breakdown{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+        .trend-month-break-item{background:var(--bg);border:1px solid var(--border-light);border-radius:12px;padding:8px 10px}
+        .trend-month-break-label{font-size:11px;color:var(--text-secondary)}
+        .trend-month-break-value{font-size:14px;font-weight:900;color:var(--text-primary);margin-top:4px}
+
         @keyframes fadeInUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
         .animate-in{animation:fadeInUp .4s ease forwards}
 
@@ -194,6 +283,94 @@
         .chl-user-name{font-size:14px;font-weight:600;color:#374151}
         .chl-user-role{background:#f3f4f6;padding:2px 8px;border-radius:6px;font-size:12px;color:#6b7280}
         .chl-page-scroll{flex:1;min-height:0;overflow:auto}
+        @media(max-width:1400px){
+            #businessCard .section-body,#customerCard .section-body{grid-template-columns:repeat(6,minmax(0,1fr))}
+        }
+        @media(max-width:768px){
+            html,body{width:100%;max-width:100%;overflow-x:hidden}
+            body{height:auto;min-height:100vh;overflow:auto}
+            body.overview-trend-modal-open{overflow:hidden}
+            body.overview-trend-modal-open .chl-page-scroll{overflow:hidden}
+            body.overview-trend-modal-open .content-area{overflow:hidden}
+            .chl-topbar,.top-bar,.left-nav{display:none !important}
+            .app,.main-area,.chl-layout,.chl-page-scroll,.content-area,.page-header,.overview-grid,.section-grid,.section-card,.section-body,.cash-detail-panel,.cash-detail-summary{width:100%;max-width:100%;min-width:0}
+            .main-area,.chl-page-scroll{overflow:visible;min-height:100vh}
+            .content-area{padding:16px;overflow-x:hidden;}
+            .page-header{flex-direction:column;align-items:stretch;gap:12px;margin-bottom:16px}
+            .mobile-filter-entry{display:inline-flex;justify-content:center}
+            .overview-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+            .overview-card{padding:16px}
+            .overview-value{font-size:22px}
+            .section-grid{grid-template-columns:1fr;gap:12px}
+            .section-card{padding:16px;min-width:0;overflow-x:hidden}
+            .section-body{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+            #serviceOpsCard{grid-template-columns:1fr;gap:14px}
+            #serviceOpsCard .section-header{margin-bottom:2px}
+            #serviceOpsCard .section-subgroup + .section-subgroup{margin-top:0;padding-top:14px;padding-left:0;border-left:none;border-top:1px solid var(--border-light)}
+            #businessCard .section-body,#customerCard .section-body{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+            .section-body,.section-header{min-width:0}
+            .metric-item{gap:8px;min-width:0;padding:6px 4px;overflow:hidden}
+            .metric-item.clickable{padding:8px 10px;margin:0;border-radius:10px}
+            .trend-grid{grid-template-columns:1fr;gap:12px}
+            .trend-header{flex-direction:column;align-items:flex-start}
+            .trend-chart-shell{padding:14px 16px 14px}
+            .trend-totals{padding:12px 16px;flex-wrap:nowrap;align-items:center;gap:10px}
+            .trend-total-item{min-width:0;flex:1 1 0;flex-direction:row;align-items:baseline;justify-content:space-between;gap:6px}
+            .trend-total-label{max-width:58%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:10px;letter-spacing:.2px}
+            .trend-total-value{white-space:nowrap;font-size:14px}
+            .trend-yoy{white-space:nowrap}
+            .metric-label{
+                line-height:1.4;
+                align-items:flex-start;
+                flex-wrap:wrap;
+                min-width:0;
+                overflow-wrap:anywhere;
+                word-break:break-word;
+                column-gap:4px;
+                row-gap:4px
+            }
+            .metric-label > button,
+            .metric-label > svg,
+            .metric-label > iconify-icon{flex:0 0 auto}
+            .metric-value{font-size:18px}
+            .filter-bar{
+                position:fixed;inset:0;z-index:320;background:rgba(17,24,39,0.44);
+                display:flex;align-items:flex-end;justify-content:stretch;padding:16px;opacity:0;pointer-events:none;
+                margin:0;border-radius:0
+            }
+            .filter-bar-surface{
+                display:flex;flex-direction:column;width:min(100%,420px);margin:0 auto;background:var(--bg-card);
+                border-radius:18px 18px 0 0;box-shadow:var(--shadow-lg);padding:20px 18px 18px;gap:14px;
+                min-height:min(70vh,520px);max-height:min(88vh,760px);overflow:auto
+            }
+            .filter-bar-mobile-header{display:flex;align-items:center;justify-content:space-between;gap:12px}
+            .filter-bar-mobile-title{font-size:16px;font-weight:700}
+            .filter-bar-close{width:32px;height:32px;border:none;border-radius:8px;background:var(--bg);color:var(--text-secondary);display:flex;align-items:center;justify-content:center;cursor:pointer}
+            .filter-left,.filter-right,.date-range{width:100%;min-width:0}
+            .filter-left{display:flex;flex-direction:column;gap:12px}
+            .table-tabs{width:100%;justify-content:space-between}
+            .table-tab{flex:1;min-width:0}
+            .date-range{display:flex;justify-content:flex-start;gap:8px;padding:10px 12px}
+            .date-range input[type="date"]{flex:1;min-width:0}
+            .filter-bar-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;position:sticky;bottom:0;background:var(--bg-card);padding-top:12px}
+            .filter-action-btn{height:40px;border-radius:10px;border:1px solid var(--border);font-size:13px;font-weight:600;cursor:pointer}
+            .filter-action-btn.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+            .filter-action-btn.secondary{background:var(--bg-card);color:var(--text-secondary)}
+            body.overview-mobile-filter-open .filter-bar{opacity:1;pointer-events:auto}
+            body.overview-mobile-filter-open .chl-page-scroll{overflow:hidden}
+            .cash-detail-panel:not(.show){display:none}
+            .cash-detail-panel.show{display:block}
+            .cash-detail-summary{display:grid;gap:10px;padding:14px 16px}
+            .cash-detail-header{padding:14px 16px}
+            .cash-detail-table-wrap{margin:0;max-width:100%;padding:0 16px;overflow-x:auto}
+            .cash-detail-table{min-width:720px}
+        }
+        @media(max-width:480px){
+            .overview-grid{grid-template-columns:1fr}
+            .section-body{grid-template-columns:repeat(2,minmax(0,1fr))}
+            #businessCard .section-body,#customerCard .section-body{grid-template-columns:repeat(2,minmax(0,1fr)) !important}
+            .metric-item.clickable{padding:8px}
+        }
     </style>
 </head>
 <body>
@@ -230,12 +407,23 @@
             <div class="content-area">
                 <div class="page-header">
                     <div>
-                        <div class="page-title">数据概览</div>
+                        <div class="page-title">经营总览</div>
                         <div class="page-title-sub">实时查看门店经营数据</div>
                     </div>
+                    <button type="button" class="mobile-filter-entry" onclick="openMobileOverviewFilter()">
+                        <iconify-icon icon="mdi:filter-outline"></iconify-icon>
+                        <span>筛选条件</span>
+                    </button>
                 </div>
 
-                <div class="filter-bar">
+                <div class="filter-bar" id="overviewFilterOverlay">
+                    <div class="filter-bar-surface">
+                    <div class="filter-bar-mobile-header">
+                        <div class="filter-bar-mobile-title">筛选条件</div>
+                        <button type="button" class="filter-bar-close" onclick="closeMobileOverviewFilter()" aria-label="关闭筛选">
+                            <iconify-icon icon="mdi:close"></iconify-icon>
+                        </button>
+                    </div>
                     <div class="filter-left">
                         <div class="table-tabs" id="viewTabs">
                             <button class="table-tab active" data-view="daily">日</button>
@@ -251,6 +439,11 @@
                             <input type="date" id="endDate" value="2026-05-27">
                         </div>
                     </div>
+                    <div class="filter-bar-actions">
+                        <button type="button" class="filter-action-btn secondary" onclick="closeMobileOverviewFilter()">关闭</button>
+                        <button type="button" class="filter-action-btn primary" onclick="applyMobileOverviewFilter()">应用</button>
+                    </div>
+                    </div>
                 </div>
 
                 <div class="section-grid animate-in">
@@ -258,24 +451,58 @@
                         <div class="section-header">
                             <span class="section-title">经营分析</span>
                         </div>
-                        <div class="section-body" style="grid-template-columns:repeat(4,1fr)">
+                        <div class="section-body" style="grid-template-columns:repeat(6,1fr)">
                             <div class="metric-item clickable" data-detail="cashPerformance" onclick="toggleDetail('cashPerformance')">
                                 <div class="metric-label">现金业绩 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，客户实际付款总金额，统计时减去退款金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥2,840</div>
+                                <div class="metric-trends" id="cashPerformanceTrend" style="display:none"></div>
                             </div>
-                            <div class="metric-item clickable" data-detail="productCash" onclick="toggleDetail('productCash')">
+                            <div class="metric-item clickable" data-detail="consume" onclick="toggleDetail('consume')">
+                                <div class="metric-label">消耗业绩 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，客户消耗总金额，统计时减去退款金额及客户消耗回退金额；不含赠送权益的消耗" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value">¥4,650</div>
+                                <div class="metric-trends" id="consumeTrend" style="display:none"></div>
+                            </div>
+                            <div class="metric-item" >
+                                <div class="metric-label">客单价 <button class="metric-tip-btn" type="button" data-tip="统计时间内，总现金业绩平均每单成交金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                                <div class="metric-value" id="avgOrderValue">¥355</div>
+                                <div class="metric-trends" id="avgOrderTrend" style="display:none"></div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="memberDeal" onclick="toggleDetail('memberDeal')">
+                                <div class="metric-label">到店客户数 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的客户数（同一客户统计时间内去重，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="memberDealValue">18</div>
+                                <div class="metric-trends" id="memberDealTrend" style="display:none"></div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="customerFlow" onclick="toggleDetail('customerFlow')">
+                                <div class="metric-label">客流量 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的人次（同一客户按日去重跨天累加，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="customerFlowValue">21</div>
+                                <div class="metric-trends" id="customerFlowTrend" style="display:none"></div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="serviceCount" onclick="toggleDetail('serviceCount')">
+                                <div class="metric-label">服务项次数 <button class="metric-tip-btn" type="button" data-tip="统计时间内，提供给客户的服务项次数总计（可展开订单明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="serviceCountValue">10</div>
+                                <div class="metric-trends" id="serviceCountTrend" style="display:none"></div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px"  data-detail="productCash" onclick="toggleDetail('productCash')">
                                 <div class="metric-label">产品现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，产品类产生的现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥1,200</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="careCash" onclick="toggleDetail('careCash')">
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="careCash" onclick="toggleDetail('careCash')">
                                 <div class="metric-label">护理现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，护理类产生的现金收入" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥840</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="cardCash" onclick="toggleDetail('cardCash')">
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="cardCash" onclick="toggleDetail('cardCash')">
                                 <div class="metric-label">卡项现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项销售产生的现金收入（含开卡/充值/升级等）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value">¥800</div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="newCustomerCashPerformance" onclick="toggleDetail('newCustomerCashPerformance')">
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="courseConsume" onclick="toggleDetail('courseConsume')">
+                                <div class="metric-label">护理消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中护理类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value">¥2,350</div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="productConsume" onclick="toggleDetail('productConsume')">
+                                <div class="metric-label">产品消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中产品类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value">¥2,300</div>
+                            </div>
+                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px;grid-column:1" data-detail="newCustomerCashPerformance" onclick="toggleDetail('newCustomerCashPerformance')">
                                 <div class="metric-label">新客现金业绩 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的现金收入总额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value" id="newCustomerCashPerformanceValue">¥920</div>
                             </div>
@@ -291,29 +518,25 @@
                                 <div class="metric-label">新客卡项现金 <button class="metric-tip-btn" type="button" data-tip="统计时间内，新客产生的卡项现金收入（含开卡/充值/升级等）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value" id="newCustomerCardCashValue">¥320</div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="consume" onclick="toggleDetail('consume')">
-                                <div class="metric-label">消耗业绩 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，客户消耗总金额，统计时减去退款金额及客户消耗回退金额；不含赠送权益的消耗" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">¥4,650</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="courseConsume" onclick="toggleDetail('courseConsume')">
-                                <div class="metric-label">护理消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中护理类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">¥2,350</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="productConsume" onclick="toggleDetail('productConsume')">
-                                <div class="metric-label">产品消耗 <button class="metric-tip-btn" type="button" data-tip="统计时间内，卡项中产品类权益的消耗金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">¥2,300</div>
-                            </div>
-                            <div class="metric-item" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px">
-                                <div class="metric-label">客单价 <button class="metric-tip-btn" type="button" data-tip="统计时间内，总现金业绩平均每单成交金额" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
-                                <div class="metric-value" id="avgOrderValue">¥355</div>
-                            </div>
                         </div>
                     </div>
-                    <div class="section-card">
+                    <div class="section-card" id="customerCard">
                         <div class="section-header">
                             <span class="section-title">客户分析</span>
                         </div>
                         <div class="section-body">
+                            <div class="metric-item clickable" data-detail="amountCardAsset" onclick="toggleDetail('amountCardAsset')">
+                                <div class="metric-label">金额卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（金额卡余额资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="amountCardAssetValue">¥32,800</div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="serviceCardAsset" onclick="toggleDetail('serviceCardAsset')">
+                                <div class="metric-label">次卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（次卡剩余价值资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="serviceCardAssetValue">¥20,000</div>
+                            </div>
+                            <div class="metric-item clickable" data-detail="arrears" onclick="toggleDetail('arrears')">
+                                <div class="metric-label">累计欠款 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（客户欠款合计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                <div class="metric-value" id="arrearsValue">¥12,800</div>
+                            </div>
                             <div class="metric-item clickable" data-detail="newCustomer" onclick="toggleDetail('newCustomer')">
                                 <div class="metric-label">新增新客人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内新增的新客数量（没有消费过）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value" id="newCustomerValue">2</div>
@@ -326,69 +549,83 @@
                                 <div class="metric-label">新增会员人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内新增的会员数量（产生消费，且交易记录中包含卡项）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
                                 <div class="metric-value" id="newMemberValue">0</div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="customerFlow" onclick="toggleDetail('customerFlow')">
-                                <div class="metric-label">客流量 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的人次（同一客户按日去重跨天累加，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="customerFlowValue">21</div>
+                        </div>
+                    </div>
+                    <div class="section-card" id="serviceOpsCard">
+                        <div class="section-header">
+                            <span class="section-title">平台核销与预约到店</span>
+                        </div>
+                        <div class="section-subgroup">
+                            <div class="section-subtitle">平台核销</div>
+                            <div class="section-body">
+                                <div class="metric-item clickable" data-detail="platformMeituan" onclick="toggleDetail('platformMeituan')">
+                                    <div class="metric-label">美团/大众点评核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，美团/大众点评渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                    <div class="metric-value">3</div>
+                                </div>
+                                <div class="metric-item clickable" data-detail="platformDouyin" onclick="toggleDetail('platformDouyin')">
+                                    <div class="metric-label">抖音核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，抖音渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                    <div class="metric-value">1</div>
+                                </div>
+                                <div class="metric-item clickable" data-detail="platformAmount" onclick="toggleDetail('platformAmount')">
+                                    <div class="metric-label">核销金额 <button class="metric-tip-btn" type="button" data-tip="统计时间内，平台核销金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                    <div class="metric-value">¥1,280</div>
+                                </div>
                             </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="memberDeal" onclick="toggleDetail('memberDeal')">
-                                <div class="metric-label">到店客户数 <button class="metric-tip-btn" type="button" data-tip="订单完成时间在统计时间内，付款的客户数（同一客户统计时间内去重，散客按散客订单数统计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="memberDealValue">18</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="serviceCount" onclick="toggleDetail('serviceCount')">
-                                <div class="metric-label">服务项次数 <button class="metric-tip-btn" type="button" data-tip="统计时间内，提供给客户的服务项次数总计（可展开订单明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="serviceCountValue">10</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="arrears" onclick="toggleDetail('arrears')">
-                                <div class="metric-label">累计欠款 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（客户欠款合计）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="arrearsValue">¥12,800</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="amountCardAsset" onclick="toggleDetail('amountCardAsset')">
-                                <div class="metric-label">金额卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（金额卡余额资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="amountCardAssetValue">¥32,800</div>
-                            </div>
-                            <div class="metric-item clickable" style="border-top:1px dashed rgba(0,0,0,.06);padding-top:12px" data-detail="serviceCardAsset" onclick="toggleDetail('serviceCardAsset')">
-                                <div class="metric-label">次卡资产总额 <span class="metric-badge metric-badge-const">当前</span> <button class="metric-tip-btn" type="button" data-tip="当前存量指标，不随时间筛选变化（次卡剩余价值资产总额）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value" id="serviceCardAssetValue">¥20,000</div>
+                        </div>
+                        <div class="section-subgroup">
+                            <div class="section-subtitle">预约到店</div>
+                            <div class="section-body">
+                                <div class="metric-item clickable" data-detail="appointmentBooking" onclick="toggleDetail('appointmentBooking')">
+                                    <div class="metric-label">预约人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内产生的预约人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                    <div class="metric-value">12</div>
+                                </div>
+                                <div class="metric-item clickable" data-detail="appointmentArrived" onclick="toggleDetail('appointmentArrived')">
+                                    <div class="metric-label">实际到店 <button class="metric-tip-btn" type="button" data-tip="统计时间内实际到店的人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
+                                    <div class="metric-value">8</div>
+                                </div>
+                                <div class="metric-item">
+                                    <div class="metric-label">到店率 <button class="metric-tip-btn" type="button" data-tip="实际到店 / 预约人数（不展开明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
+                                    <div class="metric-value" id="appointmentRateValue">67%</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="section-card">
-                        <div class="section-header">
-                            <span class="section-title">平台核销</span>
-                        </div>
-                        <div class="section-body">
-                            <div class="metric-item clickable" data-detail="platformMeituan" onclick="toggleDetail('platformMeituan')">
-                                <div class="metric-label">美团/大众点评核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，美团/大众点评渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">3</div>
+                </div>
+
+                <div class="trend-grid animate-in" id="trendGrid">
+                    <div class="trend-card">
+                        <div class="trend-header">
+                            <div class="trend-title-wrap">
+                                <div class="trend-title">消费人数趋势</div>
+                                <div class="trend-subtitle">按月份查看今年与去年消费人数变化，悬浮/点击查看会员 / 体验客 / 新客拆分</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="platformDouyin" onclick="toggleDetail('platformDouyin')">
-                                <div class="metric-label">抖音核销 <button class="metric-tip-btn" type="button" data-tip="统计时间内，抖音渠道核销单数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">1</div>
-                            </div>
-                            <div class="metric-item clickable" data-detail="platformAmount" onclick="toggleDetail('platformAmount')">
-                                <div class="metric-label">核销金额 <button class="metric-tip-btn" type="button" data-tip="统计时间内，平台核销金额合计" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">¥1,280</div>
+                            <div class="trend-legend">
+                                <div class="trend-legend-item"><span class="trend-legend-line current"></span><span>今年</span></div>
+                                <div class="trend-legend-item"><span class="trend-legend-line previous"></span><span>去年</span></div>
                             </div>
                         </div>
+                        <div class="trend-chart-shell" id="overviewConsumerTrendShell">
+                            <div class="trend-chart" id="overviewConsumerTrendChart"></div>
+                            <div class="trend-tooltip" id="overviewConsumerTrendTooltip"></div>
+                        </div>
+                        <div class="trend-totals" id="overviewConsumerTrendTotals"></div>
                     </div>
-                    <div class="section-card">
-                        <div class="section-header">
-                            <span class="section-title">预约到店</span>
-                        </div>
-                        <div class="section-body">
-                            <div class="metric-item clickable" data-detail="appointmentBooking" onclick="toggleDetail('appointmentBooking')">
-                                <div class="metric-label">预约人数 <button class="metric-tip-btn" type="button" data-tip="统计时间内产生的预约人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">12</div>
+                    <div class="trend-card">
+                        <div class="trend-header">
+                            <div class="trend-title-wrap">
+                                <div class="trend-title">服务项次数趋势</div>
+                                <div class="trend-subtitle">按月份查看今年与去年服务项次数变化，悬浮/点击查看会员 / 体验客 / 新客拆分</div>
                             </div>
-                            <div class="metric-item clickable" data-detail="appointmentArrived" onclick="toggleDetail('appointmentArrived')">
-                                <div class="metric-label">实际到店 <button class="metric-tip-btn" type="button" data-tip="统计时间内实际到店的人数" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button> <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg></div>
-                                <div class="metric-value">8</div>
-                            </div>
-                            <div class="metric-item">
-                                <div class="metric-label">到店率 <button class="metric-tip-btn" type="button" data-tip="实际到店 / 预约人数（不展开明细）" aria-label="指标说明"><iconify-icon icon="mdi:information-outline"></iconify-icon></button></div>
-                                <div class="metric-value" id="appointmentRateValue">67%</div>
+                            <div class="trend-legend">
+                                <div class="trend-legend-item"><span class="trend-legend-line current"></span><span>今年</span></div>
+                                <div class="trend-legend-item"><span class="trend-legend-line previous"></span><span>去年</span></div>
                             </div>
                         </div>
+                        <div class="trend-chart-shell" id="overviewServiceTrendShell">
+                            <div class="trend-chart" id="overviewServiceTrendChart"></div>
+                            <div class="trend-tooltip" id="overviewServiceTrendTooltip"></div>
+                        </div>
+                        <div class="trend-totals" id="overviewServiceTrendTotals"></div>
                     </div>
                 </div>
 
@@ -429,6 +666,21 @@
                     </div>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div class="trend-month-modal-overlay" id="overviewTrendModalOverlay">
+        <div class="trend-month-modal" role="dialog" aria-modal="true" aria-label="趋势指标详情">
+            <div class="trend-month-modal-head">
+                <div>
+                    <div class="trend-month-modal-title" id="overviewTrendModalTitle">趋势详情</div>
+                    <div class="trend-month-modal-subtitle" id="overviewTrendModalSubtitle">点击趋势图查看当月拆分</div>
+                </div>
+                <button type="button" class="trend-month-modal-close" id="overviewTrendModalClose" aria-label="关闭">
+                    <iconify-icon icon="mdi:close"></iconify-icon>
+                </button>
+            </div>
+            <div class="trend-month-modal-body" id="overviewTrendModalBody"></div>
         </div>
     </div>
 
@@ -1062,7 +1314,21 @@
         const endDateInput = document.getElementById('endDate');
 
         let currentView = 'daily';
+        let isPresetRange = true;
         let activeDetailType = null;
+
+        const OVERVIEW_INDEX_CARD_TRENDS = {
+            daily: [
+                { label: '较前一日', value: -85.89 },
+                { label: '较上周同期', value: 1011.12 }
+            ],
+            monthly: [
+                { label: '较前一月', value: -74.95 }
+            ],
+            yearly: [
+                { label: '较前一年', value: -74.95 }
+            ]
+        };
 
         const customerTypeTagMap = {
             '会员': 'member-tag',
@@ -1168,6 +1434,45 @@
             tooltipEl.style.top = `${top}px`;
         }
 
+        function getIndexCardTrendDirection(value) {
+            const num = Number(value);
+            if (!Number.isFinite(num) || num === 0) return 'flat';
+            return num > 0 ? 'up' : 'down';
+        }
+
+        function formatIndexCardTrendPercent(value) {
+            const num = Number(value);
+            if (!Number.isFinite(num) || num === 0) return '0%';
+            const abs = Math.abs(num).toFixed(2);
+            return `${num > 0 ? '+' : '-'}${abs}%`;
+        }
+
+        function buildIndexCardTrendHtml(view) {
+            const list = OVERVIEW_INDEX_CARD_TRENDS[view] || [];
+            return list.map(item => {
+                const direction = getIndexCardTrendDirection(item.value);
+                const valueText = formatIndexCardTrendPercent(item.value);
+                return `
+                    <span class="metric-trend ${direction}">
+                        <span class="metric-trend-label">${item.label}</span>
+                        ${direction === 'flat' ? '' : '<span class="metric-trend-triangle" aria-hidden="true"></span>'}
+                        <span class="metric-trend-value">${valueText}</span>
+                    </span>
+                `;
+            }).join('');
+        }
+
+        function updateOverviewIndexCardTrends(view) {
+            const shouldShow = view === 'daily' || isPresetRange;
+            const trendHtml = shouldShow ? buildIndexCardTrendHtml(view) : '';
+            ['cashPerformanceTrend', 'consumeTrend', 'customerFlowTrend', 'avgOrderTrend', 'memberDealTrend', 'serviceCountTrend'].forEach(id => {
+                const el = document.getElementById(id);
+                if (!el) return;
+                el.innerHTML = trendHtml;
+                el.style.display = trendHtml ? 'flex' : 'none';
+            });
+        }
+
         document.addEventListener('click', function() {
             hideMetricTooltip();
         });
@@ -1231,6 +1536,8 @@
 
             const serviceCountEl = document.getElementById('serviceCountValue');
             if (serviceCountEl) serviceCountEl.textContent = data.member.serviceCount;
+
+            updateOverviewIndexCardTrends(view);
 
             const arrearsEl = document.getElementById('arrearsValue');
             if (arrearsEl) arrearsEl.textContent = '¥' + constantData.arrears.toLocaleString();
@@ -1623,6 +1930,10 @@
             allClickable.forEach(el => el.classList.remove('active'));
             const target = document.querySelector('[data-detail="' + type + '"]');
             if (target) target.classList.add('active');
+            const sectionCard = target ? target.closest('.section-card') : null;
+            if (sectionCard && panel.parentElement !== sectionCard) {
+                sectionCard.appendChild(panel);
+            }
 
             activeDetailType = type;
 
@@ -1760,11 +2071,23 @@
                 endDateInput.value = s;
             }
         }
+        function openMobileOverviewFilter() {
+            document.body.classList.add('overview-mobile-filter-open');
+        }
+        function closeMobileOverviewFilter() {
+            document.body.classList.remove('overview-mobile-filter-open');
+        }
+        function applyMobileOverviewFilter() {
+            normalizeRangeInputs();
+            updateSectionCards(currentView);
+            closeMobileOverviewFilter();
+        }
         function applyPreset(view) {
             const todayISO = getTodayISO();
             const today = new Date(todayISO + 'T00:00:00');
 
             currentView = view;
+            isPresetRange = true;
             setActiveTab(view);
             setDateMode(view);
 
@@ -1783,6 +2106,309 @@
             updateSectionCards(currentView);
         }
 
+        const TREND_MONTH_LABELS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+        const OVERVIEW_CONSUMER_TREND_DATA = {
+            currentYear: [
+                { member:48, experience:15, newCustomer:15 },
+                { member:54, experience:14, newCustomer:18 },
+                { member:60, experience:16, newCustomer:19 },
+                { member:68, experience:18, newCustomer:22 },
+                { member:81, experience:19, newCustomer:24 },
+                { member:76, experience:18, newCustomer:24 },
+                { member:72, experience:17, newCustomer:23 },
+                { member:67, experience:16, newCustomer:23 },
+                { member:62, experience:15, newCustomer:21 },
+                { member:58, experience:14, newCustomer:20 },
+                { member:55, experience:13, newCustomer:20 },
+                { member:52, experience:13, newCustomer:19 }
+            ],
+            previousYear: [
+                { member:40, experience:12, newCustomer:12 },
+                { member:44, experience:11, newCustomer:14 },
+                { member:48, experience:13, newCustomer:14 },
+                { member:52, experience:13, newCustomer:17 },
+                { member:58, experience:14, newCustomer:18 },
+                { member:55, experience:13, newCustomer:18 },
+                { member:53, experience:12, newCustomer:19 },
+                { member:50, experience:12, newCustomer:18 },
+                { member:48, experience:11, newCustomer:17 },
+                { member:45, experience:11, newCustomer:16 },
+                { member:42, experience:10, newCustomer:16 },
+                { member:43, experience:10, newCustomer:17 }
+            ]
+        };
+        const OVERVIEW_SERVICE_TREND_DATA = {
+            currentYear: [
+                { member:128, experience:42, newCustomer:38 },
+                { member:136, experience:40, newCustomer:44 },
+                { member:148, experience:45, newCustomer:46 },
+                { member:162, experience:48, newCustomer:52 },
+                { member:186, experience:52, newCustomer:56 },
+                { member:176, experience:50, newCustomer:56 },
+                { member:168, experience:48, newCustomer:54 },
+                { member:156, experience:46, newCustomer:54 },
+                { member:148, experience:44, newCustomer:50 },
+                { member:140, experience:42, newCustomer:48 },
+                { member:134, experience:40, newCustomer:46 },
+                { member:130, experience:40, newCustomer:44 }
+            ],
+            previousYear: [
+                { member:112, experience:36, newCustomer:34 },
+                { member:118, experience:34, newCustomer:38 },
+                { member:126, experience:38, newCustomer:38 },
+                { member:136, experience:40, newCustomer:44 },
+                { member:152, experience:42, newCustomer:46 },
+                { member:146, experience:40, newCustomer:46 },
+                { member:140, experience:38, newCustomer:48 },
+                { member:134, experience:38, newCustomer:46 },
+                { member:128, experience:36, newCustomer:44 },
+                { member:122, experience:36, newCustomer:42 },
+                { member:118, experience:34, newCustomer:42 },
+                { member:120, experience:34, newCustomer:44 }
+            ]
+        };
+
+        function getTrendEntryTotal(entry) {
+            return (Number(entry.member) || 0) + (Number(entry.experience) || 0) + (Number(entry.newCustomer) || 0);
+        }
+
+        function getYearOverYearTrend(currentValue, previousValue) {
+            const current = Number(currentValue) || 0;
+            const previous = Number(previousValue) || 0;
+            if (previous <= 0) {
+                if (current <= 0) {
+                    return { direction:'flat', text:'0%' };
+                }
+                return { direction:'up', text:'新增' };
+            }
+            const ratio = ((current - previous) / previous) * 100;
+            if (Math.abs(ratio) < 0.5) {
+                return { direction:'flat', text:'0%' };
+            }
+            const rounded = Math.round(ratio);
+            return {
+                direction: rounded >= 0 ? 'up' : 'down',
+                text: `${rounded >= 0 ? '+' : ''}${rounded}%`
+            };
+        }
+
+        function openOverviewTrendModal({ title, subtitle, monthLabel, metricLabel, currentEntry, previousEntry }) {
+            const overlayEl = document.getElementById('overviewTrendModalOverlay');
+            const titleEl = document.getElementById('overviewTrendModalTitle');
+            const subtitleEl = document.getElementById('overviewTrendModalSubtitle');
+            const bodyEl = document.getElementById('overviewTrendModalBody');
+            if (!overlayEl || !titleEl || !subtitleEl || !bodyEl) return;
+            titleEl.textContent = `${monthLabel} ${metricLabel}`;
+            subtitleEl.textContent = subtitle || title || '';
+            bodyEl.innerHTML = `
+                <div class="trend-month-card current">
+                    <div class="trend-month-card-head">
+                        <div class="trend-month-card-title"><span class="trend-month-dot"></span><span>今年</span></div>
+                        <div class="trend-month-total">${getTrendEntryTotal(currentEntry)}</div>
+                    </div>
+                    <div class="trend-month-breakdown">
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${currentEntry.member}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${currentEntry.experience}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${currentEntry.newCustomer}</div></div>
+                    </div>
+                </div>
+                <div class="trend-month-card previous">
+                    <div class="trend-month-card-head">
+                        <div class="trend-month-card-title"><span class="trend-month-dot"></span><span>去年</span></div>
+                        <div class="trend-month-total">${getTrendEntryTotal(previousEntry)}</div>
+                    </div>
+                    <div class="trend-month-breakdown">
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${previousEntry.member}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${previousEntry.experience}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${previousEntry.newCustomer}</div></div>
+                    </div>
+                </div>
+            `;
+            overlayEl.classList.add('active');
+            document.body.classList.add('overview-trend-modal-open');
+        }
+
+        function closeOverviewTrendModal() {
+            const overlayEl = document.getElementById('overviewTrendModalOverlay');
+            if (!overlayEl) return;
+            overlayEl.classList.remove('active');
+            document.body.classList.remove('overview-trend-modal-open');
+        }
+
+        function bindOverviewTrendModal() {
+            if (document.body.dataset.overviewTrendModalBound) return;
+            const overlayEl = document.getElementById('overviewTrendModalOverlay');
+            const closeEl = document.getElementById('overviewTrendModalClose');
+            if (closeEl) closeEl.addEventListener('click', closeOverviewTrendModal);
+            if (overlayEl) {
+                overlayEl.addEventListener('click', event => {
+                    if (event.target === overlayEl) closeOverviewTrendModal();
+                });
+            }
+            window.addEventListener('keydown', event => {
+                if (event.key === 'Escape') closeOverviewTrendModal();
+            });
+            document.body.dataset.overviewTrendModalBound = '1';
+        }
+
+        function renderOverviewTrendChart({ chartId, shellId, tooltipId, totalsId, dataset, metricLabel }) {
+            const chartEl = document.getElementById(chartId);
+            const shellEl = document.getElementById(shellId);
+            const tooltipEl = document.getElementById(tooltipId);
+            const totalsEl = document.getElementById(totalsId);
+            if (!chartEl || !shellEl || !tooltipEl) return;
+
+            const currentYearData = dataset.currentYear;
+            const previousYearData = dataset.previousYear;
+            const allTotals = currentYearData.concat(previousYearData).map(getTrendEntryTotal);
+            const maxTotal = Math.max(...allTotals, 1);
+            const roughStep = maxTotal <= 100 ? 20 : maxTotal <= 250 ? 50 : 100;
+            const maxY = Math.ceil(maxTotal / roughStep) * roughStep;
+            const width = 860;
+            const height = 320;
+            const padding = { top:20, right:26, bottom:42, left:58 };
+            const plotWidth = width - padding.left - padding.right;
+            const plotHeight = height - padding.top - padding.bottom;
+            const stepX = plotWidth / (TREND_MONTH_LABELS.length - 1);
+            const toY = value => padding.top + plotHeight - (value / maxY) * plotHeight;
+            const toX = index => padding.left + stepX * index;
+            const buildPath = dataset => dataset.map((entry, index) => `${index === 0 ? 'M' : 'L'} ${toX(index)} ${toY(getTrendEntryTotal(entry))}`).join(' ');
+            const yTicks = Array.from({ length:5 }, (_, index) => Math.round((maxY / 4) * index)).reverse();
+            const isMobileCompact = shellEl.clientWidth > 0 && shellEl.clientWidth <= 420;
+            const monthLabelStep = isMobileCompact ? 2 : 1;
+            const axisLabelFontSize = isMobileCompact ? 11 : 12;
+
+            chartEl.innerHTML = `
+                <svg viewBox="0 0 ${width} ${height}" role="img" aria-label="${metricLabel}趋势图">
+                    ${yTicks.map(value => {
+                        const y = toY(value);
+                        return `
+                            <line class="trend-grid-line" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>
+                        `;
+                    }).join('')}
+                    <line class="trend-axis-line" x1="${padding.left}" y1="${padding.top + plotHeight}" x2="${width - padding.right}" y2="${padding.top + plotHeight}"></line>
+                    <path class="trend-line-previous" d="${buildPath(previousYearData)}"></path>
+                    <path class="trend-line-current" d="${buildPath(currentYearData)}"></path>
+                    ${previousYearData.map((entry, index) => `<circle class="trend-point-previous" cx="${toX(index)}" cy="${toY(getTrendEntryTotal(entry))}" r="4"></circle>`).join('')}
+                    ${currentYearData.map((entry, index) => `<circle class="trend-point-current" cx="${toX(index)}" cy="${toY(getTrendEntryTotal(entry))}" r="4.5"></circle>`).join('')}
+                    ${TREND_MONTH_LABELS.map((label, index) => `
+                        ${(index % monthLabelStep === 0 || index === TREND_MONTH_LABELS.length - 1) ? `<text x="${toX(index)}" y="${height - 12}" text-anchor="middle" fill="#9ca3af" font-size="${axisLabelFontSize}">${label}</text>` : ''}
+                        <rect class="trend-hover-zone" x="${index === 0 ? padding.left - stepX / 2 : toX(index) - stepX / 2}" y="${padding.top}" width="${stepX}" height="${plotHeight}" data-index="${index}"></rect>
+                    `).join('')}
+                </svg>
+            `;
+
+            if (totalsEl) {
+                const currentTotal = currentYearData.reduce((sum, entry) => sum + getTrendEntryTotal(entry), 0);
+                const previousTotal = previousYearData.reduce((sum, entry) => sum + getTrendEntryTotal(entry), 0);
+                const yoy = getYearOverYearTrend(currentTotal, previousTotal);
+                totalsEl.innerHTML = `
+                    <div class="trend-total-item">
+                        <div class="trend-total-label">今年${metricLabel}</div>
+                        <div class="trend-total-value">${currentTotal}</div>
+                    </div>
+                    <div class="trend-total-item">
+                        <div class="trend-total-label">去年${metricLabel}</div>
+                        <div class="trend-total-value">${previousTotal}</div>
+                    </div>
+                    <div class="trend-total-item">
+                        <div class="trend-total-label">同比</div>
+                        <div class="trend-total-value">
+                            <span class="trend-yoy ${yoy.direction}">
+                                ${yoy.direction === 'flat' ? '' : '<span class="trend-yoy-triangle" aria-hidden="true"></span>'}
+                                <span>${yoy.text}</span>
+                            </span>
+                        </div>
+                    </div>
+                `;
+            }
+
+            const buildSeriesHtml = (title, className, entry) => `
+                <div class="trend-tooltip-series ${className}">
+                    <div class="trend-tooltip-series-head">
+                        <div class="trend-tooltip-series-title"><span class="trend-tooltip-dot"></span><span>${title}</span></div>
+                        <div class="trend-tooltip-total">总数 ${getTrendEntryTotal(entry)}</div>
+                    </div>
+                    <div class="trend-tooltip-breakdown">
+                        <span>会员 <strong>${entry.member}</strong></span>
+                        <span>体验客 <strong>${entry.experience}</strong></span>
+                        <span>新客 <strong>${entry.newCustomer}</strong></span>
+                    </div>
+                </div>
+            `;
+
+            function showTooltip(index, event) {
+                tooltipEl.innerHTML = `
+                    <div class="trend-tooltip-month">${TREND_MONTH_LABELS[index]}</div>
+                    ${buildSeriesHtml('今年', 'current', currentYearData[index])}
+                    ${buildSeriesHtml('去年', 'previous', previousYearData[index])}
+                `;
+                tooltipEl.classList.add('show');
+                const shellRect = shellEl.getBoundingClientRect();
+                const tooltipRect = tooltipEl.getBoundingClientRect();
+                let left = event.clientX - shellRect.left + 14;
+                let top = event.clientY - shellRect.top - tooltipRect.height - 14;
+                const maxLeft = shellEl.clientWidth - tooltipRect.width - 8;
+                if (left > maxLeft) left = maxLeft;
+                if (left < 8) left = 8;
+                if (top < 8) top = event.clientY - shellRect.top + 16;
+                tooltipEl.style.left = `${left}px`;
+                tooltipEl.style.top = `${top}px`;
+            }
+
+            function hideTooltip() {
+                tooltipEl.classList.remove('show');
+            }
+
+            chartEl.querySelectorAll('.trend-hover-zone').forEach(zone => {
+                const index = Number(zone.dataset.index);
+                zone.addEventListener('pointerenter', event => {
+                    if (event.pointerType === 'touch') return;
+                    showTooltip(index, event);
+                });
+                zone.addEventListener('pointermove', event => {
+                    if (event.pointerType === 'touch') return;
+                    showTooltip(index, event);
+                });
+                zone.addEventListener('pointerleave', () => {
+                    hideTooltip();
+                });
+                zone.addEventListener('pointerdown', () => {
+                    if (window.matchMedia && window.matchMedia('(max-width: 768px)').matches) {
+                        bindOverviewTrendModal();
+                        openOverviewTrendModal({
+                            title: '',
+                            subtitle: '',
+                            monthLabel: TREND_MONTH_LABELS[index],
+                            metricLabel,
+                            currentEntry: currentYearData[index],
+                            previousEntry: previousYearData[index]
+                        });
+                        hideTooltip();
+                    }
+                });
+            });
+        }
+
+        function renderOverviewTrends() {
+            renderOverviewTrendChart({
+                chartId: 'overviewConsumerTrendChart',
+                shellId: 'overviewConsumerTrendShell',
+                tooltipId: 'overviewConsumerTrendTooltip',
+                totalsId: 'overviewConsumerTrendTotals',
+                dataset: OVERVIEW_CONSUMER_TREND_DATA,
+                metricLabel: '消费人数'
+            });
+            renderOverviewTrendChart({
+                chartId: 'overviewServiceTrendChart',
+                shellId: 'overviewServiceTrendShell',
+                tooltipId: 'overviewServiceTrendTooltip',
+                totalsId: 'overviewServiceTrendTotals',
+                dataset: OVERVIEW_SERVICE_TREND_DATA,
+                metricLabel: '服务项次数'
+            });
+        }
+
         document.querySelectorAll('.table-tab').forEach(tab => {
             tab.addEventListener('click', function() {
                 applyPreset(this.dataset.view);
@@ -1791,6 +2417,7 @@
 
         document.getElementById('singleDate').addEventListener('change', function() {
             currentView = 'daily';
+            isPresetRange = true;
             setActiveTab('daily');
             setDateMode('daily');
             updateSectionCards(currentView);
@@ -1802,6 +2429,7 @@
                 currentView = 'monthly';
                 setActiveTab('monthly');
             }
+            isPresetRange = false;
             normalizeRangeInputs();
             updateSectionCards(currentView);
         });
@@ -1812,10 +2440,17 @@
                 currentView = 'monthly';
                 setActiveTab('monthly');
             }
+            isPresetRange = false;
             normalizeRangeInputs();
             updateSectionCards(currentView);
         });
+        document.getElementById('overviewFilterOverlay').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeMobileOverviewFilter();
+            }
+        });
 
+        renderOverviewTrends();
         applyPreset('daily');
     </script>
 </body>
