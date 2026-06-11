@@ -9,6 +9,12 @@
 - Nginx 配置反向代理，静态项目用 `alias`，API 用 `proxy_pass`
 - 服务器: lhins-p0csjffm (124.222.211.194)
 
+## 部署方式（cltn 项目）
+- Docker 容器化部署，端口 9018
+- **上传前**：使用 robocopy 排除 `.codebuddy/` `.trae/` `.agents/` `.git/` `node_modules/` 到临时目录
+- 原因：项目含 NTFS Junction 符号链接，直接上传会失败
+- 服务器: lhins-p0csjffm (124.222.211.194, ap-shanghai)
+
 ## 已完成部署
 - `http://124.222.211.194:9018/` — cltn 全项目，Docker 容器名 cltn，Node.js test_server.js 静态服务（端口 9018），部署路径 `/var/www/cltn/`
 - `/var/www/store_goal_mgmt_hl/` — 门店目标管理(含API反向代理 /api/→localhost:5001)

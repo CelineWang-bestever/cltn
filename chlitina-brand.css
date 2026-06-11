@@ -637,10 +637,10 @@
     transition: var(--transition-normal);
 }
 
-.card:hover {
+/* .card:hover {
     background: var(--card-hover);
     box-shadow: var(--shadow-md);
-}
+} */
 
 /* 输入框基础样式 */
 .input {
@@ -740,7 +740,7 @@ input[type="time"] {
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
     width: 100%;
-    height: 48px;
+    height: 36px;
     line-height: 1.5;
 }
 

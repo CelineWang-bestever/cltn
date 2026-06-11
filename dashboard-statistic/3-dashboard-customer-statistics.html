@@ -417,6 +417,12 @@ font-weight:600;
 .tag-silent { background:var(--warning-light); color:var(--warning); }
 .tag-churn { background:var(--danger-light); color:var(--danger); }
 .tag-new { background:var(--primary-light); color:var(--primary); }
+.tag-segment { background:var(--border-light); color:var(--text-secondary); border:1px solid rgba(17,24,39,0.08); font-weight:600; min-width:22px; text-align:center; }
+.tag-segment.seg-A { background:rgba(232,124,154,0.12); color:var(--primary-dark); border-color:rgba(232,124,154,0.28); }
+.tag-segment.seg-B { background:rgba(139,92,246,0.12); color:#6D28D9; border-color:rgba(139,92,246,0.28); }
+.tag-segment.seg-C { background:rgba(245,158,11,0.14); color:#B45309; border-color:rgba(245,158,11,0.30); }
+.tag-segment.seg-D { background:rgba(100,116,139,0.12); color:#475569; border-color:rgba(100,116,139,0.26); }
+.tag-segment.seg-E { background:rgba(17,24,39,0.06); color:#6B7280; border-color:rgba(17,24,39,0.12); }
 
 .highlight { color:var(--primary); font-weight:600; }
 
@@ -456,6 +462,39 @@ font-weight:600;
 .detail-empty-text { color:var(--text-light); font-weight:500; }
 .overlay { display:none; position:fixed; inset:0; background:rgba(0,0,0,0.3); z-index:150; }
 .overlay.active { display:block; }
+
+.criteria-modal { display:none; position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:660px; max-width:calc(100vw - 32px); max-height:78vh; background:var(--white); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow-md); z-index:210; overflow:hidden; }
+.criteria-modal.active { display:flex; flex-direction:column; }
+.criteria-modal-header { padding:16px 18px; border-bottom:1px solid var(--border-light); display:flex; align-items:flex-start; justify-content:space-between; gap:14px; }
+.criteria-modal-title { font-size:15px; font-weight:700; color:var(--text-primary); }
+.criteria-modal-sub { font-size:12px; color:var(--text-secondary); margin-top:4px; line-height:1.5; }
+.criteria-modal-close { width:34px; height:34px; border-radius:10px; border:1px solid var(--border-light); background:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); flex:0 0 auto; transition:all 0.2s; }
+.criteria-modal-close:hover { border-color:rgba(232,124,154,0.28); color:var(--primary); background:rgba(232,124,154,0.06); }
+.criteria-modal-body { padding:16px 18px; overflow:auto; min-height:0; }
+.criteria-note { background:rgba(232,124,154,0.06); border:1px solid rgba(232,124,154,0.18); padding:10px 12px; border-radius:12px; font-size:12px; color:var(--text-secondary); line-height:1.55; margin-bottom:14px; }
+.criteria-note strong { color:var(--text-primary); font-weight:700; }
+.criteria-section { border:1px solid var(--border-light); border-radius:14px; padding:12px; background:var(--white); }
+.criteria-section + .criteria-section { margin-top:12px; }
+.criteria-section-title { font-size:13px; font-weight:700; color:var(--text-primary); margin-bottom:10px; display:flex; align-items:center; gap:8px; }
+.criteria-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px 12px; }
+.criteria-field { display:flex; flex-direction:column; gap:6px; min-width:0; }
+.criteria-label { font-size:12px; color:var(--text-secondary); }
+.criteria-input { height:36px; border:1px solid var(--border); border-radius:10px; padding:0 10px; font-size:13px; color:var(--text-primary); background:var(--white); }
+.criteria-input:focus { outline:none; border-color:rgba(232,124,154,0.5); box-shadow:0 0 0 3px rgba(232,124,154,0.12); }
+.criteria-rule-head { display:grid; grid-template-columns:minmax(0,1fr) 140px 140px 72px; gap:10px 12px; padding:8px 10px; border-radius:12px; background:var(--border-light); color:var(--text-secondary); font-size:12px; font-weight:600; }
+.criteria-rule-list { display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+.criteria-rule-row { display:grid; grid-template-columns:minmax(0,1fr) 140px 140px 72px; gap:10px 12px; align-items:center; padding:10px; border:1px solid var(--border-light); border-radius:14px; background:var(--white); }
+.criteria-rule-actions { display:flex; justify-content:flex-start; margin-top:10px; }
+.criteria-mini-btn { height:36px; width:36px; border-radius:10px; border:1px solid var(--border); background:var(--white); cursor:pointer; display:flex; align-items:center; justify-content:center; color:var(--text-secondary); transition:all 0.2s; }
+.criteria-mini-btn:hover { border-color:rgba(232,124,154,0.28); color:var(--primary); background:rgba(232,124,154,0.06); }
+.criteria-help { font-size:12px; color:var(--text-light); line-height:1.5; margin-top:10px; }
+.criteria-modal-footer { padding:14px 18px; border-top:1px solid var(--border-light); display:flex; align-items:center; justify-content:space-between; gap:10px; }
+.criteria-status { font-size:12px; color:var(--text-secondary); min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.criteria-actions { display:flex; gap:10px; flex:0 0 auto; }
+.criteria-btn { height:36px; padding:0 14px; border-radius:10px; border:1px solid var(--border); background:var(--white); cursor:pointer; font-size:13px; font-weight:600; color:var(--text-secondary); transition:all 0.2s; }
+.criteria-btn:hover { border-color:rgba(232,124,154,0.28); color:var(--primary); background:rgba(232,124,154,0.06); }
+.criteria-btn.primary { background:var(--primary); border-color:var(--primary); color:white; }
+.criteria-btn.primary:hover { background:var(--primary-dark); border-color:var(--primary-dark); color:white; }
 
 .days-warn { color:var(--warning); }
 .days-danger { color:var(--danger); }
@@ -509,6 +548,12 @@ justify-content:center;
 .stats-row { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
 .stat-card { padding:14px; }
 .stat-card-value { font-size:20px; }
+.criteria-modal { left:16px; right:16px; top:auto; bottom:16px; transform:none; width:auto; max-width:none; max-height:72vh; border-radius:16px; }
+.criteria-grid { grid-template-columns:1fr; }
+.criteria-rule-head { display:none; }
+.criteria-rule-row { grid-template-columns:repeat(2,minmax(0,1fr)) 48px; gap:10px; }
+.criteria-rule-row .criteria-input[data-rule-field="name"] { grid-column:1 / 3; }
+.criteria-rule-row .criteria-mini-btn { grid-column:3; grid-row:1 / 3; height:40px; width:40px; border-radius:12px; }
 .filter-bar {
 position:fixed;
 inset:0;
@@ -755,7 +800,7 @@ table { min-width:1800px; }
         <div class="page-header">
             <div class="page-header-main">
                 <div class="page-title">客户分析</div>
-                <div class="page-desc">客户消费画像、活跃画像、消费趋势分析</div>
+                <div class="page-desc">客户消费画像、活跃画像、消费分层等分析</div>
             </div>
             <div class="page-header-actions">
                 <div class="stats-settings" id="statsSettings">
@@ -768,6 +813,12 @@ table { min-width:1800px; }
                         <div class="stats-settings-list" id="statsSettingsList"></div>
                         <div class="stats-settings-tip">至少保留 1 张指标卡显示</div>
                     </div>
+                </div>
+                <div class="stats-settings" id="criteriaSettings">
+                    <button type="button" class="stats-settings-btn" id="criteriaSettingsBtn">
+                        <iconify-icon icon="mdi:clipboard-text-outline"></iconify-icon>
+                        <span>客户画像指标设置</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -851,6 +902,12 @@ table { min-width:1800px; }
                 </div>
             </div>
             <div class="filter-group">
+                <span class="filter-label">消费层级</span>
+                <select class="filter-select" id="filterConsumeSegment" onchange="filterTable()">
+                    <option value="全部">全部</option>
+                </select>
+            </div>
+            <div class="filter-group">
                 <span class="filter-label">客户类型</span>
                 <select class="filter-select" id="filterCustomerType" onchange="filterTable()">
                     <option value="全部">全部</option>
@@ -885,9 +942,6 @@ table { min-width:1800px; }
                 <span class="filter-label">活跃度</span>
                 <select class="filter-select" id="filterActivityLevel" onchange="filterTable()">
                     <option value="全部">全部</option>
-                    <option value="活跃客户">活跃客户</option>
-                    <option value="有效客户">有效客户</option>
-                    <option value="沉睡客户">沉睡客户</option>
                 </select>
             </div>
             <div class="filter-group birthday-filter-group">
@@ -981,6 +1035,7 @@ table { min-width:1800px; }
                             <th class="num sortable" data-sort-key="lastVisit" data-col-id="lastVisit">最近到店</th>
                             <th class="num sortable" data-sort-key="daysSinceLastVisit" data-col-id="daysSinceLastVisit">未到店天数</th>
                             <th class="num sortable" data-sort-key="currentYearConsume" data-col-id="currentYearConsume">今年累计消费</th>
+                            <th class="sortable" data-sort-key="consumeSegment" data-col-id="consumeSegment">消费分层</th>
                             <th class="num sortable" data-sort-key="lastYearConsume" data-col-id="lastYearConsume">去年累计消费</th>
                             <th class="num sortable" data-sort-key="avgSpend" data-col-id="avgSpend">客单价</th>
                             <th class="num sortable" data-sort-key="highestConsume" data-col-id="highestConsume">最高消费金额</th>
@@ -1031,6 +1086,57 @@ table { min-width:1800px; }
         <button class="detail-close" onclick="closeDetail()">✕</button>
     </div>
     <div id="detailContent"></div>
+</div>
+
+<div class="overlay" id="criteriaOverlay"></div>
+<div class="criteria-modal" id="criteriaModal" role="dialog" aria-modal="true" aria-label="客户画像指标设置">
+    <div class="criteria-modal-header">
+        <div style="min-width:0">
+            <div class="criteria-modal-title">客户画像指标设置</div>
+            <div class="criteria-modal-sub" id="criteriaModalSub"></div>
+        </div>
+        <button type="button" class="criteria-modal-close" id="criteriaModalClose" aria-label="关闭">
+            <iconify-icon icon="mdi:close"></iconify-icon>
+        </button>
+    </div>
+    <div class="criteria-modal-body">
+        <div class="criteria-note" id="criteriaModalNote"></div>
+        <div class="criteria-section">
+            <div class="criteria-section-title"><iconify-icon icon="mdi:account-group-outline"></iconify-icon><span>活跃度口径</span></div>
+            <div class="criteria-rule-head">
+                <div class="criteria-rule-head-item">口径名称</div>
+                <div class="criteria-rule-head-item">未到店天数（min）</div>
+                <div class="criteria-rule-head-item">未到店天数（max）</div>
+                <div class="criteria-rule-head-item">操作</div>
+            </div>
+            <div class="criteria-rule-list" id="activityRuleList"></div>
+            <div class="criteria-rule-actions">
+                <button type="button" class="criteria-btn" id="addActivityRuleBtn">+ 新增口径</button>
+            </div>
+            <div class="criteria-help">规则要求：区间不重叠，且从 0 开始连续覆盖到无上限（max 为空表示无上限）。保存后次日生效。</div>
+        </div>
+        <div class="criteria-section">
+            <div class="criteria-section-title"><iconify-icon icon="mdi:alpha-a-box-outline"></iconify-icon><span>消费分层口径（基于今年累计消费）</span></div>
+            <div class="criteria-rule-head">
+                <div class="criteria-rule-head-item">层级名称</div>
+                <div class="criteria-rule-head-item">今年累计消费（min）</div>
+                <div class="criteria-rule-head-item">今年累计消费（max）</div>
+                <div class="criteria-rule-head-item">操作</div>
+            </div>
+            <div class="criteria-rule-list" id="segmentRuleList"></div>
+            <div class="criteria-rule-actions">
+                <button type="button" class="criteria-btn" id="addSegmentRuleBtn">+ 新增层级</button>
+            </div>
+            <div class="criteria-help">规则要求：区间不重叠，且从 0 开始连续覆盖到无上限（max 为空表示无上限）。保存后次日生效。</div>
+        </div>
+    </div>
+    <div class="criteria-modal-footer">
+        <div class="criteria-status" id="criteriaStatus"></div>
+        <div class="criteria-actions">
+            <button type="button" class="criteria-btn" id="criteriaCancelBtn">取消</button>
+            <button type="button" class="criteria-btn primary" id="criteriaSaveBtn">保存</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -1146,6 +1252,9 @@ let selectedTagValue = '';
 let currentSort = { key:'', direction:'' };
 const CARD_VISIBILITY_STORAGE_KEY = 'dashboard-customer-statistics-visible-cards';
 const COLUMN_VISIBILITY_STORAGE_KEY = 'dashboard-customer-statistics-visible-columns';
+const CRITERIA_EFFECTIVE_STORAGE_KEY = 'dashboard-customer-statistics-criteria-effective';
+const CRITERIA_PENDING_STORAGE_KEY = 'dashboard-customer-statistics-criteria-pending';
+const METRIC_DATA_LAST_UPDATED_AT = '2026-06-10 23:59';
 const MOCK_TOTAL_CUSTOMER_COUNT = 1286;
 const statCardDefinitions = [
     { id:'customerTotal', label:'客户总数' },
@@ -1171,6 +1280,7 @@ const tableColumnDefinitions = [
     { id:'lastVisit', label:'最近到店' },
     { id:'daysSinceLastVisit', label:'未到店天数' },
     { id:'currentYearConsume', label:'今年累计消费' },
+    { id:'consumeSegment', label:'消费分层' },
     { id:'lastYearConsume', label:'去年累计消费' },
     { id:'avgSpend', label:'客单价' },
     { id:'highestConsume', label:'最高消费金额' },
@@ -1279,15 +1389,233 @@ function getAgeRangeSortValue(ageRange) {
 }
 
 function getActivityLevelSortValue(level) {
-    const order = ['活跃客户', '有效客户', '沉睡客户'];
-    const index = order.indexOf(level);
-    return index === -1 ? order.length : index;
+    const rules = criteriaEffective && Array.isArray(criteriaEffective.activityRules) ? criteriaEffective.activityRules : getDefaultCriteriaConfig().activityRules;
+    const sorted = rules.slice().sort((a, b) => a.min - b.min);
+    const index = sorted.findIndex(rule => rule.name === level);
+    return index === -1 ? sorted.length : index;
 }
 
 function getActivityTag(level) {
     if (level === '活跃客户') return '<span class="tag tag-active">活跃客户</span>';
     if (level === '沉睡客户') return '<span class="tag tag-churn">沉睡客户</span>';
     return '<span class="tag tag-silent">有效客户</span>';
+}
+
+let criteriaEffective = null;
+let criteriaPending = null;
+
+function formatYMD(date) {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+}
+
+function parseYMDToDate(ymd) {
+    const [y, m, d] = String(ymd || '').split('-').map(Number);
+    if (!y || !m || !d) return null;
+    const date = new Date(y, m - 1, d, 0, 0, 0, 0);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+
+function buildRuleId(prefix = 'r') {
+    return `${prefix}-${Math.random().toString(16).slice(2)}-${Date.now().toString(16)}`;
+}
+
+function getDefaultCriteriaConfig() {
+    return {
+        activityRules: [
+            { id:'act-1', name:'活跃客户', min:0, max:90 },
+            { id:'act-2', name:'有效客户', min:91, max:180 },
+            { id:'act-3', name:'沉睡客户', min:181, max:null }
+        ],
+        segmentRules: [
+            { id:'seg-1', name:'E', min:0, max:4999 },
+            { id:'seg-2', name:'D', min:5000, max:14999 },
+            { id:'seg-3', name:'C', min:15000, max:29999 },
+            { id:'seg-4', name:'B', min:30000, max:50000 },
+            { id:'seg-5', name:'A', min:50001, max:null }
+        ],
+        dataLastUpdatedAt: METRIC_DATA_LAST_UPDATED_AT
+    };
+}
+
+function normalizeRule(rule, defaultName = '', defaultMin = 0, defaultMax = null) {
+    const name = String(rule && rule.name ? rule.name : defaultName).trim();
+    const min = Math.max(0, Math.floor(Number(rule && rule.min !== undefined ? rule.min : defaultMin) || 0));
+    const rawMax = rule && rule.max !== undefined ? rule.max : defaultMax;
+    const max = (rawMax === '' || rawMax === null || rawMax === undefined) ? null : Math.max(min, Math.floor(Number(rawMax) || 0));
+    const id = String(rule && rule.id ? rule.id : buildRuleId('rule'));
+    return { id, name, min, max };
+}
+
+function normalizeRuleList(list, type) {
+    const normalized = (Array.isArray(list) ? list : []).map((rule, index) => {
+        const baseName = type === 'activity' ? `口径${index + 1}` : `层级${index + 1}`;
+        return normalizeRule(rule, baseName, 0, null);
+    }).filter(rule => rule.name);
+    normalized.sort((a, b) => (a.min - b.min) || String(a.id).localeCompare(String(b.id)));
+    return normalized;
+}
+
+function normalizeCriteriaConfig(raw) {
+    const base = getDefaultCriteriaConfig();
+    return {
+        activityRules: normalizeRuleList(raw && raw.activityRules ? raw.activityRules : base.activityRules, 'activity'),
+        segmentRules: normalizeRuleList(raw && raw.segmentRules ? raw.segmentRules : base.segmentRules, 'segment'),
+        dataLastUpdatedAt: String(raw && raw.dataLastUpdatedAt ? raw.dataLastUpdatedAt : base.dataLastUpdatedAt)
+    };
+}
+
+function loadCriteriaEffective() {
+    try {
+        const stored = localStorage.getItem(CRITERIA_EFFECTIVE_STORAGE_KEY);
+        if (!stored) return getDefaultCriteriaConfig();
+        const parsed = JSON.parse(stored);
+        return normalizeCriteriaConfig(parsed);
+    } catch (error) {
+        return getDefaultCriteriaConfig();
+    }
+}
+
+function saveCriteriaEffective(config) {
+    localStorage.setItem(CRITERIA_EFFECTIVE_STORAGE_KEY, JSON.stringify(normalizeCriteriaConfig(config)));
+}
+
+function loadCriteriaPending() {
+    try {
+        const stored = localStorage.getItem(CRITERIA_PENDING_STORAGE_KEY);
+        if (!stored) return null;
+        const parsed = JSON.parse(stored);
+        if (!parsed || !parsed.effectiveOn || !parsed.criteria) return null;
+        return {
+            effectiveOn: String(parsed.effectiveOn),
+            submittedAt: String(parsed.submittedAt || ''),
+            criteria: normalizeCriteriaConfig(parsed.criteria)
+        };
+    } catch (error) {
+        return null;
+    }
+}
+
+function saveCriteriaPending(pending) {
+    localStorage.setItem(CRITERIA_PENDING_STORAGE_KEY, JSON.stringify(pending));
+}
+
+function clearCriteriaPending() {
+    localStorage.removeItem(CRITERIA_PENDING_STORAGE_KEY);
+}
+
+function reconcileCriteriaSettings() {
+    criteriaEffective = loadCriteriaEffective();
+    criteriaPending = loadCriteriaPending();
+    if (!criteriaPending) return;
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const effectiveDate = parseYMDToDate(criteriaPending.effectiveOn);
+    if (effectiveDate && effectiveDate.getTime() <= today.getTime()) {
+        saveCriteriaEffective(criteriaPending.criteria);
+        criteriaEffective = loadCriteriaEffective();
+        clearCriteriaPending();
+        criteriaPending = null;
+    }
+}
+
+function updateActivityCriteriaTooltips(config) {
+    const activeBtn = document.querySelector('[data-card-id="activeMember"] .stat-tip-btn');
+    const validBtn = document.querySelector('[data-card-id="validMember"] .stat-tip-btn');
+    const sleepingBtn = document.querySelector('[data-card-id="sleepingMember"] .stat-tip-btn');
+    const rules = (config && Array.isArray(config.activityRules) ? config.activityRules : []).slice().sort((a, b) => a.min - b.min);
+    const activeRule = rules.find(r => String(r.name).includes('活跃')) || null;
+    const validRule = rules.find(r => String(r.name).includes('有效')) || null;
+    const sleepingRule = rules.find(r => String(r.name).includes('沉睡')) || null;
+    if (activeBtn && activeRule) activeBtn.setAttribute('data-tip', `未到店天数 ${activeRule.min}-${activeRule.max ?? '∞'} 的客户数量（口径设置次日生效）`);
+    if (validBtn && validRule) validBtn.setAttribute('data-tip', `未到店天数 ${validRule.min}-${validRule.max ?? '∞'} 的客户数量（口径设置次日生效）`);
+    if (sleepingBtn && sleepingRule) sleepingBtn.setAttribute('data-tip', `未到店天数 ${sleepingRule.min}-${sleepingRule.max ?? '∞'} 的客户数量（口径设置次日生效）`);
+}
+
+function renderCriteriaFilterOptions() {
+    const activitySelect = document.getElementById('filterActivityLevel');
+    const segmentSelect = document.getElementById('filterConsumeSegment');
+    const effective = criteriaEffective || getDefaultCriteriaConfig();
+    const activityRules = (effective && Array.isArray(effective.activityRules) ? effective.activityRules : []).slice().sort((a, b) => a.min - b.min);
+    const segmentRules = (effective && Array.isArray(effective.segmentRules) ? effective.segmentRules : []).slice().sort((a, b) => a.min - b.min);
+
+    if (activitySelect) {
+        const current = activitySelect.value;
+        activitySelect.innerHTML = `<option value="全部">全部</option>` + activityRules.map(rule => {
+            const rangeText = rule.max === null || rule.max === undefined ? `≥${rule.min}天` : `${rule.min}-${rule.max}天`;
+            const label = String(rule.name || '').trim();
+            return `<option value="${label}">${label}（${rangeText}）</option>`;
+        }).join('');
+        if (current && Array.from(activitySelect.options).some(opt => opt.value === current)) {
+            activitySelect.value = current;
+        } else {
+            activitySelect.value = '全部';
+        }
+    }
+
+    if (segmentSelect) {
+        const current = segmentSelect.value;
+        segmentSelect.innerHTML = `<option value="全部">全部</option>` + segmentRules.map(rule => {
+            const rangeText = rule.max === null || rule.max === undefined ? `≥${rule.min}` : `${rule.min}-${rule.max}`;
+            const label = String(rule.name || '').trim();
+            return `<option value="${label}">${label}（${rangeText}）</option>`;
+        }).join('');
+        if (current && Array.from(segmentSelect.options).some(opt => opt.value === current)) {
+            segmentSelect.value = current;
+        } else {
+            segmentSelect.value = '全部';
+        }
+    }
+}
+
+function getActivityLevelLabel(daysSinceLastVisit) {
+    const value = Math.max(0, Math.floor(Number(daysSinceLastVisit) || 0));
+    const rules = criteriaEffective && Array.isArray(criteriaEffective.activityRules) ? criteriaEffective.activityRules : getDefaultCriteriaConfig().activityRules;
+    for (const rule of rules) {
+        const max = (rule.max === null || rule.max === undefined) ? null : Number(rule.max);
+        if (value >= Number(rule.min) && (max === null || value <= max)) return rule.name;
+    }
+    return rules.length ? rules[rules.length - 1].name : '未定义';
+}
+
+function getConsumeSegmentLabel(currentYearConsume) {
+    const value = Math.max(0, Math.floor(Number(currentYearConsume) || 0));
+    const rules = criteriaEffective && Array.isArray(criteriaEffective.segmentRules) ? criteriaEffective.segmentRules : getDefaultCriteriaConfig().segmentRules;
+    for (const rule of rules) {
+        const max = (rule.max === null || rule.max === undefined) ? null : Number(rule.max);
+        if (value >= Number(rule.min) && (max === null || value <= max)) return rule.name;
+    }
+    return rules.length ? rules[rules.length - 1].name : '未定义';
+}
+
+function getConsumeSegmentRank(segmentLabel) {
+    const rules = criteriaEffective && Array.isArray(criteriaEffective.segmentRules) ? criteriaEffective.segmentRules : getDefaultCriteriaConfig().segmentRules;
+    const index = rules.findIndex(rule => rule.name === segmentLabel);
+    if (index === -1) return 0;
+    return index + 1;
+}
+
+function getSegmentTagStyle(segmentLabel) {
+    const rules = criteriaEffective && Array.isArray(criteriaEffective.segmentRules) ? criteriaEffective.segmentRules : getDefaultCriteriaConfig().segmentRules;
+    const index = rules.findIndex(rule => rule.name === segmentLabel);
+    const palette = [
+        { bg:'rgba(232,124,154,0.12)', color:'var(--primary-dark)', border:'rgba(232,124,154,0.28)' },
+        { bg:'rgba(139,92,246,0.12)', color:'#6D28D9', border:'rgba(139,92,246,0.28)' },
+        { bg:'rgba(245,158,11,0.14)', color:'#B45309', border:'rgba(245,158,11,0.30)' },
+        { bg:'rgba(100,116,139,0.12)', color:'#475569', border:'rgba(100,116,139,0.26)' },
+        { bg:'rgba(17,24,39,0.06)', color:'#6B7280', border:'rgba(17,24,39,0.12)' }
+    ];
+    if (index === -1) return `background:var(--border-light);color:var(--text-secondary);border-color:rgba(17,24,39,0.08);`;
+    const highToLowIndex = Math.max(0, (rules.length - 1) - index);
+    const colors = palette[Math.min(palette.length - 1, highToLowIndex)];
+    return `background:${colors.bg};color:${colors.color};border-color:${colors.border};`;
+}
+
+function getConsumeSegmentTag(segmentLabel) {
+    const label = String(segmentLabel || '').trim() || '-';
+    return `<span class="tag tag-segment" style="${getSegmentTagStyle(segmentLabel)}">${label}</span>`;
 }
 
 function getRowViewModel(customer, startDate, endDate) {
@@ -1320,6 +1648,8 @@ function getRowViewModel(customer, startDate, endDate) {
         displayTotalConsume = displaySalesPerf + displayConsumePerf;
     }
 
+    const activityLevelLabel = getActivityLevelLabel(days);
+    const consumeSegmentLabel = getConsumeSegmentLabel(currentYearConsume);
     return {
         days,
         cardSplit,
@@ -1327,7 +1657,11 @@ function getRowViewModel(customer, startDate, endDate) {
         customerMeta,
         customerInsight,
         customerProfile,
+        activityLevelLabel,
+        activityLevelRank: getActivityLevelSortValue(activityLevelLabel),
         currentYearConsume,
+        consumeSegmentLabel,
+        consumeSegmentRank: getConsumeSegmentRank(consumeSegmentLabel),
         previousYearConsume: Number(customerInsight.lastYearConsume) || 0,
         highestConsume,
         conversionDays,
@@ -1551,7 +1885,11 @@ function getVisibleColumnIds() {
         const validIds = Array.isArray(parsed)
             ? parsed.filter(id => tableColumnDefinitions.some(column => column.id === id && !column.locked))
             : [];
-        return validIds.length ? validIds : getDefaultVisibleColumnIds();
+        if (!validIds.length) return getDefaultVisibleColumnIds();
+        if (tableColumnDefinitions.some(column => column.id === 'consumeSegment' && !column.locked) && !validIds.includes('consumeSegment')) {
+            return validIds.concat('consumeSegment');
+        }
+        return validIds;
     } catch (error) {
         return getDefaultVisibleColumnIds();
     }
@@ -1656,6 +1994,8 @@ function getSortValue(customer, sortKey, startDate, endDate) {
             return rowViewModel.displayTotalConsume;
         case 'currentYearConsume':
             return rowViewModel.currentYearConsume;
+        case 'consumeSegment':
+            return rowViewModel.consumeSegmentRank;
         case 'lastYearConsume':
             return rowViewModel.previousYearConsume;
         case 'highestConsume':
@@ -1760,6 +2100,7 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
         document.getElementById('searchInput').value || 
         document.getElementById('filterConsumeMin').value ||
         document.getElementById('filterConsumeMax').value ||
+        document.getElementById('filterConsumeSegment').value !== '全部' ||
         document.getElementById('filterCustomerType').value !== '全部' ||
         document.getElementById('filterChannel').value !== '全部' ||
         document.getElementById('filterLastVisit').value !== '全部' ||
@@ -1806,10 +2147,11 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
             <td class="num" data-col-id="lastVisit">${c.lastVisit}</td>
             <td class="num" data-col-id="daysSinceLastVisit"><span class="${getDaysClass(rowViewModel.days)}">${rowViewModel.days}天</span></td>
             <td class="num" data-col-id="currentYearConsume">¥${rowViewModel.currentYearConsume.toLocaleString()}</td>
+            <td data-col-id="consumeSegment">${getConsumeSegmentTag(rowViewModel.consumeSegmentLabel)}</td>
             <td class="num" data-col-id="lastYearConsume">¥${rowViewModel.previousYearConsume.toLocaleString()}</td>
             <td class="num" data-col-id="avgSpend">¥${c.avgSpend}</td>
             <td class="num" data-col-id="highestConsume">¥${rowViewModel.highestConsume.toLocaleString()}</td>
-            <td data-col-id="activityLevel">${getActivityTag(rowViewModel.customerInsight.activityLevel)}</td>
+            <td data-col-id="activityLevel">${getActivityTag(rowViewModel.activityLevelLabel)}</td>
             <td class="num" data-col-id="salesPerf">¥${rowViewModel.displaySalesPerf.toLocaleString()}</td>
             <td class="num" data-col-id="cardSales">¥${c.cardSales.toLocaleString()}</td>
             <td class="num" data-col-id="careSales">¥${c.careSales.toLocaleString()}</td>
@@ -1839,6 +2181,7 @@ function renderTable(data, startDate, endDate, totalCount = data.length) {
 
 function filterTable() {
     const keyword = document.getElementById('searchInput').value.toLowerCase();
+    const consumeSegment = document.getElementById('filterConsumeSegment').value;
     const customerType = document.getElementById('filterCustomerType').value;
     const channel = document.getElementById('filterChannel').value;
     const lastVisitFilter = document.getElementById('filterLastVisit').value;
@@ -1854,14 +2197,15 @@ function filterTable() {
         const matchCustomerType = customerType === '全部' || c.type === customerType;
         const matchChannel = channel === '全部' || customerMeta.channel === channel;
         const matchLastVisit = matchesLastVisitFilter(c.lastVisit, lastVisitFilter);
-        const matchActivityLevel = activityLevel === '全部' || rowViewModel.customerInsight.activityLevel === activityLevel;
+        const matchActivityLevel = activityLevel === '全部' || rowViewModel.activityLevelLabel === activityLevel;
         const matchBirthday = matchesUpcomingBirthdayFilter(customerMeta, birthdayType, birthdayRange);
         const matchTag = !selectedTagValue || customerMeta.tags.includes(selectedTagValue);
         const matchStaff = staff === '全部美容师' || c.staff === staff;
         const matchConsumeMin = consumeRange.min === null || rowViewModel.displayTotalConsume >= consumeRange.min;
         const matchConsumeMax = consumeRange.max === null || rowViewModel.displayTotalConsume <= consumeRange.max;
+        const matchConsumeSegment = consumeSegment === '全部' || rowViewModel.consumeSegmentLabel === consumeSegment;
 
-        return matchKeyword && matchCustomerType && matchChannel && matchLastVisit && matchActivityLevel && matchBirthday && matchTag && matchStaff && matchConsumeMin && matchConsumeMax;
+        return matchKeyword && matchCustomerType && matchChannel && matchLastVisit && matchActivityLevel && matchBirthday && matchTag && matchStaff && matchConsumeMin && matchConsumeMax && matchConsumeSegment;
     });
     renderTable(filtered, '', '', filtered.length);
 }
@@ -1875,6 +2219,7 @@ function resetFilter() {
     document.getElementById('searchInput').value = '';
     document.getElementById('filterConsumeMin').value = '';
     document.getElementById('filterConsumeMax').value = '';
+    document.getElementById('filterConsumeSegment').value = '全部';
     document.getElementById('filterCustomerType').value = '全部';
     document.getElementById('filterChannel').value = '全部';
     document.getElementById('filterLastVisit').value = '全部';
@@ -1898,6 +2243,7 @@ function showDetail(index) {
     const customerInsight = rowViewModel.customerInsight;
     const customerProfile = getCustomerProfile(c);
     const consumeTrend = getYearOverYearTrend(rowViewModel.currentYearConsume, rowViewModel.previousYearConsume);
+    const consumeSegmentLabel = rowViewModel.consumeSegmentLabel;
     const tagsHtml = customerMeta.tags.length
         ? customerMeta.tags.map(tag => `<span class="tag tag-new">${tag}</span>`).join('')
         : '<span class="detail-empty-text">暂无标签</span>';
@@ -1911,7 +2257,7 @@ function showDetail(index) {
                 </div>
                 <div class="detail-summary-badges">
                     ${getTypeTag(c.type)}
-                    ${getActivityTag(customerInsight.activityLevel)}
+                    ${getActivityTag(rowViewModel.activityLevelLabel)}
                 </div>
             </div>
         </div>
@@ -1966,6 +2312,7 @@ function showDetail(index) {
             <div class="detail-grid">
             <div class="detail-row"><span class="detail-row-label">累计消费</span><span class="detail-row-value">¥${rowViewModel.displayTotalConsume.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">今年累计消费</span><span class="detail-row-value">¥${rowViewModel.currentYearConsume.toLocaleString()}<span class="detail-trend stat-card-trend ${consumeTrend.direction}"><span class="stat-card-trend-label">较前一年</span>${consumeTrend.direction === 'flat' ? '' : '<span class="stat-card-trend-triangle" aria-hidden="true"></span>'}<span class="stat-card-trend-value">${consumeTrend.text}</span></span></span></div>
+            <div class="detail-row"><span class="detail-row-label">消费分层</span><span class="detail-row-value">${getConsumeSegmentTag(consumeSegmentLabel)}</span></div>
             <div class="detail-row"><span class="detail-row-label">去年累计消费</span><span class="detail-row-value">¥${rowViewModel.previousYearConsume.toLocaleString()}</span></div>
             <div class="detail-row"><span class="detail-row-label">客单价</span><span class="detail-row-value">¥${c.avgSpend}</span></div>
             <div class="detail-row"><span class="detail-row-label">最高消费金额</span><span class="detail-row-value">¥${rowViewModel.highestConsume.toLocaleString()}</span></div>
@@ -1981,7 +2328,7 @@ function showDetail(index) {
         <div class="detail-section">
             <div class="detail-section-title">到店活跃信息</div>
             <div class="detail-grid">
-            <div class="detail-row"><span class="detail-row-label">活跃度</span><span class="detail-row-value">${getActivityTag(customerInsight.activityLevel)}</span></div>
+            <div class="detail-row"><span class="detail-row-label">活跃度</span><span class="detail-row-value">${getActivityTag(rowViewModel.activityLevelLabel)}</span></div>
             <div class="detail-row"><span class="detail-row-label">最近到店</span><span class="detail-row-value">${c.lastVisit}</span></div>
             <div class="detail-row"><span class="detail-row-label">未到店天数</span><span class="detail-row-value ${getDaysClass(rowViewModel.days)}">${rowViewModel.days} 天</span></div>
             <div class="detail-row"><span class="detail-row-label">累计到店情况</span><span class="detail-row-value">${c.visitCount} 次</span></div>
@@ -1997,6 +2344,173 @@ function closeDetail() {
     document.getElementById('detailPanel').classList.remove('active');
     document.getElementById('overlay').classList.remove('active');
 }
+
+function setCriteriaStatus(text) {
+    const statusEl = document.getElementById('criteriaStatus');
+    if (statusEl) statusEl.textContent = text || '';
+}
+
+function getRuleListFromConfig(type, config) {
+    const normalized = normalizeCriteriaConfig(config || getDefaultCriteriaConfig());
+    return type === 'activity' ? normalized.activityRules : normalized.segmentRules;
+}
+
+function renderCriteriaRuleList(listEl, type, rules) {
+    if (!listEl) return;
+    listEl.innerHTML = '';
+    rules.forEach(rule => {
+        const rowEl = document.createElement('div');
+        rowEl.className = 'criteria-rule-row';
+        rowEl.dataset.ruleType = type;
+        rowEl.dataset.ruleId = rule.id;
+
+        const nameInput = document.createElement('input');
+        nameInput.className = 'criteria-input';
+        nameInput.dataset.ruleField = 'name';
+        nameInput.value = String(rule.name || '');
+        nameInput.placeholder = type === 'activity' ? '例如：活跃客户' : '例如：A';
+
+        const minInput = document.createElement('input');
+        minInput.type = 'number';
+        minInput.min = '0';
+        minInput.step = '1';
+        minInput.className = 'criteria-input';
+        minInput.dataset.ruleField = 'min';
+        minInput.value = String(Number(rule.min) || 0);
+
+        const maxInput = document.createElement('input');
+        maxInput.type = 'number';
+        maxInput.min = '0';
+        maxInput.step = '1';
+        maxInput.className = 'criteria-input';
+        maxInput.dataset.ruleField = 'max';
+        maxInput.placeholder = '∞';
+        maxInput.value = (rule.max === null || rule.max === undefined) ? '' : String(Number(rule.max) || 0);
+
+        const deleteBtn = document.createElement('button');
+        deleteBtn.type = 'button';
+        deleteBtn.className = 'criteria-mini-btn';
+        deleteBtn.dataset.ruleAction = 'delete';
+        deleteBtn.innerHTML = '<iconify-icon icon="mdi:trash-can-outline"></iconify-icon>';
+
+        rowEl.appendChild(nameInput);
+        rowEl.appendChild(minInput);
+        rowEl.appendChild(maxInput);
+        rowEl.appendChild(deleteBtn);
+        listEl.appendChild(rowEl);
+    });
+}
+
+function collectCriteriaRuleList(listEl) {
+    const rows = Array.from(listEl.querySelectorAll('.criteria-rule-row'));
+    return rows.map(rowEl => {
+        const name = String(rowEl.querySelector('[data-rule-field="name"]')?.value || '').trim();
+        const min = Math.max(0, Math.floor(Number(rowEl.querySelector('[data-rule-field="min"]')?.value) || 0));
+        const maxRaw = rowEl.querySelector('[data-rule-field="max"]')?.value;
+        const max = (maxRaw === '' || maxRaw === null || maxRaw === undefined) ? null : Math.max(min, Math.floor(Number(maxRaw) || 0));
+        const id = String(rowEl.dataset.ruleId || buildRuleId('rule'));
+        return { id, name, min, max };
+    }).filter(rule => rule.name);
+}
+
+function validateContiguousCoverage(rules, label) {
+    if (!rules.length) return `${label} 至少需要 1 条规则`;
+    const sorted = rules.slice().sort((a, b) => (a.min - b.min) || String(a.id).localeCompare(String(b.id)));
+    if (sorted[0].min !== 0) return `${label} 需要从 0 开始`;
+    for (let i = 0; i < sorted.length; i += 1) {
+        const current = sorted[i];
+        if (current.max !== null && current.max < current.min) return `${label} 区间不合法：max 需大于等于 min`;
+        if (i === sorted.length - 1) {
+            if (current.max !== null) return `${label} 最后一条规则 max 需为空（表示无上限）`;
+        } else {
+            if (current.max === null) return `${label} 中间规则 max 不能为空`;
+            const next = sorted[i + 1];
+            if (next.min <= current.max) return `${label} 区间不能重叠`;
+            if (next.min !== current.max + 1) return `${label} 区间需要连续覆盖（存在空档）`;
+        }
+    }
+    return '';
+}
+
+function openCriteriaSettings() {
+    reconcileCriteriaSettings();
+    const overlayEl = document.getElementById('criteriaOverlay');
+    const modalEl = document.getElementById('criteriaModal');
+    const subEl = document.getElementById('criteriaModalSub');
+    const noteEl = document.getElementById('criteriaModalNote');
+    const activityListEl = document.getElementById('activityRuleList');
+    const segmentListEl = document.getElementById('segmentRuleList');
+    if (!overlayEl || !modalEl || !subEl || !noteEl || !activityListEl || !segmentListEl) return;
+
+    const lastUpdated = (criteriaEffective && criteriaEffective.dataLastUpdatedAt) ? criteriaEffective.dataLastUpdatedAt : METRIC_DATA_LAST_UPDATED_AT;
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextEffectiveOn = formatYMD(tomorrow);
+
+    const pendingText = criteriaPending
+        ? `当前已有待生效设置：<strong>${criteriaPending.effectiveOn}</strong> 生效`
+        : `本次保存将于 <strong>${nextEffectiveOn}</strong> 生效（次日生效）`;
+
+    subEl.textContent = `指标数据最后更新时间：${lastUpdated}`;
+    noteEl.innerHTML = `${pendingText}<br>说明：当前页面展示的数据不会立即变化，系统会在次日按新口径重新计算后生效。`;
+
+    const config = (criteriaPending && criteriaPending.criteria) ? criteriaPending.criteria : (criteriaEffective || getDefaultCriteriaConfig());
+    renderCriteriaRuleList(activityListEl, 'activity', getRuleListFromConfig('activity', config));
+    renderCriteriaRuleList(segmentListEl, 'segment', getRuleListFromConfig('segment', config));
+    renderCriteriaFilterOptions();
+    setCriteriaStatus(criteriaPending ? `已提交，将于 ${criteriaPending.effectiveOn} 生效` : '');
+    overlayEl.classList.add('active');
+    modalEl.classList.add('active');
+}
+
+function closeCriteriaSettings() {
+    const overlayEl = document.getElementById('criteriaOverlay');
+    const modalEl = document.getElementById('criteriaModal');
+    if (overlayEl) overlayEl.classList.remove('active');
+    if (modalEl) modalEl.classList.remove('active');
+}
+
+function saveCriteriaSettings() {
+    reconcileCriteriaSettings();
+    const activityListEl = document.getElementById('activityRuleList');
+    const segmentListEl = document.getElementById('segmentRuleList');
+    if (!activityListEl || !segmentListEl) return;
+    const activityRules = collectCriteriaRuleList(activityListEl);
+    const segmentRules = collectCriteriaRuleList(segmentListEl);
+    const activityError = validateContiguousCoverage(activityRules, '活跃度口径');
+    if (activityError) {
+        setCriteriaStatus(activityError);
+        return;
+    }
+    const segmentError = validateContiguousCoverage(segmentRules, '消费分层口径');
+    if (segmentError) {
+        setCriteriaStatus(segmentError);
+        return;
+    }
+
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const nextEffectiveOn = formatYMD(tomorrow);
+    const lastUpdated = (criteriaEffective && criteriaEffective.dataLastUpdatedAt) ? criteriaEffective.dataLastUpdatedAt : METRIC_DATA_LAST_UPDATED_AT;
+    const pending = {
+        effectiveOn: nextEffectiveOn,
+        submittedAt: new Date().toISOString(),
+        criteria: {
+            activityRules,
+            segmentRules,
+            dataLastUpdatedAt: lastUpdated
+        }
+    };
+    saveCriteriaPending(pending);
+    criteriaPending = loadCriteriaPending();
+    setCriteriaStatus(`已保存，将于 ${nextEffectiveOn} 生效`);
+
+    const noteEl = document.getElementById('criteriaModalNote');
+    if (noteEl) {
+        noteEl.innerHTML = `本次保存将于 <strong>${nextEffectiveOn}</strong> 生效（次日生效）<br>说明：当前页面展示的数据不会立即变化，系统会在次日按新口径重新计算后生效。`;
+    }
+}
+
 function openMobileCustomerFilter() {
     document.body.classList.add('customer-mobile-filter-open');
 }
@@ -2150,6 +2664,66 @@ document.getElementById('tableSettingsList').addEventListener('change', function
     applyVisibleColumns(selectedIds);
 });
 
+document.getElementById('criteriaSettingsBtn').addEventListener('click', function(event) {
+    event.stopPropagation();
+    openCriteriaSettings();
+});
+
+document.getElementById('criteriaOverlay').addEventListener('click', closeCriteriaSettings);
+document.getElementById('criteriaModalClose').addEventListener('click', closeCriteriaSettings);
+document.getElementById('criteriaCancelBtn').addEventListener('click', closeCriteriaSettings);
+document.getElementById('criteriaSaveBtn').addEventListener('click', saveCriteriaSettings);
+document.getElementById('addActivityRuleBtn').addEventListener('click', function() {
+    const listEl = document.getElementById('activityRuleList');
+    if (!listEl) return;
+    const rowEl = document.createElement('div');
+    rowEl.className = 'criteria-rule-row';
+    rowEl.dataset.ruleType = 'activity';
+    rowEl.dataset.ruleId = buildRuleId('act');
+    rowEl.innerHTML = `
+        <input class="criteria-input" data-rule-field="name" placeholder="例如：流失客户" value="">
+        <input type="number" class="criteria-input" data-rule-field="min" min="0" step="1" value="0">
+        <input type="number" class="criteria-input" data-rule-field="max" min="0" step="1" placeholder="∞" value="">
+        <button type="button" class="criteria-mini-btn" data-rule-action="delete" aria-label="删除"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+    `;
+    listEl.appendChild(rowEl);
+    setCriteriaStatus('');
+});
+document.getElementById('addSegmentRuleBtn').addEventListener('click', function() {
+    const listEl = document.getElementById('segmentRuleList');
+    if (!listEl) return;
+    const rowEl = document.createElement('div');
+    rowEl.className = 'criteria-rule-row';
+    rowEl.dataset.ruleType = 'segment';
+    rowEl.dataset.ruleId = buildRuleId('seg');
+    rowEl.innerHTML = `
+        <input class="criteria-input" data-rule-field="name" placeholder="例如：F" value="">
+        <input type="number" class="criteria-input" data-rule-field="min" min="0" step="1" value="0">
+        <input type="number" class="criteria-input" data-rule-field="max" min="0" step="1" placeholder="∞" value="">
+        <button type="button" class="criteria-mini-btn" data-rule-action="delete" aria-label="删除"><iconify-icon icon="mdi:trash-can-outline"></iconify-icon></button>
+    `;
+    listEl.appendChild(rowEl);
+    setCriteriaStatus('');
+});
+document.getElementById('criteriaModal').addEventListener('click', function(event) {
+    const btn = event.target.closest('[data-rule-action="delete"]');
+    if (!btn) return;
+    const rowEl = btn.closest('.criteria-rule-row');
+    if (!rowEl) return;
+    rowEl.remove();
+    setCriteriaStatus('');
+});
+document.getElementById('criteriaModal').addEventListener('input', function(event) {
+    if (!event.target.closest('.criteria-rule-row')) return;
+    setCriteriaStatus('');
+});
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') closeCriteriaSettings();
+});
+
+reconcileCriteriaSettings();
+updateActivityCriteriaTooltips(criteriaEffective || getDefaultCriteriaConfig());
+renderCriteriaFilterOptions();
 syncTagTrigger();
 renderTagOptions();
 syncSortHeaders();

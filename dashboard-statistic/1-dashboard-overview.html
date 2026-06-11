@@ -121,7 +121,9 @@
         #serviceOpsCard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}
         #serviceOpsCard .section-header{grid-column:1/-1;margin-bottom:0}
         #serviceOpsCard .section-subgroup{min-width:0}
-        #serviceOpsCard > .cash-detail-panel{grid-column:1/-1}
+        .section-grid > .cash-detail-panel{grid-column:1/-1}
+        .section-grid > .cash-detail-panel:not(.show){display:none}
+        .section-grid > .cash-detail-panel.show{margin-top:0}
         .section-subgroup + .section-subgroup{margin-top:18px;padding-top:18px;border-top:1px solid var(--border-light)}
         #serviceOpsCard .section-subgroup + .section-subgroup{margin-top:0;padding-top:0;padding-left:18px;border-top:none;border-left:1px solid var(--border-light)}
         .section-subtitle{font-size:13px;font-weight:700;color:var(--text-secondary);margin-bottom:12px}
@@ -593,6 +595,40 @@
                 </div>
 
                 <div class="trend-grid animate-in" id="trendGrid">
+                    <div class="trend-card">
+                        <div class="trend-header">
+                            <div class="trend-title-wrap">
+                                <div class="trend-title">现金业绩趋势</div>
+                                <div class="trend-subtitle">按月份查看今年与去年现金业绩变化，悬浮/点击查看会员 / 体验客 / 新客拆分</div>
+                            </div>
+                            <div class="trend-legend">
+                                <div class="trend-legend-item"><span class="trend-legend-line current"></span><span>今年</span></div>
+                                <div class="trend-legend-item"><span class="trend-legend-line previous"></span><span>去年</span></div>
+                            </div>
+                        </div>
+                        <div class="trend-chart-shell" id="overviewCashTrendShell">
+                            <div class="trend-chart" id="overviewCashTrendChart"></div>
+                            <div class="trend-tooltip" id="overviewCashTrendTooltip"></div>
+                        </div>
+                        <div class="trend-totals" id="overviewCashTrendTotals"></div>
+                    </div>
+                    <div class="trend-card">
+                        <div class="trend-header">
+                            <div class="trend-title-wrap">
+                                <div class="trend-title">消耗业绩趋势</div>
+                                <div class="trend-subtitle">按月份查看今年与去年消耗业绩变化，悬浮/点击查看会员 / 体验客 / 新客拆分</div>
+                            </div>
+                            <div class="trend-legend">
+                                <div class="trend-legend-item"><span class="trend-legend-line current"></span><span>今年</span></div>
+                                <div class="trend-legend-item"><span class="trend-legend-line previous"></span><span>去年</span></div>
+                            </div>
+                        </div>
+                        <div class="trend-chart-shell" id="overviewConsumeTrendShell">
+                            <div class="trend-chart" id="overviewConsumeTrendChart"></div>
+                            <div class="trend-tooltip" id="overviewConsumeTrendTooltip"></div>
+                        </div>
+                        <div class="trend-totals" id="overviewConsumeTrendTotals"></div>
+                    </div>
                     <div class="trend-card">
                         <div class="trend-header">
                             <div class="trend-title-wrap">
@@ -1173,22 +1209,22 @@
         const serviceDetailData = {
             serviceCount: {
                 daily: [
-                    { orderId: 'ORD20260526001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-10 10:30' },
+                    { orderId: 'ORD20260526001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-10 10:30', redeemChannel: '美团/大众点评' },
                     { orderId: 'ORD20260526004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-10 15:20' },
-                    { orderId: 'ORD20260526006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-10 17:10' },
+                    { orderId: 'ORD20260526006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-10 17:10', redeemChannel: '抖音' },
                     { orderId: 'ORD20260526007', name: '周琳', phone: '132****0123', customerType: '会员', serviceItem: '补水护理', beautician: '苏瑶', count: 1, time: '2026-06-10 18:00' }
                 ],
                 monthly: [
-                    { orderId: 'ORD20260501001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260501001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30', redeemChannel: '美团/大众点评' },
                     { orderId: 'ORD20260508004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-04 15:20' },
-                    { orderId: 'ORD20260512006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-06 09:30' },
+                    { orderId: 'ORD20260512006', name: '赵敏', phone: '133****2345', customerType: '会员', serviceItem: '肩颈疏通护理', beautician: '可欣', count: 1, time: '2026-06-06 09:30', redeemChannel: '抖音' },
                     { orderId: 'ORD20260514008', name: '孙丽', phone: '131****6789', customerType: '会员', serviceItem: '美白护理套餐', beautician: '林悦', count: 1, time: '2026-06-07 14:20' },
                     { orderId: 'ORD20260518009', name: '周琳', phone: '132****0123', customerType: '会员', serviceItem: '补水护理', beautician: '苏瑶', count: 1, time: '2026-06-08 17:40' }
                 ],
                 yearly: [
-                    { orderId: 'ORD20260105001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30' },
+                    { orderId: 'ORD20260105001', name: '张小美', phone: '138****6721', customerType: '会员', serviceItem: '水光针护理', beautician: '林悦', count: 1, time: '2026-06-01 10:30', redeemChannel: '美团/大众点评' },
                     { orderId: 'ORD20260212002', name: '李晓丽', phone: '139****3845', customerType: '会员', serviceItem: '深层清洁护理', beautician: '苏瑶', count: 1, time: '2026-06-03 11:15' },
-                    { orderId: 'ORD20260320003', name: '王芳', phone: '136****9012', customerType: '会员', serviceItem: '抖音限时体验', beautician: '林悦', count: 1, time: '2026-06-05 14:00' },
+                    { orderId: 'ORD20260320003', name: '王芳', phone: '136****9012', customerType: '会员', serviceItem: '抖音限时体验', beautician: '林悦', count: 1, time: '2026-06-05 14:00', redeemChannel: '抖音' },
                     { orderId: 'ORD20260401004', name: '陈雅', phone: '137****4567', customerType: '会员', serviceItem: '面部清洁护理', beautician: '诗涵', count: 1, time: '2026-06-07 15:20' }
                 ]
             }
@@ -1319,14 +1355,14 @@
 
         const OVERVIEW_INDEX_CARD_TRENDS = {
             daily: [
-                { label: '较前一日', value: -85.89 },
-                { label: '较上周同期', value: 1011.12 }
+                { label: '较前一日', value: +8.89 },
+                { label: '较上周同期', value: -2.10 }
             ],
             monthly: [
-                { label: '较前一月', value: -74.95 }
+                { label: '较前一月', value: 1.95 }
             ],
             yearly: [
-                { label: '较前一年', value: -74.95 }
+                { label: '较前一年', value: 9.2 }
             ]
         };
 
@@ -1827,9 +1863,9 @@
                     const data = (serviceDetailData.serviceCount && serviceDetailData.serviceCount[view]) || [];
                     const memberData = sectionData[view] || sectionData.daily;
                     document.getElementById('cashTotalValue').textContent = memberData.member.serviceCount + '次';
-                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>服务项目</th><th>数量</th><th>美容师</th><th>服务时间</th></tr>';
+                    thead.innerHTML = '<tr><th>客户姓名</th><th>手机号</th><th>客户类型</th><th>服务项目</th><th>数量</th><th>核销渠道</th><th>美容师</th><th>服务时间</th></tr>';
                     if (data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="7" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;color:var(--text-muted);padding:24px">暂无数据</td></tr>';
                     } else {
                         tbody.innerHTML = data.map(row => `
                             <tr>
@@ -1838,6 +1874,7 @@
                                 <td><span class="type-tag ${customerTypeTagMap[row.customerType] || 'member-tag'}">${row.customerType || '-'}</span></td>
                                 <td>${row.serviceItem}</td>
                                 <td>${row.count}</td>
+                                <td>${row.redeemChannel || '非核销'}</td>
                                 <td>${row.beautician}</td>
                                 <td>${row.time}</td>
                             </tr>
@@ -1931,8 +1968,8 @@
             const target = document.querySelector('[data-detail="' + type + '"]');
             if (target) target.classList.add('active');
             const sectionCard = target ? target.closest('.section-card') : null;
-            if (sectionCard && panel.parentElement !== sectionCard) {
-                sectionCard.appendChild(panel);
+            if (sectionCard && panel.previousElementSibling !== sectionCard) {
+                sectionCard.insertAdjacentElement('afterend', panel);
             }
 
             activeDetailType = type;
@@ -2107,6 +2144,66 @@
         }
 
         const TREND_MONTH_LABELS = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+        const OVERVIEW_CASH_TREND_DATA = {
+            currentYear: [
+                { member: 38200, experience: 9200, newCustomer: 11800 },
+                { member: 40100, experience: 9800, newCustomer: 12400 },
+                { member: 42600, experience: 10200, newCustomer: 13200 },
+                { member: 45800, experience: 11000, newCustomer: 14500 },
+                { member: 51200, experience: 11800, newCustomer: 15600 },
+                { member: 48600, experience: 11400, newCustomer: 15100 },
+                { member: 47200, experience: 11000, newCustomer: 14800 },
+                { member: 44800, experience: 10600, newCustomer: 14300 },
+                { member: 43100, experience: 10200, newCustomer: 13800 },
+                { member: 41800, experience: 9900, newCustomer: 13400 },
+                { member: 40600, experience: 9600, newCustomer: 13000 },
+                { member: 39500, experience: 9400, newCustomer: 12600 }
+            ],
+            previousYear: [
+                { member: 50600, experience: 7800, newCustomer: 9800 },
+                { member: 34100, experience: 8100, newCustomer: 10200 },
+                { member: 35600, experience: 8600, newCustomer: 10800 },
+                { member: 38200, experience: 9100, newCustomer: 11600 },
+                { member: 42100, experience: 9800, newCustomer: 12400 },
+                { member: 66600, experience: 20300, newCustomer: 12000 },
+                { member: 39200, experience: 9100, newCustomer: 11700 },
+                { member: 37600, experience: 8900, newCustomer: 11300 },
+                { member: 36200, experience: 8600, newCustomer: 10900 },
+                { member: 35100, experience: 8300, newCustomer: 10600 },
+                { member: 33800, experience: 8100, newCustomer: 10300 },
+                { member: 33200, experience: 7900, newCustomer: 10000 }
+            ]
+        };
+        const OVERVIEW_CONSUME_TREND_DATA = {
+            currentYear: [
+                { member: 52800, experience: 13600, newCustomer: 16200 },
+                { member: 54600, experience: 14200, newCustomer: 16800 },
+                { member: 57200, experience: 14800, newCustomer: 17600 },
+                { member: 60100, experience: 15600, newCustomer: 18800 },
+                { member: 64800, experience: 16400, newCustomer: 20100 },
+                { member: 62400, experience: 15800, newCustomer: 19400 },
+                { member: 61100, experience: 15400, newCustomer: 18900 },
+                { member: 59600, experience: 14900, newCustomer: 18400 },
+                { member: 58200, experience: 14500, newCustomer: 17800 },
+                { member: 56900, experience: 18100, newCustomer: 17300 },
+                { member: 55600, experience: 13800, newCustomer: 16900 },
+                { member: 54200, experience: 13500, newCustomer: 16500 }
+            ],
+            previousYear: [
+                { member: 46200, experience: 14800, newCustomer: 14100 },
+                { member: 47800, experience: 12200, newCustomer: 14600 },
+                { member: 49300, experience: 12600, newCustomer: 15200 },
+                { member: 52100, experience: 32400, newCustomer: 16000 },
+                { member: 55800, experience: 14100, newCustomer: 17000 },
+                { member: 53900, experience: 13700, newCustomer: 16500 },
+                { member: 52800, experience: 13300, newCustomer: 16100 },
+                { member: 51300, experience: 12900, newCustomer: 15600 },
+                { member: 50100, experience: 42600, newCustomer: 15100 },
+                { member: 48800, experience: 12300, newCustomer: 14700 },
+                { member: 47600, experience: 12000, newCustomer: 14400 },
+                { member: 46800, experience: 11800, newCustomer: 14200 }
+            ]
+        };
         const OVERVIEW_CONSUMER_TREND_DATA = {
             currentYear: [
                 { member:48, experience:15, newCustomer:15 },
@@ -2116,11 +2213,11 @@
                 { member:81, experience:19, newCustomer:24 },
                 { member:76, experience:18, newCustomer:24 },
                 { member:72, experience:17, newCustomer:23 },
-                { member:67, experience:16, newCustomer:23 },
+                { member:100, experience:16, newCustomer:23 },
                 { member:62, experience:15, newCustomer:21 },
-                { member:58, experience:14, newCustomer:20 },
-                { member:55, experience:13, newCustomer:20 },
-                { member:52, experience:13, newCustomer:19 }
+                { member:110, experience:14, newCustomer:20 },
+                { member:120, experience:13, newCustomer:20 },
+                { member:152, experience:13, newCustomer:19 }
             ],
             previousYear: [
                 { member:40, experience:12, newCustomer:12 },
@@ -2147,9 +2244,9 @@
                 { member:176, experience:50, newCustomer:56 },
                 { member:168, experience:48, newCustomer:54 },
                 { member:156, experience:46, newCustomer:54 },
-                { member:148, experience:44, newCustomer:50 },
-                { member:140, experience:42, newCustomer:48 },
-                { member:134, experience:40, newCustomer:46 },
+                { member:188, experience:44, newCustomer:50 },
+                { member:200, experience:42, newCustomer:48 },
+                { member:174, experience:40, newCustomer:46 },
                 { member:130, experience:40, newCustomer:44 }
             ],
             previousYear: [
@@ -2172,6 +2269,14 @@
             return (Number(entry.member) || 0) + (Number(entry.experience) || 0) + (Number(entry.newCustomer) || 0);
         }
 
+        function formatTrendCountValue(value) {
+            return (Number(value) || 0).toLocaleString();
+        }
+
+        function formatTrendCurrencyValue(value) {
+            return `¥${(Number(value) || 0).toLocaleString()}`;
+        }
+
         function getYearOverYearTrend(currentValue, previousValue) {
             const current = Number(currentValue) || 0;
             const previous = Number(previousValue) || 0;
@@ -2192,7 +2297,7 @@
             };
         }
 
-        function openOverviewTrendModal({ title, subtitle, monthLabel, metricLabel, currentEntry, previousEntry }) {
+        function openOverviewTrendModal({ title, subtitle, monthLabel, metricLabel, currentEntry, previousEntry, valueFormatter = formatTrendCountValue }) {
             const overlayEl = document.getElementById('overviewTrendModalOverlay');
             const titleEl = document.getElementById('overviewTrendModalTitle');
             const subtitleEl = document.getElementById('overviewTrendModalSubtitle');
@@ -2204,23 +2309,23 @@
                 <div class="trend-month-card current">
                     <div class="trend-month-card-head">
                         <div class="trend-month-card-title"><span class="trend-month-dot"></span><span>今年</span></div>
-                        <div class="trend-month-total">${getTrendEntryTotal(currentEntry)}</div>
+                        <div class="trend-month-total">${valueFormatter(getTrendEntryTotal(currentEntry))}</div>
                     </div>
                     <div class="trend-month-breakdown">
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${currentEntry.member}</div></div>
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${currentEntry.experience}</div></div>
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${currentEntry.newCustomer}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${valueFormatter(currentEntry.member)}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${valueFormatter(currentEntry.experience)}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${valueFormatter(currentEntry.newCustomer)}</div></div>
                     </div>
                 </div>
                 <div class="trend-month-card previous">
                     <div class="trend-month-card-head">
                         <div class="trend-month-card-title"><span class="trend-month-dot"></span><span>去年</span></div>
-                        <div class="trend-month-total">${getTrendEntryTotal(previousEntry)}</div>
+                        <div class="trend-month-total">${valueFormatter(getTrendEntryTotal(previousEntry))}</div>
                     </div>
                     <div class="trend-month-breakdown">
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${previousEntry.member}</div></div>
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${previousEntry.experience}</div></div>
-                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${previousEntry.newCustomer}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">会员</div><div class="trend-month-break-value">${valueFormatter(previousEntry.member)}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">体验客</div><div class="trend-month-break-value">${valueFormatter(previousEntry.experience)}</div></div>
+                        <div class="trend-month-break-item"><div class="trend-month-break-label">新客</div><div class="trend-month-break-value">${valueFormatter(previousEntry.newCustomer)}</div></div>
                     </div>
                 </div>
             `;
@@ -2251,7 +2356,7 @@
             document.body.dataset.overviewTrendModalBound = '1';
         }
 
-        function renderOverviewTrendChart({ chartId, shellId, tooltipId, totalsId, dataset, metricLabel }) {
+        function renderOverviewTrendChart({ chartId, shellId, tooltipId, totalsId, dataset, metricLabel, valueFormatter = formatTrendCountValue, totalLabel = '总数' }) {
             const chartEl = document.getElementById(chartId);
             const shellEl = document.getElementById(shellId);
             const tooltipEl = document.getElementById(tooltipId);
@@ -2266,7 +2371,9 @@
             const maxY = Math.ceil(maxTotal / roughStep) * roughStep;
             const width = 860;
             const height = 320;
-            const padding = { top:20, right:26, bottom:42, left:58 };
+            const isMobileCompact = shellEl.clientWidth > 0 && shellEl.clientWidth <= 420;
+            const isCurrencyMetric = valueFormatter === formatTrendCurrencyValue;
+            const padding = { top:20, right:26, bottom:42, left:isCurrencyMetric ? (isMobileCompact ? 76 : 96) : 58 };
             const plotWidth = width - padding.left - padding.right;
             const plotHeight = height - padding.top - padding.bottom;
             const stepX = plotWidth / (TREND_MONTH_LABELS.length - 1);
@@ -2274,7 +2381,6 @@
             const toX = index => padding.left + stepX * index;
             const buildPath = dataset => dataset.map((entry, index) => `${index === 0 ? 'M' : 'L'} ${toX(index)} ${toY(getTrendEntryTotal(entry))}`).join(' ');
             const yTicks = Array.from({ length:5 }, (_, index) => Math.round((maxY / 4) * index)).reverse();
-            const isMobileCompact = shellEl.clientWidth > 0 && shellEl.clientWidth <= 420;
             const monthLabelStep = isMobileCompact ? 2 : 1;
             const axisLabelFontSize = isMobileCompact ? 11 : 12;
 
@@ -2284,6 +2390,7 @@
                         const y = toY(value);
                         return `
                             <line class="trend-grid-line" x1="${padding.left}" y1="${y}" x2="${width - padding.right}" y2="${y}"></line>
+                            <text x="${padding.left - 12}" y="${y + 4}" text-anchor="end" fill="#9ca3af" font-size="${axisLabelFontSize}">${valueFormatter(value)}</text>
                         `;
                     }).join('')}
                     <line class="trend-axis-line" x1="${padding.left}" y1="${padding.top + plotHeight}" x2="${width - padding.right}" y2="${padding.top + plotHeight}"></line>
@@ -2305,11 +2412,11 @@
                 totalsEl.innerHTML = `
                     <div class="trend-total-item">
                         <div class="trend-total-label">今年${metricLabel}</div>
-                        <div class="trend-total-value">${currentTotal}</div>
+                        <div class="trend-total-value">${valueFormatter(currentTotal)}</div>
                     </div>
                     <div class="trend-total-item">
                         <div class="trend-total-label">去年${metricLabel}</div>
-                        <div class="trend-total-value">${previousTotal}</div>
+                        <div class="trend-total-value">${valueFormatter(previousTotal)}</div>
                     </div>
                     <div class="trend-total-item">
                         <div class="trend-total-label">同比</div>
@@ -2327,12 +2434,12 @@
                 <div class="trend-tooltip-series ${className}">
                     <div class="trend-tooltip-series-head">
                         <div class="trend-tooltip-series-title"><span class="trend-tooltip-dot"></span><span>${title}</span></div>
-                        <div class="trend-tooltip-total">总数 ${getTrendEntryTotal(entry)}</div>
+                        <div class="trend-tooltip-total">${totalLabel} ${valueFormatter(getTrendEntryTotal(entry))}</div>
                     </div>
                     <div class="trend-tooltip-breakdown">
-                        <span>会员 <strong>${entry.member}</strong></span>
-                        <span>体验客 <strong>${entry.experience}</strong></span>
-                        <span>新客 <strong>${entry.newCustomer}</strong></span>
+                        <span>会员 <strong>${valueFormatter(entry.member)}</strong></span>
+                        <span>体验客 <strong>${valueFormatter(entry.experience)}</strong></span>
+                        <span>新客 <strong>${valueFormatter(entry.newCustomer)}</strong></span>
                     </div>
                 </div>
             `;
@@ -2382,7 +2489,8 @@
                             monthLabel: TREND_MONTH_LABELS[index],
                             metricLabel,
                             currentEntry: currentYearData[index],
-                            previousEntry: previousYearData[index]
+                            previousEntry: previousYearData[index],
+                            valueFormatter
                         });
                         hideTooltip();
                     }
@@ -2391,6 +2499,26 @@
         }
 
         function renderOverviewTrends() {
+            renderOverviewTrendChart({
+                chartId: 'overviewCashTrendChart',
+                shellId: 'overviewCashTrendShell',
+                tooltipId: 'overviewCashTrendTooltip',
+                totalsId: 'overviewCashTrendTotals',
+                dataset: OVERVIEW_CASH_TREND_DATA,
+                metricLabel: '现金业绩',
+                valueFormatter: formatTrendCurrencyValue,
+                totalLabel: '总额'
+            });
+            renderOverviewTrendChart({
+                chartId: 'overviewConsumeTrendChart',
+                shellId: 'overviewConsumeTrendShell',
+                tooltipId: 'overviewConsumeTrendTooltip',
+                totalsId: 'overviewConsumeTrendTotals',
+                dataset: OVERVIEW_CONSUME_TREND_DATA,
+                metricLabel: '消耗业绩',
+                valueFormatter: formatTrendCurrencyValue,
+                totalLabel: '总额'
+            });
             renderOverviewTrendChart({
                 chartId: 'overviewConsumerTrendChart',
                 shellId: 'overviewConsumerTrendShell',
@@ -2455,3 +2583,4 @@
     </script>
 </body>
 </html>
+2

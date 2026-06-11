@@ -1,0 +1,929 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>员工业绩分析</title>
+    <link rel="stylesheet" href="../chlitina-brand.css">
+    <script defer src="https://modao.cc/agent-py/static/source/js/iconify-icon.min.js"></script>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        :root{
+            --primary:#E87C9A;
+            --primary-dark:#B75A70;
+            --primary-light:rgba(232,124,154,0.08);
+            --primary-lighter:rgba(232,124,154,0.04);
+            --bg:#F7F8FA;
+            --white:#fff;
+            --border:#E5E7EB;
+            --border-light:#F3F4F6;
+            --text-primary:#111827;
+            --text-secondary:#374151;
+            --text-light:#6B7280;
+            --shadow-sm:0 1px 3px rgba(17,24,39,0.06);
+            --shadow-md:0 10px 28px rgba(17,24,39,0.10);
+            --radius:14px;
+            --radius-sm:10px;
+        }
+        body{font-family:'Noto Sans SC',-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--bg);color:var(--text-primary);height:100vh;overflow:hidden}
+        a{text-decoration:none;color:inherit}
+        button{font:inherit}
+        input,select{font:inherit}
+        ::-webkit-scrollbar{width:4px;height:4px}
+        ::-webkit-scrollbar-thumb{background:rgba(17,24,39,0.12);border-radius:999px}
+        ::-webkit-scrollbar-track{background:transparent}
+        .chl-layout{display:flex;flex-direction:column;height:100vh}
+        .chl-topbar{height:56px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border);z-index:10;flex-shrink:0}
+        .chl-topbar-left{display:flex;align-items:center;gap:24px}
+        .chl-back{display:flex;align-items:center;color:var(--primary);text-decoration:none;gap:6px}
+        /* .chl-back:hover{opacity:.75} */
+        .chl-brand{display:flex;align-items:center;font-size:20px;font-weight:800;letter-spacing:1px;color:#111827}
+        .chl-brand span{color:var(--primary)}
+        .chl-store{display:flex;align-items:center;gap:6px;border:1px solid var(--border);padding:6px 12px;border-radius:9999px;font-size:14px;color:var(--text-secondary);background:#fff;cursor:pointer}
+        /* .chl-store:hover{background:#f9fafb} */
+        .chl-topbar-right{display:flex;align-items:center;gap:18px;color:#6b7280}
+        .chl-icon-btn{border:none;background:transparent;cursor:pointer;color:#9ca3af;padding:6px;border-radius:10px}
+        .chl-icon-btn:hover{color:var(--primary);background:#f9fafb}
+        .chl-meta{font-size:14px;color:#9ca3af}
+        .chl-meta-strong{font-size:14px;font-weight:600;color:#6b7280}
+        .chl-user{display:flex;align-items:center;gap:10px}
+        .chl-user img{width:24px;height:24px;border-radius:9999px;object-fit:cover}
+        .chl-user-name{font-size:14px;font-weight:600;color:#374151}
+        .chl-user-role{background:#f3f4f6;padding:2px 8px;border-radius:6px;font-size:12px;color:#6b7280}
+        .chl-page-scroll{flex:1;min-height:0;overflow:auto}
+        .content{padding:18px 18px 24px}
+        .page-header{display:flex;align-items:flex-end;justify-content:space-between;gap:16px;margin-bottom:14px}
+        .page-title{font-size:20px;font-weight:800;color:var(--text-primary);letter-spacing:.2px}
+        .page-desc{font-size:13px;color:var(--text-secondary);margin-top:4px}
+        .page-actions{display:flex;align-items:center;gap:10px;flex:0 0 auto}
+        .btn{height:36px;padding:0 14px;border-radius:10px;border:1px solid var(--border);background:var(--white);cursor:pointer;color:var(--text-secondary);display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;transition:all .18s ease}
+        .btn:hover{border-color:rgba(232,124,154,0.28);color:var(--primary);background:rgba(232,124,154,0.06)}
+        .btn-primary{background:var(--primary);border-color:var(--primary);color:#fff}
+        .btn-primary:hover{background:var(--primary-dark);border-color:var(--primary-dark);color:#fff}
+        .tabs{display:flex;gap:8px;background:var(--white);border:1px solid var(--border-light);border-radius:999px;padding:6px;box-shadow:var(--shadow-sm);overflow:auto;max-width:100%}
+        .tab{height:32px;padding:0 12px;border-radius:999px;border:none;background:transparent;cursor:pointer;color:var(--text-secondary);font-size:13px;font-weight:700;white-space:nowrap;transition:all .18s ease}
+        /* .tab:hover{color:var(--primary)} */
+        .tab.active{color:var(--primary-dark)}
+        .card{background:var(--white);border:1px solid var(--border-light);border-radius:var(--radius);box-shadow:var(--shadow-sm)}
+        .filter-card{padding:14px 14px 12px;margin-bottom:12px}
+        .filter-row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+        .filter-group{display:flex;align-items:center;gap:8px}
+        .filter-label{font-size:12px;font-weight:700;color:var(--text-secondary)}
+        .filter-input{height:34px;border:1px solid var(--border);border-radius:10px;padding:0 10px;background:var(--white);font-size:13px;color:var(--text-primary);outline:none;min-width:140px}
+        .filter-input:focus{border-color:rgba(232,124,154,0.5);box-shadow:0 0 0 3px rgba(232,124,154,0.12)}
+        .quick-range{display:flex;gap:6px;align-items:center}
+        .chip{height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--border);background:var(--white);cursor:pointer;font-size:12px;font-weight:700;color:var(--text-secondary);transition:all .18s ease}
+        /* .chip:hover{border-color:rgba(232,124,154,0.28);color:var(--primary);background:rgba(232,124,154,0.06)} */
+        .chip.active{border-color:rgba(232,124,154,0.35);color:var(--primary-dark);background:rgba(232,124,154,0.10)}
+        .filter-spacer{flex:1 1 auto;min-width:10px}
+        .table-card{overflow:hidden}
+        .table-filters{padding:14px 16px;border-bottom:1px solid var(--border-light)}
+        .table-header{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;border-bottom:1px solid var(--border-light)}
+        .table-header-right{display:flex;align-items:center;gap:10px}
+        .table-title{font-size:14px;font-weight:800;color:var(--text-primary)}
+        .table-meta{font-size:12px;color:var(--text-light)}
+        .table-scroll{overflow:auto}
+        table{width:100%;border-collapse:separate;border-spacing:0;min-width:920px}
+        thead th{position:sticky;top:0;background:var(--border-light);z-index:2;border-bottom:1px solid var(--border);font-size:12px;font-weight:800;color:var(--text-secondary);padding:10px 10px;text-align:center;white-space:nowrap}
+        thead tr:first-child th{border-bottom:1px solid rgba(17,24,39,0.10)}
+        thead tr:last-child th{font-size:11px;font-weight:800;color:#4B5563}
+        th.sortable{cursor:pointer;user-select:none}
+        th.sortable::after{content:'↕';display:inline-block;margin-left:6px;font-size:11px;opacity:.45}
+        th.sortable.sort-asc::after{content:'↑';opacity:1;color:var(--primary-dark)}
+        th.sortable.sort-desc::after{content:'↓';opacity:1;color:var(--primary-dark)}
+        tbody td{border-bottom:1px solid var(--border-light);padding:10px 10px;font-size:13px;color:var(--text-primary);white-space:nowrap; text-align: center;}
+        tbody tr:last-child td{border-bottom:none}
+        td.num{text-align:right;font-variant-numeric:tabular-nums;text-align: center;}
+        td.center{text-align:center}
+        .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;border:1px solid rgba(232,124,154,0.20);background:rgba(232,124,154,0.08);color:var(--primary-dark);font-size:11px;font-weight:800}
+        .tag{display:inline-flex;align-items:center;justify-content:center;min-width:24px;height:20px;padding:0 8px;border-radius:999px;border:1px solid rgba(17,24,39,0.10);background:rgba(17,24,39,0.04);color:#6B7280;font-size:11px;font-weight:800}
+        .pager{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 16px;border-top:1px solid var(--border-light)}
+        .pager-left{font-size:12px;color:var(--text-light)}
+        .pager-right{display:flex;align-items:center;gap:6px}
+        .page-btn{height:30px;min-width:30px;padding:0 10px;border-radius:10px;border:1px solid var(--border);background:var(--white);cursor:pointer;color:var(--text-secondary);font-size:12px;font-weight:800;transition:all .18s ease}
+        .page-btn:hover{border-color:rgba(232,124,154,0.28);color:var(--primary);background:rgba(232,124,154,0.06)}
+        .page-btn.active{background:rgba(232,124,154,0.12);border-color:rgba(232,124,154,0.35);color:var(--primary-dark)}
+        .page-btn:disabled{opacity:.45;cursor:not-allowed}
+        @media (max-width: 768px){
+            html,body{width:100%;max-width:100%;overflow-x:hidden}
+            body{height:auto;overflow:auto}
+            .chl-topbar{display:none}
+            .chl-page-scroll{overflow:visible;min-height:100vh}
+            .content{padding:16px}
+            .page-header{flex-direction:column;align-items:stretch}
+            .page-actions{justify-content:flex-end}
+            #exportBtn{display:none !important}
+            .table-header{flex-direction:column;align-items:stretch;gap:10px}
+            .table-header-right{justify-content:flex-end}
+            #tableCount{margin-left:auto}
+            .table-filters{padding:12px 12px}
+            .table-filters .filter-row{gap:10px}
+            .table-filters .filter-row>.filter-group{width:100%}
+            .table-filters .filter-row>.filter-group:first-child{display:grid;grid-template-columns:72px 1fr 22px 1fr;align-items:center;gap:8px}
+            .table-filters .filter-row>.filter-group:first-child .filter-label{width:auto !important}
+            .table-filters .filter-row>.filter-group .filter-input{min-width:0;width:100%}
+            .table-filters .quick-range{width:100%;overflow-x:auto;flex-wrap:nowrap;-webkit-overflow-scrolling:touch;padding-bottom:2px}
+            .table-filters .quick-range .chip{flex:0 0 auto}
+            .table-filters .filter-spacer{display:none}
+            #applyBtn,#resetBtn{flex:1 1 calc(50% - 5px);justify-content:center}
+            .table-scroll{-webkit-overflow-scrolling:touch}
+            table{min-width:980px}
+        }
+    </style>
+</head>
+<body>
+<div class="chl-layout">
+    <div class="chl-topbar">
+        <div class="chl-topbar-left">
+            <a class="chl-back" href="report-entry-pad.html">
+                <iconify-icon icon="mdi:chevron-left"></iconify-icon>
+                <span>返回</span>
+            </a>
+            <div class="chl-brand"><span>CHLITINA</span> 克丽缇娜</div>
+            <div class="chl-store">
+                <span>测试店1</span>
+                <iconify-icon icon="mdi:chevron-down"></iconify-icon>
+            </div>
+        </div>
+        <div class="chl-topbar-right">
+            <button class="chl-icon-btn" type="button" aria-label="通知"><iconify-icon icon="mdi:bell-outline"></iconify-icon></button>
+            <span class="chl-meta-strong" id="topTime">23:04</span>
+            <span class="chl-meta" id="topDate">6月10日 周三</span>
+            <iconify-icon class="text-base" icon="mdi:wifi"></iconify-icon>
+            <span class="chl-meta">70%</span>
+            <div class="chl-user">
+                <img alt="User Avatar" src="https://modao.cc/agent-py/media/generated_images/2026-06-02/32a78f2a4eba4942bec808cd867a35a9.jpg"/>
+                <span class="chl-user-name">roger</span>
+                <span class="chl-user-role">店总</span>
+            </div>
+        </div>
+    </div>
+    <div class="chl-page-scroll">
+        <div class="content">
+            <div class="page-header">
+                <div>
+                    <div class="page-title">员工业绩分析</div>
+                    <div class="page-desc">员工客户、业绩、劳动明细与绩效指标分析</div>
+                </div>
+            </div>
+            <div class="tabs card" id="tabs" style="margin-bottom: 12px;"></div>
+            <div class="card table-card">
+                <div class="table-filters">
+                    <div class="filter-row">
+                        <div class="filter-group">
+                            <span class="filter-label" style="width: 160px;">时间范围</span>
+                            <input class="filter-input" type="date" id="startDate">
+                            <span class="filter-label" style="opacity:.6">至</span>
+                            <input class="filter-input" type="date" id="endDate">
+                        </div>
+                        <div class="quick-range" id="quickRange">
+                            <button class="chip" type="button" data-range="day">日</button>
+                            <button class="chip" type="button" data-range="month">月</button>
+                            <button class="chip" type="button" data-range="year">年</button>
+                        </div>
+                        <div class="filter-group">
+                            <!-- <span class="filter-label" style="width: 90px;">员工姓名</span> -->
+                            <input class="filter-input" type="text" id="staffKeyword" placeholder="输入员工姓名筛选">
+                        </div>
+                        <div class="filter-spacer"></div>
+                        <button class="btn btn-primary" type="button" id="applyBtn">
+                            <iconify-icon icon="mdi:filter-outline"></iconify-icon>
+                            <span>筛选</span>
+                        </button>
+                        <button class="btn " type="button" id="resetBtn">
+                            <iconify-icon icon="mdi:refresh"></iconify-icon>
+                            <span>重置筛选</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-header">
+                    <div>
+                        <div class="table-title" id="tableTitle">-</div>
+                        <div class="table-meta" id="tableMeta">-</div>
+                    </div>
+                    <div class="table-header-right">
+                        <div class="table-meta" id="tableCount">共 0 条</div>
+                        <button class="btn btn-primary" type="button" id="exportBtn">
+                            <iconify-icon icon="mdi:tray-arrow-down"></iconify-icon>
+                            <span>导出 CSV</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead id="thead"></thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <div class="pager">
+                    <div class="pager-left" id="pagerText">显示 0-0 / 共 0 条</div>
+                    <div class="pager-right" id="pagerBtns"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+const BASE_TODAY = '2026-06-10';
+const PAGE_SIZE = 20;
+
+const TAB_DEFS = [
+    { id:'staffCustomer', label:'员工客户统计', desc:'员工维度的客户结构与分层统计' },
+    { id:'staffPerformance', label:'员工业绩统计', desc:'员工对门店业绩贡献（现金/消耗拆分）' },
+    { id:'staffLabor', label:'员工劳动明细', desc:'员工服务操作明细（含赠送、点客、分摊）' },
+    { id:'staffKpi', label:'员工绩效统计', desc:'服务、留客、客存与运营指标' }
+];
+
+const STAFF_LIST = [
+    { name:'王小美', role:'资深美容师' },
+    { name:'李婷婷', role:'美容师' },
+    { name:'张丽丽', role:'店长' },
+    { name:'林悦', role:'美容师' },
+    { name:'苏瑶', role:'美容师' },
+    { name:'诗涵', role:'顾问' },
+    { name:'可欣', role:'美容师' }
+];
+
+function getStaffRole(name) {
+    return (STAFF_LIST.find(s => s.name === name) || {}).role || '美容师';
+}
+
+function pad2(n){return String(n).padStart(2,'0')}
+function formatYMD(date){
+    const y = date.getFullYear();
+    const m = pad2(date.getMonth() + 1);
+    const d = pad2(date.getDate());
+    return `${y}-${m}-${d}`;
+}
+function parseDate(value){
+    if (!value) return null;
+    const date = new Date(`${value}T00:00:00`);
+    return Number.isNaN(date.getTime()) ? null : date;
+}
+function isInRange(dateStr, startStr, endStr){
+    const date = parseDate(dateStr);
+    const start = parseDate(startStr);
+    const end = parseDate(endStr);
+    if (!date || !start || !end) return true;
+    return date.getTime() >= start.getTime() && date.getTime() <= end.getTime();
+}
+function formatMoney(n){
+    return `¥${(Number(n) || 0).toLocaleString()}`;
+}
+function downloadCsv(filename, rows){
+    const csv = rows.map(row => row.map(cell => {
+        const text = String(cell ?? '');
+        const escaped = text.replace(/"/g, '""');
+        return /[",\n]/.test(escaped) ? `"${escaped}"` : escaped;
+    }).join(',')).join('\n');
+    const blob = new Blob([`\ufeff${csv}`], { type:'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(url);
+}
+
+function buildMockDateSeries(count, startDate = '2026-01-01'){
+    const start = parseDate(startDate) || parseDate(BASE_TODAY) || new Date();
+    const list = [];
+    for (let i=0;i<count;i+=1){
+        const d = new Date(start.getTime());
+        d.setDate(d.getDate() + i);
+        list.push(formatYMD(d));
+    }
+    return list;
+}
+
+const MOCK_DATES = buildMockDateSeries(60, BASE_TODAY);
+
+function buildStaffCustomerRows(){
+    return STAFF_LIST.map((s, idx) => {
+        const base = 40 + idx * 7;
+        return MOCK_DATES.slice(0, 20).map((date, i) => {
+            const delta = (i + 1) * (idx + 1);
+            const dealFlow = base + delta;
+            const dealTimes = Math.round(dealFlow * 1.2);
+            const serviceTimes = Math.round(dealTimes * 1.4);
+            const serviceFlow = Math.round(dealFlow * 1.1);
+            const newCustomer = Math.max(0, Math.round(dealFlow * 0.18));
+            const expCustomer = Math.max(0, Math.round(dealFlow * 0.12));
+            const member = Math.max(0, dealFlow - newCustomer - expCustomer);
+            const segA = Math.round(dealFlow * 0.10);
+            const segB = Math.round(dealFlow * 0.18);
+            const segC = Math.round(dealFlow * 0.26);
+            const segD = Math.round(dealFlow * 0.28);
+            const segE = Math.max(0, dealFlow - segA - segB - segC - segD);
+            return {
+                date,
+                staff:s.name,
+                role:s.role,
+                dealFlow,
+                dealTimes,
+                serviceTimes,
+                serviceFlow,
+                customerNew:newCustomer,
+                customerExp:expCustomer,
+                customerMember:member,
+                segA, segB, segC, segD, segE
+            };
+        });
+    }).flat();
+}
+
+function buildStaffPerformanceRows(){
+    return STAFF_LIST.map((s, idx) => {
+        return MOCK_DATES.slice(0, 20).map((date, i) => {
+            const base = 12000 + idx * 2800 + i * 360;
+            const cashProduct = Math.round(base * 0.24);
+            const cashCare = Math.round(base * 0.18);
+            const cashCard = Math.round(base * 0.42);
+            const cashCoop = Math.round(base * 0.06);
+            const cashTotal = cashProduct + cashCare + cashCard + cashCoop;
+            const consumeProduct = Math.round(base * 0.14);
+            const consumeCare = Math.round(base * 0.22);
+            const consumeTotal = consumeProduct + consumeCare;
+            const total = cashTotal + consumeTotal;
+            return {
+                date,
+                staff:s.name,
+                role:s.role,
+                total,
+                cashTotal,
+                cashProduct,
+                cashCare,
+                cashCard,
+                cashCoop,
+                consumeTotal,
+                consumeProduct,
+                consumeCare
+            };
+        });
+    }).flat();
+}
+
+function buildStaffLaborRows(){
+    const serviceItems = [
+        { name:'面部清洁护理', gift:false },
+        { name:'肩颈疏通护理', gift:false },
+        { name:'补水护理', gift:false },
+        { name:'水光针护理', gift:false },
+        { name:'抖音体验项目', gift:true },
+        { name:'赠送面膜', gift:true }
+    ];
+    const customerNames = ['张小美','陈雅','赵敏','周琳','孙丽','刘婷','吴静','郑雪','何梅','黄蓉'];
+    const rows = [];
+    for (let i=0;i<65;i+=1){
+        const staff = STAFF_LIST[i % STAFF_LIST.length];
+        const date = MOCK_DATES[i % MOCK_DATES.length];
+        const item = serviceItems[i % serviceItems.length];
+        const qty = (i % 3) + 1;
+        const cardAmount = item.gift ? 0 : Math.round(80 + (i % 12) * 25);
+        const cashIncome = item.gift ? 0 : Math.round(120 + (i % 16) * 35);
+        rows.push({
+            date,
+            staff:staff.name,
+            role:staff.role,
+            serviceItem:item.name,
+            isGift:item.gift,
+            qty,
+            customer:customerNames[i % customerNames.length],
+            cardAmount,
+            cashIncome,
+            isPointed:(i % 4 === 0) ? '点客' : '非点客',
+            splitRate:`${[50,60,70,80,100][i % 5]}%`,
+            serviceTime:`${date} ${pad2(9 + (i % 10))}:${pad2((i * 7) % 60)}`,
+            orderId:`ORD${date.replace(/-/g,'')}${pad2(i % 99)}`
+        });
+    }
+    return rows;
+}
+
+function buildStaffKpiRows(){
+    return STAFF_LIST.map((s, idx) => {
+        return MOCK_DATES.slice(0, 20).map((date, i) => {
+            const base = 30 + idx * 6 + i * 2;
+            const serviceCount = base + 12;
+            const serviceTimes = Math.round(serviceCount * 1.1);
+            const serviceFlow = Math.round(serviceCount * 0.9);
+            const keepNew = Math.max(0, Math.round(serviceFlow * 0.08));
+            const stockA = Math.round(serviceFlow * 0.10);
+            const stockB = Math.round(serviceFlow * 0.18);
+            const stockC = Math.round(serviceFlow * 0.24);
+            const stockD = Math.round(serviceFlow * 0.26);
+            const stockE = Math.max(0, serviceFlow - stockA - stockB - stockC - stockD);
+            return {
+                date,
+                staff:s.name,
+                role:s.role,
+                serviceCount,
+                serviceTimes,
+                serviceFlow,
+                keepNew,
+                stockA, stockB, stockC, stockD, stockE,
+                rating:Math.round(6 + ((idx + i) % 5)),
+                checkIn:Math.round(10 + ((idx * 2 + i) % 8)),
+                note:Math.round(4 + ((idx + i) % 6)),
+                exam:Math.round(60 + ((idx * 7 + i * 3) % 41)),
+                team:Math.round(4 + ((idx + i) % 5))
+            };
+        });
+    }).flat();
+}
+
+const DATASETS = {
+    staffCustomer: buildStaffCustomerRows(),
+    staffPerformance: buildStaffPerformanceRows(),
+    staffLabor: buildStaffLaborRows(),
+    staffKpi: buildStaffKpiRows()
+};
+
+function getTabColumns(tabId){
+    if (tabId === 'staffCustomer'){
+        return {
+            headerRows: [
+                [
+                    { label:'员工', rowSpan:2 },
+                    { label:'员工职位', rowSpan:2 },
+                    { label:'成交客流', rowSpan:2 },
+                    { label:'成交客次', rowSpan:2 },
+                    { label:'服务客次', rowSpan:2 },
+                    { label:'服务客流', rowSpan:2 },
+                    { label:'客户构成', colSpan:3 },
+                    { label:'消费分层', colSpan:5 }
+                ],
+                [
+                    { label:'新客' },
+                    { label:'体验客' },
+                    { label:'会员' },
+                    { label:'A' },
+                    { label:'B' },
+                    { label:'C' },
+                    { label:'D' },
+                    { label:'E' }
+                ]
+            ],
+            sortKeys: [
+                'staff','role','dealFlow','dealTimes','serviceTimes','serviceFlow',
+                'customerNew','customerExp','customerMember',
+                'segA','segB','segC','segD','segE'
+            ],
+            row: (r) => [
+                r.staff,
+                r.role,
+                r.dealFlow,
+                r.dealTimes,
+                r.serviceTimes,
+                r.serviceFlow,
+                r.customerNew,
+                r.customerExp,
+                r.customerMember,
+                r.segA,
+                r.segB,
+                r.segC,
+                r.segD,
+                r.segE
+            ],
+            cellClass: (index) => index >= 2 ? 'num' : ''
+        };
+    }
+    if (tabId === 'staffPerformance'){
+        return {
+            headerRows: [
+                [
+                    { label:'员工', rowSpan:2 },
+                    { label:'员工职位', rowSpan:2 },
+                    { label:'总业绩', rowSpan:2 },
+                    { label:'现金业绩', colSpan:5 },
+                    { label:'消耗业绩', colSpan:3 }
+                ],
+                [
+                    { label:'总额' },
+                    { label:'产品' },
+                    { label:'护理' },
+                    { label:'卡项' },
+                    { label:'合作' },
+                    { label:'总额' },
+                    { label:'产品' },
+                    { label:'护理' }
+                ]
+            ],
+            sortKeys: [
+                'staff','role','total',
+                'cashTotal','cashProduct','cashCare','cashCard','cashCoop',
+                'consumeTotal','consumeProduct','consumeCare'
+            ],
+            row: (r) => [
+                r.staff,
+                r.role,
+                formatMoney(r.total),
+                formatMoney(r.cashTotal),
+                formatMoney(r.cashProduct),
+                formatMoney(r.cashCare),
+                formatMoney(r.cashCard),
+                formatMoney(r.cashCoop),
+                formatMoney(r.consumeTotal),
+                formatMoney(r.consumeProduct),
+                formatMoney(r.consumeCare)
+            ],
+            cellClass: (index) => index >= 2 ? 'num' : ''
+        };
+    }
+    if (tabId === 'staffLabor'){
+        return {
+            headerRows: [
+                [
+                    { label:'员工', rowSpan:1 },
+                    { label:'员工职位', rowSpan:1 },
+                    { label:'服务项目', rowSpan:1 },
+                    { label:'数量', rowSpan:1 },
+                    { label:'客户姓名', rowSpan:1 },
+                    { label:'耗卡金额', rowSpan:1 },
+                    { label:'现金收入', rowSpan:1 },
+                    { label:'点客情况', rowSpan:1 },
+                    { label:'服务分摊比例', rowSpan:1 },
+                    { label:'服务时间', rowSpan:1 },
+                    { label:'订单编号', rowSpan:1 }
+                ]
+            ],
+            sortKeys: [
+                'staff','role','serviceItem','qty','customer','cardAmount','cashIncome',
+                'isPointed','splitRate','serviceTime','orderId'
+            ],
+            row: (r) => [
+                r.staff,
+                r.role,
+                r.isGift ? `${r.serviceItem} <span class="badge">赠</span>` : r.serviceItem,
+                r.qty,
+                r.customer,
+                formatMoney(r.cardAmount),
+                formatMoney(r.cashIncome),
+                r.isPointed,
+                r.splitRate,
+                r.serviceTime,
+                r.orderId
+            ],
+            cellClass: (index) => {
+                if ([3].includes(index)) return 'num';
+                if ([5,6].includes(index)) return 'num';
+                if (index === 7) return 'center';
+                return '';
+            },
+            htmlCellIndexes: new Set([2])
+        };
+    }
+    return {
+        headerRows: [
+            [
+                { label:'员工', rowSpan:2 },
+                { label:'员工职位', rowSpan:2 },
+                { label:'服务项次', rowSpan:2 },
+                { label:'服务客次', rowSpan:2 },
+                { label:'服务客流', rowSpan:2 },
+                { label:'新客留客数', rowSpan:2 },
+                { label:'客存', colSpan:5 },
+                { label:'平台好评', rowSpan:2 },
+                { label:'打卡收藏', rowSpan:2 },
+                { label:'笔记', rowSpan:2 },
+                { label:'专业考核', rowSpan:2 },
+                { label:'团队建设', rowSpan:2 }
+            ],
+            [
+                { label:'A' },
+                { label:'B' },
+                { label:'C' },
+                { label:'D' },
+                { label:'E' }
+            ]
+        ],
+        sortKeys: [
+            'staff','role','serviceCount','serviceTimes','serviceFlow','keepNew',
+            'stockA','stockB','stockC','stockD','stockE',
+            'rating','checkIn','note','exam','team'
+        ],
+        row: (r) => [
+            r.staff,
+            r.role,
+            r.serviceCount,
+            r.serviceTimes,
+            r.serviceFlow,
+            r.keepNew,
+            r.stockA,
+            r.stockB,
+            r.stockC,
+            r.stockD,
+            r.stockE,
+            r.rating,
+            r.checkIn,
+            r.note,
+            r.exam,
+            r.team
+        ],
+        cellClass: (index) => index >= 2 ? 'num' : ''
+    };
+}
+
+const state = {
+    tabId: 'staffCustomer',
+    startDate: BASE_TODAY,
+    endDate: BASE_TODAY,
+    rangeMode: 'day',
+    staffKeyword: '',
+    sortByTab: Object.fromEntries(TAB_DEFS.map(t => [t.id, { key:'', dir:'' }])),
+    pageByTab: Object.fromEntries(TAB_DEFS.map(t => [t.id, 1]))
+};
+
+function toggleSort(key){
+    const current = state.sortByTab[state.tabId] || { key:'', dir:'' };
+    if (current.key !== key){
+        state.sortByTab[state.tabId] = { key, dir:'asc' };
+        state.pageByTab[state.tabId] = 1;
+        renderAll();
+        return;
+    }
+    if (current.dir === 'asc'){
+        state.sortByTab[state.tabId] = { key, dir:'desc' };
+        state.pageByTab[state.tabId] = 1;
+        renderAll();
+        return;
+    }
+    state.sortByTab[state.tabId] = { key:'', dir:'' };
+    state.pageByTab[state.tabId] = 1;
+    renderAll();
+}
+
+function getSortValue(row, key){
+    if (key === 'splitRate') return parseFloat(String(row[key] || '').replace('%','')) || 0;
+    if (key === 'serviceTime'){
+        const t = Date.parse(String(row[key] || '').replace(' ', 'T'));
+        return Number.isNaN(t) ? 0 : t;
+    }
+    const value = row[key];
+    if (value == null) return '';
+    return value;
+}
+
+function compareSortValues(a, b){
+    const aEmpty = a === '' || a == null || (typeof a === 'number' && Number.isNaN(a));
+    const bEmpty = b === '' || b == null || (typeof b === 'number' && Number.isNaN(b));
+    if (aEmpty && bEmpty) return 0;
+    if (aEmpty) return 1;
+    if (bEmpty) return -1;
+    const aNum = typeof a === 'number';
+    const bNum = typeof b === 'number';
+    if (aNum && bNum) return a - b;
+    if (aNum && !bNum) return -1;
+    if (!aNum && bNum) return 1;
+    return String(a).localeCompare(String(b), 'zh-Hans-CN', { numeric:true, sensitivity:'base' });
+}
+
+function renderTabs(){
+    const el = document.getElementById('tabs');
+    el.innerHTML = TAB_DEFS.map(t => `<button class="tab ${t.id === state.tabId ? 'active' : ''}" type="button" data-tab="${t.id}">${t.label}</button>`).join('');
+}
+
+function setRange(mode){
+    state.rangeMode = mode;
+    const base = parseDate(BASE_TODAY) || new Date();
+    const start = new Date(base.getTime());
+    const end = new Date(base.getTime());
+    if (mode === 'day'){
+        state.startDate = formatYMD(start);
+        state.endDate = formatYMD(end);
+    } else if (mode === 'month'){
+        start.setDate(1);
+        end.setMonth(end.getMonth() + 1, 0);
+        state.startDate = formatYMD(start);
+        state.endDate = formatYMD(end);
+    } else {
+        start.setMonth(0, 1);
+        end.setMonth(11, 31);
+        state.startDate = formatYMD(start);
+        state.endDate = formatYMD(end);
+    }
+    state.pageByTab[state.tabId] = 1;
+    syncFilters();
+    renderAll();
+}
+
+function syncFilters(){
+    document.getElementById('startDate').value = state.startDate;
+    document.getElementById('endDate').value = state.endDate;
+    document.getElementById('staffKeyword').value = state.staffKeyword;
+    document.querySelectorAll('#quickRange .chip').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.range === state.rangeMode);
+    });
+}
+
+function getFilteredRows(){
+    const rows = DATASETS[state.tabId] || [];
+    const keyword = String(state.staffKeyword || '').trim();
+    const start = state.startDate;
+    const end = state.endDate;
+    const filtered = rows.filter(r => {
+        const nameMatch = !keyword || String(r.staff || '').includes(keyword);
+        const dateMatch = isInRange(r.date, start, end);
+        return nameMatch && dateMatch;
+    });
+    const sortState = state.sortByTab[state.tabId];
+    if (!sortState || !sortState.key || !sortState.dir) return filtered;
+    const dir = sortState.dir === 'asc' ? 1 : -1;
+    const key = sortState.key;
+    return filtered.slice().sort((a, b) => {
+        const diff = compareSortValues(getSortValue(a, key), getSortValue(b, key));
+        return diff * dir;
+    });
+}
+
+function buildTheadHtml(tabId){
+    const colDef = getTabColumns(tabId);
+    const rows = colDef.headerRows;
+    const sortState = state.sortByTab[tabId] || { key:'', dir:'' };
+    let leafIndex = 0;
+    const html = rows.map((row, rowIndex) => {
+        const tds = row.map(cell => {
+            const attrs = [];
+            if (cell.rowSpan) attrs.push(`rowspan="${cell.rowSpan}"`);
+            if (cell.colSpan) attrs.push(`colspan="${cell.colSpan}"`);
+            const bg = rowIndex === 0 && (cell.colSpan || 0) > 1 ? 'style="background:rgba(232,124,154,0.10);color:var(--primary-dark)"' : '';
+            const isLeaf = rows.length === 1 ? true : (rowIndex === 1 || cell.rowSpan === 2);
+            let sortAttrs = '';
+            let sortCls = '';
+            if (isLeaf && colDef.sortKeys && colDef.sortKeys[leafIndex]){
+                const key = colDef.sortKeys[leafIndex];
+                sortAttrs = `data-sort-key="${key}"`;
+                sortCls = `sortable${sortState.key === key && sortState.dir ? ` sort-${sortState.dir}` : ''}`;
+                leafIndex += 1;
+            }
+            return `<th class="${sortCls}" ${sortAttrs} ${attrs.join(' ')} ${bg}>${cell.label}</th>`;
+        }).join('');
+        return `<tr>${tds}</tr>`;
+    }).join('');
+    return html;
+}
+
+function renderTable(){
+    const tab = TAB_DEFS.find(t => t.id === state.tabId);
+    document.getElementById('tableTitle').textContent = tab ? tab.label : '-';
+    document.getElementById('tableMeta').textContent = tab ? tab.desc : '-';
+
+    const rows = getFilteredRows();
+    const total = rows.length;
+    document.getElementById('tableCount').textContent = `共 ${total.toLocaleString()} 条`;
+
+    const page = state.pageByTab[state.tabId] || 1;
+    const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const safePage = Math.min(page, pageCount);
+    state.pageByTab[state.tabId] = safePage;
+    const startIndex = (safePage - 1) * PAGE_SIZE;
+    const endIndex = Math.min(total, startIndex + PAGE_SIZE);
+    document.getElementById('pagerText').textContent = `显示 ${total ? (startIndex + 1) : 0}-${endIndex} / 共 ${total.toLocaleString()} 条`;
+
+    const colDef = getTabColumns(state.tabId);
+    document.getElementById('thead').innerHTML = buildTheadHtml(state.tabId);
+    const tbody = document.getElementById('tbody');
+    const pageRows = rows.slice(startIndex, endIndex);
+    if (!pageRows.length){
+        const colspan = colDef.sortKeys ? colDef.sortKeys.length : colDef.headerRows[colDef.headerRows.length - 1].length;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;color:var(--text-light);padding:18px">暂无数据</td></tr>`;
+        return;
+    }
+    tbody.innerHTML = pageRows.map(r => {
+        const cells = colDef.row(r);
+        return `<tr>` + cells.map((cell, index) => {
+            const cls = colDef.cellClass ? colDef.cellClass(index) : '';
+            const isHtml = colDef.htmlCellIndexes && colDef.htmlCellIndexes.has(index);
+            return `<td class="${cls}">${isHtml ? cell : String(cell)}</td>`;
+        }).join('') + `</tr>`;
+    }).join('');
+}
+
+function buildPagerButtons(){
+    const rows = getFilteredRows();
+    const total = rows.length;
+    const pageCount = Math.max(1, Math.ceil(total / PAGE_SIZE));
+    const current = state.pageByTab[state.tabId] || 1;
+    const el = document.getElementById('pagerBtns');
+    const maxButtons = 7;
+
+    const buttons = [];
+    const prevDisabled = current <= 1;
+    const nextDisabled = current >= pageCount;
+    buttons.push({ label:'‹', page:current - 1, disabled:prevDisabled });
+
+    let start = Math.max(1, current - Math.floor(maxButtons / 2));
+    let end = Math.min(pageCount, start + maxButtons - 1);
+    start = Math.max(1, end - maxButtons + 1);
+    for (let p = start; p <= end; p += 1) {
+        buttons.push({ label:String(p), page:p, active:p === current });
+    }
+    buttons.push({ label:'›', page:current + 1, disabled:nextDisabled });
+
+    el.innerHTML = buttons.map(btn => {
+        const cls = ['page-btn', btn.active ? 'active' : ''].filter(Boolean).join(' ');
+        return `<button class="${cls}" type="button" data-page="${btn.page}" ${btn.disabled ? 'disabled' : ''}>${btn.label}</button>`;
+    }).join('');
+}
+
+function renderAll(){
+    renderTabs();
+    renderTable();
+    buildPagerButtons();
+}
+
+function applyFiltersFromInputs(){
+    state.startDate = document.getElementById('startDate').value || state.startDate;
+    state.endDate = document.getElementById('endDate').value || state.endDate;
+    state.staffKeyword = document.getElementById('staffKeyword').value || '';
+    state.rangeMode = '';
+    state.pageByTab[state.tabId] = 1;
+    renderAll();
+}
+
+function resetFilters(){
+    state.staffKeyword = '';
+    setRange('day');
+}
+
+function exportCurrentTab(){
+    const tab = TAB_DEFS.find(t => t.id === state.tabId);
+    const rows = getFilteredRows();
+    const colDef = getTabColumns(state.tabId);
+    const headerRows = colDef.headerRows;
+
+    const leafHeaders = headerRows.length === 1
+        ? headerRows[0].map(c => c.label)
+        : headerRows[1].map(c => c.label);
+
+    const prefixHeaders = headerRows.length === 1
+        ? []
+        : headerRows[0]
+            .filter(c => c.rowSpan === 2)
+            .map(c => c.label);
+
+    const groupHeaders = headerRows.length === 1
+        ? []
+        : headerRows[0]
+            .filter(c => c.colSpan)
+            .flatMap(c => Array.from({ length:c.colSpan }, () => c.label));
+
+    const header = headerRows.length === 1
+        ? leafHeaders
+        : prefixHeaders.concat(groupHeaders);
+
+    const dataRows = rows.map(r => {
+        const cells = colDef.row(r).map(v => String(v ?? '').replace(/<[^>]+>/g, ''));
+        return cells;
+    });
+
+    const filename = `${tab ? tab.label : 'export'}_${state.startDate}_${state.endDate}.csv`;
+    downloadCsv(filename, [header].concat(dataRows));
+}
+
+document.getElementById('tabs').addEventListener('click', function(event){
+    const btn = event.target.closest('[data-tab]');
+    if (!btn) return;
+    const nextTabId = btn.dataset.tab;
+    if (!nextTabId || nextTabId === state.tabId) return;
+    state.tabId = nextTabId;
+    syncFilters();
+    renderAll();
+});
+document.getElementById('quickRange').addEventListener('click', function(event){
+    const btn = event.target.closest('[data-range]');
+    if (!btn) return;
+    setRange(btn.dataset.range);
+});
+document.getElementById('applyBtn').addEventListener('click', applyFiltersFromInputs);
+document.getElementById('resetBtn').addEventListener('click', resetFilters);
+document.getElementById('exportBtn').addEventListener('click', exportCurrentTab);
+document.getElementById('thead').addEventListener('click', function(event){
+    const th = event.target.closest('th[data-sort-key]');
+    if (!th) return;
+    toggleSort(th.dataset.sortKey);
+});
+document.getElementById('pagerBtns').addEventListener('click', function(event){
+    const btn = event.target.closest('[data-page]');
+    if (!btn) return;
+    const page = Number(btn.dataset.page);
+    if (!page || Number.isNaN(page)) return;
+    state.pageByTab[state.tabId] = page;
+    renderTable();
+    buildPagerButtons();
+});
+
+function init(){
+    const now = new Date('2026-06-10T23:04:00');
+    document.getElementById('topTime').textContent = `${pad2(now.getHours())}:${pad2(now.getMinutes())}`;
+    document.getElementById('topDate').textContent = `6月10日 周三`;
+    setRange('day');
+    syncFilters();
+    renderAll();
+}
+init();
+</script>
+</body>
+</html>
