@@ -124,9 +124,6 @@
         .pnl-label{flex:1;font-size:13px;color:var(--text-primary)}
         .pnl-amount{text-align:right;font-family:'Inter',sans-serif;font-weight:600;font-size:14px;min-width:120px;color:var(--text-primary)}
         .pnl-ratio{text-align:right;font-size:12px;color:var(--text-muted);min-width:80px}
-        .pnl-bar-cell{min-width:100px;padding:0 16px}
-        .pnl-bar{height:6px;border-radius:3px;background:var(--border);overflow:hidden}
-        .pnl-bar-fill{height:100%;border-radius:3px;transition:width .4s ease}
         .pnl-detail-toggle{width:24px;height:24px;border-radius:6px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;flex-shrink:0;margin-right:8px}
         .pnl-detail-toggle:hover{background:var(--bg-main)}
         .pnl-detail-toggle svg{width:14px;height:14px;color:var(--text-muted);transition:transform .2s}
@@ -159,11 +156,18 @@
         .donut-legend-value{font-weight:600;color:var(--text-primary);font-family:'Inter',sans-serif;margin-left:auto}
 
         .trend-chart{display:flex;align-items:flex-end;gap:8px;height:160px;padding-top:10px}
-        .trend-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+        .trend-col{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%}
+        .trend-bar-wrap{width:100%;flex:1;display:flex;align-items:flex-end;position:relative;z-index:1}
         .trend-bar{width:100%;border-radius:4px 4px 0 0;transition:height .4s ease;position:relative;cursor:pointer}
         .trend-bar:hover{opacity:.85}
-        .trend-bar-tooltip{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--text-primary);color:white;padding:4px 8px;border-radius:4px;font-size:11px;white-space:nowrap;margin-bottom:4px}
+        .trend-bar-tooltip{display:none;position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:var(--text-primary);color:white;padding:8px 10px;border-radius:8px;font-size:11px;white-space:normal;margin-bottom:6px;min-width:120px}
+        .trend-tooltip-amount{font-weight:700;font-family:'Inter',sans-serif}
+        .trend-tooltip-mom{margin-top:2px;opacity:.9}
+        .trend-tooltip-mom.up{color:#10B981}
+        .trend-tooltip-mom.down{color:var(--error)}
         .trend-bar:hover .trend-bar-tooltip{display:block}
+        .trend-bar.is-selected{outline:2px solid rgba(232,124,154,.55);outline-offset:2px}
+        .trend-bar.is-negative{background:linear-gradient(180deg, #FECACA, #EF4444) !important}
         .trend-label{font-size:10px;color:var(--text-muted)}
 
         .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.5);display:none;align-items:center;justify-content:center;z-index:1000;backdrop-filter:blur(4px)}
@@ -326,17 +330,17 @@
                     <div class="profit-hero-top">
                         <div>
                             <div class="profit-hero-label">本月利润</div>
-                            <div class="profit-hero-value positive">¥ 23,680</div>
+                            <div class="profit-hero-value positive">¥ 23,680.00</div>
                             <div class="profit-hero-sub">利润占比 24.8%</div>
                         </div>
                         <div class="profit-hero-right">
                             <div class="profit-hero-item">
                                 <div class="profit-hero-item-label">总消耗业绩</div>
-                                <div class="profit-hero-item-value">¥ 95,380</div>
+                                <div class="profit-hero-item-value">¥ 95,380.00</div>
                             </div>
                             <div class="profit-hero-item">
                                 <div class="profit-hero-item-label">总支出费用</div>
-                                <div class="profit-hero-item-value">¥ 71,700</div>
+                                <div class="profit-hero-item-value">¥ 71,700.00</div>
                             </div>
                         </div>
                     </div>
@@ -350,17 +354,17 @@
                     <div class="profit-hero-top">
                         <div>
                             <div class="profit-hero-label">本年利润</div>
-                            <div class="profit-hero-value positive-year">¥ 128,560</div>
+                            <div class="profit-hero-value positive-year">¥ 128,560.00</div>
                             <div class="profit-hero-sub">利润占比 26.3%</div>
                         </div>
                         <div class="profit-hero-right">
                             <div class="profit-hero-item">
                                 <div class="profit-hero-item-label">本年总消耗业绩</div>
-                                <div class="profit-hero-item-value">¥ 488,800</div>
+                                <div class="profit-hero-item-value">¥ 488,800.00</div>
                             </div>
                             <div class="profit-hero-item">
                                 <div class="profit-hero-item-label">本年总支出费用</div>
-                                <div class="profit-hero-item-value">¥ 360,240</div>
+                                <div class="profit-hero-item-value">¥ 360,240.00</div>
                             </div>
                         </div>
                     </div>
@@ -377,143 +381,11 @@
                             损益明细表
                         </div>
                         <div class="pnl-section-toggle expanded" onclick="toggleAll(this)">
-                            展开全部
+                            收起全部
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
                         </div>
                     </div>
-                    <div>
-                        <div class="pnl-row level-0">
-                            <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                            <span class="pnl-label">一、消耗业绩（收入）</span>
-                            <span class="pnl-amount" style="color:var(--success)">¥ 95,380</span>
-                            <span class="pnl-ratio">100%</span>
-                            <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:100%;background:var(--success)"></div></div></div>
-                        </div>
-                        <div class="detail-rows show">
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">疗程消耗</span>
-                                <span class="pnl-amount">¥ 76,840</span>
-                                <span class="pnl-ratio">80.6%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:80.6%;background:var(--success)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">补水疗程</span><span class="pnl-amount">¥ 12,800</span><span class="pnl-ratio">13.4%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:13.4%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">抗衰疗程</span><span class="pnl-amount">¥ 15,200</span><span class="pnl-ratio">15.9%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:15.9%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">深层清洁</span><span class="pnl-amount">¥ 9,800</span><span class="pnl-ratio">10.3%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:10.3%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">精油推拿</span><span class="pnl-amount">¥ 8,500</span><span class="pnl-ratio">8.9%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:8.9%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">经络疏通</span><span class="pnl-amount">¥ 7,000</span><span class="pnl-ratio">7.3%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:7.3%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">肩颈调理</span><span class="pnl-amount">¥ 6,400</span><span class="pnl-ratio">6.7%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:6.7%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">美白疗程</span><span class="pnl-amount">¥ 7,540</span><span class="pnl-ratio">7.9%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:7.9%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">祛痘疗程</span><span class="pnl-amount">¥ 5,600</span><span class="pnl-ratio">5.9%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:5.9%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">芳香SPA</span><span class="pnl-amount">¥ 4,000</span><span class="pnl-ratio">4.2%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:4.2%;background:var(--success)"></div></div></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">产品消耗</span>
-                                <span class="pnl-amount">¥ 18,540</span>
-                                <span class="pnl-ratio">19.4%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:19.4%;background:var(--success)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">面膜套装</span><span class="pnl-amount">¥ 6,800</span><span class="pnl-ratio">7.1%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:7.1%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">精油套装</span><span class="pnl-amount">¥ 5,000</span><span class="pnl-ratio">5.2%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:5.2%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">精华液套装</span><span class="pnl-amount">¥ 3,600</span><span class="pnl-ratio">3.8%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:3.8%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">眼霜套装</span><span class="pnl-amount">¥ 1,940</span><span class="pnl-ratio">2.0%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:2.0%;background:var(--success)"></div></div></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">防晒霜</span><span class="pnl-amount">¥ 1,200</span><span class="pnl-ratio">1.3%</span><div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:1.3%;background:var(--success)"></div></div></div></div>
-                            </div>
-                        </div>
-
-                        <div class="pnl-row level-0">
-                            <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                            <span class="pnl-label">二、总支出费用</span>
-                            <span class="pnl-amount" style="color:var(--rose)">- ¥ 71,700</span>
-                            <span class="pnl-ratio">75.2%</span>
-                            <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:75.2%;background:var(--rose)"></div></div></div>
-                        </div>
-                        <div class="detail-rows show">
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">日常运营成本</span>
-                                <span class="pnl-amount">- ¥ 17,100</span>
-                                <span class="pnl-ratio">17.9%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:17.9%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">房租</span><span class="pnl-amount">- ¥ 15,000</span><span class="pnl-ratio">15.7%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-05</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">物业费</span><span class="pnl-amount">- ¥ 800</span><span class="pnl-ratio">0.8%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-20</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">水电费</span><span class="pnl-amount">- ¥ 850</span><span class="pnl-ratio">0.9%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-26</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">网络通讯费</span><span class="pnl-amount">- ¥ 200</span><span class="pnl-ratio">0.2%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-15</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">清洁耗材</span><span class="pnl-amount">- ¥ 150</span><span class="pnl-ratio">0.2%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-18</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">其他</span><span class="pnl-amount">- ¥ 100</span><span class="pnl-ratio">0.1%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-28</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">人员支出</span>
-                                <span class="pnl-amount">- ¥ 23,500</span>
-                                <span class="pnl-ratio">24.6%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:24.6%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">工资</span><span class="pnl-amount">- ¥ 18,500</span><span class="pnl-ratio">19.4%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-10</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">社保</span><span class="pnl-amount">- ¥ 3,200</span><span class="pnl-ratio">3.4%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-22</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">公积金</span><span class="pnl-amount">- ¥ 1,300</span><span class="pnl-ratio">1.4%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-25</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">培训费用</span><span class="pnl-amount">- ¥ 300</span><span class="pnl-ratio">0.3%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-12</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">节日福利</span><span class="pnl-amount">- ¥ 200</span><span class="pnl-ratio">0.2%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-08</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">产品耗材</span>
-                                <span class="pnl-amount">- ¥ 2,300</span>
-                                <span class="pnl-ratio">2.4%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:2.4%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">美容产品</span><span class="pnl-amount">- ¥ 1,800</span><span class="pnl-ratio">1.9%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-12</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">仪器耗材</span><span class="pnl-amount">- ¥ 500</span><span class="pnl-ratio">0.5%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-24</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">设备相关</span>
-                                <span class="pnl-amount">- ¥ 1,500</span>
-                                <span class="pnl-ratio">1.6%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:1.6%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">仪器折旧费</span><span class="pnl-amount">- ¥ 800</span><span class="pnl-ratio">0.8%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-01</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">设备维护费</span><span class="pnl-amount">- ¥ 700</span><span class="pnl-ratio">0.7%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-15</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">营销推广</span>
-                                <span class="pnl-amount">- ¥ 2,850</span>
-                                <span class="pnl-ratio">3.0%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:3%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">线上推广（美团/抖音）</span><span class="pnl-amount">- ¥ 2,000</span><span class="pnl-ratio">2.1%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-18</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">线下活动物料</span><span class="pnl-amount">- ¥ 500</span><span class="pnl-ratio">0.5%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-20</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                                <div class="pnl-row level-2"><span class="pnl-label">客户礼品</span><span class="pnl-amount">- ¥ 350</span><span class="pnl-ratio">0.4%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-22</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>李前台</span></div></div>
-                            </div>
-                            <div class="pnl-row level-1">
-                                <button class="pnl-detail-toggle" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
-                                <span class="pnl-label">其他费用</span>
-                                <span class="pnl-amount">- ¥ 370</span>
-                                <span class="pnl-ratio">0.4%</span>
-                                <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:0.4%;background:var(--warning)"></div></div></div>
-                            </div>
-                            <div class="detail-rows">
-                                <div class="pnl-row level-2"><span class="pnl-label">税费</span><span class="pnl-amount">- ¥ 370</span><span class="pnl-ratio">0.4%</span><div class="pnl-meta"><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>05-28</span><span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>张店长</span></div></div>
-                            </div>
-                        </div>
-
-                        <div class="pnl-row total" style="border-top:2px solid var(--primary)">
-                            <span class="pnl-label">利润</span>
-                            <span class="pnl-amount" style="color:var(--primary)">¥ 23,680</span>
-                            <span class="pnl-ratio">24.8%</span>
-                            <div class="pnl-bar-cell"><div class="pnl-bar"><div class="pnl-bar-fill" style="width:24.8%;background:var(--primary)"></div></div></div>
-                        </div>
-                    </div>
+                    <div id="pnlTableRoot"></div>
                 </div>
 
                 <div class="chart-row">
@@ -524,25 +396,8 @@
                         </div>
                         <div class="chart-card-body">
                             <div class="donut-chart">
-                                <svg class="donut-svg" viewBox="0 0 160 160">
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#E5E7EB" stroke-width="24"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="var(--primary)" stroke-width="24" stroke-dasharray="131.95 245.04" stroke-dashoffset="0" transform="rotate(-90 80 80)"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#F59E0B" stroke-width="24" stroke-dasharray="92.36 284.63" stroke-dashoffset="-131.95" transform="rotate(-90 80 80)"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#EC4899" stroke-width="24" stroke-dasharray="30.16 346.83" stroke-dashoffset="-224.31" transform="rotate(-90 80 80)"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#8B5CF6" stroke-width="24" stroke-dasharray="18.85 358.14" stroke-dashoffset="-254.47" transform="rotate(-90 80 80)"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#F43F5E" stroke-width="24" stroke-dasharray="22.62 354.37" stroke-dashoffset="-273.32" transform="rotate(-90 80 80)"/>
-                                    <circle cx="80" cy="80" r="60" fill="none" stroke="#9CA3AF" stroke-width="24" stroke-dasharray="4.71 372.28" stroke-dashoffset="-295.94" transform="rotate(-90 80 80)"/>
-                                    <text x="80" y="76" text-anchor="middle" font-size="16" font-weight="700" fill="#1F2937" font-family="Inter">¥71,700</text>
-                                    <text x="80" y="94" text-anchor="middle" font-size="10" fill="#9CA3AF">总支出费用</text>
-                                </svg>
-                                <div class="donut-legend">
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:var(--primary)"></div>日常运营 <span class="donut-legend-value">35.9%</span></div>
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:#F59E0B"></div>人员支出 <span class="donut-legend-value">49.4%</span></div>
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:#EC4899"></div>产品耗材 <span class="donut-legend-value">4.8%</span></div>
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:#8B5CF6"></div>设备相关 <span class="donut-legend-value">3.2%</span></div>
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:#F43F5E"></div>营销推广 <span class="donut-legend-value">6.0%</span></div>
-                                    <div class="donut-legend-item"><div class="donut-legend-dot" style="background:#9CA3AF"></div>其他费用 <span class="donut-legend-value">0.8%</span></div>
-                                </div>
+                                <svg class="donut-svg" id="expenseDonutSvg" viewBox="0 0 160 160"></svg>
+                                <div class="donut-legend" id="expenseDonutLegend"></div>
                             </div>
                         </div>
                     </div>
@@ -552,44 +407,7 @@
                             <span style="font-size:12px;color:var(--text-muted)">近6个月</span>
                         </div>
                         <div class="chart-card-body">
-                            <div class="trend-chart">
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:55%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥18,200</span>
-                                    </div>
-                                    <span class="trend-label">12月</span>
-                                </div>
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:40%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥13,500</span>
-                                    </div>
-                                    <span class="trend-label">1月</span>
-                                </div>
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:62%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥20,800</span>
-                                    </div>
-                                    <span class="trend-label">2月</span>
-                                </div>
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:50%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥16,900</span>
-                                    </div>
-                                    <span class="trend-label">3月</span>
-                                </div>
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:68%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥22,500</span>
-                                    </div>
-                                    <span class="trend-label">4月</span>
-                                </div>
-                                <div class="trend-col">
-                                    <div class="trend-bar" style="height:72%;background:linear-gradient(180deg, var(--primary-light), var(--primary))">
-                                        <span class="trend-bar-tooltip">¥23,680</span>
-                                    </div>
-                                    <span class="trend-label">5月</span>
-                                </div>
-                            </div>
+                            <div class="trend-chart" id="profitTrendChart"></div>
                         </div>
                     </div>
                 </div>
@@ -651,20 +469,22 @@
         }
 
         const consumeData = [
-            { category: '疗程消耗', project: '补水疗程', amount: 12800, date: '2026-05-03', person: '王美容师' },
-            { category: '疗程消耗', project: '抗衰疗程', amount: 15200, date: '2026-05-10', person: '王美容师' },
-            { category: '疗程消耗', project: '深层清洁', amount: 9800, date: '2026-05-12', person: '王美容师' },
-            { category: '疗程消耗', project: '精油推拿', amount: 8500, date: '2026-05-05', person: '李美容师' },
-            { category: '疗程消耗', project: '经络疏通', amount: 7000, date: '2026-05-15', person: '李美容师' },
-            { category: '疗程消耗', project: '肩颈调理', amount: 6400, date: '2026-05-20', person: '李美容师' },
-            { category: '疗程消耗', project: '美白疗程', amount: 7540, date: '2026-05-27', person: '李美容师' },
-            { category: '疗程消耗', project: '祛痘疗程', amount: 5600, date: '2026-05-08', person: '王美容师' },
-            { category: '疗程消耗', project: '芳香SPA', amount: 4000, date: '2026-05-24', person: '李美容师' },
+            { category: '护理消耗', project: '补水疗程', amount: 12800, date: '2026-05-03', person: '王美容师' },
+            { category: '护理消耗', project: '抗衰疗程', amount: 15200, date: '2026-05-10', person: '王美容师' },
+            { category: '护理消耗', project: '深层清洁', amount: 9800, date: '2026-05-12', person: '王美容师' },
+            { category: '护理消耗', project: '精油推拿', amount: 8500, date: '2026-05-05', person: '李美容师' },
+            { category: '护理消耗', project: '经络疏通', amount: 7000, date: '2026-05-15', person: '李美容师' },
+            { category: '护理消耗', project: '肩颈调理', amount: 6400, date: '2026-05-20', person: '李美容师' },
+            { category: '护理消耗', project: '美白疗程', amount: 7540, date: '2026-05-27', person: '李美容师' },
+            { category: '护理消耗', project: '祛痘疗程', amount: 5600, date: '2026-05-08', person: '王美容师' },
+            { category: '护理消耗', project: '芳香SPA', amount: 4000, date: '2026-05-24', person: '李美容师' },
+            { category: '护理消耗', project: '单次护理退款', amount: -800, date: '2026-05-28', person: '张店长' },
             { category: '产品消耗', project: '面膜套装', amount: 6800, date: '2026-05-16', person: '张美容师' },
             { category: '产品消耗', project: '精油套装', amount: 5000, date: '2026-05-25', person: '张美容师' },
             { category: '产品消耗', project: '精华液套装', amount: 3600, date: '2026-05-08', person: '张美容师' },
             { category: '产品消耗', project: '眼霜套装', amount: 1940, date: '2026-05-29', person: '张美容师' },
             { category: '产品消耗', project: '防晒霜', amount: 1200, date: '2026-05-22', person: '张美容师' },
+            { category: '产品消耗', project: '居家产品退款', amount: -400, date: '2026-05-28', person: '张店长' },
         ];
 
         const expenseData = [
@@ -738,106 +558,498 @@
             if (e.target === this) closeModal();
         });
 
+        const monthlyTotals = {
+            '2025-12': { consume: 73800, expense: 55600 },
+            '2026-01': { consume: 85600, expense: 63200 },
+            '2026-02': { consume: 92300, expense: 68500 },
+            '2026-03': { consume: 105400, expense: 78600 },
+            '2026-04': { consume: 97800, expense: 72400 },
+            '2026-05': { consume: 94180, expense: 71700 },
+            '2026-06': { consume: 30860, expense: 5840 }
+        };
+
+        function formatCurrency(amount) {
+            const abs = Math.abs(amount);
+            const text = abs.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            if (amount < 0) return `- ¥ ${text}`;
+            return `¥ ${text}`;
+        }
+
+        function formatPercent(value) {
+            if (!isFinite(value)) return '0.0%';
+            return `${value.toFixed(1)}%`;
+        }
+
+        function ymToDate(ym) {
+            const [y, m] = ym.split('-').map(n => parseInt(n, 10));
+            return new Date(y, m - 1, 1);
+        }
+
+        function dateToYm(d) {
+            const y = d.getFullYear();
+            const m = String(d.getMonth() + 1).padStart(2, '0');
+            return `${y}-${m}`;
+        }
+
+        function addMonths(ym, delta) {
+            const d = ymToDate(ym);
+            d.setMonth(d.getMonth() + delta);
+            return dateToYm(d);
+        }
+
+        function formatMetaDate(dateStr) {
+            const parts = dateStr.split('-');
+            if (parts.length !== 3) return dateStr;
+            return `${parts[1]}-${parts[2]}`;
+        }
+
+        function groupSum(list, keyFn) {
+            const map = new Map();
+            list.forEach(item => {
+                const k = keyFn(item);
+                map.set(k, (map.get(k) || 0) + item.amount);
+            });
+            return map;
+        }
+
+        function renderDonut(monthFilter, filteredExpense, totalExpense) {
+            const svg = document.getElementById('expenseDonutSvg');
+            const legend = document.getElementById('expenseDonutLegend');
+            if (!svg || !legend) return;
+
+            const r = 60;
+            const cx = 80;
+            const cy = 80;
+            const strokeWidth = 24;
+            const circumference = 2 * Math.PI * r;
+
+            svg.innerHTML = '';
+            legend.innerHTML = '';
+
+            const baseCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            baseCircle.setAttribute('cx', String(cx));
+            baseCircle.setAttribute('cy', String(cy));
+            baseCircle.setAttribute('r', String(r));
+            baseCircle.setAttribute('fill', 'none');
+            baseCircle.setAttribute('stroke', '#E5E7EB');
+            baseCircle.setAttribute('stroke-width', String(strokeWidth));
+            svg.appendChild(baseCircle);
+
+            const titleText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            titleText.setAttribute('x', String(cx));
+            titleText.setAttribute('y', '76');
+            titleText.setAttribute('text-anchor', 'middle');
+            titleText.setAttribute('font-size', '16');
+            titleText.setAttribute('font-weight', '700');
+            titleText.setAttribute('fill', '#1F2937');
+            titleText.setAttribute('font-family', 'Inter');
+            titleText.textContent = totalExpense > 0 ? formatCurrency(totalExpense).replace('- ', '') : '¥ 0.00';
+            svg.appendChild(titleText);
+
+            const subText = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+            subText.setAttribute('x', String(cx));
+            subText.setAttribute('y', '94');
+            subText.setAttribute('text-anchor', 'middle');
+            subText.setAttribute('font-size', '10');
+            subText.setAttribute('fill', '#9CA3AF');
+            subText.textContent = '总支出费用';
+            svg.appendChild(subText);
+
+            if (totalExpense <= 0) {
+                legend.innerHTML = `<div class="donut-legend-item"><div class="donut-legend-dot" style="background:#E5E7EB"></div>暂无数据 <span class="donut-legend-value">0.0%</span></div>`;
+                return;
+            }
+
+            const sumByCategory = groupSum(filteredExpense, d => d.category);
+            const entries = Array.from(sumByCategory.entries())
+                .map(([name, amount]) => ({ name, amount }))
+                .sort((a, b) => b.amount - a.amount);
+
+            const otherEntries = [];
+            const mainEntries = [];
+            entries.forEach(e => {
+                const pct = (e.amount / totalExpense) * 100;
+                if (pct < 1) otherEntries.push(e);
+                else mainEntries.push(e);
+            });
+            if (otherEntries.length) {
+                const sum = otherEntries.reduce((s, e) => s + e.amount, 0);
+                mainEntries.push({ name: `其他（${otherEntries.length}项）`, amount: sum, isOther: true });
+            }
+
+            const colors = ['var(--primary)', '#F59E0B', '#EC4899', '#8B5CF6', '#F43F5E', '#9CA3AF'];
+            let offset = 0;
+            mainEntries.forEach((e, idx) => {
+                const pct = (e.amount / totalExpense) * 100;
+                const dash = (circumference * pct) / 100;
+                const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                circle.setAttribute('cx', String(cx));
+                circle.setAttribute('cy', String(cy));
+                circle.setAttribute('r', String(r));
+                circle.setAttribute('fill', 'none');
+                circle.setAttribute('stroke', e.isOther ? '#9CA3AF' : colors[idx % colors.length]);
+                circle.setAttribute('stroke-width', String(strokeWidth));
+                circle.setAttribute('stroke-dasharray', `${dash} ${circumference - dash}`);
+                circle.setAttribute('stroke-dashoffset', String(-offset));
+                circle.setAttribute('transform', `rotate(-90 ${cx} ${cy})`);
+                svg.appendChild(circle);
+                offset += dash;
+
+                const legendDotColor = e.isOther ? '#9CA3AF' : colors[idx % colors.length];
+                const legendItem = document.createElement('div');
+                legendItem.className = 'donut-legend-item';
+                legendItem.innerHTML = `<div class="donut-legend-dot" style="background:${legendDotColor}"></div>${e.name} <span class="donut-legend-value">${pct.toFixed(1)}%</span>`;
+                legend.appendChild(legendItem);
+            });
+        }
+
+        function renderTrendChart(monthFilter) {
+            const el = document.getElementById('profitTrendChart');
+            if (!el) return;
+            const months = [];
+            for (let i = 5; i >= 0; i--) {
+                months.push(addMonths(monthFilter, -i));
+            }
+            const profits = months.map(ym => {
+                const t = monthlyTotals[ym];
+                if (!t) return 0;
+                return t.consume - t.expense;
+            });
+            const maxAbs = Math.max(1, ...profits.map(v => Math.abs(v)));
+
+            const computeMoM = (idx) => {
+                if (idx === 0) return { text: '—', cls: '' };
+                const prev = profits[idx - 1];
+                const curr = profits[idx];
+                if (prev === 0) {
+                    if (curr === 0) return { text: '0.0%', cls: '' };
+                    return { text: '新增', cls: curr >= 0 ? 'up' : 'down' };
+                }
+                const pct = ((curr - prev) / Math.abs(prev)) * 100;
+                const text = `${pct >= 0 ? '+' : ''}${pct.toFixed(1)}%`;
+                return { text, cls: pct >= 0 ? 'up' : 'down' };
+            };
+
+            el.innerHTML = months.map((ym, idx) => {
+                const profit = profits[idx];
+                const heightPct = (Math.abs(profit) / maxAbs) * 100;
+                const d = ymToDate(ym);
+                const label = `${d.getMonth() + 1}月`;
+                const tooltip = formatCurrency(profit);
+                const mom = computeMoM(idx);
+                const isSelected = ym === monthFilter ? ' is-selected' : '';
+                const isNegative = profit < 0 ? ' is-negative' : '';
+                const bg = profit < 0
+                    ? ''
+                    : 'background:linear-gradient(180deg, var(--primary-light), var(--primary))';
+                return `
+                    <div class="trend-col">
+                        <div class="trend-bar-wrap">
+                            <div class="trend-bar${isSelected}${isNegative}" style="height:${heightPct}%;${bg}">
+                                <span class="trend-bar-tooltip"><div class="trend-tooltip-amount">${tooltip}</div><div class="trend-tooltip-mom ${mom.cls}">环比 ${mom.text}</div></span>
+                            </div>
+                        </div>
+                        <span class="trend-label">${label}</span>
+                    </div>`;
+            }).join('');
+        }
+
+        function renderPnLTable(monthFilter, filteredConsume, filteredExpense, totalConsume, totalExpense, profit) {
+            const root = document.getElementById('pnlTableRoot');
+            if (!root) return;
+
+            const ratio = (value) => totalConsume > 0 ? formatPercent((value / totalConsume) * 100) : '0.0%';
+            const amountHtml = (value, color) => `<span class="pnl-amount" style="color:${color}">${formatCurrency(value)}</span>`;
+
+            const consumeCategories = ['护理消耗', '产品消耗'];
+            const consumeByCategory = new Map();
+            consumeCategories.forEach(c => consumeByCategory.set(c, []));
+            const consumeAgg = new Map();
+            filteredConsume.forEach(item => {
+                const key = `${item.category}||${item.project}`;
+                consumeAgg.set(key, (consumeAgg.get(key) || 0) + item.amount);
+            });
+            consumeAgg.forEach((amount, key) => {
+                const [category, project] = key.split('||');
+                if (!consumeByCategory.has(category)) consumeByCategory.set(category, []);
+                consumeByCategory.get(category).push({ category, project, amount });
+            });
+
+            const consumeCategoryTotals = new Map();
+            consumeByCategory.forEach((items, cat) => {
+                consumeCategoryTotals.set(cat, items.reduce((s, d) => s + d.amount, 0));
+            });
+
+            const consumeSectionHtml = `
+                <div class="pnl-row level-0">
+                    <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+                    <span class="pnl-label">一、消耗业绩（收入）</span>
+                    ${amountHtml(totalConsume, 'var(--success)')}
+                    <span class="pnl-ratio">${totalConsume > 0 ? '100.0%' : '0.0%'}</span>
+                </div>
+                <div class="detail-rows show">
+                    ${consumeCategories.map(cat => {
+                        const list = consumeByCategory.get(cat) || [];
+                        const catTotal = consumeCategoryTotals.get(cat) || 0;
+                        const sorted = list.slice().sort((a, b) => b.amount - a.amount);
+                        const leafRows = sorted.map(d => `
+                            <div class="pnl-row level-2${d.amount < 0 ? ' negative' : ''}">
+                                <span class="pnl-label">${d.project}</span>
+                                <span class="pnl-amount">${formatCurrency(d.amount)}</span>
+                                <span class="pnl-ratio">${ratio(d.amount)}</span>
+                            </div>
+                        `).join('');
+                        const empty = `<div class="pnl-row level-2"><span class="pnl-label" style="color:var(--text-muted)">暂无数据</span><span class="pnl-amount">¥ 0.00</span><span class="pnl-ratio">0.0%</span></div>`;
+                        return `
+                            <div class="pnl-row level-1">
+                                <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+                                <span class="pnl-label">${cat}</span>
+                                <span class="pnl-amount">${formatCurrency(catTotal)}</span>
+                                <span class="pnl-ratio">${ratio(catTotal)}</span>
+                            </div>
+                            <div class="detail-rows show">
+                                ${leafRows || empty}
+                            </div>
+                        `;
+                    }).join('')}
+                </div>
+            `;
+
+            const expenseByCategory = new Map();
+            filteredExpense.forEach(item => {
+                if (!expenseByCategory.has(item.category)) expenseByCategory.set(item.category, []);
+                expenseByCategory.get(item.category).push(item);
+            });
+            const expenseEntries = Array.from(expenseByCategory.entries()).map(([cat, items]) => {
+                const total = items.reduce((s, d) => s + d.amount, 0);
+                return { cat, total, items };
+            }).sort((a, b) => b.total - a.total);
+
+            const expenseSectionHtml = `
+                <div class="pnl-row level-0">
+                    <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+                    <span class="pnl-label">二、总支出费用</span>
+                    <span class="pnl-amount" style="color:var(--rose)">${formatCurrency(-totalExpense)}</span>
+                    <span class="pnl-ratio">${ratio(totalExpense)}</span>
+                </div>
+                <div class="detail-rows show">
+                    ${(expenseEntries.length ? expenseEntries : []).map(e => {
+                        const leafRows = e.items.slice().sort((a, b) => (a.date || '').localeCompare(b.date || '')).map(d => `
+                            <div class="pnl-row level-2">
+                                <span class="pnl-label">${d.project}</span>
+                                <span class="pnl-amount">${formatCurrency(-d.amount)}</span>
+                                <span class="pnl-ratio">${ratio(d.amount)}</span>
+                                <div class="pnl-meta">
+                                    <span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>${formatMetaDate(d.date)}</span>
+                                    <span class="pnl-meta-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>${d.person}</span>
+                                </div>
+                            </div>
+                        `).join('');
+                        const empty = `<div class="pnl-row level-2"><span class="pnl-label" style="color:var(--text-muted)">暂无数据</span><span class="pnl-amount">- ¥ 0.00</span><span class="pnl-ratio">0.0%</span></div>`;
+                        return `
+                            <div class="pnl-row level-1">
+                                <button class="pnl-detail-toggle expanded" onclick="toggleDetail(this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"/></svg></button>
+                                <span class="pnl-label">${e.cat}</span>
+                                <span class="pnl-amount">${formatCurrency(-e.total)}</span>
+                                <span class="pnl-ratio">${ratio(e.total)}</span>
+                            </div>
+                            <div class="detail-rows show">
+                                ${leafRows || empty}
+                            </div>
+                        `;
+                    }).join('') || `<div class="pnl-row level-1"><span class="pnl-label" style="color:var(--text-muted)">暂无数据</span><span class="pnl-amount">- ¥ 0.00</span><span class="pnl-ratio">0.0%</span></div>`}
+                </div>
+            `;
+
+            const profitRatio = totalConsume > 0 ? formatPercent((profit / totalConsume) * 100) : '0.0%';
+            const profitColor = profit >= 0 ? 'var(--primary)' : 'var(--error)';
+            const profitSectionHtml = `
+                <div class="pnl-row total" style="border-top:2px solid var(--primary)">
+                    <span class="pnl-label">利润</span>
+                    <span class="pnl-amount" style="color:${profitColor}">${formatCurrency(profit)}</span>
+                    <span class="pnl-ratio">${profitRatio}</span>
+                </div>
+            `;
+
+            root.innerHTML = consumeSectionHtml + expenseSectionHtml + profitSectionHtml;
+        }
+
+        function computeMonthTotals(monthFilter, filteredConsume, filteredExpense) {
+            const fallback = monthlyTotals[monthFilter] || { consume: 0, expense: 0 };
+            const totalConsume = filteredConsume.length ? filteredConsume.reduce((s, d) => s + d.amount, 0) : fallback.consume;
+            const totalExpense = filteredExpense.length ? filteredExpense.reduce((s, d) => s + d.amount, 0) : fallback.expense;
+            return { totalConsume, totalExpense, profit: totalConsume - totalExpense };
+        }
+
+        function computeYtdTotals(monthFilter) {
+            const [yearStr, monthStr] = monthFilter.split('-');
+            const year = parseInt(yearStr, 10);
+            const month = parseInt(monthStr, 10);
+            let consume = 0;
+            let expense = 0;
+            for (let m = 1; m <= month; m++) {
+                const ym = `${yearStr}-${String(m).padStart(2, '0')}`;
+                const t = monthlyTotals[ym];
+                if (!t) continue;
+                consume += t.consume;
+                expense += t.expense;
+            }
+            return { consume, expense, profit: consume - expense };
+        }
+
+        function updateHeroMonth(totalConsume, totalExpense, profit) {
+            const heroValue = document.querySelector('.profit-hero .profit-hero-value');
+            const heroItems = document.querySelectorAll('.profit-hero .profit-hero-item-value');
+            const heroSub = document.querySelector('.profit-hero .profit-hero-sub');
+            const pctProfit = totalConsume > 0 ? (profit / totalConsume) * 100 : 0;
+            const pctExpense = totalConsume > 0 ? (totalExpense / totalConsume) * 100 : 0;
+
+            if (heroValue) {
+                heroValue.textContent = formatCurrency(profit);
+                heroValue.classList.toggle('positive', profit >= 0);
+                heroValue.classList.toggle('negative', profit < 0);
+            }
+            if (heroItems && heroItems.length >= 2) {
+                heroItems[0].textContent = formatCurrency(totalConsume);
+                heroItems[1].textContent = formatCurrency(totalExpense);
+            }
+            if (heroSub) heroSub.textContent = `利润占比 ${formatPercent(pctProfit)}`;
+
+            const lp = document.querySelector('.legend-profit-pct');
+            const le = document.querySelector('.legend-expense-pct');
+            if (lp) lp.textContent = pctProfit.toFixed(1);
+            if (le) le.textContent = pctExpense.toFixed(1);
+        }
+
+        function updateHeroYear(monthFilter) {
+            const totals = computeYtdTotals(monthFilter);
+            const totalConsume = totals.consume;
+            const totalExpense = totals.expense;
+            const profit = totals.profit;
+            const pctProfit = totalConsume > 0 ? (profit / totalConsume) * 100 : 0;
+            const pctExpense = totalConsume > 0 ? (totalExpense / totalConsume) * 100 : 0;
+
+            const heroValue = document.querySelector('.profit-hero-year .profit-hero-value');
+            const heroItems = document.querySelectorAll('.profit-hero-year .profit-hero-item-value');
+            const heroSub = document.querySelector('.profit-hero-year .profit-hero-sub');
+            if (heroValue) {
+                heroValue.textContent = formatCurrency(profit);
+                heroValue.classList.toggle('positive-year', profit >= 0);
+                heroValue.classList.toggle('negative', profit < 0);
+            }
+            if (heroItems && heroItems.length >= 2) {
+                heroItems[0].textContent = formatCurrency(totalConsume);
+                heroItems[1].textContent = formatCurrency(totalExpense);
+            }
+            if (heroSub) heroSub.textContent = `利润占比 ${formatPercent(pctProfit)}`;
+            const lp = document.querySelector('.year-legend-profit-pct');
+            const le = document.querySelector('.year-legend-expense-pct');
+            if (lp) lp.textContent = pctProfit.toFixed(1);
+            if (le) le.textContent = pctExpense.toFixed(1);
+        }
+
         function exportReport() {
             const monthFilter = document.getElementById('monthFilter').value;
-            const [year, month] = monthFilter.split('-');
-            
-            const filteredConsume = consumeData.filter(item => {
-                return item.date.startsWith(monthFilter);
-            });
+            const [yearStr, monthStr] = monthFilter.split('-');
+            const year = parseInt(yearStr, 10);
+            const month = parseInt(monthStr, 10);
 
-            const filteredExpense = expenseData.filter(item => {
-                return item.date.startsWith(monthFilter);
-            });
+            const filteredConsume = consumeData.filter(item => item.date.startsWith(monthFilter));
+            const filteredExpense = expenseData.filter(item => item.date.startsWith(monthFilter));
+            const totals = computeMonthTotals(monthFilter, filteredConsume, filteredExpense);
 
-            const totalConsume = filteredConsume.reduce((sum, item) => sum + item.amount, 0);
-            const totalExpense = filteredExpense.reduce((sum, item) => sum + item.amount, 0);
-            const profit = totalConsume - totalExpense;
-            const profitPercent = totalConsume > 0 ? ((profit / totalConsume) * 100).toFixed(1) : '0.0';
+            const profitPercent = totals.totalConsume > 0 ? ((totals.profit / totals.totalConsume) * 100) : 0;
 
-            let csvContent = `经营损益表\n`;
-            csvContent += `${year}年${month}月\n\n`;
-            csvContent += `【概要】\n`;
-            csvContent += `总消耗业绩,¥ ${totalConsume.toLocaleString()}\n`;
-            csvContent += `总支出费用,¥ ${totalExpense.toLocaleString()}\n`;
-            csvContent += `利润,¥ ${profit.toLocaleString()}\n`;
-            csvContent += `利润率,${profitPercent}%\n\n`;
-            
-            csvContent += `【消耗业绩明细】\n`;
-            csvContent += `类别,项目,金额,日期,经办人\n`;
-            filteredConsume.forEach(item => {
-                csvContent += `${item.category},${item.project},¥ ${item.amount.toLocaleString()},${item.date},${item.person}\n`;
-            });
-            
-            csvContent += `\n【支出费用明细】\n`;
-            csvContent += `类别,项目,金额,日期,经办人\n`;
-            filteredExpense.forEach(item => {
-                csvContent += `${item.category},${item.project},¥ ${item.amount.toLocaleString()},${item.date},${item.person}\n`;
-            });
+            const escape = (s) => String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const consumeAgg = new Map();
+            filteredConsume.forEach(d => {
+                const key = `${d.category}||${d.project}`;
+                consumeAgg.set(key, (consumeAgg.get(key) || 0) + d.amount);
+            });
+            const consumeAggList = Array.from(consumeAgg.entries()).map(([key, amount]) => {
+                const [category, project] = key.split('||');
+                return { category, project, amount };
+            }).sort((a, b) => b.amount - a.amount);
+
+            const consumeRows = (consumeAggList.length ? consumeAggList : []).map(d => `
+                <tr>
+                    <td>${escape(d.category)}</td>
+                    <td>${escape(d.project)}</td>
+                    <td>${escape(formatCurrency(d.amount))}</td>
+                </tr>
+            `).join('');
+
+            const expenseRows = (filteredExpense.length ? filteredExpense : []).map(d => `
+                <tr>
+                    <td>${escape(d.category)}</td>
+                    <td>${escape(d.project)}</td>
+                    <td>${escape(formatCurrency(d.amount))}</td>
+                    <td>${escape(d.date)}</td>
+                    <td>${escape(d.person)}</td>
+                    <td></td>
+                </tr>
+            `).join('');
+
+            const html = `
+                <html>
+                <head>
+                    <meta charset="utf-8" />
+                    <title>损益报表</title>
+                </head>
+                <body>
+                    <h2>损益报表</h2>
+                    <div>${year}年${month}月</div>
+                    <h3>概要</h3>
+                    <table border="1" cellspacing="0" cellpadding="6">
+                        <tr><td>总消耗业绩</td><td>${escape(formatCurrency(totals.totalConsume))}</td></tr>
+                        <tr><td>总支出费用</td><td>${escape(formatCurrency(totals.totalExpense))}</td></tr>
+                        <tr><td>利润</td><td>${escape(formatCurrency(totals.profit))}</td></tr>
+                        <tr><td>利润率</td><td>${escape(formatPercent(profitPercent))}</td></tr>
+                    </table>
+
+                    <h3>消耗业绩明细</h3>
+                    <table border="1" cellspacing="0" cellpadding="6">
+                        <tr><th>类别</th><th>商品分类名称</th><th>金额</th></tr>
+                        ${consumeRows || '<tr><td colspan="3">暂无数据</td></tr>'}
+                    </table>
+
+                    <h3>支出费用明细</h3>
+                    <table border="1" cellspacing="0" cellpadding="6">
+                        <tr><th>类别</th><th>项目</th><th>金额</th><th>日期</th><th>经办人</th><th>备注</th></tr>
+                        ${expenseRows || '<tr><td colspan="6">暂无数据</td></tr>'}
+                    </table>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([html], { type: 'application/vnd.ms-excel;charset=utf-8;' });
             const link = document.createElement('a');
             const url = URL.createObjectURL(blob);
             link.setAttribute('href', url);
-            link.setAttribute('download', `经营损益表_${year}年${month}月.csv`);
+            link.setAttribute('download', `损益报表_${year}年${month}月.xls`);
             link.style.visibility = 'hidden';
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
         }
 
-        const yearConsumeData = [
-            { month: '01', amount: 85600 }, { month: '02', amount: 92300 }, { month: '03', amount: 105400 },
-            { month: '04', amount: 97800 }, { month: '05', amount: 76840 }, { month: '06', amount: 30860 }
-        ];
-        const yearExpenseData = [
-            { month: '01', amount: 63200 }, { month: '02', amount: 68500 }, { month: '03', amount: 78600 },
-            { month: '04', amount: 72400 }, { month: '05', amount: 71700 }, { month: '06', amount: 5840 }
-        ];
-
         function filterByMonth() {
             const monthFilter = document.getElementById('monthFilter').value;
-            
-            const filteredConsume = consumeData.filter(item => {
-                return item.date.startsWith(monthFilter);
-            });
+            const filteredConsume = consumeData.filter(item => item.date.startsWith(monthFilter));
+            const filteredExpense = expenseData.filter(item => item.date.startsWith(monthFilter));
+            const totals = computeMonthTotals(monthFilter, filteredConsume, filteredExpense);
 
-            const filteredExpense = expenseData.filter(item => {
-                return item.date.startsWith(monthFilter);
-            });
+            updateHeroMonth(totals.totalConsume, totals.totalExpense, totals.profit);
+            updateHeroYear(monthFilter);
 
-            const totalConsume = filteredConsume.reduce((sum, item) => sum + item.amount, 0);
-            const totalExpense = filteredExpense.reduce((sum, item) => sum + item.amount, 0);
-            const profit = totalConsume - totalExpense;
-
-            document.querySelector('.profit-hero-value').textContent = `¥ ${profit.toLocaleString()}`;
-            document.querySelectorAll('.profit-hero-item')[0].querySelector('.profit-hero-item-value').textContent = `¥ ${totalConsume.toLocaleString()}`;
-            document.querySelectorAll('.profit-hero-item')[1].querySelector('.profit-hero-item-value').textContent = `¥ ${totalExpense.toLocaleString()}`;
-
-            const profitPercent = totalConsume > 0 ? ((profit / totalConsume) * 100).toFixed(1) : '0.0';
-            document.querySelector('.profit-hero-sub').textContent = `利润占比 ${profitPercent}%`;
-            document.querySelector('.legend-profit-pct').textContent = profitPercent;
-            document.querySelector('.legend-expense-pct').textContent = expensePercent;
-
-            document.querySelector('.pnl-row.total .pnl-amount').textContent = `¥ ${profit.toLocaleString()}`;
-            document.querySelector('.pnl-row.total .pnl-ratio').textContent = profitPercent + '%';
-            document.querySelector('.pnl-row.total .pnl-bar-fill').style.width = profitPercent + '%';
-
-            const [selYear] = monthFilter.split('-');
-            const yearConsumeTotal = yearConsumeData.reduce((s, d) => s + d.amount, 0);
-            const yearExpenseTotal = yearExpenseData.reduce((s, d) => s + d.amount, 0);
-            const yearProfit = yearConsumeTotal - yearExpenseTotal;
-            const yearProfitPercent = yearConsumeTotal > 0 ? ((yearProfit / yearConsumeTotal) * 100).toFixed(1) : '0.0';
-
-            document.querySelector('.profit-hero-year .profit-hero-value').textContent = `¥ ${yearProfit.toLocaleString()}`;
-            document.querySelector('.profit-hero-year .profit-hero-sub').textContent = `利润占比 ${yearProfitPercent}%`;
-            document.querySelectorAll('.profit-hero-year .profit-hero-item-value')[0].textContent = `¥ ${yearConsumeTotal.toLocaleString()}`;
-            document.querySelectorAll('.profit-hero-year .profit-hero-item-value')[1].textContent = `¥ ${yearExpenseTotal.toLocaleString()}`;
-            document.querySelector('.year-legend-profit-pct').textContent = yearProfitPercent;
-            document.querySelector('.year-legend-expense-pct').textContent = yearExpensePercent;
+            renderPnLTable(monthFilter, filteredConsume, filteredExpense, totals.totalConsume, totals.totalExpense, totals.profit);
+            renderDonut(monthFilter, filteredExpense, totals.totalExpense);
+            renderTrendChart(monthFilter);
         }
 
         document.getElementById('monthFilter').addEventListener('change', filterByMonth);
+        filterByMonth();
     </script>
 </body>
 </html>
